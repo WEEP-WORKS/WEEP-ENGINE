@@ -60,17 +60,11 @@
     <ClInclude Include="PhysBody3D.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="PhysVehicle3D.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="DebugScene.h">
       <Filter>Sources\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="App.h">
       <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Functions.h">
-      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="PerfTimer.h">
       <Filter>Sources\Tools</Filter>
@@ -116,17 +110,11 @@
     <ClCompile Include="PhysBody3D.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="PhysVehicle3D.cpp">
-      <Filter>Sources\Helpers</Filter>
-    </ClCompile>
     <ClCompile Include="DebugScene.cpp">
       <Filter>Sources\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="App.cpp">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Functions.cpp">
-      <Filter>Sources\Tools</Filter>
     </ClCompile>
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Sources\Tools</Filter>

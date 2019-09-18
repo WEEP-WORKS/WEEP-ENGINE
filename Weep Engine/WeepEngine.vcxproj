@@ -78,7 +78,6 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="DebugScene.h" />
-    <ClInclude Include="Functions.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Light.h" />
@@ -91,7 +90,6 @@
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="PhysBody3D.h" />
-    <ClInclude Include="PhysVehicle3D.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -99,7 +97,6 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="DebugScene.cpp" />
-    <ClCompile Include="Functions.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
@@ -112,7 +109,6 @@
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="PhysBody3D.cpp" />
-    <ClCompile Include="PhysVehicle3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
