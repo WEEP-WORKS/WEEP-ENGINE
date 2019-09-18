@@ -9,7 +9,6 @@ struct Light
 
 	void Init();
 	void SetPos(float x, float y, float z);
-	void SetDirection(vec3 direction);
 	void Active(bool active);
 	void Render();
 

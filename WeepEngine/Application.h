@@ -16,16 +16,14 @@
 class Application
 {
 public:
-	ModuleWindow* window = nullptr;
-	ModuleInput* input = nullptr;
-	ModuleAudio* audio = nullptr;
-	ModuleSceneIntro* scene_intro = nullptr;
-	ModuleRenderer3D* renderer3D = nullptr;
-	ModulePhysics3D* physics = nullptr;
-	ModuleCamera3D* camera_1 = nullptr;
-	ModuleCamera3D* camera_2 = nullptr;
-	ModulePlayer* player_1 = nullptr;
-	ModulePlayer* player_2 = nullptr;
+	ModuleWindow* window;
+	ModuleInput* input;
+	ModuleAudio* audio;
+	ModuleSceneIntro* scene_intro;
+	ModuleRenderer3D* renderer3D;
+	ModuleCamera3D* camera;
+	ModulePhysics3D* physics;
+	ModulePlayer* player;
 
 private:
 
@@ -41,8 +39,6 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
-
-	bool Draw();
 
 private:
 

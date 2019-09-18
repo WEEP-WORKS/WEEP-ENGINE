@@ -116,23 +116,6 @@ public:
 		return ret;
 	}
 
-	tdata Index( int index)
-	{
-		unsigned int i = 0;
-		p2List_item<tdata>*   p_data = start;
-
-		for (unsigned int i = 0; i < index && p_data != NULL; ++i)
-			p_data = p_data->next;
-
-		if (p_data != NULL)
-		{
-			return  p_data->data;
-		}
-
-		return tdata();
-	}
-
-
 	/**
 	* Deletes an item from the list
 	*/

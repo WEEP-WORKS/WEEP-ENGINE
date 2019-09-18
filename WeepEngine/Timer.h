@@ -19,8 +19,8 @@ public:
 private:
 
 	bool	running;
-	Uint32	started_at = 1u;
-	Uint32	stopped_at = 1u;
+	Uint32	started_at;
+	Uint32	stopped_at;
 };
 
 #endif //__TIMER_H__

@@ -17,7 +17,7 @@
 
 ModulePhysics3D::ModulePhysics3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	debug = false;
+	debug = true;
 
 	collision_conf = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collision_conf);
@@ -115,20 +115,34 @@ update_status ModulePhysics3D::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
+	if(debug == true)
+	{
+		world->debugDrawWorld();
+
+		// Render vehicles
+		p2List_item<PhysVehicle3D*>* item = vehicles.getFirst();
+		while(item)
+		{
+			item->data->Render();
+			item = item->next;
+		}
+
+		if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		{
+			Sphere s(1);
+			s.SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+			float force = 30.0f;
+			AddBody(s)->Push(-(App->camera->Z.x * force), -(App->camera->Z.y * force), -(App->camera->Z.z * force));
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
 
 // ---------------------------------------------------------
-
-
-bool ModulePhysics3D::Draw()
+update_status ModulePhysics3D::PostUpdate(float dt)
 {
-	if (debug == true)
-	{
-		world->debugDrawWorld();
-	}
-	return false;
+	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
@@ -161,12 +175,8 @@ bool ModulePhysics3D::CleanUp()
 
 	shapes.clear();
 
-	for (p2List_item<PhysBody3D*>* item = bodies.getFirst(); item; item = item->next) 
-	{
-		world->removeRigidBody(item->data->body);
+	for(p2List_item<PhysBody3D*>* item = bodies.getFirst(); item; item = item->next)
 		delete item->data;
-	}
-		
 
 	bodies.clear();
 
@@ -180,24 +190,6 @@ bool ModulePhysics3D::CleanUp()
 
 	return true;
 }
-
-bool ModulePhysics3D::DeleteBody(PhysBody3D * body)
-{
-	for (p2List_item<PhysBody3D*>* item = bodies.getFirst(); item; item = item->next)
-	{
-		if (item->data == body)
-		{
-
-			world->removeRigidBody(item->data->body);
-			delete item->data;
-			bodies.del(item);
-
-			return true;
-		}
-	}
-	return false;
-}
-
 
 // ---------------------------------------------------------
 PhysBody3D* ModulePhysics3D::AddBody(const Sphere& sphere, float mass)
@@ -218,9 +210,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const Sphere& sphere, float mass)
 
 	btRigidBody* body = new btRigidBody(rbInfo);
 	PhysBody3D* pbody = new PhysBody3D(body);
-	Primitive* new_primitive = new Sphere(sphere);
 
-	pbody->primitive = new_primitive;
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
 	bodies.add(pbody);
@@ -248,9 +238,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const Cube& cube, float mass)
 
 	btRigidBody* body = new btRigidBody(rbInfo);
 	PhysBody3D* pbody = new PhysBody3D(body);
-	Primitive* new_primitive = new Cube(cube);
 
-	pbody->primitive = new_primitive;
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
 	bodies.add(pbody);
@@ -277,9 +265,7 @@ PhysBody3D* ModulePhysics3D::AddBody(const Cylinder& cylinder, float mass)
 
 	btRigidBody* body = new btRigidBody(rbInfo);
 	PhysBody3D* pbody = new PhysBody3D(body);
-	Primitive* new_primitive = new Cylinder(cylinder);
 
-	pbody->primitive = new_primitive;
 	body->setUserPointer(pbody);
 	world->addRigidBody(body);
 	bodies.add(pbody);
@@ -346,7 +332,6 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	return pvehicle;
 }
 
-
 // ---------------------------------------------------------
 void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB)
 {
@@ -360,7 +345,7 @@ void ModulePhysics3D::AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, con
 	p2p->setDbgDrawSize(2.0f);
 }
 
-btHingeConstraint* ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
+void ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisA, const vec3& axisB, bool disable_collision)
 {
 	btHingeConstraint* hinge = new btHingeConstraint(
 		*(bodyA.body), 
@@ -373,8 +358,6 @@ btHingeConstraint* ModulePhysics3D::AddConstraintHinge(PhysBody3D& bodyA, PhysBo
 	world->addConstraint(hinge, disable_collision);
 	constraints.add(hinge);
 	hinge->setDbgDrawSize(2.0f);
-
-	return hinge;
 }
 
 // =============================================

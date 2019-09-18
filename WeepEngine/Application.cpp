@@ -7,29 +7,24 @@ Application::Application()
 	audio = new ModuleAudio(this, true);
 	scene_intro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
+	camera = new ModuleCamera3D(this);
 	physics = new ModulePhysics3D(this);
-	player_1 = new ModulePlayer(this, 1);
-	player_2 = new ModulePlayer(this, 2);
-	camera_1 = new ModuleCamera3D(this, 1, player_1);
-	camera_2 = new ModuleCamera3D(this, 2, player_2);
+	player = new ModulePlayer(this);
+
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order
 
 	// Main Modules
 	AddModule(window);
+	AddModule(camera);
 	AddModule(input);
 	AddModule(audio);
 	AddModule(physics);
 	
-	// Cameras & Players
-	AddModule(player_1);
-	AddModule(player_2);
-	AddModule(camera_1);
-	AddModule(camera_2);
-
 	// Scenes
 	AddModule(scene_intro);
+	AddModule(player);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -135,15 +130,4 @@ bool Application::CleanUp()
 void Application::AddModule(Module* mod)
 {
 	list_modules.add(mod);
-}
-
-bool Application:: Draw()
-{
-	bool ret = true;
-
-	for (p2List_item<Module*>* item = list_modules.getFirst(); item; item = item->next) {
-		ret = item->data->Draw();
-	}
-
-	return ret;
 }

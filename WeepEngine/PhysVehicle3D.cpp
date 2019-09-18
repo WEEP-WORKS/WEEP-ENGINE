@@ -25,18 +25,31 @@ void PhysVehicle3D::Render()
 {
 	Cylinder wheel;
 
-	wheel.color = Black;
+	wheel.color = Blue;
 
 	for(int i = 0; i < vehicle->getNumWheels(); ++i)
 	{
-		wheel.radius = info.wheels[i].radius;
-		wheel.height = info.wheels[i].width;
+		wheel.radius = info.wheels[0].radius;
+		wheel.height = info.wheels[0].width;
 
 		vehicle->updateWheelTransform(i);
 		vehicle->getWheelInfo(i).m_worldTransform.getOpenGLMatrix(&wheel.transform);
 
 		wheel.Render();
 	}
+
+	Cube chassis(info.chassis_size.x, info.chassis_size.y, info.chassis_size.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&chassis.transform);
+	btQuaternion q = vehicle->getChassisWorldTransform().getRotation();
+	btVector3 offset(info.chassis_offset.x, info.chassis_offset.y, info.chassis_offset.z);
+	offset = offset.rotate(q.getAxis(), q.getAngle());
+
+	chassis.transform.M[12] += offset.getX();
+	chassis.transform.M[13] += offset.getY();
+	chassis.transform.M[14] += offset.getZ();
+
+
+	chassis.Render();
 }
 
 // ----------------------------------------------------------------------------

@@ -54,11 +54,8 @@ void Primitive::Render() const
 
 		glLineWidth(1.0f);
 	}
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
-	glEnable(GL_BLEND); 
-	//glClearColor(0.0, 0.0, 0.0, 0.0);
 
-	glColor4f(color.r, color.g, color.b,color.a);
+	glColor3f(color.r, color.g, color.b);
 
 	if(wire)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

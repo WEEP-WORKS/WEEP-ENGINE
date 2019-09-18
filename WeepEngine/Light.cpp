@@ -19,12 +19,6 @@ void Light::SetPos(float x, float y, float z)
 	position.z = z;
 }
 
-void Light::SetDirection(vec3 direction)
-{
-	float dir[] = { direction.x, direction.y, direction.z, 1.0f };
-	glLightfv(ref, GL_SPOT_DIRECTION, dir);
-}
-
 void Light::Render()
 {
 	if(on)
