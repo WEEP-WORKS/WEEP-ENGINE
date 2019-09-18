@@ -4,7 +4,7 @@
 
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
-ModuleAudio::ModuleAudio(Application* app, bool start_enabled) : Module(app, start_enabled), music(NULL)
+ModuleAudio::ModuleAudio(bool start_enabled) : Module( start_enabled)
 {}
 
 // Destructor
@@ -54,11 +54,9 @@ bool ModuleAudio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	p2List_item<Mix_Chunk*>* item;
-
-	for(item = fx.getFirst(); item != NULL; item = item->next)
+	for (list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++)
 	{
-		Mix_FreeChunk(item->data);
+		Mix_FreeChunk((*it));
 	}
 
 	fx.clear();
@@ -132,24 +130,29 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.add(chunk);
-		ret = fx.count();
+		fx.push_back(chunk);
+		ret = fx.size();
 	}
 
 	return ret;
 }
 
 // Play WAV
-bool ModuleAudio::PlayFx(unsigned int id, int repeat)
+bool ModuleAudio::PlayFx(unsigned int id, int repeat, int channel)
 {
 	bool ret = false;
 
 	Mix_Chunk* chunk = NULL;
 	
-	if(fx.at(id-1, chunk) == true)
+	int count = 0;
+	for (list<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); it++)
 	{
-		Mix_PlayChannel(-1, chunk, repeat);
-		ret = true;
+		if (count == id - 1)
+		{
+			Mix_PlayChannel(channel, chunk, repeat);
+			break;
+		}
+		count++;
 	}
 
 	return ret;

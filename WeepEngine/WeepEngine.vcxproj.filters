@@ -99,6 +99,9 @@
     <ClInclude Include="imstb_truetype.h">
       <Filter>Sources\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -160,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>Sources\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>Sources\Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

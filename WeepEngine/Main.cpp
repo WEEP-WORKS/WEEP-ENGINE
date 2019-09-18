@@ -6,68 +6,79 @@
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 
-enum main_states
+enum MainState
 {
 	MAIN_CREATION,
+	MAIN_INIT,
 	MAIN_START,
 	MAIN_UPDATE,
-	MAIN_FINISH,
+	MAIN_CLEAN,
 	MAIN_EXIT
 };
 
+Application* App = nullptr;
+
 int main(int argc, char ** argv)
 {
-	LOG("Starting game '%s'...", TITLE);
+	LOG("Engine starting: '%s'", TITLE);
 
 	int main_return = EXIT_FAILURE;
-	main_states state = MAIN_CREATION;
-	Application* App = NULL;
+	MainState state = MainState::MAIN_CREATION;
 
 	while (state != MAIN_EXIT)
 	{
 		switch (state)
 		{
-		case MAIN_CREATION:
+		case MainState::MAIN_CREATION:
 
-			LOG("-------------- Application Creation --------------");
-			App = new Application();
-			state = MAIN_START;
+			LOG("CREATION PHASE ===============================");
+			App = new Application(argc, argv);
+			state = MainState::MAIN_INIT;
 			break;
 
-		case MAIN_START:
+		case MainState::MAIN_INIT:
 
-			LOG("-------------- Application Init --------------");
+			LOG("AWAKE PHASE ===============================");
 			if (App->Init() == false)
 			{
-				LOG("Application Init exits with ERROR");
-				state = MAIN_EXIT;
+				LOG("Application Awake exits with ERROR");
+				state = MainState::MAIN_EXIT;
 			}
 			else
 			{
-				state = MAIN_UPDATE;
-				LOG("-------------- Application Update --------------");
+				state = MainState::MAIN_START;
 			}
 
 			break;
 
-		case MAIN_UPDATE:
-		{
-			int update_return = App->Update();
+		case MainState::MAIN_START:
 
-			if (update_return == UPDATE_ERROR)
+			LOG("START PHASE ===============================");
+			if (App->Start() == false)
 			{
-				LOG("Application Update exits with ERROR");
-				state = MAIN_EXIT;
+				LOG("Application Start exits with ERROR");
+				state = MainState::MAIN_EXIT;
+			}
+			else
+			{
+				state = MainState::MAIN_UPDATE;
+				LOG("UPDATE PHASE ===============================");
 			}
 
-			if (update_return == UPDATE_STOP)
-				state = MAIN_FINISH;
-		}
 			break;
 
-		case MAIN_FINISH:
+		case MainState::MAIN_UPDATE:
 
-			LOG("-------------- Application CleanUp --------------");
+			if (App->Update() == false)
+			{
+				state = MainState::MAIN_CLEAN;
+			}
+
+			break;
+
+		case MainState::MAIN_CLEAN:
+
+			LOG("CLEANUP PHASE ===============================");
 			if (App->CleanUp() == false)
 			{
 				LOG("Application CleanUp exits with ERROR");
@@ -75,7 +86,7 @@ int main(int argc, char ** argv)
 			else
 				main_return = EXIT_SUCCESS;
 
-			state = MAIN_EXIT;
+			state = MainState::MAIN_EXIT;
 
 			break;
 

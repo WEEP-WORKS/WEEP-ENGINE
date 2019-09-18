@@ -12,15 +12,23 @@ enum KEY_STATE
 	KEY_UP
 };
 
+enum EventWindow
+{
+	WE_QUIT = 0,
+	WE_HIDE = 1,
+	WE_SHOW = 2,
+	WE_COUNT
+};
+
 class ModuleInput : public Module
 {
 public:
 	
-	ModuleInput(Application* app, bool start_enabled = true);
+	ModuleInput( bool start_enabled = true);
 	~ModuleInput();
 
 	bool Init();
-	update_status PreUpdate(float dt);
+	bool PreUpdate();
 	bool CleanUp();
 
 	KEY_STATE GetKey(int id) const
@@ -58,7 +66,10 @@ public:
 		return mouse_y_motion;
 	}
 
+	bool GetWindowEvent(EventWindow ev);
+
 private:
+	bool	   windowEvents[WE_COUNT];
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
 	int mouse_x;

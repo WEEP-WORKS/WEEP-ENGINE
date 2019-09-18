@@ -11,6 +11,10 @@ Timer::Timer()
 	Start();
 }
 
+Timer::~Timer()
+{
+}
+
 // ---------------------------------------------
 void Timer::Start()
 {
@@ -26,7 +30,7 @@ void Timer::Stop()
 }
 
 // ---------------------------------------------
-Uint32 Timer::Read()
+Uint32 Timer::Read() const
 {
 	if(running == true)
 	{
@@ -38,4 +42,17 @@ Uint32 Timer::Read()
 	}
 }
 
+float Timer::ReadSec() const
+{
+	return float(Read()) / 1000.0f;
+}
 
+void Timer::SubstractTimeFromStart(float sec)
+{
+	started_at -= (sec * 1000);
+}
+
+bool Timer::IsActive()
+{
+	return active;
+}

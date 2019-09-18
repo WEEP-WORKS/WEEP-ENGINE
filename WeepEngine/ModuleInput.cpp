@@ -4,7 +4,7 @@
 
 #define MAX_KEYS 300
 
-ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleInput::ModuleInput( bool start_enabled) : Module( start_enabled)
 {
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
@@ -34,7 +34,7 @@ bool ModuleInput::Init()
 }
 
 // Called every draw update
-update_status ModuleInput::PreUpdate(float dt)
+bool ModuleInput::PreUpdate()
 {
 	SDL_PumpEvents();
 
@@ -90,27 +90,45 @@ update_status ModuleInput::PreUpdate(float dt)
 	{
 		switch(e.type)
 		{
-			case SDL_MOUSEWHEEL:
-			mouse_z = e.wheel.y;
-			break;
-
-			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
-
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
-			break;
 
 			case SDL_QUIT:
-			quit = true;
+			windowEvents[WE_QUIT] = true;
 			break;
 
 			case SDL_WINDOWEVENT:
-			{
-				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
-			}
+				switch (e.window.event)
+				{
+					//case SDL_WINDOWEVENT_LEAVE:
+				case SDL_WINDOWEVENT_HIDDEN:
+				case SDL_WINDOWEVENT_MINIMIZED:
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					windowEvents[WE_HIDE] = true;
+					break;
+
+					//case SDL_WINDOWEVENT_ENTER:
+				case SDL_WINDOWEVENT_SHOWN:
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_MAXIMIZED:
+				case SDL_WINDOWEVENT_RESTORED:
+					windowEvents[WE_SHOW] = true;
+					break;
+
+					if (e.window.event == SDL_WINDOWEVENT_RESIZED)
+						App->renderer3D->OnResize(e.window.data1, e.window.data2);
+				}
+				break;
+
+			case SDL_MOUSEWHEEL:
+				mouse_z = e.wheel.y;
+				break;
+
+			case SDL_MOUSEMOTION:
+				mouse_x = e.motion.x / SCREEN_SIZE;
+				mouse_y = e.motion.y / SCREEN_SIZE;
+
+				mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
+				mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+				break;
 		}
 	}
 
@@ -126,4 +144,9 @@ bool ModuleInput::CleanUp()
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
+}
+
+bool ModuleInput::GetWindowEvent(EventWindow ev)
+{
+	return windowEvents[ev];
 }

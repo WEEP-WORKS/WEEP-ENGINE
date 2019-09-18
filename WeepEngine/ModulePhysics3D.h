@@ -17,20 +17,19 @@ struct VehicleInfo;
 class ModulePhysics3D : public Module
 {
 public:
-	ModulePhysics3D(Application* app, bool start_enabled = true);
+	ModulePhysics3D(bool start_enabled = true);
 	~ModulePhysics3D();
 
 	bool Init();
 	bool Start();
-	update_status PreUpdate(float dt);
-	update_status Update(float dt);
-	update_status PostUpdate(float dt);
+	bool PreUpdate();
+	bool Update();
+	bool PostUpdate();
 	bool CleanUp();
 
 	PhysBody3D* AddBody(const Sphere& sphere, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cube& cube, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cylinder& cylinder, float mass = 1.0f);
-	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
 
 	void AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
