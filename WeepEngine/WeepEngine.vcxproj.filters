@@ -19,6 +19,9 @@
     <Filter Include="Sources\Modules\Game">
       <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Imgui">
+      <UniqueIdentifier>{9a3e3fab-1cf4-4a9a-a653-5dadcdcdafdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -78,6 +81,24 @@
     <ClInclude Include="PhysBody3D.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -127,6 +148,18 @@
     </ClCompile>
     <ClCompile Include="PhysBody3D.cpp">
       <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Sources\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Sources\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Sources\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Sources\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
