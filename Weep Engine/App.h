@@ -24,6 +24,7 @@ public:
 	bool Start();
 	bool Update();
 	bool CleanUp();
+	void CloseApp();
 
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
@@ -58,6 +59,8 @@ private:
 
 	string		       title;
 	string		       organization;
+
+	bool		       close_app = false;
 
 	// Engine debug info
 	int				   capped_ms = -1;

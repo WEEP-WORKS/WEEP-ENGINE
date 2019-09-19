@@ -80,7 +80,7 @@ bool Application::Update()
 {
 	bool ret = true;
 
-	if (input->GetWindowEvent(WE_QUIT) == true)
+	if (input->GetWindowEvent(WE_QUIT) == true || close_app)
 		return false;
 
 	PrepareUpdate();
@@ -136,6 +136,11 @@ bool Application::CleanUp()
 	}
 
 	return ret;
+}
+
+void Application::CloseApp()
+{
+	close_app = true;
 }
 
 void Application::FrameCalculations()
