@@ -1,7 +1,6 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleWindow.h"
-#include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
 
@@ -76,6 +75,23 @@ bool ModuleWindow::Awake()
 			screen_surface = SDL_GetWindowSurface(window);
 		}
 
+		SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+		SDL_GL_MakeCurrent(window, gl_context);
+		SDL_GL_SetSwapInterval(1); // Enable vsync
+
+		// Setup Dear ImGui context
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+
+		io = ImGui::GetIO();
+
+		// Setup Dear ImGui style
+		ImGui::StyleColorsDark();
+		//ImGui::StyleColorsClassic();
+
+		// Setup Platform/Renderer bindings
+		ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
+		ImGui_ImplOpenGL2_Init();
 		
 	}
 

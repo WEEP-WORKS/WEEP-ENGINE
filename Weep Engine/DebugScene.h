@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 #include "p2List2.h"
-#include "imgui.h"
+
 #define MAX_SNAKE 2
 
 struct PhysBody3D;
@@ -36,8 +36,7 @@ public:
 
 
 
-	ImGuiIO io;
-	ImVec4 clear_color;
+
 
 public:
 

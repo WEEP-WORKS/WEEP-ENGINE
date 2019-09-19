@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
-
+#include "imgui.h"
 class Application;
 
 class ModuleWindow : public Module
@@ -26,6 +26,8 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+
+	ImGuiIO io;
 };
 
 #endif // __ModuleWindow_H__
