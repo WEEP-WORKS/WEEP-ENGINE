@@ -7,6 +7,7 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "imgui_impl_opengl2.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -101,6 +102,11 @@ bool ModuleRenderer3D::Awake()
 		glEnable(GL_COLOR_MATERIAL);
 	}
 
+	clear_color = ImVec4(0.f, 0.f, 0.f, 1.00f); // Color background
+	
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -130,7 +136,17 @@ bool ModuleRenderer3D::PreUpdate()
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
+	// Rendering ImGui
+	ImGui::Render();
+	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+
 	SDL_GL_SwapWindow(App->window->window);
+
+	
 	return true;
 }
 
