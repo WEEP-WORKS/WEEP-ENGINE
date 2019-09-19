@@ -55,12 +55,6 @@ bool DebugScene::Update()
 	p.axis = true;
 	p.Render();
 
-
-	
-	
-
-	
-
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
@@ -78,7 +72,10 @@ bool DebugScene::Update()
 	//ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 	////SDL_GL_SwapWindow(App->window->window); //esto activado causa parpadeo
 
-
+	if (ImGui::Button("Close App", ImVec2(100, 25)))
+	{
+		App->CloseApp();
+	}
 
 	return ret;
 }
