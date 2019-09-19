@@ -1,6 +1,9 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleWindow.h"
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl2.h"
 
 ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
@@ -34,8 +37,11 @@ bool ModuleWindow::Awake()
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
 		if(WIN_FULLSCREEN == true)
 		{
@@ -69,6 +75,8 @@ bool ModuleWindow::Awake()
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
 		}
+
+		
 	}
 
 	return ret;
