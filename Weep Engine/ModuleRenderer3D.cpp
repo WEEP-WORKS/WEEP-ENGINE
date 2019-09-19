@@ -7,6 +7,7 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
@@ -154,6 +155,9 @@ bool ModuleRenderer3D::PostUpdate()
 bool ModuleRenderer3D::CleanUp()
 {
 	bool ret = true;
+
+	LOG("Destroying ImGui");
+	ImGui_ImplSDL2_Shutdown();
 
 	LOG("Destroying 3D Renderer");
 
