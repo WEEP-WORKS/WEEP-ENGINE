@@ -8,6 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "imgui_impl_opengl2.h"
+#include "imgui_impl_sdl.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -103,9 +104,7 @@ bool ModuleRenderer3D::Awake()
 	}
 
 	clear_color = ImVec4(0.f, 0.f, 0.f, 1.00f); // Color background
-	
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -129,6 +128,11 @@ bool ModuleRenderer3D::PreUpdate()
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
+
+	// Start the Dear ImGui frame
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(App->window->window);
+	ImGui::NewFrame();
 
 	return ret;
 }

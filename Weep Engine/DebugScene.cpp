@@ -5,8 +5,7 @@
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl2.h"
+
 #include "ModuleWindow.h"
 #include "SDL/include/SDL_opengl.h"
 
@@ -31,11 +30,6 @@ bool DebugScene::Start()
 {
 	bool ret = true;
 
-
-
-
-	
-
 	return true;
 }
 
@@ -54,11 +48,6 @@ bool DebugScene::Update()
 	Plane p(0, 10, 0, 0);
 	p.axis = true;
 	p.Render();
-
-	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->window->window);
-	ImGui::NewFrame();
 
 	if (show_demo_window)
 		ImGui::ShowTestWindow();
