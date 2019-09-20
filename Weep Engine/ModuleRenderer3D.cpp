@@ -145,12 +145,12 @@ bool ModuleRenderer3D::PostUpdate()
 	ImGui::Render();
 	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	glClear(GL_COLOR_BUFFER_BIT);
+
 
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_GL_SwapWindow(App->window->window);
-
+	//glClear(GL_COLOR_BUFFER_BIT);
 	
 	return true;
 }
