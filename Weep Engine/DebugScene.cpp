@@ -49,22 +49,29 @@ bool DebugScene::Update()
 	p.axis = true;
 	p.Render();
 
-	if (show_demo_window)
-		ImGui::ShowTestWindow();
-
-	//// Rendering ImGui
-	//ImGui::Render();
-	//glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	//glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	//glClear(GL_COLOR_BUFFER_BIT);
-
-	//ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-	////SDL_GL_SwapWindow(App->window->window); //esto activado causa parpadeo
-
-	if (ImGui::Button("Close App", ImVec2(100, 25)))
+	if (ImGui::BeginMainMenuBar()) 
 	{
-		App->CloseApp();
+		//if (ImGui::BeginMenu) 
+		//{
+		//	ImGui::MenuItem("Options");
+		//	
+		//	ImGui::EndMenu();
+		//}
+		if (show_demo_window)
+			ImGui::ShowTestWindow();
+		//ImGui::BeginMenu("Options");
+		if (ImGui::MenuItem("Options")) 
+		{
+
+		}
+		//ImGui::EndMenu();
+
+		if (ImGui::Button("Close App", ImVec2(100, 25)))
+		{
+			App->CloseApp();
+		}
 	}
+	ImGui::EndMainMenuBar();
 
 	return ret;
 }
