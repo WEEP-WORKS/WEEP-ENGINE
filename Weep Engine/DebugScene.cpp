@@ -51,27 +51,28 @@ bool DebugScene::Update()
 
 	if (ImGui::BeginMainMenuBar()) 
 	{
-		//if (ImGui::BeginMenu) 
-		//{
-		//	ImGui::MenuItem("Options");
-		//	
-		//	ImGui::EndMenu();
-		//}
-		if (show_demo_window)
-			ImGui::ShowTestWindow();
-		//ImGui::BeginMenu("Options");
-		if (ImGui::MenuItem("Options")) 
+		if (ImGui::BeginMenu("File"))
 		{
-
+			if (ImGui::MenuItem("Exit"))
+			{
+				ret = false;
+			}
+			ImGui::EndMenu();
 		}
-		//ImGui::EndMenu();
 
-		if (ImGui::Button("Close App", ImVec2(100, 25)))
+		if (ImGui::BeginMenu ("Window"))
 		{
-			App->CloseApp();
+			ImGui::Checkbox("Test Window", &show_demo_window);
+			ImGui::EndMenu();
 		}
+
+		ImGui::EndMainMenuBar();
 	}
-	ImGui::EndMainMenuBar();
+
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
 
 	return ret;
 }
