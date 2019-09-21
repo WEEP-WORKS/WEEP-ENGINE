@@ -1,8 +1,11 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleWindow.h"
+#include "glew/glew.h"
 #include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl2.h"
+#include "imgui_impl_opengl3.h"
+
+#pragma comment (lib, "glew/glew32.lib")
 
 ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
@@ -40,8 +43,8 @@ bool ModuleWindow::Awake()
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
 		if(WIN_FULLSCREEN == true)
 		{
@@ -81,10 +84,11 @@ bool ModuleWindow::Awake()
 		SDL_GL_SetSwapInterval(1); // Enable vsync
 
 		// Setup Dear ImGui context
+		glewInit();
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
-		io = ImGui::GetIO();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -92,7 +96,7 @@ bool ModuleWindow::Awake()
 
 		// Setup Platform/Renderer bindings
 		ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
-		ImGui_ImplOpenGL2_Init();
+		ImGui_ImplOpenGL3_Init();
 		
 	}
 

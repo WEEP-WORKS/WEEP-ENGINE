@@ -69,9 +69,6 @@
     <ClInclude Include="imgui.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui_impl_opengl2.h">
-      <Filter>Sources\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="imgui_impl_sdl.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
@@ -88,6 +85,9 @@
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
+      <Filter>Sources\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,13 +143,13 @@
     <ClCompile Include="imgui_draw.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui_impl_opengl2.cpp">
-      <Filter>Sources\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui_impl_sdl.cpp">
+      <Filter>Sources\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
   </ItemGroup>

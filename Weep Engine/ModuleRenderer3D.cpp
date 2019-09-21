@@ -4,14 +4,12 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "glew/glew.h"
 #include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
 #include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl2.h"
-#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
 
-#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
+#pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
@@ -52,7 +50,7 @@ bool ModuleRenderer3D::Awake()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", __glewErrorStringREGAL(error));
 			ret = false;
 		}
 
@@ -64,7 +62,7 @@ bool ModuleRenderer3D::Awake()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", __glewErrorStringREGAL(error));
 			ret = false;
 		}
 		
@@ -78,7 +76,7 @@ bool ModuleRenderer3D::Awake()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOG("Error initializing OpenGL! %s\n", __glewErrorStringREGAL(error));
 			ret = false;
 		}
 		
@@ -131,7 +129,7 @@ bool ModuleRenderer3D::PreUpdate()
 		lights[i].Render();
 
 	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
@@ -147,7 +145,7 @@ bool ModuleRenderer3D::PostUpdate()
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 
 
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_GL_SwapWindow(App->window->window);
 	//glClear(GL_COLOR_BUFFER_BIT);
@@ -161,6 +159,7 @@ bool ModuleRenderer3D::CleanUp()
 	bool ret = true;
 
 	LOG("Destroying ImGui");
+	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 
 	LOG("Destroying 3D Renderer");
