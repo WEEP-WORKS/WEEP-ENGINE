@@ -1,7 +1,6 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleInput.h"
-#include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
@@ -63,7 +62,7 @@ bool ModuleCamera3D::Update()
 	if (following != nullptr)
 	{
 		mat4x4 m;
-		following->GetTransform(&m);
+		//following->GetTransform(&m);
 
 		vec3 look(m.translation().x, m.translation().y, m.translation().z + displacement);
 		LookAt(look);

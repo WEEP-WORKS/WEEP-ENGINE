@@ -1,7 +1,6 @@
 #include "Globals.h"
 #include "App.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"

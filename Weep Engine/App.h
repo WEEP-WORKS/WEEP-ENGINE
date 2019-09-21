@@ -8,10 +8,8 @@
 
 class ModuleWindow;
 class ModuleInput;
-class ModuleAudio;
 class ModuleRenderer3D;
 class ModuleCamera3D;
-class ModulePhysics3D;
 class DebugScene;
 
 class Application
@@ -45,10 +43,8 @@ public:
 	//Modules
 	ModuleWindow*      window = nullptr;
 	ModuleInput*       input = nullptr;
-	ModuleAudio*       audio = nullptr;
 	ModuleRenderer3D*  renderer3D = nullptr;
 	ModuleCamera3D*    camera = nullptr;
-	ModulePhysics3D*   physics = nullptr;
 	DebugScene*        debug_scene = nullptr;
 
 private:
