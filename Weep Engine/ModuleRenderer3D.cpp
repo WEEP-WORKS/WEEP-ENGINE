@@ -124,10 +124,16 @@ bool ModuleRenderer3D::PreUpdate()
 	// Make a random number engine
 	pcg32 rng(seed_source);
 
-	// Choose a random mean between 0 and 1
+	 //Choose a random mean between 0 and 1
 	std::uniform_real_distribution<float> uniform_dist(0, 1);
 	float mean = uniform_dist(rng);
-	LOG("number is: %f", mean);
+
+	LOG("float num is: %f", mean);
+
+	// Choose a random mean between 1 and 6
+	std::uniform_int_distribution<int> uniform_dist1(1, 6);
+	int mean1 = uniform_dist1(rng);
+	LOG("int num is: %i", mean1);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
