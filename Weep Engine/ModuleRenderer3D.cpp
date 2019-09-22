@@ -8,6 +8,8 @@
 #include "SDL\include\SDL_opengl.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include <random>
+#include "pcg_random.hpp"
 
 #pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -115,6 +117,17 @@ bool ModuleRenderer3D::Awake()
 bool ModuleRenderer3D::PreUpdate()
 {
 	bool ret = true;
+
+	// Seed with a real random value, if available
+	pcg_extras::seed_seq_from<std::random_device> seed_source;
+
+	// Make a random number engine
+	pcg32 rng(seed_source);
+
+	// Choose a random mean between 0 and 1
+	std::uniform_real_distribution<float> uniform_dist(0, 1);
+	float mean = uniform_dist(rng);
+	LOG("number is: %f", mean);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();

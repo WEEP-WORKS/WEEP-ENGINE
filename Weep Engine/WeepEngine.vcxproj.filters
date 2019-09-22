@@ -90,6 +90,9 @@
     <ClInclude Include="imgui_impl_opengl3.h">
       <Filter>Sources\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="pcg_random.hpp">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
