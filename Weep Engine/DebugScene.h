@@ -2,7 +2,6 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "Primitive.h"
 
 #define MAX_SNAKE 2
 

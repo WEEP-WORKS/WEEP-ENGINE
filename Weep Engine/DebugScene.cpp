@@ -1,6 +1,5 @@
 #include "Globals.h"
 #include "App.h"
-#include "Primitive.h"
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"
@@ -44,9 +43,9 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	Plane p(0, 10, 0, 0);
+	/*Plane p(0, 10, 0, 0);
 	p.axis = true;
-	p.Render();
+	p.Render();*/
 
 	if (ImGui::BeginMainMenuBar()) 
 	{
