@@ -79,7 +79,8 @@ bool DebugScene::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
-			ImGui::MenuItem("RandomNumber Generator", NULL, &geometry_math_test);
+			ImGui::MenuItem("Geometry Math Test", NULL, &show_geometry_math_test);
+			ImGui::MenuItem("RandomNumber Generator", NULL, &show_random_generator);
 			ImGui::EndMenu();
 		}
 
@@ -94,6 +95,7 @@ bool DebugScene::Update()
 		ImGui::EndMainMenuBar();
 	}
 
+	//Test
 	if (show_demo_window)
 	{
 		ImGui::ShowDemoWindow(&show_demo_window);
@@ -106,9 +108,14 @@ bool DebugScene::Update()
 	}
 
 	// Geometry debug
-	if (geometry_math_test)
+	if (show_random_generator)
 	{
-		GeometryMathTest();
+		RandomGenerator();
+	}
+
+	if (show_geometry_math_test)
+	{
+		MathGeoTest();
 	}
 
 	return ret;
@@ -131,17 +138,20 @@ void DebugScene::AppAbout()
 	ImGui::End();
 }
 
-void DebugScene::GeometryMathTest()
+void DebugScene::MathGeoTest()
 {
-	/*ImGui::Begin("Geometry Math test", &geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Geometry Math test", &show_geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
 
 	ImGui::Separator();
 
-	ImGui::End();*/
+	ImGui::End();
+}
 
-	ImGui::Begin("Random Number Generation", &geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+void DebugScene::RandomGenerator()
+{
+	ImGui::Begin("Random Number Generation", &show_random_generator, ImGuiWindowFlags_AlwaysAutoResize);
 	
 	ImGui::InputFloat2("Min | Max FLOAT", range_demo.ptr(), 2);
 	ImGui::InputFloat2("Min | Max INT", range_demo1.ptr(), 2);

@@ -21,25 +21,17 @@ public:
 
 public:
 
-	// Our state
-	//bool show_demo_window = false;
-	//bool show_another_window = false;
-
 	// Main loop
 	bool done = false;
 
 private:
 
-	void GeometryMathTest();
-
-private:
-
 	bool show_app_about = false;
 	bool show_demo_window = false;
+	bool show_geometry_math_test = false;
+	bool show_random_generator = false;
 
-	// Geometry math test
-	bool geometry_math_test = false;
-
+	//MathGeo
 	bool contact = false;
 
 	//Random Number
@@ -48,8 +40,13 @@ private:
 	int quantity_demo = 1; // number of random generations of the demo
 
 private:
+
+	//Random Number
+	void RandomGenerator();
 	void GenerateRandomNumbers(float2 range, float2 range1, int quantity);
 	float GetFloatRandomValue(float range_f1, float range_f2);
 	int GetIntRandomValue(float range_f1, float range_f2);
 
+	//MathGeo
+	void MathGeoTest();
 };
