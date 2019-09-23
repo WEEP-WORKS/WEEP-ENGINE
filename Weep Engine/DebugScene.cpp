@@ -123,7 +123,7 @@ bool DebugScene::Update()
 
 void DebugScene::AppAbout()
 {
-	ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Text("Weep Engine. v.0.1");
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
@@ -145,6 +145,126 @@ void DebugScene::MathGeoTest()
 	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
 
 	ImGui::Separator();
+
+	ImGui::InputFloat3("Position", vec3a);
+	ImGui::SliderFloat("Distance", &dist, 0, 10);
+
+	if (ImGui::Button("Sphere - Sphere"))
+	{
+		contact_sphere_sphere = false;
+		contact_sphere_capsules = false;
+		contact_aabb_aabb = false;
+		contact_obb_obb = false;
+		contact_aabb_ray = false;
+		contact_sphere_sphere = !contact_sphere_sphere;
+	}
+
+	if (ImGui::Button("Sphere - Capsule"))
+	{
+		contact_sphere_sphere = false;
+		contact_sphere_capsules = false;
+		contact_aabb_aabb = false;
+		contact_obb_obb = false;
+		contact_aabb_ray = false;
+		contact_sphere_capsules = !contact_sphere_capsules;
+	}
+
+	if (ImGui::Button("AABB - AABB"))
+	{
+		contact_sphere_sphere = false;
+		contact_sphere_capsules = false;
+		contact_aabb_aabb = false;
+		contact_obb_obb = false;
+		contact_aabb_ray = false;
+		contact_aabb_aabb = !contact_aabb_aabb;
+	}
+
+	if (ImGui::Button("OBB - OBB"))
+	{
+		contact_sphere_sphere = false;
+		contact_sphere_capsules = false;
+		contact_aabb_aabb = false;
+		contact_obb_obb = false;
+		contact_aabb_ray = false;
+		contact_obb_obb = !contact_obb_obb;
+	}
+
+	if (ImGui::Button("AABB - Ray"))
+	{
+		contact_sphere_sphere = false;
+		contact_sphere_capsules = false;
+		contact_aabb_aabb = false;
+		contact_obb_obb = false;
+		contact_aabb_ray = false;
+		contact_aabb_ray = !contact_aabb_ray;
+	}
+
+	math::float3 p1 = { vec3a[0] - dist / 2, vec3a[1], vec3a[2] };
+	math::float3 p2 = { vec3a[0] + dist / 2, vec3a[1], vec3a[2] };
+	contact = false;
+
+	if (contact_sphere_sphere)
+	{
+		// Sphere 1
+		ImGui::Text("contact_sphere_sphere");
+
+		Sphere sph1(p1, 2);
+
+		Sphere sph2(p2, 2);
+
+		if (sph1.Intersects(sph2))
+			contact = true;
+	}
+
+	if (contact_sphere_capsules)
+	{
+		ImGui::Text("contact_sphere_capsules");
+
+		Sphere sph1(p1, 2);
+
+		Capsule c(float3(p2.x, p2.y - 1, p2.z), float3(p2.x, p2.y + 1, p2.z), 1.0f);
+
+		if (sph1.Intersects(c))
+			contact = true;
+	}
+
+	if (contact_aabb_aabb)
+	{
+		ImGui::Text("contact_aabb_aabb");
+
+		AABB sph1(float3(p1.x - 1, p1.y - 1, p1.z - 1), float3(p1.x + 1, p1.y + 1, p1.z + 1));
+
+		AABB sph2(float3(p2.x - 1, p2.y - 1, p2.z - 1), float3(p2.x + 1, p2.y + 1, p2.z + 1));
+
+		if (sph1.Intersects(sph2))
+			contact = true;
+	}
+
+	if (contact_obb_obb)
+	{
+		ImGui::Text("contact_obb_obb");
+
+		AABB ab1(float3(p1.x - 1, p1.y - 1, p1.z - 1), float3(p1.x + 1, p1.y + 1, p1.z + 1));
+		OBB sph1(ab1);
+
+		AABB ab2(float3(p2.x - 1, p2.y - 1, p2.z - 1), float3(p2.x + 1, p2.y + 1, p2.z + 1));
+		OBB sph2(ab2);
+
+		if (sph1.Intersects(sph2))
+			contact = true;
+	}		
+
+	if (contact_aabb_ray)
+	{
+		ImGui::Text("contact_aabb_ray");
+
+		AABB sph1(float3(p1.x - 1, p1.y - 1, p1.z - 1), float3(p1.x + 1, p1.y + 1, p1.z + 1));
+
+		Ray sph2(float3(p2.x, p2.y, p2.z - 10), float3(p2.x, p2.y, p2.z + 10));
+
+		if (sph1.Intersects(sph2))
+			contact = true;
+	}
 
 	ImGui::End();
 }

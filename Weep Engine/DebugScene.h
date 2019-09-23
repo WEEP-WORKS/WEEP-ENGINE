@@ -49,4 +49,12 @@ private:
 
 	//MathGeo
 	void MathGeoTest();
+
+	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
+	float dist = 0;
+	bool contact_sphere_sphere = false;
+	bool contact_sphere_capsules = false;
+	bool contact_aabb_aabb = false;
+	bool contact_obb_obb = false;
+	bool contact_aabb_ray = false;
 };
