@@ -26,6 +26,8 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 
 	// Renderer last
 	AddModule(renderer3D);
+
+	SetDebugMode(true);
 }
 
 Application::~Application()
@@ -190,7 +192,22 @@ int Application::GetFramesSinceStart()
 	return frame_count;
 }
 
+bool Application::GetDebugMode()
+{
+	return debug_mode;
+}
+
+void Application::SetDebugMode(bool set)
+{
+	debug_mode = set;
+}
+
 void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);
+}
+
+void Application::OpenWeb(string web)
+{
+	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
 }

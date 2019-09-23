@@ -32,6 +32,11 @@ public:
 	float GetAvgFps();
 	int GetFramesSinceStart();
 
+	bool GetDebugMode();
+	void SetDebugMode(bool set);
+
+	void OpenWeb(string web);
+
 
 private:
 	void AddModule(Module* mod);
@@ -60,6 +65,8 @@ private:
 	bool		       close_app = false;
 
 	// Engine debug info
+	bool			   debug_mode = false;
+
 	int				   capped_ms = -1;
 	PerfTimer		   ptimer;
 	int				   frame_count = 0;

@@ -7,6 +7,9 @@
 #include "ModuleWindow.h"
 #include "SDL/include/SDL_opengl.h"
 
+#include "MathGeoLib\include\MathBuildConfig.h"
+#include "MathGeoLib\include\MathGeoLib.h"
+
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {}
@@ -64,6 +67,20 @@ bool DebugScene::Update()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
+		{
+			ImGui::MenuItem("Geometry math test", NULL, &geometry_math_test);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			ImGui::MenuItem("About Weep Engine", NULL, &show_app_about);
+			ImGui::EndMenu();
+		}
+
+		ImGui::Text("Fps: %f", App->GetAvgFps());
+
 		ImGui::EndMainMenuBar();
 	}
 
@@ -72,9 +89,44 @@ bool DebugScene::Update()
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
 
+	// About
+	if (show_app_about)
+	{
+		AppAbout();
+	}
+
+	// Geometry debug
+	if (geometry_math_test)
+	{
+		GeometryMathTest();
+	}
+
 	return ret;
 }
 
-void DebugScene::OnCollision(PhysBody3D * body1, PhysBody3D * body2)
+void DebugScene::AppAbout()
 {
+	ImGui::Begin("About SuSto Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("Weep Engine. v.0.1");
+	ImGui::Separator();
+	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
+	ImGui::Text("Weep Engine is licensed under the MIT License, see LICENSE for more information.");
+	if (ImGui::Button("Github Repository")) {
+		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE");
+	}
+	if (ImGui::Button("Download Latest Release")) {
+		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE/releases");
+	}
+	ImGui::End();
+}
+
+void DebugScene::GeometryMathTest()
+{
+	ImGui::Begin("Geometry Math test", &geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+
+	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
+
+	ImGui::Separator();
+
+	ImGui::End();
 }

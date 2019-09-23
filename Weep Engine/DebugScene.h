@@ -5,8 +5,6 @@
 
 #define MAX_SNAKE 2
 
-struct PhysBody3D;
-struct PhysMotor3D;
 
 
 class DebugScene : public Module
@@ -18,24 +16,35 @@ public:
 	bool Awake();
 	bool Start();
 	bool Update();
+	void AppAbout();
 	bool CleanUp();
-
-	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 public:
 
 	// Our state
-	bool show_demo_window = false;
+	//bool show_demo_window = false;
 	//bool show_another_window = false;
 
 	// Main loop
 	bool done = false;
 
+private:
 
+	void GeometryMathTest();
 
+private:
 
+	bool show_app_about = false;
+	bool show_demo_window = false;
 
-public:
-
-
+	// Geometry math test
+	bool geometry_math_test = false;
+	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
+	float dist = 0;
+	bool contact = false;
+	bool contact_sphere_sphere = false;
+	bool contact_sphere_capsules = false;
+	bool contact_aabb_aabb = false;
+	bool contact_obb_obb = false;
+	bool contact_aabb_ray = false;
 };
