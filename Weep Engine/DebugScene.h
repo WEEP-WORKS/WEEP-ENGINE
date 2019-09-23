@@ -41,6 +41,8 @@ private:
 
 private:
 
+	void LoadStyle(const char * name);
+
 	//Random Number
 	void RandomGenerator();
 	void GenerateRandomNumbers(float2 range, float2 range1, int quantity);
