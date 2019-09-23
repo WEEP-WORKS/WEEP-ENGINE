@@ -1,7 +1,6 @@
 #pragma once
 
 class Application;
-struct PhysBody3D;
 
 using namespace std;
 
@@ -50,9 +49,6 @@ public:
 	{ 
 		return true; 
 	}
-
-	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
-	{}
 
 	void SetName(const char* set_name) { name = set_name; }
 	bool GetEnabled() { return enabled; };
