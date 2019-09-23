@@ -54,7 +54,7 @@ bool DebugScene::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Exit"))
+			if (ImGui::MenuItem("Quit", "Alt+F4"))
 			{
 				ret = false;
 			}
@@ -79,7 +79,7 @@ bool DebugScene::Update()
 			ImGui::EndMenu();
 		}
 
-		ImGui::Text("Fps: %f", App->GetAvgFps());
+		ImGui::Text("Fps: %f", App->GetFps());
 
 		ImGui::EndMainMenuBar();
 	}
@@ -110,6 +110,7 @@ void DebugScene::AppAbout()
 	ImGui::Text("Weep Engine. v.0.1");
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
+	ImGui::Text("This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa");
 	ImGui::Text("Weep Engine is licensed under the MIT License, see LICENSE for more information.");
 	if (ImGui::Button("Github Repository")) {
 		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE");

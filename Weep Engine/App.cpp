@@ -67,6 +67,9 @@ bool Application::Start()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
+	frame_count++;
+	last_sec_frame_count++;
+
 	dt = (float)startup_time.Read() / 1000.0f;
 	startup_time.Start();
 }
@@ -141,6 +144,7 @@ void Application::CloseApp()
 
 void Application::FrameCalculations()
 {
+
 	if (last_sec_frame_time.Read() > 1000)
 	{
 		last_sec_frame_time.Start();
