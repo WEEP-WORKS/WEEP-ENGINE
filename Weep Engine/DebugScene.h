@@ -42,4 +42,14 @@ private:
 
 	bool contact = false;
 
+	//Random Number
+	float2 range_demo; // for the random generation demo
+	float2 range_demo1;
+	int quantity_demo = 1; // number of random generations of the demo
+
+private:
+	void GenerateRandomNumbers(float2 range, float2 range1, int quantity);
+	float GetFloatRandomValue(float range_f1, float range_f2);
+	int GetIntRandomValue(float range_f1, float range_f2);
+
 };
