@@ -4,6 +4,8 @@
 #include "Timer.h"
 #include "PerfTimer.h"
 #include "Module.h"
+#include "MathGeoLib/include/MathBuildConfig.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class ModuleWindow;
 class ModuleInput;
