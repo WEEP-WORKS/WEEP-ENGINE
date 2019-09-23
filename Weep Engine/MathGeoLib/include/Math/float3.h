@@ -37,9 +37,9 @@
 #include <OgreVector3.h>
 #endif
 
-#ifdef MATH_BULLET_INTEROP
-#include "../../../Bullet/include/LinearMath/btVector3.h"
-#endif
+//#ifdef MATH_BULLET_INTEROP
+//#include "../../../Bullet/include/LinearMath/btVector3.h"
+//#endif
 
 MATH_BEGIN_NAMESPACE
 
@@ -688,10 +688,10 @@ public:
 	static float3 FromQVector3D(const QVector3D &v) { return (float3)v; }
 	static float3 FromString(const QString &str) { return FromString(str.toStdString()); }
 #endif
-#ifdef MATH_BULLET_INTEROP
-	float3(const btVector3 &other) { x = other.x(); y = other.y(); z = other.z(); }
-	operator btVector3() const { return btVector3(x, y, z); }
-#endif
+//#ifdef MATH_BULLET_INTEROP
+//	float3(const btVector3 &other) { x = other.x(); y = other.y(); z = other.z(); }
+//	operator btVector3() const { return btVector3(x, y, z); }
+//#endif
 };
 
 /// Prints this float3 to the given stream.

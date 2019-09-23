@@ -672,11 +672,11 @@ public:
 	static float4 FromQVector4D(const QVector4D &v) { return (float4)v; }
 	static float4 FromString(const QString &str) { return FromString(str.toStdString()); }
 #endif
-#ifdef MATH_BULLET_INTEROP
-	// Bullet uses the same btVector3 class for both 3- and 4 -tuples (due to SSE).
-	float4(const btVector3 &other) { x = other.x(); y = other.y(); z = other.z(); w = other.w(); }
-	operator btVector3() const { btVector3 v(x, y, z); v.setW(w); return v; }
-#endif
+//#ifdef MATH_BULLET_INTEROP
+//	// Bullet uses the same btVector3 class for both 3- and 4 -tuples (due to SSE).
+//	float4(const btVector3 &other) { x = other.x(); y = other.y(); z = other.z(); w = other.w(); }
+//	operator btVector3() const { btVector3 v(x, y, z); v.setW(w); return v; }
+//#endif
 
 #ifdef MATH_SSE
 	float4(__m128 vec):v(vec) {}

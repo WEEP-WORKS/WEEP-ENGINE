@@ -29,9 +29,9 @@
 #include <QQuaternion>
 #endif
 
-#ifdef MATH_BULLET_INTEROP
-#include "../../../Bullet/include/LinearMath/btQuaternion.h"
-#endif
+//#ifdef MATH_BULLET_INTEROP
+//#include "../../../Bullet/include/LinearMath/btQuaternion.h"
+//#endif
 /*
 #ifdef MATH_IRRLICHT_INTEROP
 #include "Quaternion.h"
@@ -389,10 +389,10 @@ public:
 	static MUST_USE_RESULT Quat FromQQuaternion(const QQuaternion &q) { return (Quat)q; }
 	static MUST_USE_RESULT Quat FromString(const QString &str) { return FromString(str.toStdString()); }
 #endif
-#ifdef MATH_BULLET_INTEROP
-	Quat(const btQuaternion &other) { w = other.w(); x = other.x(); y = other.y(); z = other.z(); }
-	operator btQuaternion() const { return btQuaternion(x, y, z, w); }
-#endif
+//#ifdef MATH_BULLET_INTEROP
+//	Quat(const btQuaternion &other) { w = other.w(); x = other.x(); y = other.y(); z = other.z(); }
+//	operator btQuaternion() const { return btQuaternion(x, y, z, w); }
+//#endif
 
 	/// Multiplies two quaternions in the order 'this * rhs'.
 	/// This corresponds to the concatenation of the two operations ('this * rhs * vector' applies the rotation 'rhs' first, followed by the rotation 'this'.
