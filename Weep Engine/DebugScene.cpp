@@ -130,12 +130,61 @@ void DebugScene::AppAbout()
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
 	ImGui::Text("This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa");
-	ImGui::Text("Weep Engine is licensed under the MIT License, see LICENSE for more information.");
 	if (ImGui::Button("Github Repository")) {
 		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE");
 	}
+	ImGui::SameLine();
 	if (ImGui::Button("Download Latest Release")) {
 		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE/releases");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Report Issue"))
+	{
+		App->OpenWeb("https://github.com/Guillemsc/3D-Engine/issues");
+	}
+	ImGui::Separator();
+	if (ImGui::CollapsingHeader("Libraries"))
+	{
+		ImGui::Columns(3, "Name");
+		ImGui::Separator();
+		ImGui::Text("Use"); ImGui::NextColumn();
+		ImGui::Text("Name"); ImGui::NextColumn();
+		ImGui::Text("Version"); ImGui::NextColumn();
+		ImGui::Separator();
+		const char* use[7] = { "Graphics", "Graphics", "Math", "Random Numeber Generator", "UI", "File System", "OpenGL Supporter" };
+		const char* name[7] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" };
+		const char* version[7] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0"};
+		static int selected = -1;
+		for (int i = 0; i < 7; i++)
+		{
+			ImGui::Text(use[i]); ImGui::NextColumn();
+			ImGui::Text(name[i]); ImGui::NextColumn();
+			ImGui::Text(version[i]); ImGui::NextColumn();
+		}
+		ImGui::Columns(1);
+		ImGui::Separator();
+	}
+	if (ImGui::CollapsingHeader("License"))
+	{
+		ImGui::Text("MIT License");
+		ImGui::Text("Copyright(c) 2019 WEEP-WORKS");
+		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
+		ImGui::Text("of this software and associated documentation files (the 'Software'), to deal");
+		ImGui::Text("in the Software without restriction, including without limitation the rights");
+		ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and / or sell");
+		ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
+		ImGui::Text("furnished to do so, subject to the following conditions :");
+
+		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "The above copyright notice and this permission notice shall be included in all");
+		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "copies or substantial portions of the Software.");
+
+		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+		ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
+		ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
+		ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
+		ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
+		ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
+		ImGui::Text("SOFTWARE.");
 	}
 	ImGui::End();
 }
