@@ -280,7 +280,6 @@ void DebugScene::UpdateVRAMInfo()
 	}
 }
 
-
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
@@ -309,9 +308,9 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[7] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" };
-		const char* name[7] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" };
-		const char* version[7] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0"};
+		const char* use[8] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data"};
+		const char* name[8] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" , "GpuDetect"};
+		const char* version[8] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0", "---"};
 		static int selected = -1;
 		for (int i = 0; i < 7; i++)
 		{
