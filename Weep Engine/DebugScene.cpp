@@ -109,7 +109,7 @@ bool DebugScene::Update()
 			ImGui::EndMenu();
 		}
 
-		ImGui::Text("Fps: %f", App->GetFps());
+		ImGui::Text("Fps: %d", App->profiler->GetFPS());
 
 		ImGui::EndMainMenuBar();
 	}
@@ -148,7 +148,7 @@ bool DebugScene::Update()
 
 void DebugScene::Configuration()
 {
-	ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
 	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Configuration", &show_app_configuration, ImGuiWindowFlags_NoSavedSettings))
 	{
@@ -166,7 +166,14 @@ void DebugScene::Configuration()
 
 void DebugScene::OnConfiguration()
 {
-	
+	char title[25];
+	std::vector<float> framerate = App->profiler->GetFramesVector();
+	sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
+	ImGui::PlotHistogram("##Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+	ImGui::SameLine();
+	std::vector<float> milliseconds = App->profiler->GetMillisecondsVector();
+	sprintf_s(title, 25, "Milliseconds %.1f", milliseconds[milliseconds.size() - 1]);
+	ImGui::PlotHistogram("##Framerate", &milliseconds[0], milliseconds.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 }
 
 void DebugScene::AppAbout()

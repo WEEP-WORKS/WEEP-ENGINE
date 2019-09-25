@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Globals.h"
-#include "Timer.h"
-#include "PerfTimer.h"
+#include "Profiler.h"
 #include "Module.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
+class Profiler;
 
 class ModuleWindow;
 class ModuleInput;
@@ -28,9 +29,6 @@ public:
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
 	float GetDT();
-	float GetFps();
-	float GetAvgFps();
-	int GetFramesSinceStart();
 
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
@@ -42,8 +40,6 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
-	void FrameCalculations();
-
 public:
 	//Modules
 	ModuleWindow*      window = nullptr;
@@ -52,6 +48,8 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
 
+	Profiler*		   profiler = nullptr;
+		
 	std::list<Module*>      modules;
 
 private:
@@ -69,11 +67,7 @@ private:
 	bool			   debug_mode = false;
 
 	int				   capped_ms = -1;
-	PerfTimer		   ptimer;
 	int				   frame_count = 0;
-	Timer			   startup_time;
-	Timer			   frame_time;
-	Timer			   last_sec_frame_time;
 	int				   last_sec_frame_count = 0;
 	int				   prev_last_sec_frame_count = 0;
 	float		   	   dt = 0.0f;
