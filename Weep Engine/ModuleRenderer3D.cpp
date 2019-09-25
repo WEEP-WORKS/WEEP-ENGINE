@@ -15,6 +15,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	vsync = VSYNC;
 }
 
 // Destructor
@@ -198,4 +199,16 @@ void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)
 	}
 	glEnd();
 
+}
+
+void ModuleRenderer3D::OnConfiguration()
+{
+	if (ImGui::Checkbox("Vsync", &vsync))
+		SetVsync(vsync);
+}
+
+void ModuleRenderer3D::SetVsync(bool set)
+{
+	vsync = set;
+	SDL_GL_SetSwapInterval(vsync);
 }

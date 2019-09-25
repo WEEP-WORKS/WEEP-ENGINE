@@ -17,6 +17,7 @@ public:
 	bool PreUpdate();
 	bool PostUpdate();
 	bool CleanUp();
+	void OnConfiguration();
 
 	void OnResize(int width, int height);
 	void DrawGrid(int HALF_GRID_SIZE);
@@ -30,4 +31,10 @@ public:
 
 	
 	ImVec4 clear_color;
+
+private:
+
+	bool vsync = false;
+
+	void SetVsync(bool set);
 };
