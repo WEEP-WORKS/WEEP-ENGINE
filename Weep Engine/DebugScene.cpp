@@ -197,7 +197,7 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[7] = { "Graphics", "Graphics", "Math", "Random Numeber Generator", "UI", "File System", "OpenGL Supporter" };
+		const char* use[7] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" };
 		const char* name[7] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" };
 		const char* version[7] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0"};
 		static int selected = -1;
