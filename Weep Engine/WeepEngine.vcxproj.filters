@@ -37,6 +37,9 @@
     <Filter Include="Sources\MathGeoLib\Math">
       <UniqueIdentifier>{6ca6a3b7-3c8a-4b64-a11a-c677e6909aa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GpuDetect">
+      <UniqueIdentifier>{31353c43-f6f9-4f9d-b2b6-46fc4c03da6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -279,6 +282,12 @@
     <ClInclude Include="Profiler.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="gpudetect\DeviceId.h">
+      <Filter>Sources\GpuDetect</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\dxgi1_4.h">
+      <Filter>Sources\GpuDetect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -436,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="Profiler.cpp">
       <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="gpudetect\DeviceId.cpp">
+      <Filter>Sources\GpuDetect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

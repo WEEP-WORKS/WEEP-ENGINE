@@ -3,6 +3,7 @@
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"
+#include "gpudetect\DeviceId.h"
 
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -16,7 +17,22 @@
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
-{}
+{
+	uint vendor_id, device_id;
+	Uint64 vm, vm_curr, vm_a, vm_r;
+	std::wstring brand;
+
+	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &vm, &vm_curr, &vm_a, &vm_curr))
+	{
+		info1.gpu_vendor = vendor_id;
+		info1.gpu_device = device_id;
+		sprintf_s(info1.gpu_brand, 250, "%S", brand.c_str());
+		info1.vram_mb_budget = float(vm) / (1024.f * 1024.f);
+		info1.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
+		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
+		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
+	}
+}
 
 DebugScene::~DebugScene()
 {}
@@ -187,6 +203,10 @@ void DebugScene::OnConfiguration()
 
 void DebugScene::HardwareInfo()
 {
+
+	UpdateVRAMInfo();
+
+
 	ImGui::Text("SDL Version:");
 	ImGui::SameLine();
 	std::string temp = std::to_string(compiled_version.major) + "." + std::to_string(compiled_version.minor) + "." + std::to_string(compiled_version.patch);
@@ -212,7 +232,12 @@ void DebugScene::HardwareInfo()
 
 	ImGui::Text("GPU:");
 	ImGui::SameLine();
-	ImGui::TextColored(glGetString(GL_VENDOR));
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "vendor %u device %u", info1.gpu_vendor, info1.gpu_device);
+	ImGui::Text("Brand: ");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info1.gpu_brand);
+	ImGui::Text("Video Memory: ");				ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_budget);
+	ImGui::Text("Video Memory On Use: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_usage);
+	ImGui::Text("Video Memory Available: ");	ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_available);
+	ImGui::Text("Video Memory Reserved: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_reserved);
 }
 
 std::string DebugScene::GetHardwareInfo()
@@ -239,9 +264,22 @@ std::string DebugScene::GetHardwareInfo()
 			info.append("SSE41, ");
 		if (SDL_HasSSE42())
 			info.append("SSE42, ");
-
 		return info;
 }
+
+void DebugScene::UpdateVRAMInfo()
+{
+	Uint64 vm, vm_curr, vm_a, vm_r;
+
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vm, &vm_curr, &vm_a, &vm_curr))
+	{
+		info1.vram_mb_budget = float(vm) / (1024.f * 1024.f);
+		info1.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
+		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
+		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
+	}
+}
+
 
 void DebugScene::AppAbout()
 {

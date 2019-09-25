@@ -5,7 +5,15 @@
 
 #define MAX_SNAKE 2
 
-
+struct hardware_info {
+	uint gpu_vendor = 0;
+	uint gpu_device = 0;
+	char gpu_brand[250] = "";
+	float vram_mb_budget = 0.f;
+	float vram_mb_usage = 0.f;
+	float vram_mb_available = 0.f;
+	float vram_mb_reserved = 0.f;
+};
 
 class DebugScene : public Module
 {
@@ -60,6 +68,10 @@ private:
 	void HardwareInfo();
 
 	std::string GetHardwareInfo();
+
+	hardware_info info1;
+
+	void UpdateVRAMInfo();
 
 	//Random Number
 	void RandomGenerator();
