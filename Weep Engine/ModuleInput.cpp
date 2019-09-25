@@ -52,15 +52,20 @@ bool ModuleInput::PreUpdate()
 	{
 		if(keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE)
+			{
 				keyboard[i] = KEY_DOWN;
+				BufferInput(i, KEY_DOWN,false);
+			}
 			else
 				keyboard[i] = KEY_REPEAT;
 		}
 		else
 		{
 			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			{
 				keyboard[i] = KEY_UP;
+			}
 			else
 				keyboard[i] = KEY_IDLE;
 		}
@@ -76,15 +81,20 @@ bool ModuleInput::PreUpdate()
 	{
 		if(buttons & SDL_BUTTON(i))
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
+			if (mouse_buttons[i] == KEY_IDLE)
+			{
 				mouse_buttons[i] = KEY_DOWN;
+				BufferInput(i + 1, KEY_DOWN, true);
+			}
 			else
 				mouse_buttons[i] = KEY_REPEAT;
 		}
 		else
 		{
 			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
+			{
 				mouse_buttons[i] = KEY_UP;
+			}
 			else
 				mouse_buttons[i] = KEY_IDLE;
 		}
@@ -158,8 +168,46 @@ bool ModuleInput::CleanUp()
 	return ret;
 }
 
+void ModuleInput::BufferInput(int key, KEY_STATE state, bool mouse)
+{
+	std::string output_string;
+	std::string states[] = { "IDLE","DOWN","REPEAT","UP" };
+
+	if (mouse == false) 
+	{
+		output_string = "Keyboard: " + std::to_string(key) + " " + states[state] + "\n";
+	}
+	else {
+		output_string = "Mouse: " + std::to_string(key) + " " + states[state] + "\n";
+	}
+
+	input_buff.appendf(output_string.c_str());
+}
+
+void ModuleInput::OnConfiguration()
+{
+	ImGui::Text("Mouse position:");
+	ImGui::SameLine();
+	std::string mouse_log = std::to_string(GetMouseX()) + ", " + std::to_string(GetMouseY());
+	ImGui::TextColored({ 0,1.0f,1.0f,1.0f }, mouse_log.c_str());
+
+	ImGui::Text("Mouse motion:");
+	ImGui::SameLine();
+	mouse_log = std::to_string(GetMouseXMotion()) + ", " + std::to_string(GetMouseYMotion());
+	ImGui::TextColored({ 0,1.0f,1.0f,1.0f }, mouse_log.c_str());
+
+	ImGui::Text("Mouse wheel:");
+	ImGui::SameLine();
+	mouse_log = std::to_string(App->input->GetMouseZ());
+	ImGui::TextColored({ 0,1.0f,1.0f,1.0f }, mouse_log.c_str());
+	ImGui::Separator();
+
+	ImGui::BeginChild("Buffer");
+	ImGui::TextUnformatted(input_buff.begin());
+	ImGui::EndChild();
+}
+
 bool ModuleInput::GetWindowEvent(EventWindow ev)
 {
 	return windowEvents[ev];
 }
-

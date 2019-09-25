@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "imgui.h"
 
 #define MAX_MOUSE_BUTTONS 5
 
@@ -31,6 +32,8 @@ public:
 	bool PreUpdate();
 	bool CleanUp();
 
+	void OnConfiguration();
+
 	KEY_STATE GetKey(int id) const
 	{
 		return keyboard[id];
@@ -42,6 +45,8 @@ public:
 	}
 
 	bool GetWindowEvent(EventWindow ev);
+
+	void BufferInput(int key, KEY_STATE state, bool mouse);
 
 	int GetMouseX() const
 	{
@@ -69,13 +74,19 @@ public:
 	}
 
 private:
+
 	bool	   windowEvents[WE_COUNT];
+
 	KEY_STATE* keyboard;
 	KEY_STATE  mouse_buttons[MAX_MOUSE_BUTTONS];
+
 	int	       mouse_x;
 	int	       mouse_y;
 	int	       mouse_z;
 	int	       mouse_x_motion;
 	int	       mouse_y_motion;
-	//int mouse_z_motion;
+	//int	   mouse_z_motion;
+
+	ImGuiTextBuffer input_buff;
+
 };
