@@ -142,7 +142,7 @@ bool ModuleInput::PreUpdate()
 	}
 
 	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
-		return UPDATE_STOP;
+		return false;
 
 	return ret;
 }

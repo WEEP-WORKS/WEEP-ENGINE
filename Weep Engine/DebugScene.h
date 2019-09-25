@@ -15,9 +15,12 @@ public:
 
 	bool Awake();
 	bool Start();
+	bool PreUpdate();
 	bool Update();
+	void Configuration();
 	void AppAbout();
 	bool CleanUp();
+	void OnConfiguration();
 
 public:
 
@@ -30,6 +33,7 @@ private:
 	bool show_demo_window = false;
 	bool show_geometry_math_test = false;
 	bool show_random_generator = false;
+	bool show_app_configuration = false;
 
 	//MathGeo
 	bool contact = false;
@@ -51,7 +55,6 @@ private:
 
 	//MathGeo
 	void MathGeoTest();
-
 	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
 	float dist = 0;
 	bool contact_sphere_sphere = false;

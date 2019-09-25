@@ -27,7 +27,7 @@ bool ModuleRenderer3D::Awake()
 	bool ret = true;
 
 	LOG("Creating 3D Renderer context");
-	SetName("Renderer3D");
+	SetName("Renderer");
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);

@@ -25,7 +25,7 @@ bool ModuleCamera3D::Awake()
 	bool ret = true;
 
 	LOG("Loading Camera3D");
-	SetName("camera3D");
+	SetName("Camera");
 
 	return ret;
 }

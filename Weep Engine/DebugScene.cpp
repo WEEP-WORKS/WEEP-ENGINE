@@ -5,6 +5,7 @@
 #include "imgui.h"
 
 #include "ModuleWindow.h"
+#include "ModuleInput.h"
 #include "SDL/include/SDL_opengl.h"
 
 #include "MathGeoLib\include\MathBuildConfig.h"
@@ -54,6 +55,21 @@ bool DebugScene::CleanUp()
 	return ret;
 }
 
+bool DebugScene::PreUpdate() 
+{
+	bool ret = true;
+
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
+		App->debug_scene->show_app_configuration = true;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == true) {
+		App->debug_scene->show_app_configuration = false;
+	}
+
+	return ret;
+}
+
 bool DebugScene::Update()
 {
 	bool ret = true;
@@ -66,7 +82,7 @@ bool DebugScene::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Quit", "Alt+F4"))
+			if (ImGui::MenuItem("Quit", "Alt+F4 || ESC"))
 			{
 				ret = false;
 			}
@@ -75,12 +91,13 @@ bool DebugScene::Update()
 
 		if (ImGui::BeginMenu ("Window"))
 		{
-			ImGui::Checkbox("Test Window", &show_demo_window);
+			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
+			ImGui::MenuItem("Test Window", NULL, &show_demo_window);
 			ImGui::MenuItem("Geometry Math Test", NULL, &show_geometry_math_test);
 			ImGui::MenuItem("RandomNumber Generator", NULL, &show_random_generator);
 			ImGui::EndMenu();
@@ -95,6 +112,12 @@ bool DebugScene::Update()
 		ImGui::Text("Fps: %f", App->GetFps());
 
 		ImGui::EndMainMenuBar();
+	}
+
+	//Configuration
+	if (show_app_configuration)
+	{
+		Configuration();
 	}
 
 	//Test
@@ -123,6 +146,29 @@ bool DebugScene::Update()
 	return ret;
 }
 
+void DebugScene::Configuration()
+{
+	ImGui::SetNextWindowSize(ImVec2(500, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Configuration", &show_app_configuration, ImGuiWindowFlags_NoSavedSettings))
+	{
+		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
+		{
+			if (ImGui::CollapsingHeader((*it)->name))
+			{
+				(*it)->OnConfiguration();
+			}
+		}
+
+		ImGui::End();
+	}
+}
+
+void DebugScene::OnConfiguration()
+{
+	
+}
+
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
@@ -140,7 +186,7 @@ void DebugScene::AppAbout()
 	ImGui::SameLine();
 	if (ImGui::Button("Report Issue"))
 	{
-		App->OpenWeb("https://github.com/Guillemsc/3D-Engine/issues");
+		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE/issues");
 	}
 	ImGui::Separator();
 	if (ImGui::CollapsingHeader("Libraries"))

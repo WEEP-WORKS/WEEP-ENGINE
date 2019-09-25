@@ -50,11 +50,19 @@ public:
 		return true; 
 	}
 
+	virtual void OnConfiguration()
+	{
+
+	}
+
+
 	void SetName(const char* set_name) { name = set_name; }
 	bool GetEnabled() { return enabled; };
 	void SetEnabled(bool set) { enabled = set; };
 
+	const char * name = "";
+
 private:
-	string name = "";
+
 	bool   enabled = false;
 };

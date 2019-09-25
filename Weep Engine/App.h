@@ -37,7 +37,6 @@ public:
 
 	void OpenWeb(string web);
 
-
 private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
@@ -53,8 +52,10 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
 
+	std::list<Module*>      modules;
+
 private:
-	list<Module*>      modules;
+
 
 	int				   argc;
 	char**			   args;
