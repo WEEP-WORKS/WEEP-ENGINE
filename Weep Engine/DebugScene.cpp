@@ -9,7 +9,7 @@
 
 #include "MathGeoLib\include\MathBuildConfig.h"
 #include "MathGeoLib\include\MathGeoLib.h"
-
+#include "json/json.h"
 #include <random>
 #include "pcg_random.hpp"
 
@@ -119,6 +119,9 @@ bool DebugScene::Update()
 	{
 		MathGeoTest();
 	}
+
+	//Json::Value root;
+	//std::cin >> root;
 
 	return ret;
 }
