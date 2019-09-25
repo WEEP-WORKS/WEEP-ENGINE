@@ -29,6 +29,8 @@ bool DebugScene::Awake()
 
 	LoadStyle("green_purple");
 
+	SDL_VERSION(&compiled_version);
+
 	// Initial range set
 	range_demo.x = 0;
 	range_demo.y = 1;
@@ -154,14 +156,21 @@ void DebugScene::Configuration()
 	{
 		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
 		{
-			if (ImGui::CollapsingHeader((*it)->name))
+			if ((*it)->name != "Camera") 
 			{
-				(*it)->OnConfiguration();
+				if (ImGui::CollapsingHeader((*it)->name))
+				{
+					(*it)->OnConfiguration();
+				}
 			}
 		}
 
+		if (ImGui::CollapsingHeader("Hardware"))
+			HardwareInfo();
+
 		ImGui::End();
 	}
+
 }
 
 void DebugScene::OnConfiguration()
@@ -174,6 +183,64 @@ void DebugScene::OnConfiguration()
 	std::vector<float> milliseconds = App->profiler->GetMillisecondsVector();
 	sprintf_s(title, 25, "Milliseconds %.1f", milliseconds[milliseconds.size() - 1]);
 	ImGui::PlotHistogram("##Framerate", &milliseconds[0], milliseconds.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+}
+
+void DebugScene::HardwareInfo()
+{
+	ImGui::Text("SDL Version:");
+	ImGui::SameLine();
+	std::string temp = std::to_string(compiled_version.major) + "." + std::to_string(compiled_version.minor) + "." + std::to_string(compiled_version.patch);
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, temp.c_str());
+
+	ImGui::Separator();
+
+	ImGui::Text("CPU cores:");
+	ImGui::SameLine();
+	temp = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, temp.c_str());
+
+	ImGui::Text("System RAM:");
+	ImGui::SameLine();
+	temp = std::to_string(SDL_GetSystemRAM()) + "Mb";
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, temp.c_str());
+
+	ImGui::Text("Caps:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, GetHardwareInfo().c_str());
+
+	ImGui::Separator();
+
+	ImGui::Text("GPU:");
+	ImGui::SameLine();
+	ImGui::TextColored(glGetString(GL_VENDOR));
+}
+
+std::string DebugScene::GetHardwareInfo()
+{
+	std::string info;
+
+		if (SDL_Has3DNow())
+			info.append("3DNow, ");
+		if (SDL_HasAVX())
+			info.append("AVX, ");
+		if (SDL_HasAVX2())
+			info.append("AVX2, ");
+		if (SDL_HasMMX())
+			info.append("MMX, ");
+		if (SDL_HasRDTSC())
+			info.append("RDTSC, ");
+		if (SDL_HasSSE())
+			info.append("SSE, ");
+		if (SDL_HasSSE2())
+			info.append("SSE2, ");
+		if (SDL_HasSSE3())
+			info.append("SSE3, ");
+		if (SDL_HasSSE41())
+			info.append("SSE41, ");
+		if (SDL_HasSSE42())
+			info.append("SSE42, ");
+
+		return info;
 }
 
 void DebugScene::AppAbout()

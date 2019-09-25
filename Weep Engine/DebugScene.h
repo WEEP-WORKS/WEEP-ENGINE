@@ -37,15 +37,29 @@ private:
 
 	//MathGeo
 	bool contact = false;
+	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
+	float dist = 0;
+	bool contact_sphere_sphere = false;
+	bool contact_sphere_capsules = false;
+	bool contact_aabb_aabb = false;
+	bool contact_obb_obb = false;
+	bool contact_aabb_ray = false;
 
 	//Random Number
 	float2 range_demo; // for the random generation demo
 	float2 range_demo1;
 	int quantity_demo = 1; // number of random generations of the demo
 
+	SDL_version compiled_version;
+
 private:
 
 	void LoadStyle(const char * name);
+
+	//HardWare
+	void HardwareInfo();
+
+	std::string GetHardwareInfo();
 
 	//Random Number
 	void RandomGenerator();
@@ -55,11 +69,5 @@ private:
 
 	//MathGeo
 	void MathGeoTest();
-	float vec3a[3] = { 0.0f, 0.0f, 0.0f };
-	float dist = 0;
-	bool contact_sphere_sphere = false;
-	bool contact_sphere_capsules = false;
-	bool contact_aabb_aabb = false;
-	bool contact_obb_obb = false;
-	bool contact_aabb_ray = false;
+
 };
