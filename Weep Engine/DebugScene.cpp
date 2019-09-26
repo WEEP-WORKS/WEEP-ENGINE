@@ -10,6 +10,9 @@
 #include "MathGeoLib\include\MathBuildConfig.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 #include "jsoncpp/json/json.h"
+#include <fstream>
+#include <iostream>
+
 #include <random>
 #include "pcg_random.hpp"
 
@@ -120,11 +123,21 @@ bool DebugScene::Update()
 		MathGeoTest();
 	}
 
-	Json::Value root;
-	//std::cin >> root;
+
+	//----- test json ------- 
+	std::ifstream file_input("test.json");
 	Json::Reader reader;
-	reader.parse("test.json", root);
+	Json::Value root;
+	reader.parse(file_input, root);
+
+ 	std::string prof = root["Anna"]["profession"].asString();
+	//Json::Reader reader;
+	//reader.parse("test.json", root);
+
+	const int age = root["Anna"]["age"].asInt();
 	
+	//----- test json end------- 
+
 	return ret;
 }
 
