@@ -159,6 +159,9 @@ void Application::FinishUpdate()
 		std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
 		std::ofstream outputFileStream("/tmp/test.json");
 		writer->write(rootJsonValue, &outputFileStream);*/
+
+		want_to_save = false;
+
 	}
 
 	//---- Load -----
@@ -169,6 +172,8 @@ void Application::FinishUpdate()
 		{
 			(*it)->Load(root);
 		}
+
+		want_to_load = false;
 	}
 }
 

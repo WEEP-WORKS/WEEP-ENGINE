@@ -30,6 +30,8 @@ private:
 	bool show_demo_window = false;
 	bool show_geometry_math_test = false;
 	bool show_random_generator = false;
+	bool to_save = false;
+	bool to_load = false;
 
 	//MathGeo
 	bool contact = false;

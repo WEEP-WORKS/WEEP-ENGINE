@@ -1,12 +1,12 @@
 {
 	"Anna" : 
 	{
-		"age" : 1,
+		"age" : 2,
 		"profession" : "student"
 	},
 	"Ben" : 
 	{
 		"age" : "nineteen",
 		"profession" : "mechanic"
-	},
+	}
 }

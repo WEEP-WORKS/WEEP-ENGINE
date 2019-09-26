@@ -129,7 +129,7 @@ void ModuleWindow::SetTitle(const char* title)
 
 void ModuleWindow::Save(Json::Value& root)
 {
-	root["Anna"]["age"] = 1;
+	root["Anna"]["age"] = 2;
 	const int age = root["Anna"]["age"].asInt();
 }
 

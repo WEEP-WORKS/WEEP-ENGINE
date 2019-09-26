@@ -93,6 +93,13 @@ bool DebugScene::Update()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Options"))
+		{
+			ImGui::MenuItem("Save", NULL, &to_save);
+			ImGui::MenuItem("Load", NULL, &to_load);
+			ImGui::EndMenu();
+		}
+
 		ImGui::Text("Fps: %f", App->GetFps());
 
 		ImGui::EndMainMenuBar();
@@ -116,9 +123,16 @@ bool DebugScene::Update()
 		RandomGenerator();
 	}
 
-	if (show_geometry_math_test)
+	if (to_save)
 	{
-		MathGeoTest();
+		App->WantToSave();
+	}
+
+	// Save
+
+	if (to_load)
+	{
+		App->WantToLoad();
 	}
 
 	return ret;
