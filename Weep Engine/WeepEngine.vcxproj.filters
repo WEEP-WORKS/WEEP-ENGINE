@@ -505,5 +505,8 @@
     <None Include="jsoncpp\json_valueiterator.inl">
       <Filter>Sources\jsoncpp</Filter>
     </None>
+    <None Include="Game\SaveFile.json">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
 </Project>

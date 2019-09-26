@@ -16,7 +16,9 @@
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
-{}
+{
+	SetName("DebugScene");
+}
 
 DebugScene::~DebugScene()
 {}
@@ -25,7 +27,7 @@ bool DebugScene::Awake()
 {
 	bool ret = true;
 
-	SetName("DebugScene");
+	
 
 	LoadStyle("green_purple");
 
@@ -123,13 +125,13 @@ bool DebugScene::Update()
 		RandomGenerator();
 	}
 
+	// Save
 	if (to_save)
 	{
 		App->WantToSave();
 	}
 
-	// Save
-
+	// Load
 	if (to_load)
 	{
 		App->WantToLoad();

@@ -20,7 +20,7 @@ Application* App = nullptr;
 
 int main(int argc, char ** argv)
 {
-	LOG("Engine starting: '%s'", TITLE);
+	//LOG("Engine starting: '%s'", TITLE);   comented cause its necessary include ModuleWindow to use App->window->GetTitle() and I don't think it's worth. 
 
 	int main_return = EXIT_FAILURE;
 	MainState state = MainState::MAIN_CREATION;
@@ -94,6 +94,6 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
-	LOG("Exiting game '%s'...\n", TITLE);
+	// LOG("Exiting game '%s'...\n", TITLE); the same as the line 23.
 	return main_return;
 }

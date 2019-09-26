@@ -44,6 +44,8 @@ bool Application::Awake()
 {
 	bool ret = true;
 
+	LoadAll(); //Load all setings for the first time
+
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
 		ret = (*it)->Awake();
@@ -126,55 +128,53 @@ void Application::FinishUpdate()
 {
 	FrameCalculations();
 
-	std::ifstream file_input("test.json");
-	Json::Reader reader;
-	Json::Value root;
-	reader.parse(file_input, root);
-
 	//---- save ----
 
 	if (want_to_save)
 	{
-		
-
-		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-		{
-			(*it)->Save(root);
-		}
-		
-
-		Json::StreamWriterBuilder builder;
-		const std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
-		std::ofstream outputFileStream("test.json");
-
-		writer->write(root, &outputFileStream);
-
-	/*	Json::Value rootJsonValue;
-		rootJsonValue["foo"] = "bar";
-
-		Json::StreamWriterBuilder builder;
-		builder["commentStyle"] = "None";
-		builder["indentation"] = "   ";
-
-		std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
-		std::ofstream outputFileStream("/tmp/test.json");
-		writer->write(rootJsonValue, &outputFileStream);*/
-
-		want_to_save = false;
-
+		SaveAll();
 	}
 
 	//---- Load -----
 
 	if (want_to_load)
 	{
-		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
-		{
-			(*it)->Load(root);
-		}
-
-		want_to_load = false;
+		LoadAll();
 	}
+}
+
+void Application::SaveAll()
+{
+	Json::Value new_root;
+	Json::StreamWriterBuilder builder;
+	const std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->Save(new_root);
+	}
+
+
+	std::ofstream outputFileStream("SaveFile.json");
+
+	writer->write(new_root, &outputFileStream);
+
+	want_to_save = false;
+}
+
+void Application::LoadAll()
+{
+	std::ifstream file_input("SaveFile.json");
+	Json::Reader reader;
+	Json::Value root;
+	reader.parse(file_input, root);
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->Load(root);
+	}
+
+	want_to_load = false;
 }
 
 bool Application::CleanUp()

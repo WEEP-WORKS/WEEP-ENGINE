@@ -18,6 +18,9 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
+
 	void OnResize(int width, int height);
 	void DrawGrid(int HALF_GRID_SIZE);
 
@@ -30,4 +33,8 @@ public:
 
 	
 	ImVec4 clear_color;
+
+private:
+
+	bool vsync = false;
 };

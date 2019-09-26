@@ -11,6 +11,7 @@ ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
 	window = NULL;
 	screen_surface = NULL;
+	SetName("Window");
 }
 
 // Destructor
@@ -24,7 +25,7 @@ bool ModuleWindow::Awake()
 	bool ret = true;
 
 	LOG("Init SDL window & surface");
-	SetName("Window");
+	
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -34,8 +35,8 @@ bool ModuleWindow::Awake()
 	else
 	{
 		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
+		int new_width = width * size;
+		int new_height = height * size;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -46,27 +47,27 @@ bool ModuleWindow::Awake()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
-		if(WIN_FULLSCREEN == true)
+		if(fullscreen == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(resizable == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(borderless == true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(fullscreen_desktop == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, new_width, new_height, flags);
 
 		if(window == NULL)
 		{
@@ -127,18 +128,47 @@ void ModuleWindow::SetTitle(const char* title)
 	SDL_SetWindowTitle(window, title);
 }
 
+int ModuleWindow::GetWidth() const
+{
+	return width;
+}
+
+int ModuleWindow::GetHeight() const
+{
+	return height;
+}
+
+float ModuleWindow::GetSize() const
+{
+	return size;
+}
+
+string ModuleWindow::GetTitle() const
+{
+	return title;
+}
+
 void ModuleWindow::Save(Json::Value& root)
 {
-	root["Anna"]["age"] = 2;
-	const int age = root["Anna"]["age"].asInt();
+	root[GetName()]["Title"]				= title;
+	root[GetName()]["Width"]				= width;
+	root[GetName()]["Height"]				= height;
+	root[GetName()]["Size"]					= size;
+	root[GetName()]["Fullscreen"]			= fullscreen;
+	root[GetName()]["Resizable"]			= resizable;
+	root[GetName()]["Borderless"]			= borderless;
+	root[GetName()]["Fullscreen_desktop"]	= fullscreen_desktop;
 }
 
 void ModuleWindow::Load(Json::Value& root)
 {
-	std::string prof = root["Anna"]["profession"].asString();
-	//Json::Reader reader;
-	//reader.parse("test.json", root);
-
-	const int age = root["Anna"]["age"].asInt();
-
+	title = root[GetName()]["Title"].asString();
+	width = root[GetName()]["Width"].asInt();
+	height = root[GetName()]["Height"].asInt();
+	size = root[GetName()]["Size"].asFloat();
+	fullscreen = root[GetName()]["Fullscreen"].asBool();
+	resizable = root[GetName()]["Resizable"].asBool();
+	borderless = root[GetName()]["Borderless"].asBool();
+	fullscreen_desktop = root[GetName()]["Fullscreen_desktop"].asBool();
 }
+

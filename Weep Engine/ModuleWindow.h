@@ -23,6 +23,11 @@ public:
 
 	void SetTitle(const char* title);
 
+	int GetWidth() const;
+	int GetHeight() const;
+	float GetSize() const;
+	string GetTitle() const;
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;
@@ -31,6 +36,18 @@ public:
 	SDL_Surface* screen_surface;
 
 	ImGuiIO io;
+
+private:
+
+	string title;
+	int width = 0u;
+	int height = 0u;
+	float size = 0.0f;
+	bool fullscreen = false;
+	bool resizable = false;
+	bool borderless = false;
+	bool fullscreen_desktop = false;
+
 };
 
 #endif // __ModuleWindow_H__

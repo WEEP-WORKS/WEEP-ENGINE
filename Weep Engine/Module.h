@@ -57,7 +57,8 @@ public:
 	virtual void Load(Json::Value&) {}
 
 	void SetName(const char* set_name) { name = set_name; }
-	bool GetEnabled() { return enabled; };
+	string GetName() { return name; }
+	bool GetEnabled() const { return enabled; };
 	void SetEnabled(bool set) { enabled = set; };
 
 private:

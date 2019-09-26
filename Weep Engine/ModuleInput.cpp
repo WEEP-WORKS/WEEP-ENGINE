@@ -4,6 +4,7 @@
 #include "ModuleInput.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
+#include "ModuleWindow.h"
 
 #define MAX_KEYS 300
 
@@ -12,6 +13,8 @@ ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
+
+	SetName("Input");
 }
 
 // Destructor
@@ -26,7 +29,7 @@ bool ModuleInput::Awake()
 	bool ret = true;
 
 	LOG("Init SDL input event system");
-	SetName("Input");
+	
 
 	SDL_Init(0);
 
@@ -68,8 +71,8 @@ bool ModuleInput::PreUpdate()
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
+	mouse_x /= App->window->GetSize();
+	mouse_y /= App->window->GetSize();
 	mouse_z = 0;
 
 	for(int i = 0; i < 5; ++i)
@@ -132,11 +135,11 @@ bool ModuleInput::PreUpdate()
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
+			mouse_x = e.motion.x / App->window->GetSize();
+			mouse_y = e.motion.y / App->window->GetSize();
 
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			mouse_x_motion = e.motion.xrel / App->window->GetSize();
+			mouse_y_motion = e.motion.yrel / App->window->GetSize();
 			break;
 		}
 	}

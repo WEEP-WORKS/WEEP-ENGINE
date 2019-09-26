@@ -46,6 +46,10 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 
+	void SaveAll();
+
+	void LoadAll();
+
 	void FrameCalculations();
 
 public:
@@ -62,7 +66,6 @@ private:
 	int				   argc;
 	char**			   args;
 
-	string		       title;
 	string		       organization;
 
 	bool		       close_app = false;

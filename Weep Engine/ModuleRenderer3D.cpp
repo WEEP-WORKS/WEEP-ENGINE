@@ -15,6 +15,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool start_enabled) : Module(start_enabled)
 {
+	SetName("Renderer3D");
 }
 
 // Destructor
@@ -27,7 +28,7 @@ bool ModuleRenderer3D::Awake()
 	bool ret = true;
 
 	LOG("Creating 3D Renderer context");
-	SetName("Renderer3D");
+	
 	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
@@ -40,7 +41,7 @@ bool ModuleRenderer3D::Awake()
 	if(ret == true)
 	{
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		if(vsync && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		//Initialize Projection Matrix
@@ -107,7 +108,7 @@ bool ModuleRenderer3D::Awake()
 
 
 	// Projection matrix for
-	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	OnResize(App->window->GetWidth(), App->window->GetHeight());
 
 	return ret;
 }
@@ -198,4 +199,14 @@ void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)
 	}
 	glEnd();
 
+}
+
+void ModuleRenderer3D::Save(Json::Value& root)
+{
+	root[GetName()]["VSYNC"] = vsync;
+}
+
+void ModuleRenderer3D::Load(Json::Value& root)
+{
+	vsync = root[GetName()]["VSYNC"].asBool();
 }
