@@ -18,6 +18,10 @@
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
+	memset(name_input_buffer, 0, sizeof(name_input_buffer));
+	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
+	//max_fps = App->GetMaxFps();
+
 	uint vendor_id, device_id;
 	Uint64 vm, vm_curr, vm_a, vm_r;
 	std::wstring brand;
@@ -170,6 +174,9 @@ void DebugScene::Configuration()
 	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Configuration", &show_app_configuration, ImGuiWindowFlags_NoSavedSettings))
 	{
+		if (ImGui::CollapsingHeader("App"))
+			AppInfo();
+
 		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
 		{
 			if ((*it)->name != "Camera") 
@@ -199,6 +206,24 @@ void DebugScene::OnConfiguration()
 	std::vector<float> milliseconds = App->profiler->GetMillisecondsVector();
 	sprintf_s(title, 25, "Milliseconds %.1f", milliseconds[milliseconds.size() - 1]);
 	ImGui::PlotHistogram("##Framerate", &milliseconds[0], milliseconds.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+}
+
+void DebugScene::AppInfo()
+{
+	if (ImGui::InputText("App Name", name_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		App->SetAppName(name_input_buffer);
+	}
+
+	if (ImGui::InputText("Organization", organization_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		App->SetAppOrganization(organization_input_buffer);
+	}
+
+	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
+	{
+		App->SetMaxFps(max_fps);
+	}
 }
 
 void DebugScene::HardwareInfo()

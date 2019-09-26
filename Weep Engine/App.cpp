@@ -82,6 +82,12 @@ bool Application::Update()
 	if (input->GetWindowEvent(WE_QUIT) == true || close_app)
 		return false;
 
+	// Cap fps
+	if (App->profiler->capped_ms > 0 && GetDT() < App->profiler->capped_ms)
+	{
+		SDL_Delay(App->profiler->capped_ms - GetDT());
+	}
+
 	PrepareUpdate();
 	
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
@@ -186,3 +192,43 @@ void Application::OpenWeb(string web)
 {
 	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
 }
+
+
+void Application::SetAppName(const char* name)
+{
+	if (title != name)
+	{
+		title = name;
+		window->SetTitle(name);
+	}
+}
+
+const char * Application::GetAppName()
+{
+	return title.c_str();
+}
+
+void Application::SetAppOrganization(const char* name)
+{
+	if (name != organization)
+	{
+		organization = name;
+	}
+}
+
+const char * Application::GetAppOrganization()
+{
+	return organization.c_str();
+}
+
+void Application::SetMaxFps(int set)
+{
+	if (set > 0)
+		//App->profiler->max_fps = set;
+		App->profiler->capped_ms = (1000 / set);
+}
+
+//int Application::GetMaxFps()
+//{
+//	return App->profiler->max_fps;
+//}	

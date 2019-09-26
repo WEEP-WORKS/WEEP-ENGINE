@@ -30,6 +30,13 @@ public:
 	const char* GetArgv(int index) const;
 	float GetDT();
 
+	void SetAppName(const char* name);
+	const char* GetAppName();
+	void SetAppOrganization(const char* name);
+	const char* GetAppOrganization();
+	void SetMaxFps(int set);
+	//int GetMaxFps();
+
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
 
@@ -58,8 +65,8 @@ private:
 	int				   argc;
 	char**			   args;
 
-	string		       title;
-	string		       organization;
+	std::string		   title = "";
+	std::string		   organization = "";
 
 	bool		       close_app = false;
 

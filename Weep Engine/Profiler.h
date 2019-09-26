@@ -41,6 +41,14 @@ public:
 	std::vector<float> GetFramesVector();
 	std::vector<float> GetMillisecondsVector();
 
+	//void SetMaxFps(int fps);
+	//int GetMaxFps();
+
+public:
+	int	  capped_ms = -1;
+
+	int	  max_fps = 1;
+
 private:	
 	float create_time = 0.0f;
 
@@ -61,6 +69,8 @@ private:
 
 	Profile* current_profile = nullptr;
 	std::vector<Profile*> profiles;
+
+
 };
 
 #endif //__PROFILER_H__

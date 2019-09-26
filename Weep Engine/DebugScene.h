@@ -59,8 +59,13 @@ private:
 	int quantity_demo = 1; // number of random generations of the demo
 
 	SDL_version compiled_version;
+	char  name_input_buffer[255];
+	char  organization_input_buffer[255];
+	int   max_fps = 0;
 
 private:
+
+	void AppInfo();
 
 	void LoadStyle(const char * name);
 
