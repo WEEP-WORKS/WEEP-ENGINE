@@ -17,6 +17,7 @@ public:
 	bool PreUpdate();
 	bool PostUpdate();
 	bool CleanUp();
+	void OnConfiguration();
 
 	void Save(Json::Value&) override;
 	void Load(Json::Value&) override;
@@ -37,4 +38,9 @@ public:
 private:
 
 	bool vsync = false;
+
+private:
+
+	void SetVsync(bool set);
+
 };

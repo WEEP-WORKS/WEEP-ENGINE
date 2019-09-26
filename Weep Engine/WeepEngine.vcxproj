@@ -80,6 +80,8 @@
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="gpudetect\DeviceId.h" />
+    <ClInclude Include="gpudetect\dxgi1_4.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_impl_opengl3.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="pcg_random.hpp" />
     <ClInclude Include="PerfTimer.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +175,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="gpudetect\DeviceId.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_demo.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
@@ -221,6 +225,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
+    <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

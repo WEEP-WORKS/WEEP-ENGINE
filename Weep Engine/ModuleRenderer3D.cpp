@@ -27,6 +27,7 @@ bool ModuleRenderer3D::Awake()
 {
 	bool ret = true;
 
+
 	if(ret == true)
 	{
 		//Use Vsync
@@ -196,3 +197,16 @@ void ModuleRenderer3D::Load(Json::Value& root)
 {
 	vsync = root[GetName()]["VSYNC"].asBool();
 }
+
+void ModuleRenderer3D::OnConfiguration()
+{
+	if (ImGui::Checkbox("Vsync", &vsync))
+		SetVsync(vsync);
+}
+
+void ModuleRenderer3D::SetVsync(bool set)
+{
+	vsync = set;
+	SDL_GL_SetSwapInterval(vsync);
+}
+

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Globals.h"
-#include "Timer.h"
-#include "PerfTimer.h"
+#include "Profiler.h"
 #include "Module.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+
+class Profiler;
 
 class ModuleWindow;
 class ModuleInput;
@@ -28,9 +29,10 @@ public:
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
 	float GetDT();
-	float GetFps();
-	float GetAvgFps();
-	int GetFramesSinceStart();
+
+	
+	void SetMaxFps(int set);
+	//int GetMaxFps();
 
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
@@ -39,7 +41,6 @@ public:
 
 	void WantToSave();
 	void WantToLoad();
-
 
 private:
 	void AddModule(Module* mod);
@@ -50,8 +51,6 @@ private:
 
 	void LoadAll();
 
-	void FrameCalculations();
-
 public:
 	//Modules
 	ModuleWindow*      window = nullptr;
@@ -60,35 +59,23 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
 
+	Profiler*		   profiler = nullptr;
+		
+	std::list<Module*>      modules;
+
 private:
-	list<Module*>      modules;
+
 
 	int				   argc;
 	char**			   args;
 
-	string		       organization;
-
 	bool		       close_app = false;
 
-	// Engine debug info
 	bool			   debug_mode = false;
-
-	int				   capped_ms = -1;
-	PerfTimer		   ptimer;
-	int				   frame_count = 0;
-	Timer			   startup_time;
-	Timer			   frame_time;
-	Timer			   last_sec_frame_time;
-	int				   last_sec_frame_count = 0;
-	int				   prev_last_sec_frame_count = 0;
-	float		   	   dt = 0.0f;
-	float			   avg_fps = 0;
-	float			   seconds_since_startup = 0;
-	float			   last_frame_ms = 0;
-	float			   frames_on_last_update = 0;
 
 	bool want_to_save = false;
 	bool want_to_load = false;
+
 };
 
 extern Application* App;

@@ -29,6 +29,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	// Renderer last
 	AddModule(renderer3D);
 
+	profiler = new Profiler();
 	SetDebugMode(true);
 }
 
@@ -51,6 +52,8 @@ bool Application::Awake()
 		ret = (*it)->Awake();
 	}
 
+	profiler->AwakeTime();
+
 	return ret;
 }
 
@@ -64,27 +67,30 @@ bool Application::Start()
 		if (!ret) return false;
 	}
 
-	startup_time.Start();
+	profiler->StartTime();
+
 	return ret;
 }
 
-// ---------------------------------------------
+// Call PreUpdate, Update and PostUpdate on all modules
+
 void Application::PrepareUpdate()
 {
-	frame_count++;
-	last_sec_frame_count++;
 
-	dt = (float)startup_time.Read() / 1000.0f;
-	startup_time.Start();
 }
 
-// Call PreUpdate, Update and PostUpdate on all modules
 bool Application::Update()
 {
 	bool ret = true;
 
 	if (input->GetWindowEvent(WE_QUIT) == true || close_app)
 		return false;
+
+	// Cap fps
+	if (App->profiler->capped_ms > 0 && GetDT() < App->profiler->capped_ms)
+	{
+		SDL_Delay(App->profiler->capped_ms - GetDT());
+	}
 
 	PrepareUpdate();
 	
@@ -103,7 +109,11 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
+		profiler->StartProfile((*it)->name);
+
 		ret = (*it)->Update(); 
+
+		profiler->FinishProfile();
 
 		if (!ret) return false;
 	}
@@ -120,14 +130,14 @@ bool Application::Update()
 	
 	FinishUpdate();
 
+	profiler->UpdateFinish();
+
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	FrameCalculations();
-
 	//---- save ----
 
 	if (want_to_save)
@@ -175,6 +185,7 @@ void Application::LoadAll()
 	}
 
 	want_to_load = false;
+
 }
 
 bool Application::CleanUp()
@@ -186,33 +197,14 @@ bool Application::CleanUp()
 		ret = (*it)->CleanUp();
 	}
 
+	profiler->CleanUp();
+
 	return ret;
 }
 
 void Application::CloseApp()
 {
 	close_app = true;
-}
-
-void Application::FrameCalculations()
-{
-
-	if (last_sec_frame_time.Read() > 1000)
-	{
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
-
-	avg_fps = float(frame_count) / startup_time.ReadSec();
-	seconds_since_startup = startup_time.ReadSec();
-	last_frame_ms = frame_time.Read();
-	frames_on_last_update = prev_last_sec_frame_count;
-
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-	{
-		SDL_Delay(capped_ms - last_frame_ms);
-	}
 }
 
 int Application::GetArgc() const
@@ -230,22 +222,7 @@ const char * Application::GetArgv(int index) const
 
 float Application::GetDT()
 {
-	return dt;
-}
-
-float Application::GetFps()
-{
-	return frames_on_last_update;
-}
-
-float Application::GetAvgFps()
-{
-	return avg_fps;
-}
-
-int Application::GetFramesSinceStart()
-{
-	return frame_count;
+	return profiler->GetFrameTime() / 1000;
 }
 
 bool Application::GetDebugMode()
@@ -276,4 +253,17 @@ void Application::WantToSave()
 void Application::WantToLoad()
 {
 	want_to_load = true;
+}	
+
+void Application::SetMaxFps(int set)
+{
+	if (set > 0)
+		//App->profiler->max_fps = set;
+		App->profiler->capped_ms = (1000 / set);
 }
+
+//int Application::GetMaxFps()
+//{
+//	return App->profiler->max_fps;
+//}	
+

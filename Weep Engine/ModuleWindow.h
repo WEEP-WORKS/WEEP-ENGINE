@@ -17,6 +17,7 @@ public:
 
 	bool Awake();
 	bool CleanUp();
+	void OnConfiguration();
 
 	void Save(Json::Value&) override;
 	void Load(Json::Value&) override;
@@ -29,6 +30,11 @@ public:
 	string GetTitle() const;
 	string GetVersion() const;
 	string GetTitleWithVersion() const;
+
+	void SetAppName(string name);
+	const char* GetAppName();
+	void SetAppOrganization(const char* name);
+	const char* GetAppOrganization();
 
 public:
 	//The window we'll be rendering to
@@ -43,15 +49,25 @@ private:
 
 	string title;
 	string version;
-	int width						= 0u;
-	int height						= 0u;
-	float size						= 0.0f;
-	bool fullscreen					= false;
-	bool resizable					= false;
-	bool borderless					= false;
-	bool fullscreen_desktop			= false;
+	string organization;
 
 	SDL_GLContext gl_context;
+
+	int     width = 0u;
+	int     height = 0u;
+	float size = 0.0f;
+	bool    fullscreen = false;
+	bool    resizable = false;
+	bool    borderless = false;
+	bool    full_dekstop = false;
+
+private:
+
+	void SetWindowSize(int width, int height);
+	void SetFullscreen(bool set);
+	void SetResizable(bool set);
+	void SetBorderless(bool set);
+	void SetFullDekstop(bool set);
 
 };
 

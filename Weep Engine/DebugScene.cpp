@@ -3,8 +3,10 @@
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"
+#include "gpudetect\DeviceId.h"
 
 #include "ModuleWindow.h"
+#include "ModuleInput.h"
 #include "SDL/include/SDL_opengl.h"
 
 #include "MathGeoLib\include\MathBuildConfig.h"
@@ -17,7 +19,28 @@
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
+
 	SetName("DebugScene");
+
+	memset(name_input_buffer, 0, sizeof(name_input_buffer));
+	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
+	//max_fps = App->GetMaxFps();
+
+	uint vendor_id, device_id;
+	Uint64 vm, vm_curr, vm_a, vm_r;
+	std::wstring brand;
+
+	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &vm, &vm_curr, &vm_a, &vm_curr))
+	{
+		info1.gpu_vendor = vendor_id;
+		info1.gpu_device = device_id;
+		sprintf_s(info1.gpu_brand, 250, "%S", brand.c_str());
+		info1.vram_mb_budget = float(vm) / (1024.f * 1024.f);
+		info1.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
+		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
+		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
+	}
+
 }
 
 DebugScene::~DebugScene()
@@ -30,6 +53,8 @@ bool DebugScene::Awake()
 	
 
 	LoadStyle("green_purple");
+
+	SDL_VERSION(&compiled_version);
 
 	// Initial range set
 	range_demo.x = 0;
@@ -57,6 +82,21 @@ bool DebugScene::CleanUp()
 	return ret;
 }
 
+bool DebugScene::PreUpdate() 
+{
+	bool ret = true;
+
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
+		App->debug_scene->show_app_configuration = true;
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == true) {
+		App->debug_scene->show_app_configuration = false;
+	}
+
+	return ret;
+}
+
 bool DebugScene::Update()
 {
 	bool ret = true;
@@ -69,7 +109,7 @@ bool DebugScene::Update()
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Quit", "Alt+F4"))
+			if (ImGui::MenuItem("Quit", "Alt+F4 || ESC"))
 			{
 				ret = false;
 			}
@@ -78,12 +118,13 @@ bool DebugScene::Update()
 
 		if (ImGui::BeginMenu ("Window"))
 		{
-			ImGui::Checkbox("Test Window", &show_demo_window);
+			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
+			ImGui::MenuItem("Test Window", NULL, &show_demo_window);
 			ImGui::MenuItem("Geometry Math Test", NULL, &show_geometry_math_test);
 			ImGui::MenuItem("RandomNumber Generator", NULL, &show_random_generator);
 			ImGui::EndMenu();
@@ -102,9 +143,15 @@ bool DebugScene::Update()
 			ImGui::EndMenu();
 		}
 
-		ImGui::Text("Fps: %f", App->GetFps());
+		ImGui::Text("Fps: %d", App->profiler->GetFPS());
 
 		ImGui::EndMainMenuBar();
+	}
+
+	//Configuration
+	if (show_app_configuration)
+	{
+		Configuration();
 	}
 
 	//Test
@@ -140,6 +187,143 @@ bool DebugScene::Update()
 	return ret;
 }
 
+void DebugScene::Configuration()
+{
+	ImGui::SetNextWindowSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("Configuration", &show_app_configuration, ImGuiWindowFlags_NoSavedSettings))
+	{
+		if (ImGui::CollapsingHeader("App"))
+			AppInfo();
+
+		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
+		{
+			if ((*it)->name != "Camera") 
+			{
+				if (ImGui::CollapsingHeader((*it)->name))
+				{
+					(*it)->OnConfiguration();
+				}
+			}
+		}
+
+		if (ImGui::CollapsingHeader("Hardware"))
+			HardwareInfo();
+
+		ImGui::End();
+	}
+
+}
+
+void DebugScene::OnConfiguration()
+{
+	char title[25];
+	std::vector<float> framerate = App->profiler->GetFramesVector();
+	sprintf_s(title, 25, "Framerate %.1f", framerate[framerate.size() - 1]);
+	ImGui::PlotHistogram("##Framerate", &framerate[0], framerate.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+	ImGui::SameLine();
+	std::vector<float> milliseconds = App->profiler->GetMillisecondsVector();
+	sprintf_s(title, 25, "Milliseconds %.1f", milliseconds[milliseconds.size() - 1]);
+	ImGui::PlotHistogram("##Framerate", &milliseconds[0], milliseconds.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+}
+
+void DebugScene::AppInfo()
+{
+	if (ImGui::InputText("App Name", name_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		App->window->SetAppName(name_input_buffer);
+	}
+
+	if (ImGui::InputText("Organization", organization_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		App->window->SetAppOrganization(organization_input_buffer);
+	}
+
+	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
+	{
+		App->SetMaxFps(max_fps);
+	}
+}
+
+void DebugScene::HardwareInfo()
+{
+
+	UpdateVRAMInfo();
+
+
+	ImGui::Text("SDL Version:");
+	ImGui::SameLine();
+	std::string temp = std::to_string(compiled_version.major) + "." + std::to_string(compiled_version.minor) + "." + std::to_string(compiled_version.patch);
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, temp.c_str());
+
+	ImGui::Separator();
+
+	ImGui::Text("CPU cores:");
+	ImGui::SameLine();
+	temp = std::to_string(SDL_GetCPUCount()) + " (Cache: " + std::to_string(SDL_GetCPUCacheLineSize()) + "Kb)";
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, temp.c_str());
+
+	ImGui::Text("System RAM:");
+	ImGui::SameLine();
+	temp = std::to_string(SDL_GetSystemRAM()) + "Mb";
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, temp.c_str());
+
+	ImGui::Text("Caps:");
+	ImGui::SameLine();
+	ImGui::TextColored({ 0, 1.0f, 1.0f, 1.0f }, GetHardwareInfo().c_str());
+
+	ImGui::Separator();
+
+	ImGui::Text("GPU:");
+	ImGui::SameLine();
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "vendor %u device %u", info1.gpu_vendor, info1.gpu_device);
+	ImGui::Text("Brand: ");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info1.gpu_brand);
+	ImGui::Text("Video Memory: ");				ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_budget);
+	ImGui::Text("Video Memory On Use: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_usage);
+	ImGui::Text("Video Memory Available: ");	ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_available);
+	ImGui::Text("Video Memory Reserved: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_reserved);
+}
+
+std::string DebugScene::GetHardwareInfo()
+{
+	std::string info;
+
+		if (SDL_Has3DNow())
+			info.append("3DNow, ");
+		if (SDL_HasAVX())
+			info.append("AVX, ");
+		if (SDL_HasAVX2())
+			info.append("AVX2, ");
+		if (SDL_HasMMX())
+			info.append("MMX, ");
+		if (SDL_HasRDTSC())
+			info.append("RDTSC, ");
+		if (SDL_HasSSE())
+			info.append("SSE, ");
+		if (SDL_HasSSE2())
+			info.append("SSE2, ");
+		if (SDL_HasSSE3())
+			info.append("SSE3, ");
+		if (SDL_HasSSE41())
+			info.append("SSE41, ");
+		if (SDL_HasSSE42())
+			info.append("SSE42, ");
+		return info;
+}
+
+void DebugScene::UpdateVRAMInfo()
+{
+	Uint64 vm, vm_curr, vm_a, vm_r;
+
+	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vm, &vm_curr, &vm_a, &vm_curr))
+	{
+		info1.vram_mb_budget = float(vm) / (1024.f * 1024.f);
+		info1.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
+		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
+		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
+	}
+}
+
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
@@ -157,7 +341,7 @@ void DebugScene::AppAbout()
 	ImGui::SameLine();
 	if (ImGui::Button("Report Issue"))
 	{
-		App->OpenWeb("https://github.com/Guillemsc/3D-Engine/issues");
+		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE/issues");
 	}
 	ImGui::Separator();
 	if (ImGui::CollapsingHeader("Libraries"))
@@ -168,11 +352,11 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[7] = { "Graphics", "Graphics", "Math", "Random Numeber Generator", "UI", "File System", "OpenGL Supporter" };
-		const char* name[7] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" };
-		const char* version[7] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0"};
+		const char* use[8] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data"};
+		const char* name[8] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" , "GpuDetect"};
+		const char* version[8] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0", "---"};
 		static int selected = -1;
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			ImGui::Text(use[i]); ImGui::NextColumn();
 			ImGui::Text(name[i]); ImGui::NextColumn();
@@ -185,23 +369,11 @@ void DebugScene::AppAbout()
 	{
 		ImGui::Text("MIT License");
 		ImGui::Text("Copyright(c) 2019 WEEP-WORKS");
-		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
-		ImGui::Text("of this software and associated documentation files (the 'Software'), to deal");
-		ImGui::Text("in the Software without restriction, including without limitation the rights");
-		ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and / or sell");
-		ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
-		ImGui::Text("furnished to do so, subject to the following conditions :");
+		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and / or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :");
 
-		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "The above copyright notice and this permission notice shall be included in all");
-		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "copies or substantial portions of the Software.");
+		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.");
 
-		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
-		ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
-		ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
-		ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
-		ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
-		ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
-		ImGui::Text("SOFTWARE.");
+		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
 	}
 	ImGui::End();
 }
@@ -562,7 +734,7 @@ void DebugScene::LoadStyle(const char * name)
 	style->Colors[ImGuiCol_Button] = magenta;
 	style->Colors[ImGuiCol_ButtonHovered] = magenta;
 	style->Colors[ImGuiCol_ButtonActive] = magenta;
-	style->Colors[ImGuiCol_Header] = darkpurple;
+	style->Colors[ImGuiCol_Header] = magenta;
 	style->Colors[ImGuiCol_HeaderHovered] = darkpurple;
 	style->Colors[ImGuiCol_HeaderActive] = darkpurple;
 	style->Colors[ImGuiCol_Separator] = darkblue;
