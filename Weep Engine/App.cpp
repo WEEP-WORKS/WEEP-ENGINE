@@ -126,31 +126,45 @@ void Application::FinishUpdate()
 {
 	FrameCalculations();
 
+	std::ifstream file_input("test.json");
+	Json::Reader reader;
+	Json::Value root;
+	reader.parse(file_input, root);
+
 	//---- save ----
 
 	if (want_to_save)
 	{
 		
+
+		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+		{
+			(*it)->Save(root);
+		}
+		
+
+		Json::StreamWriterBuilder builder;
+		const std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+		std::ofstream outputFileStream("test.json");
+
+		writer->write(root, &outputFileStream);
+
+	/*	Json::Value rootJsonValue;
+		rootJsonValue["foo"] = "bar";
+
+		Json::StreamWriterBuilder builder;
+		builder["commentStyle"] = "None";
+		builder["indentation"] = "   ";
+
+		std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+		std::ofstream outputFileStream("/tmp/test.json");
+		writer->write(rootJsonValue, &outputFileStream);*/
 	}
 
 	//---- Load -----
 
 	if (want_to_load)
 	{
-
-	
-
-		std::ifstream file_input("test.json");
-		Json::Reader reader;
-		Json::Value root;
-		reader.parse(file_input, root);
-
-		std::string prof = root["Anna"]["profession"].asString();
-		//Json::Reader reader;
-		//reader.parse("test.json", root);
-
-		const int age = root["Anna"]["age"].asInt();
-
 		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 		{
 			(*it)->Load(root);

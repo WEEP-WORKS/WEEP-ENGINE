@@ -84,7 +84,7 @@ private:
 	float			   last_frame_ms = 0;
 	float			   frames_on_last_update = 0;
 
-	bool want_to_save = false;
+	bool want_to_save = true;
 	bool want_to_load = true;
 };
 

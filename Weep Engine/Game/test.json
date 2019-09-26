@@ -1,10 +1,12 @@
 {
-  "Anna": {
-    "age": 18,
-    "profession": "student"
-  },
-  "Ben": {
-    "age": "nineteen",
-    "profession": "mechanic"
-  }
+	"Anna" : 
+	{
+		"age" : 1,
+		"profession" : "student"
+	},
+	"Ben" : 
+	{
+		"age" : "nineteen",
+		"profession" : "mechanic"
+	},
 }

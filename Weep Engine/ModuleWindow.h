@@ -18,7 +18,7 @@ public:
 	bool Awake();
 	bool CleanUp();
 
-	//void Save(Json::Value&) override;
+	void Save(Json::Value&) override;
 	void Load(Json::Value&) override;
 
 	void SetTitle(const char* title);
