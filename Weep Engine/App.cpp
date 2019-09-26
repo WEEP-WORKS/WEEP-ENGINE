@@ -5,6 +5,9 @@
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
 #include <list>
+#include "jsoncpp/json/json.h"
+#include <fstream>
+#include <iostream>
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
@@ -123,6 +126,27 @@ bool Application::Update()
 void Application::FinishUpdate()
 {
 	FrameCalculations();
+
+	//---- save --
+
+	if (want_to_save)
+	{
+		
+	}
+
+	if (want_to_load)
+	{
+		std::ifstream file_input("test.json");
+		Json::Reader reader;
+		Json::Value root;
+		reader.parse(file_input, root);
+
+		std::string prof = root["Anna"]["profession"].asString();
+		//Json::Reader reader;
+		//reader.parse("test.json", root);
+
+		const int age = root["Anna"]["age"].asInt();
+	}
 }
 
 bool Application::CleanUp()
@@ -214,4 +238,14 @@ void Application::AddModule(Module* mod)
 void Application::OpenWeb(string web)
 {
 	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
+}
+
+void Application::WantToSave()
+{
+	want_to_save = true;
+}
+
+void Application::WantToLoad()
+{
+	want_to_load = true;
 }

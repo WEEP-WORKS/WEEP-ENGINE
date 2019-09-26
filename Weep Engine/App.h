@@ -37,6 +37,9 @@ public:
 
 	void OpenWeb(string web);
 
+	void WantToSave();
+	void WantToLoad();
+
 
 private:
 	void AddModule(Module* mod);
@@ -80,6 +83,9 @@ private:
 	float			   seconds_since_startup = 0;
 	float			   last_frame_ms = 0;
 	float			   frames_on_last_update = 0;
+
+	bool want_to_save = false;
+	bool want_to_load = false;
 };
 
 extern Application* App;
