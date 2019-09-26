@@ -715,7 +715,7 @@ void DebugScene::LoadStyle(const char * name)
 	style->Colors[ImGuiCol_Button] = magenta;
 	style->Colors[ImGuiCol_ButtonHovered] = magenta;
 	style->Colors[ImGuiCol_ButtonActive] = magenta;
-	style->Colors[ImGuiCol_Header] = darkpurple;
+	style->Colors[ImGuiCol_Header] = magenta;
 	style->Colors[ImGuiCol_HeaderHovered] = darkpurple;
 	style->Colors[ImGuiCol_HeaderActive] = darkpurple;
 	style->Colors[ImGuiCol_Separator] = darkblue;
