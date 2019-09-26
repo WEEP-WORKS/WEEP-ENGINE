@@ -337,7 +337,7 @@ void DebugScene::AppAbout()
 		const char* name[8] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" , "GpuDetect"};
 		const char* version[8] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0", "---"};
 		static int selected = -1;
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			ImGui::Text(use[i]); ImGui::NextColumn();
 			ImGui::Text(name[i]); ImGui::NextColumn();
@@ -350,23 +350,11 @@ void DebugScene::AppAbout()
 	{
 		ImGui::Text("MIT License");
 		ImGui::Text("Copyright(c) 2019 WEEP-WORKS");
-		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
-		ImGui::Text("of this software and associated documentation files (the 'Software'), to deal");
-		ImGui::Text("in the Software without restriction, including without limitation the rights");
-		ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and / or sell");
-		ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
-		ImGui::Text("furnished to do so, subject to the following conditions :");
+		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the 'Software'), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and / or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions :");
 
-		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "The above copyright notice and this permission notice shall be included in all");
-		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "copies or substantial portions of the Software.");
+		ImGui::TextColored({ 0.8f, 1.0f, 1.0f, 0.7f }, "The above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.");
 
-		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
-		ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
-		ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE");
-		ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
-		ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
-		ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
-		ImGui::Text("SOFTWARE.");
+		ImGui::Text("THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.");
 	}
 	ImGui::End();
 }
