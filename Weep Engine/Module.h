@@ -11,6 +11,8 @@ using namespace std;
 
 #include "SDL\include\SDL.h"
 
+#include "jsoncpp/json/json.h"
+
 class Module
 {
 public:
@@ -49,6 +51,10 @@ public:
 	{ 
 		return true; 
 	}
+
+	virtual void Save(Json::Value&) {}
+
+	virtual void Load(Json::Value&) {}
 
 	void SetName(const char* set_name) { name = set_name; }
 	bool GetEnabled() { return enabled; };

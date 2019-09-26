@@ -126,3 +126,13 @@ void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
+
+void ModuleWindow::Load(Json::Value& root)
+{
+	std::string prof = root["Anna"]["profession"].asString();
+	//Json::Reader reader;
+	//reader.parse("test.json", root);
+
+	const int age = root["Anna"]["age"].asInt();
+
+}

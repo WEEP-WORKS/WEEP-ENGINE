@@ -5,7 +5,6 @@
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
 #include <list>
-#include "jsoncpp/json/json.h"
 #include <fstream>
 #include <iostream>
 
@@ -127,15 +126,20 @@ void Application::FinishUpdate()
 {
 	FrameCalculations();
 
-	//---- save --
+	//---- save ----
 
 	if (want_to_save)
 	{
 		
 	}
 
+	//---- Load -----
+
 	if (want_to_load)
 	{
+
+	
+
 		std::ifstream file_input("test.json");
 		Json::Reader reader;
 		Json::Value root;
@@ -146,6 +150,11 @@ void Application::FinishUpdate()
 		//reader.parse("test.json", root);
 
 		const int age = root["Anna"]["age"].asInt();
+
+		for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+		{
+			(*it)->Load(root);
+		}
 	}
 }
 

@@ -85,7 +85,7 @@ private:
 	float			   frames_on_last_update = 0;
 
 	bool want_to_save = false;
-	bool want_to_load = false;
+	bool want_to_load = true;
 };
 
 extern Application* App;
