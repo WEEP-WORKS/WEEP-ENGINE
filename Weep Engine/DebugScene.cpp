@@ -143,7 +143,7 @@ bool DebugScene::Update()
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Text("Weep Engine. v.0.1");
+	ImGui::Text(App->window->GetTitleWithVersion().c_str());
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
 	ImGui::Text("This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa");

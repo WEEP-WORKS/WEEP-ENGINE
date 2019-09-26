@@ -27,6 +27,8 @@ public:
 	int GetHeight() const;
 	float GetSize() const;
 	string GetTitle() const;
+	string GetVersion() const;
+	string GetTitleWithVersion() const;
 
 public:
 	//The window we'll be rendering to
@@ -40,13 +42,16 @@ public:
 private:
 
 	string title;
-	int width = 0u;
-	int height = 0u;
-	float size = 0.0f;
-	bool fullscreen = false;
-	bool resizable = false;
-	bool borderless = false;
-	bool fullscreen_desktop = false;
+	string version;
+	int width						= 0u;
+	int height						= 0u;
+	float size						= 0.0f;
+	bool fullscreen					= false;
+	bool resizable					= false;
+	bool borderless					= false;
+	bool fullscreen_desktop			= false;
+
+	SDL_GLContext gl_context;
 
 };
 

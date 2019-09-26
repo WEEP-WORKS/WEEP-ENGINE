@@ -27,17 +27,6 @@ bool ModuleRenderer3D::Awake()
 {
 	bool ret = true;
 
-	LOG("Creating 3D Renderer context");
-	
-	
-	//Create context
-	context = SDL_GL_CreateContext(App->window->window);
-	if(context == NULL)
-	{
-		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
-		ret = false;
-	}
-	
 	if(ret == true)
 	{
 		//Use Vsync
@@ -164,9 +153,6 @@ bool ModuleRenderer3D::CleanUp()
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 
-	LOG("Destroying 3D Renderer");
-
-	SDL_GL_DeleteContext(context);
 
 	return ret;
 }

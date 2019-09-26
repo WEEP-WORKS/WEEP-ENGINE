@@ -4,6 +4,7 @@
 #include "glew/glew.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "ModuleRenderer3D.h"
 
 #pragma comment (lib, "glew/glew32.lib")
 
@@ -67,7 +68,7 @@ bool ModuleWindow::Awake()
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, new_width, new_height, flags);
+		window = SDL_CreateWindow(App->window->GetTitleWithVersion().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, new_width, new_height, flags);
 
 		if(window == NULL)
 		{
@@ -80,9 +81,9 @@ bool ModuleWindow::Awake()
 			screen_surface = SDL_GetWindowSurface(window);
 		}
 
-		SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-		SDL_GL_MakeCurrent(window, gl_context);
-		SDL_GL_SetSwapInterval(1); // Enable vsync
+		LOG("Creating context");
+
+		gl_context = SDL_GL_CreateContext(window);
 
 		// Setup Dear ImGui context
 		glewInit();
@@ -108,6 +109,10 @@ bool ModuleWindow::Awake()
 bool ModuleWindow::CleanUp()
 {
 	bool ret = true;
+
+	LOG("Destroying SDL_GL_Context");
+
+	SDL_GL_DeleteContext(gl_context);
 
 	LOG("Destroying SDL window and quitting all SDL systems");
 
@@ -148,27 +153,40 @@ string ModuleWindow::GetTitle() const
 	return title;
 }
 
+string ModuleWindow::GetVersion() const
+{
+	return version;
+}
+
+string ModuleWindow::GetTitleWithVersion() const
+{
+	return App->window->GetTitle() + " " + App->window->GetVersion();
+}
+
+
 void ModuleWindow::Save(Json::Value& root)
 {
-	root[GetName()]["Title"]				= title;
-	root[GetName()]["Width"]				= width;
-	root[GetName()]["Height"]				= height;
-	root[GetName()]["Size"]					= size;
-	root[GetName()]["Fullscreen"]			= fullscreen;
-	root[GetName()]["Resizable"]			= resizable;
-	root[GetName()]["Borderless"]			= borderless;
-	root[GetName()]["Fullscreen_desktop"]	= fullscreen_desktop;
+	root[GetName()]["Title"]						= title;
+	root[GetName()]["Version"]						= version;
+	root[GetName()]["Width"]						= width;
+	root[GetName()]["Height"]						= height;
+	root[GetName()]["Size"]							= size;
+	root[GetName()]["flags"]["Fullscreen"]			= fullscreen;
+	root[GetName()]["flags"]["Resizable"]			= resizable;
+	root[GetName()]["flags"]["Borderless"]			= borderless;
+	root[GetName()]["flags"]["Fullscreen_desktop"]	= fullscreen_desktop;
 }
 
 void ModuleWindow::Load(Json::Value& root)
 {
-	title = root[GetName()]["Title"].asString();
-	width = root[GetName()]["Width"].asInt();
-	height = root[GetName()]["Height"].asInt();
-	size = root[GetName()]["Size"].asFloat();
-	fullscreen = root[GetName()]["Fullscreen"].asBool();
-	resizable = root[GetName()]["Resizable"].asBool();
-	borderless = root[GetName()]["Borderless"].asBool();
-	fullscreen_desktop = root[GetName()]["Fullscreen_desktop"].asBool();
+	title											= root[GetName()]["Title"].asString();
+	version											= root[GetName()]["Version"].asString();
+	width											= root[GetName()]["Width"].asInt();
+	height											= root[GetName()]["Height"].asInt();
+	size											= root[GetName()]["Size"].asFloat();
+	fullscreen										= root[GetName()]["flags"]["Fullscreen"].asBool();
+	resizable										= root[GetName()]["flags"]["Resizable"].asBool();
+	borderless										= root[GetName()]["flags"]["Borderless"].asBool();
+	fullscreen_desktop								= root[GetName()]["flags"]["Fullscreen_desktop"].asBool();
 }
 
