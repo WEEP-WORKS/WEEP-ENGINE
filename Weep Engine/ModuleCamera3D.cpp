@@ -15,6 +15,8 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 	Reference = vec3(0.0f, 0.0f, 0.0f);
 
 	camera_distance = 0;
+
+	SetName("camera3D");
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -25,7 +27,6 @@ bool ModuleCamera3D::Awake()
 	bool ret = true;
 
 	LOG("Loading Camera3D");
-	SetName("Camera");
 
 	return ret;
 }

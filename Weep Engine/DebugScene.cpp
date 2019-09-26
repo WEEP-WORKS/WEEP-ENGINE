@@ -12,12 +12,16 @@
 #include "MathGeoLib\include\MathBuildConfig.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 
+
 #include <random>
 #include "pcg_random.hpp"
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
+
+	SetName("DebugScene");
+
 	memset(name_input_buffer, 0, sizeof(name_input_buffer));
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
 	//max_fps = App->GetMaxFps();
@@ -36,6 +40,7 @@ DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
 		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
 	}
+
 }
 
 DebugScene::~DebugScene()
@@ -45,7 +50,7 @@ bool DebugScene::Awake()
 {
 	bool ret = true;
 
-	SetName("DebugScene");
+	
 
 	LoadStyle("green_purple");
 
@@ -131,6 +136,13 @@ bool DebugScene::Update()
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Options"))
+		{
+			ImGui::MenuItem("Save", NULL, &to_save);
+			ImGui::MenuItem("Load", NULL, &to_load);
+			ImGui::EndMenu();
+		}
+
 		ImGui::Text("Fps: %d", App->profiler->GetFPS());
 
 		ImGui::EndMainMenuBar();
@@ -160,9 +172,16 @@ bool DebugScene::Update()
 		RandomGenerator();
 	}
 
-	if (show_geometry_math_test)
+	// Save
+	if (to_save)
 	{
-		MathGeoTest();
+		App->WantToSave();
+	}
+
+	// Load
+	if (to_load)
+	{
+		App->WantToLoad();
 	}
 
 	return ret;
@@ -212,12 +231,12 @@ void DebugScene::AppInfo()
 {
 	if (ImGui::InputText("App Name", name_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
 	{
-		App->SetAppName(name_input_buffer);
+		App->window->SetAppName(name_input_buffer);
 	}
 
 	if (ImGui::InputText("Organization", organization_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
 	{
-		App->SetAppOrganization(organization_input_buffer);
+		App->window->SetAppOrganization(organization_input_buffer);
 	}
 
 	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
@@ -308,7 +327,7 @@ void DebugScene::UpdateVRAMInfo()
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Text("Weep Engine. v.0.1");
+	ImGui::Text(App->window->GetTitleWithVersion().c_str());
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
 	ImGui::Text("This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa");

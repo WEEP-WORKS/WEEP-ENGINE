@@ -5,6 +5,7 @@
 #include "glew/glew.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "ModuleRenderer3D.h"
 
 #pragma comment (lib, "glew/glew32.lib")
 
@@ -12,13 +13,7 @@ ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 {
 	window = NULL;
 	screen_surface = NULL;
-
-	width = SCREEN_WIDTH;
-	height = SCREEN_HEIGHT;
-	fullscreen = WIN_FULLSCREEN;
-	resizable = WIN_RESIZABLE;
-	borderless = WIN_BORDERLESS;
-	full_dekstop = WIN_FULLSCREEN_DESKTOP;
+	SetName("Window");
 }
 
 // Destructor
@@ -32,7 +27,7 @@ bool ModuleWindow::Awake()
 	bool ret = true;
 
 	LOG("Init SDL window & surface");
-	SetName("Window");
+	
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -42,8 +37,8 @@ bool ModuleWindow::Awake()
 	else
 	{
 		//Create window
-		int width = SCREEN_WIDTH * SCREEN_SIZE;
-		int height = SCREEN_HEIGHT * SCREEN_SIZE;
+		int new_width = width * size;
+		int new_height = height * size;
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
 		//Use OpenGL 2.1
@@ -54,27 +49,27 @@ bool ModuleWindow::Awake()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
-		if(WIN_FULLSCREEN == true)
+		if(fullscreen == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
 
-		if(WIN_RESIZABLE == true)
+		if(resizable == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
 
-		if(WIN_BORDERLESS == true)
+		if(borderless == true)
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
 
-		if(WIN_FULLSCREEN_DESKTOP == true)
+		if(full_dekstop == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(App->window->GetTitleWithVersion().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, new_width, new_height, flags);
 
 		if(window == NULL)
 		{
@@ -87,9 +82,9 @@ bool ModuleWindow::Awake()
 			screen_surface = SDL_GetWindowSurface(window);
 		}
 
-		SDL_GLContext gl_context = SDL_GL_CreateContext(window);
-		SDL_GL_MakeCurrent(window, gl_context);
-		SDL_GL_SetSwapInterval(1); // Enable vsync
+		LOG("Creating context");
+
+		gl_context = SDL_GL_CreateContext(window);
 
 		// Setup Dear ImGui context
 		glewInit();
@@ -115,6 +110,10 @@ bool ModuleWindow::Awake()
 bool ModuleWindow::CleanUp()
 {
 	bool ret = true;
+
+	LOG("Destroying SDL_GL_Context");
+
+	SDL_GL_DeleteContext(gl_context);
 
 	LOG("Destroying SDL window and quitting all SDL systems");
 
@@ -162,6 +161,62 @@ void ModuleWindow::SetTitle(const char* title)
 	SDL_SetWindowTitle(window, title);
 }
 
+int ModuleWindow::GetWidth() const
+{
+	return width;
+}
+
+int ModuleWindow::GetHeight() const
+{
+	return height;
+}
+
+float ModuleWindow::GetSize() const
+{
+	return size;
+}
+
+string ModuleWindow::GetTitle() const
+{
+	return title;
+}
+
+string ModuleWindow::GetVersion() const
+{
+	return version;
+}
+
+string ModuleWindow::GetTitleWithVersion() const
+{
+	return App->window->GetTitle() + " " + App->window->GetVersion();
+}
+
+
+void ModuleWindow::Save(Json::Value& root)
+{
+	root[GetName()]["Title"]						= title;
+	root[GetName()]["Version"]						= version;
+	root[GetName()]["Width"]						= width;
+	root[GetName()]["Height"]						= height;
+	root[GetName()]["Size"]							= size;
+	root[GetName()]["flags"]["Fullscreen"]			= fullscreen;
+	root[GetName()]["flags"]["Resizable"]			= resizable;
+	root[GetName()]["flags"]["Borderless"]			= borderless;
+	root[GetName()]["flags"]["Fullscreen_desktop"]	= full_dekstop;
+}
+
+void ModuleWindow::Load(Json::Value& root)
+{
+	title											= root[GetName()]["Title"].asString();
+	version											= root[GetName()]["Version"].asString();
+	width											= root[GetName()]["Width"].asInt();
+	height											= root[GetName()]["Height"].asInt();
+	size											= root[GetName()]["Size"].asFloat();
+	fullscreen										= root[GetName()]["flags"]["Fullscreen"].asBool();
+	resizable										= root[GetName()]["flags"]["Resizable"].asBool();
+	borderless										= root[GetName()]["flags"]["Borderless"].asBool();
+	full_dekstop									= root[GetName()]["flags"]["Fullscreen_desktop"].asBool();
+}
 
 void ModuleWindow::SetWindowSize(int _width, int _height)
 {
@@ -221,4 +276,32 @@ void ModuleWindow::SetFullDekstop(bool set)
 	{
 		SDL_SetWindowFullscreen(window, 0);
 	}
+}
+
+void ModuleWindow::SetAppName(string name)
+{
+	if (title != name)
+	{
+
+		title = name;
+		SetTitle((name + " " + App->window->GetVersion()).c_str());
+	}
+}
+
+const char * ModuleWindow::GetAppName()
+{
+	return title.c_str();
+}
+
+void ModuleWindow::SetAppOrganization(const char* name)
+{
+	if (name != organization)
+	{
+		organization = name;
+	}
+}
+
+const char * ModuleWindow::GetAppOrganization()
+{
+	return organization.c_str();
 }

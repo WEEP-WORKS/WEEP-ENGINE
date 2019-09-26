@@ -19,13 +19,16 @@ public:
 	bool CleanUp();
 	void OnConfiguration();
 
+	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
+
 	void OnResize(int width, int height);
 	void DrawGrid(int HALF_GRID_SIZE);
 
 public:
 
 	Light lights[MAX_LIGHTS];
-	SDL_GLContext context;
+	//SDL_GLContext context;
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
@@ -36,5 +39,8 @@ private:
 
 	bool vsync = false;
 
+private:
+
 	void SetVsync(bool set);
+
 };

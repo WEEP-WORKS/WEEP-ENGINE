@@ -5,6 +5,8 @@
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
 #include <list>
+#include <fstream>
+#include <iostream>
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
@@ -42,6 +44,8 @@ Application::~Application()
 bool Application::Awake()
 {
 	bool ret = true;
+
+	LoadAll(); //Load all setings for the first time
 
 	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
 	{
@@ -134,6 +138,54 @@ bool Application::Update()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	//---- save ----
+
+	if (want_to_save)
+	{
+		SaveAll();
+	}
+
+	//---- Load -----
+
+	if (want_to_load)
+	{
+		LoadAll();
+	}
+}
+
+void Application::SaveAll()
+{
+	Json::Value new_root;
+	Json::StreamWriterBuilder builder;
+	const std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->Save(new_root);
+	}
+
+
+	std::ofstream outputFileStream("SaveFile.json");
+
+	writer->write(new_root, &outputFileStream);
+
+	want_to_save = false;
+}
+
+void Application::LoadAll()
+{
+	std::ifstream file_input("SaveFile.json");
+	Json::Reader reader;
+	Json::Value root;
+	reader.parse(file_input, root);
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->Load(root);
+	}
+
+	want_to_load = false;
+
 }
 
 bool Application::CleanUp()
@@ -193,33 +245,15 @@ void Application::OpenWeb(string web)
 	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
 }
 
-
-void Application::SetAppName(const char* name)
+void Application::WantToSave()
 {
-	if (title != name)
-	{
-		title = name;
-		window->SetTitle(name);
-	}
+	want_to_save = true;
 }
 
-const char * Application::GetAppName()
+void Application::WantToLoad()
 {
-	return title.c_str();
-}
-
-void Application::SetAppOrganization(const char* name)
-{
-	if (name != organization)
-	{
-		organization = name;
-	}
-}
-
-const char * Application::GetAppOrganization()
-{
-	return organization.c_str();
-}
+	want_to_load = true;
+}	
 
 void Application::SetMaxFps(int set)
 {
@@ -232,3 +266,4 @@ void Application::SetMaxFps(int set)
 //{
 //	return App->profiler->max_fps;
 //}	
+

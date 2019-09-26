@@ -30,10 +30,7 @@ public:
 	const char* GetArgv(int index) const;
 	float GetDT();
 
-	void SetAppName(const char* name);
-	const char* GetAppName();
-	void SetAppOrganization(const char* name);
-	const char* GetAppOrganization();
+	
 	void SetMaxFps(int set);
 	//int GetMaxFps();
 
@@ -42,10 +39,17 @@ public:
 
 	void OpenWeb(string web);
 
+	void WantToSave();
+	void WantToLoad();
+
 private:
 	void AddModule(Module* mod);
 	void PrepareUpdate();
 	void FinishUpdate();
+
+	void SaveAll();
+
+	void LoadAll();
 
 public:
 	//Modules
@@ -65,13 +69,12 @@ private:
 	int				   argc;
 	char**			   args;
 
-	std::string		   title = "";
-	std::string		   organization = "";
-
 	bool		       close_app = false;
 
-	// Engine debug info
 	bool			   debug_mode = false;
+
+	bool want_to_save = false;
+	bool want_to_load = false;
 
 };
 

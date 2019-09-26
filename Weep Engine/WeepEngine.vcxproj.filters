@@ -37,8 +37,11 @@
     <Filter Include="Sources\MathGeoLib\Math">
       <UniqueIdentifier>{6ca6a3b7-3c8a-4b64-a11a-c677e6909aa7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\GpuDetect">
-      <UniqueIdentifier>{31353c43-f6f9-4f9d-b2b6-46fc4c03da6c}</UniqueIdentifier>
+    <Filter Include="Sources\jsoncpp">
+      <UniqueIdentifier>{9b6ececa-3215-40ab-bf02-7a38fd2d3e51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\jsoncpp\json">
+      <UniqueIdentifier>{d002ec43-06ea-4603-b8a1-5acf0bb32ddd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -279,14 +282,41 @@
     <ClInclude Include="MathGeoLib\include\Time\Clock.h">
       <Filter>Sources\MathGeoLib\Time</Filter>
     </ClInclude>
-    <ClInclude Include="Profiler.h">
-      <Filter>Sources\Tools</Filter>
+    <ClInclude Include="jsoncpp\json_tool.h">
+      <Filter>Sources\jsoncpp</Filter>
     </ClInclude>
-    <ClInclude Include="gpudetect\DeviceId.h">
-      <Filter>Sources\GpuDetect</Filter>
+    <ClInclude Include="jsoncpp\json\features.h">
+      <Filter>Sources\jsoncpp\json</Filter>
     </ClInclude>
-    <ClInclude Include="gpudetect\dxgi1_4.h">
-      <Filter>Sources\GpuDetect</Filter>
+    <ClInclude Include="jsoncpp\json\forwards.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\json.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\reader.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\value.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\version.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\writer.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\allocator.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\assertions.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\autolink.h">
+      <Filter>Sources\jsoncpp\json</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\config.h">
+      <Filter>Sources\jsoncpp\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -443,11 +473,14 @@
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp">
       <Filter>Sources\MathGeoLib\Time</Filter>
     </ClCompile>
-    <ClCompile Include="Profiler.cpp">
-      <Filter>Sources\Tools</Filter>
+    <ClCompile Include="jsoncpp\json_value.cpp">
+      <Filter>Sources\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="gpudetect\DeviceId.cpp">
-      <Filter>Sources\GpuDetect</Filter>
+    <ClCompile Include="jsoncpp\json_writer.cpp">
+      <Filter>Sources\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp\json_reader.cpp">
+      <Filter>Sources\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -468,6 +501,12 @@
     </None>
     <None Include="MathGeoLib\include\Math\Matrix.inl">
       <Filter>Sources\MathGeoLib\Math</Filter>
+    </None>
+    <None Include="jsoncpp\json_valueiterator.inl">
+      <Filter>Sources\jsoncpp</Filter>
+    </None>
+    <None Include="Game\SaveFile.json">
+      <Filter>Sources</Filter>
     </None>
   </ItemGroup>
 </Project>

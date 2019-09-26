@@ -1,0 +1,21 @@
+{
+	"Renderer3D" : 
+	{
+		"VSYNC" : true
+	},
+	"Window" : 
+	{
+		"Height" : 1024,
+		"Size" : 1.0,
+		"Title" : "Weep Engine",
+		"Version" : "v.0.1",
+		"Width" : 1280,
+		"flags" : 
+		{
+			"Borderless" : false,
+			"Fullscreen" : false,
+			"Fullscreen_desktop" : false,
+			"Resizable" : true
+		}
+	}
+}
