@@ -36,6 +36,10 @@ public:
 	void SetAppOrganization(const char* name);
 	const char* GetAppOrganization();
 
+	void SetVersion(const char * set);
+
+	const char * GetVersion();
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

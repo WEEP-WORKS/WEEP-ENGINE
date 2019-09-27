@@ -203,6 +203,7 @@ string ModuleWindow::GetTitleWithVersion() const
 void ModuleWindow::Save(Json::Value& root)
 {
 	root[GetName()]["Title"]						= title;
+	root[GetName()]["Organization"]					= organization;
 	root[GetName()]["Version"]						= version;
 	root[GetName()]["Width"]						= width;
 	root[GetName()]["Height"]						= height;
@@ -217,6 +218,7 @@ void ModuleWindow::Save(Json::Value& root)
 void ModuleWindow::Load(Json::Value& root)
 {
 	title											= root[GetName()]["Title"].asString();
+	organization									= root[GetName()]["Organization"].asString();
 	version											= root[GetName()]["Version"].asString();
 	width											= root[GetName()]["Width"].asInt();
 	height											= root[GetName()]["Height"].asInt();
@@ -327,4 +329,16 @@ void ModuleWindow::SetAppOrganization(const char* name)
 const char * ModuleWindow::GetAppOrganization()
 {
 	return organization.c_str();
+}
+
+void ModuleWindow::SetVersion(const char * set)
+{
+	version = set;
+
+	SetTitle((App->window->GetTitle() + version + " ").c_str());
+}
+
+const char * ModuleWindow::GetVersion()
+{
+	return version.c_str();;
 }

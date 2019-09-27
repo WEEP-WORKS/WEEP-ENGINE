@@ -32,7 +32,7 @@ public:
 
 	
 	void SetMaxFps(int set);
-	//int GetMaxFps();
+	int GetMaxFps();
 
 	bool GetDebugMode();
 	void SetDebugMode(bool set);

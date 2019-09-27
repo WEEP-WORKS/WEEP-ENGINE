@@ -257,13 +257,16 @@ void Application::WantToLoad()
 
 void Application::SetMaxFps(int set)
 {
-	if (set > 0)
-		//App->profiler->max_fps = set;
+	if (set > 0) 
+	{
+		App->profiler->max_fps = set;
 		App->profiler->capped_ms = (1000 / set);
+	}
+
 }
 
-//int Application::GetMaxFps()
-//{
-//	return App->profiler->max_fps;
-//}	
+int Application::GetMaxFps()
+{
+	return App->profiler->max_fps;
+}	
 

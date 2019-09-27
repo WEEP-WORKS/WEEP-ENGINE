@@ -24,7 +24,7 @@ DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 
 	memset(name_input_buffer, 0, sizeof(name_input_buffer));
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
-	//max_fps = App->GetMaxFps();
+	memset(version_input_buffer, 0, sizeof(version_input_buffer));
 
 	uint vendor_id, device_id;
 	Uint64 vm, vm_curr, vm_a, vm_r;
@@ -50,8 +50,6 @@ bool DebugScene::Awake()
 {
 	bool ret = true;
 
-	
-
 	LoadStyle("green_purple");
 
 	SDL_VERSION(&compiled_version);
@@ -70,6 +68,11 @@ bool DebugScene::Awake()
 bool DebugScene::Start()
 {
 	bool ret = true;
+
+	strcpy(name_input_buffer, App->window->GetAppName());
+	strcpy(organization_input_buffer, App->window->GetAppOrganization());
+	strcpy(version_input_buffer, App->window->GetVersion());
+	max_fps = App->GetMaxFps();
 
 	return true;
 }
@@ -256,6 +259,11 @@ void DebugScene::AppInfo()
 	if (ImGui::InputText("Organization", organization_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
 	{
 		App->window->SetAppOrganization(organization_input_buffer);
+	}
+
+	if (ImGui::InputText("Version", version_input_buffer, 254, ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		App->window->SetVersion(version_input_buffer);
 	}
 
 	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))

@@ -68,6 +68,7 @@ private:
 	SDL_version compiled_version;
 	char  name_input_buffer[255];
 	char  organization_input_buffer[255];
+	char  version_input_buffer[255];
 	int   max_fps = 0;
 
 	ImGuiTextBuffer debug_console_buff;

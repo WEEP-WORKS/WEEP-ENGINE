@@ -43,6 +43,9 @@
     <Filter Include="Sources\jsoncpp\json">
       <UniqueIdentifier>{d002ec43-06ea-4603-b8a1-5acf0bb32ddd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GpuDetect">
+      <UniqueIdentifier>{2c33f0b2-576b-4d4e-b470-1bd5b09a11e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -318,6 +321,15 @@
     <ClInclude Include="jsoncpp\json\config.h">
       <Filter>Sources\jsoncpp\json</Filter>
     </ClInclude>
+    <ClInclude Include="Profiler.h">
+      <Filter>Sources\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\DeviceId.h">
+      <Filter>Sources\GpuDetect</Filter>
+    </ClInclude>
+    <ClInclude Include="gpudetect\dxgi1_4.h">
+      <Filter>Sources\GpuDetect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -481,6 +493,12 @@
     </ClCompile>
     <ClCompile Include="jsoncpp\json_reader.cpp">
       <Filter>Sources\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
+      <Filter>Sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="gpudetect\DeviceId.cpp">
+      <Filter>Sources\GpuDetect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
