@@ -80,6 +80,11 @@ bool ModuleWindow::Awake()
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
+
+			if (brightness > 1) brightness = 1;
+			else if (brightness < 0) brightness = 0;
+
+			SDL_SetWindowBrightness(window, brightness);
 		}
 
 		LOG("Creating context");
@@ -139,7 +144,10 @@ void ModuleWindow::OnConfiguration()
 	{
 		SetWindowSize(width, height);
 	}
-
+	if (ImGui::SliderFloat("Brightness", &brightness, 0, 1))
+	{
+		SetBrightness(brightness);
+	}
 	if (ImGui::Checkbox("Fullscreen", &fullscreen))
 		SetFullscreen(fullscreen);
 	ImGui::SameLine();
@@ -198,6 +206,7 @@ void ModuleWindow::Save(Json::Value& root)
 	root[GetName()]["Version"]						= version;
 	root[GetName()]["Width"]						= width;
 	root[GetName()]["Height"]						= height;
+	root[GetName()]["Brightness"]					= brightness;
 	root[GetName()]["Size"]							= size;
 	root[GetName()]["flags"]["Fullscreen"]			= fullscreen;
 	root[GetName()]["flags"]["Resizable"]			= resizable;
@@ -211,6 +220,7 @@ void ModuleWindow::Load(Json::Value& root)
 	version											= root[GetName()]["Version"].asString();
 	width											= root[GetName()]["Width"].asInt();
 	height											= root[GetName()]["Height"].asInt();
+	brightness										= root[GetName()]["Brightness"].asFloat();
 	size											= root[GetName()]["Size"].asFloat();
 	fullscreen										= root[GetName()]["flags"]["Fullscreen"].asBool();
 	resizable										= root[GetName()]["flags"]["Resizable"].asBool();
@@ -229,6 +239,19 @@ void ModuleWindow::SetWindowSize(int _width, int _height)
 		if (!fullscreen)
 			App->renderer3D->OnResize(width, height);
 	}
+}
+
+void ModuleWindow::SetBrightness(float set)
+{
+	if (set > 1)
+		set = 1;
+
+	else if (set < 0)
+		set = 0;
+
+	brightness = set;
+
+	SDL_SetWindowBrightness(window, set);
 }
 
 void ModuleWindow::SetFullscreen(bool set)

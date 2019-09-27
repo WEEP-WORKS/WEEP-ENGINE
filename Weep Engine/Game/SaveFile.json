@@ -6,7 +6,8 @@
 	"Window" : 
 	{
 		"Height" : 1024,
-		"Size" : 1.0,
+    "Size": 1.0,
+    "Brightness":  1.0,
 		"Title" : "Weep Engine",
 		"Version" : "v.0.1",
 		"Width" : 1280,

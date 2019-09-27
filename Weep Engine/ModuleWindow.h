@@ -55,7 +55,8 @@ private:
 
 	int     width = 0u;
 	int     height = 0u;
-	float size = 0.0f;
+	float	brightness = 1.0f;
+	float	size = 0.0f;
 	bool    fullscreen = false;
 	bool    resizable = false;
 	bool    borderless = false;
@@ -64,6 +65,7 @@ private:
 private:
 
 	void SetWindowSize(int width, int height);
+	void SetBrightness(float set);
 	void SetFullscreen(bool set);
 	void SetResizable(bool set);
 	void SetBorderless(bool set);
