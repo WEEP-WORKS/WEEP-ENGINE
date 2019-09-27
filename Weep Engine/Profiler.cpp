@@ -1,9 +1,19 @@
 #include "Profiler.h"
 #include "Globals.h"
+#include "mmgr\nommgr.h"
+#include "mmgr\mmgr.h"
 
 Profiler::Profiler()
 {
 	create_time = SDL_GetTicks();
+
+	// Memory Statistics
+	memory.push_back(m_getMemoryStatistics().totalActualMemory);
+
+	if (memory.size() > MAX_MEMORY_GRAPH) {
+		memory.erase(memory.begin());
+	}
+	// -----------
 }
 
 Profiler::~Profiler()
@@ -156,4 +166,9 @@ std::vector<float> Profiler::GetFramesVector()
 std::vector<float> Profiler::GetMillisecondsVector()
 {
 	return milliseconds;
+}
+
+std::vector<float> Profiler::GetMemoryVector()
+{
+	return memory;
 }

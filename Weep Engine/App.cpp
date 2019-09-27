@@ -8,6 +8,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "mmgr\nommgr.h"
+#include "mmgr\mmgr.h"
+
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 	window = new ModuleWindow();

@@ -6,6 +6,7 @@
 #include <iostream>
 
 #define MAX_FRAMES_GRAPH 25
+#define MAX_MEMORY_GRAPH 25
 
 struct Profile
 {
@@ -40,6 +41,7 @@ public:
 
 	std::vector<float> GetFramesVector();
 	std::vector<float> GetMillisecondsVector();
+	std::vector<float> GetMemoryVector();
 
 	//void SetMaxFps(int fps);
 	//int GetMaxFps();
@@ -62,6 +64,7 @@ private:
 	float avg_fps = 0.0f;
 	std::vector<float> frames;
 	std::vector<float> milliseconds;
+	std::vector<float> memory;
 
 	int frame_counter = 0;
 	float frame_counter_ms = 0.0f;

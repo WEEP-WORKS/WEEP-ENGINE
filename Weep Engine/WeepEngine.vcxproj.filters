@@ -46,6 +46,9 @@
     <Filter Include="Sources\GpuDetect">
       <UniqueIdentifier>{2c33f0b2-576b-4d4e-b470-1bd5b09a11e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\mmgr">
+      <UniqueIdentifier>{297ed99d-fcbe-4c81-8cc4-81fd8cf311c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -330,6 +333,12 @@
     <ClInclude Include="gpudetect\dxgi1_4.h">
       <Filter>Sources\GpuDetect</Filter>
     </ClInclude>
+    <ClInclude Include="mmgr\mmgr.h">
+      <Filter>Sources\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="mmgr\nommgr.h">
+      <Filter>Sources\mmgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -499,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="gpudetect\DeviceId.cpp">
       <Filter>Sources\GpuDetect</Filter>
+    </ClCompile>
+    <ClCompile Include="mmgr\mmgr.cpp">
+      <Filter>Sources\mmgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

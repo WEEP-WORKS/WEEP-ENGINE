@@ -235,6 +235,14 @@ void DebugScene::OnConfiguration()
 	std::vector<float> milliseconds = App->profiler->GetMillisecondsVector();
 	sprintf_s(title, 25, "Milliseconds %.1f", milliseconds[milliseconds.size() - 1]);
 	ImGui::PlotHistogram("##Framerate", &milliseconds[0], milliseconds.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+
+	std::vector<float> memory = App->profiler->GetMemoryVector();
+	if (!memory.empty())
+	{
+		char title[25];
+		sprintf_s(title, 25, "%.1f", memory[memory.size() - 1]);
+		ImGui::PlotHistogram("##Memory", &memory[0], memory.size(), 0, title, 0.0f, 30000.0f, ImVec2(0, 100));
+	}
 }
 
 void DebugScene::DebugConsole()
