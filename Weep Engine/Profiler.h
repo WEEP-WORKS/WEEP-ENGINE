@@ -49,7 +49,7 @@ public:
 public:
 	int	  capped_ms = -1;
 
-	int	  max_fps = 1;
+	int	  max_fps = -1;
 
 private:	
 	float create_time = 0.0f;
