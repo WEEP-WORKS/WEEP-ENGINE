@@ -405,11 +405,11 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[8] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data"};
-		const char* name[8] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" , "GpuDetect"};
-		const char* version[8] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0", "---"};
+		const char* use[9] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data", "Memory Tracker"};
+		const char* name[9] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" , "GpuDetect", "mmgr"};
+		const char* version[9] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0", "---", "---"};
 		static int selected = -1;
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 9; i++)
 		{
 			ImGui::Text(use[i]); ImGui::NextColumn();
 			ImGui::Text(name[i]); ImGui::NextColumn();
