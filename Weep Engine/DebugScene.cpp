@@ -87,10 +87,10 @@ bool DebugScene::PreUpdate()
 	bool ret = true;
 
 
-	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
+	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
 		App->debug_scene->show_app_configuration = true;
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == true) {
+	else if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == true) {
 		App->debug_scene->show_app_configuration = false;
 	}
 
@@ -118,7 +118,7 @@ bool DebugScene::Update()
 
 		if (ImGui::BeginMenu ("Window"))
 		{
-			ImGui::MenuItem("Configuration", "P", &show_app_configuration);
+			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
 			ImGui::EndMenu();
 		}
 
