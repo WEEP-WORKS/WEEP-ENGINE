@@ -1,15 +1,15 @@
 {
-	"Renderer3D" : 
+	"Renderer" : 
 	{
 		"VSYNC" : true
 	},
 	"Window" : 
 	{
+		"Brightness" : 1.0,
 		"Height" : 1024,
-    "Size": 1.0,
-    "Brightness":  1.0,
-    "Title": "Weep Engine",
-    "Organization": "Weep Works",
+		"Organization" : "Weep Works",
+		"Size" : 1.0,
+		"Title" : "Weep Engine",
 		"Version" : "v.0.1",
 		"Width" : 1280,
 		"flags" : 
