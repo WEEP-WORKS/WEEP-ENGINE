@@ -124,6 +124,7 @@ bool DebugScene::Update()
 
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
+			ImGui::MenuItem("Debug Console", NULL, &show_debug_console);
 			ImGui::MenuItem("Test Window", NULL, &show_demo_window);
 			ImGui::MenuItem("Geometry Math Test", NULL, &show_geometry_math_test);
 			ImGui::MenuItem("RandomNumber Generator", NULL, &show_random_generator);
@@ -152,6 +153,12 @@ bool DebugScene::Update()
 	if (show_app_configuration)
 	{
 		Configuration();
+	}
+
+	//Console
+	if (show_debug_console)
+	{
+		DebugConsole();
 	}
 
 	//Test
@@ -225,6 +232,18 @@ void DebugScene::OnConfiguration()
 	std::vector<float> milliseconds = App->profiler->GetMillisecondsVector();
 	sprintf_s(title, 25, "Milliseconds %.1f", milliseconds[milliseconds.size() - 1]);
 	ImGui::PlotHistogram("##Framerate", &milliseconds[0], milliseconds.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+}
+
+void DebugScene::DebugConsole()
+{
+	ImGui::BeginChild("Console Log");
+	ImGui::TextUnformatted(debug_console_buff.begin());
+	ImGui::EndChild();
+}
+
+void DebugScene::ConsoleLog(const char* text)
+{
+	debug_console_buff.appendf(text);
 }
 
 void DebugScene::AppInfo()

@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "imgui.h"
 
 #define MAX_SNAKE 2
 
@@ -26,9 +27,10 @@ public:
 	bool PreUpdate();
 	bool Update();
 	void Configuration();
-	void AppAbout();
 	bool CleanUp();
 	void OnConfiguration();
+
+	void ConsoleLog(const char * text);
 
 public:
 
@@ -41,6 +43,7 @@ private:
 	bool show_demo_window = false;
 	bool show_geometry_math_test = false;
 	bool show_random_generator = false;
+	bool show_debug_console = false;
 
 	bool to_save = false;
 	bool to_load = false;
@@ -67,7 +70,12 @@ private:
 	char  organization_input_buffer[255];
 	int   max_fps = 0;
 
+	ImGuiTextBuffer debug_console_buff;
+
 private:
+	
+	void AppAbout();
+	void DebugConsole();
 
 	void AppInfo();
 
