@@ -5,6 +5,7 @@
 #include "imgui.h"
 
 #define MAX_SNAKE 2
+#define LIB_NUM 9
 
 struct hardware_info {
 	uint gpu_vendor = 0;

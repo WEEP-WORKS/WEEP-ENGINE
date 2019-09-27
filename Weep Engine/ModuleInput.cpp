@@ -207,6 +207,7 @@ void ModuleInput::OnConfiguration()
 
 	ImGui::BeginChild("Buffer");
 	ImGui::TextUnformatted(input_buff.begin());
+	ImGui::SetScrollHereY(1.0f);
 	ImGui::EndChild();
 }
 

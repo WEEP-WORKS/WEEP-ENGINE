@@ -177,6 +177,13 @@ bool DebugScene::Update()
 	}
 
 	// Geometry debug
+	if (show_geometry_math_test)
+	{
+		MathGeoTest();
+	}
+
+
+	// Random Number
 	if (show_random_generator)
 	{
 		RandomGenerator();
@@ -405,11 +412,11 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[9] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data", "Memory Tracker"};
-		const char* name[9] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "Parson", "Glew" , "GpuDetect", "mmgr"};
-		const char* version[9] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "---", "v2.1.0", "---", "---"};
+		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data", "Memory Tracker"};
+		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "GpuDetect", "mmgr"};
+		const char* version[LIB_NUM] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---", "---"};
 		static int selected = -1;
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < LIB_NUM; i++)
 		{
 			ImGui::Text(use[i]); ImGui::NextColumn();
 			ImGui::Text(name[i]); ImGui::NextColumn();
