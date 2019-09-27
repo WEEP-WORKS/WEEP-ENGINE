@@ -331,6 +331,14 @@ void DebugScene::AppAbout()
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
 	ImGui::Text("This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa");
+	if (ImGui::Button("Jorge's Github")) {
+		App->OpenWeb("https://github.com/https://github.com/jorgegh2");
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Lluis' Github")) {
+		App->OpenWeb("https://github.com/youis11");
+	}
+	ImGui::SameLine();
 	if (ImGui::Button("Github Repository")) {
 		App->OpenWeb("https://github.com/WEEP-WORKS/WEEP-ENGINE");
 	}
