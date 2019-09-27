@@ -16,7 +16,7 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 
 	camera_distance = 0;
 
-	SetName("camera3D");
+	SetName("Camera");
 }
 
 ModuleCamera3D::~ModuleCamera3D()
