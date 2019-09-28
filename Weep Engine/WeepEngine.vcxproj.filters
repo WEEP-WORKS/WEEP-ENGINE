@@ -43,9 +43,6 @@
     <Filter Include="Sources\jsoncpp\json">
       <UniqueIdentifier>{d002ec43-06ea-4603-b8a1-5acf0bb32ddd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\GpuDetect">
-      <UniqueIdentifier>{2c33f0b2-576b-4d4e-b470-1bd5b09a11e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\mmgr">
       <UniqueIdentifier>{297ed99d-fcbe-4c81-8cc4-81fd8cf311c1}</UniqueIdentifier>
     </Filter>
@@ -327,12 +324,6 @@
     <ClInclude Include="Profiler.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="gpudetect\DeviceId.h">
-      <Filter>Sources\GpuDetect</Filter>
-    </ClInclude>
-    <ClInclude Include="gpudetect\dxgi1_4.h">
-      <Filter>Sources\GpuDetect</Filter>
-    </ClInclude>
     <ClInclude Include="mmgr\mmgr.h">
       <Filter>Sources\mmgr</Filter>
     </ClInclude>
@@ -505,9 +496,6 @@
     </ClCompile>
     <ClCompile Include="Profiler.cpp">
       <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="gpudetect\DeviceId.cpp">
-      <Filter>Sources\GpuDetect</Filter>
     </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Sources\mmgr</Filter>

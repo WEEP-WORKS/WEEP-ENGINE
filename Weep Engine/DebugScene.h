@@ -5,16 +5,16 @@
 #include "imgui.h"
 
 #define MAX_SNAKE 2
-#define LIB_NUM 9
+#define LIB_NUM 8
 
 struct hardware_info {
-	uint gpu_vendor = 0;
-	uint gpu_device = 0;
-	char gpu_brand[250] = "";
-	float vram_mb_budget = 0.f;
-	float vram_mb_usage = 0.f;
-	float vram_mb_available = 0.f;
-	float vram_mb_reserved = 0.f;
+	const char* gpu_vendor = 0;
+	const char* gpu_device = 0;
+
+	int vram_mb_available = 0.f;
+	int vram_mb_dedicated = 0.0f;
+	int vram_mb_current = 0.0f;
+	int vram_mb_evicted = 0.0f;
 };
 
 class DebugScene : public Module
@@ -90,7 +90,9 @@ private:
 
 	hardware_info info1;
 
-	void UpdateVRAMInfo();
+	//void UpdateVRAMInfo();
+
+	void UpdateVRAMInfo1();
 
 	//Random Number
 	void RandomGenerator();

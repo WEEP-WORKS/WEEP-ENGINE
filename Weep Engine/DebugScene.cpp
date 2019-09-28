@@ -3,7 +3,6 @@
 #include "DebugScene.h"
 #include <cmath>
 #include "imgui.h"
-#include "gpudetect\DeviceId.h"
 
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -26,20 +25,16 @@ DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
 	memset(version_input_buffer, 0, sizeof(version_input_buffer));
 
-	uint vendor_id, device_id;
-	Uint64 vm, vm_curr, vm_a, vm_r;
-	std::wstring brand;
-
-	if (getGraphicsDeviceInfo(&vendor_id, &device_id, &brand, &vm, &vm_curr, &vm_a, &vm_curr))
-	{
-		info1.gpu_vendor = vendor_id;
-		info1.gpu_device = device_id;
-		sprintf_s(info1.gpu_brand, 250, "%S", brand.c_str());
-		info1.vram_mb_budget = float(vm) / (1024.f * 1024.f);
-		info1.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
-		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
-		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
-	}
+	info1.gpu_vendor = (const char*)glGetString(GL_VENDOR);
+	info1.gpu_device = (const char*)glGetString(GL_RENDERER);
+	glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &info1.vram_mb_dedicated);
+	info1.vram_mb_dedicated /= 1024;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &info1.vram_mb_available);
+	info1.vram_mb_available /= 1024;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &info1.vram_mb_current);
+	info1.vram_mb_current /= 1024;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTED_MEMORY_NVX, &info1.vram_mb_evicted);
+	info1.vram_mb_evicted /= 1024;
 
 }
 
@@ -300,7 +295,7 @@ void DebugScene::AppInfo()
 void DebugScene::HardwareInfo()
 {
 
-	UpdateVRAMInfo();
+	UpdateVRAMInfo1();
 
 
 	ImGui::Text("SDL Version:");
@@ -326,14 +321,29 @@ void DebugScene::HardwareInfo()
 
 	ImGui::Separator();
 
-	ImGui::Text("GPU:");
+	ImGui::Text("GPU Brand:");
 	ImGui::SameLine();
-	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "vendor %u device %u", info1.gpu_vendor, info1.gpu_device);
-	ImGui::Text("Brand: ");						ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info1.gpu_brand);
-	ImGui::Text("Video Memory: ");				ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_budget);
-	ImGui::Text("Video Memory On Use: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_usage);
-	ImGui::Text("Video Memory Available: ");	ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_available);
-	ImGui::Text("Video Memory Reserved: ");		ImGui::SameLine();		ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%.1f Mb", info1.vram_mb_reserved);
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info1.gpu_vendor);
+
+	ImGui::Text("Device: ");						
+	ImGui::SameLine();		
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), info1.gpu_device);
+
+	ImGui::Text("Video Memory Dedicated: ");				
+	ImGui::SameLine();		
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%i Mb", info1.vram_mb_dedicated);
+
+	ImGui::Text("Video Memory Available: ");		
+	ImGui::SameLine();		
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%i Mb", info1.vram_mb_available);
+
+	ImGui::Text("Video Memory Current: ");	
+	ImGui::SameLine();		
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%i Mb", info1.vram_mb_current);
+
+	ImGui::Text("Video Memory Evicted: ");		
+	ImGui::SameLine();		
+	ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), "%i Mb", info1.vram_mb_evicted);
 }
 
 std::string DebugScene::GetHardwareInfo()
@@ -363,17 +373,19 @@ std::string DebugScene::GetHardwareInfo()
 		return info;
 }
 
-void DebugScene::UpdateVRAMInfo()
+void DebugScene::UpdateVRAMInfo1()
 {
-	Uint64 vm, vm_curr, vm_a, vm_r;
+	info1.gpu_vendor = (const char*)glGetString(GL_VENDOR);
+	info1.gpu_device = (const char*)glGetString(GL_RENDERER);
+	glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &info1.vram_mb_dedicated);
+	info1.vram_mb_dedicated /= 1024;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &info1.vram_mb_available);
+	info1.vram_mb_available /= 1024;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &info1.vram_mb_current);
+	info1.vram_mb_current /= 1024;
+	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTED_MEMORY_NVX, &info1.vram_mb_evicted);
+	info1.vram_mb_evicted /= 1024;
 
-	if (getGraphicsDeviceInfo(nullptr, nullptr, nullptr, &vm, &vm_curr, &vm_a, &vm_curr))
-	{
-		info1.vram_mb_budget = float(vm) / (1024.f * 1024.f);
-		info1.vram_mb_usage = float(vm_curr) / (1024.f * 1024.f);
-		info1.vram_mb_available = float(vm_a) / (1024.f * 1024.f);
-		info1.vram_mb_reserved = float(vm_curr) / (1024.f * 1024.f);
-	}
 }
 
 void DebugScene::AppAbout()
@@ -412,9 +424,9 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Vendor Data", "Memory Tracker"};
-		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "GpuDetect", "mmgr"};
-		const char* version[LIB_NUM] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---", "---"};
+		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker"};
+		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr"};
+		const char* version[LIB_NUM] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---"};
 		static int selected = -1;
 		for (int i = 0; i < LIB_NUM; i++)
 		{
