@@ -69,9 +69,9 @@ bool DebugScene::Start()
 {
 	bool ret = true;
 
-	strcpy(name_input_buffer, App->window->GetAppName());
+	strcpy(name_input_buffer, App->window->GetTitle().c_str());
 	strcpy(organization_input_buffer, App->window->GetAppOrganization());
-	strcpy(version_input_buffer, App->window->GetVersion());
+	strcpy(version_input_buffer, App->window->GetVersion().c_str());
 	max_fps = App->GetMaxFps();
 
 	return true;

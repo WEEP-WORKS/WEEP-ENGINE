@@ -23,22 +23,20 @@ public:
 	void Load(Json::Value&) override;
 
 	void SetTitle(const char* title);
+	string GetTitle() const;
 
 	int GetWidth() const;
 	int GetHeight() const;
 	float GetSize() const;
-	string GetTitle() const;
-	string GetVersion() const;
-	string GetTitleWithVersion() const;
 
+	string GetTitleWithVersion() const;
 	void SetAppName(string name);
-	const char* GetAppName();
+
 	void SetAppOrganization(const char* name);
 	const char* GetAppOrganization();
 
 	void SetVersion(const char * set);
-
-	const char * GetVersion();
+	string GetVersion() const;
 
 public:
 	//The window we'll be rendering to

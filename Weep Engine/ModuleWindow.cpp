@@ -313,11 +313,6 @@ void ModuleWindow::SetAppName(string name)
 	}
 }
 
-const char * ModuleWindow::GetAppName()
-{
-	return title.c_str();
-}
-
 void ModuleWindow::SetAppOrganization(const char* name)
 {
 	if (name != organization)
@@ -336,9 +331,4 @@ void ModuleWindow::SetVersion(const char * set)
 	version = set;
 
 	SetTitle((App->window->GetTitle() + version + " ").c_str());
-}
-
-const char * ModuleWindow::GetVersion()
-{
-	return version.c_str();;
 }
