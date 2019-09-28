@@ -7,6 +7,13 @@
 
 #define MAX_LIGHTS 8
 
+enum polygon_mode
+{
+	gl_fill,
+	gl_line,
+	gl_point
+};
+
 class ModuleRenderer3D : public Module
 {
 public:
@@ -32,12 +39,26 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	
 	ImVec4 clear_color;
 
 private:
 
 	bool vsync = false;
+	// OpenGL Options
+	bool gl_blend = false;
+	bool gl_depth = true;
+	bool gl_scissor = false;
+	bool gl_cull_face = false;
+	bool gl_lighting = false;
+	bool gl_color_material = true;
+	bool gl_texture_2d = false;
+	bool fill_mode = true;
+	bool wireframe_mode = false;
+	bool point_mode = false;
+
+	polygon_mode poly_mode = polygon_mode::gl_fill;
+
+	float point_size_slider = 1;
 
 private:
 

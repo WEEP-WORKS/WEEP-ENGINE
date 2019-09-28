@@ -1,4 +1,4 @@
-#include "App.h"
+﻿#include "App.h"
 #include "ModuleWindow.h"
 #include "ModuleCamera3D.h"
 #include "Globals.h"
@@ -97,8 +97,8 @@ bool ModuleRenderer3D::Awake()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_SCISSOR_TEST);
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_SCISSOR_TEST);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
@@ -210,6 +210,139 @@ void ModuleRenderer3D::OnConfiguration()
 {
 	if (ImGui::Checkbox("Vsync", &vsync))
 		SetVsync(vsync);
+
+	ImGui::Separator();
+
+	ImGui::Checkbox("GL_DEPTH_TEST", &gl_depth);				
+	ImGui::SameLine();
+	ImGui::Checkbox("GL_CULL_FACE", &gl_cull_face);				
+	ImGui::SameLine();
+	ImGui::Checkbox("GL_LIGHTING", &gl_lighting);				
+
+	ImGui::Checkbox("GL_COLOR_MATERIAL", &gl_color_material);
+	ImGui::SameLine();
+	ImGui::Checkbox("GL_TEXTURE_2D", &gl_texture_2d);
+	ImGui::SameLine();
+	ImGui::Checkbox("GL_BLEND", &gl_blend);
+	ImGui::SameLine();
+	ImGui::Checkbox("GL_SCISSOR_TEST", &gl_scissor);
+
+	ImGui::Separator();
+
+	ImGui::Checkbox("FILL RENDER", &fill_mode);					
+	ImGui::SameLine();
+	ImGui::Checkbox("WIREFRAME RENDER", &wireframe_mode);		
+	ImGui::SameLine();
+	ImGui::Checkbox("POINT RENDER", &point_mode);
+
+	if (gl_lighting)
+	{
+		GLfloat	ambientProperties[] = { 1.f, 0.f, 0.f, 1.0f };
+
+		if (ImGui::Button("Submit"))
+		{
+			glLightfv(GL_LIGHT0, GL_AMBIENT, ambientProperties);
+			glEnable(GL_LIGHT0);
+		}
+	}
+
+	if (gl_depth && glIsEnabled(GL_DEPTH_TEST) == false)
+	{
+		glEnable(GL_DEPTH_TEST);
+	}
+	else if (gl_depth == false && glIsEnabled(GL_DEPTH_TEST))
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+
+	if (gl_blend && glIsEnabled(GL_BLEND) == false)						//https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glBlendFunc.xml
+	{
+		glEnable(GL_BLEND);
+	}
+	else if (gl_blend == false && glIsEnabled(GL_BLEND))
+	{
+		glDisable(GL_BLEND);
+	}
+
+	if (gl_scissor && glIsEnabled(GL_SCISSOR_TEST) == false)			// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScissor.xml
+	{
+		glEnable(GL_SCISSOR_TEST);
+	}
+	else if (gl_scissor == false && glIsEnabled(GL_SCISSOR_TEST))
+	{
+		glDisable(GL_SCISSOR_TEST);
+	}
+
+
+	if (gl_cull_face && glIsEnabled(GL_CULL_FACE) == false)				// https://www.khronos.org/opengl/wiki/Face_Culling
+	{
+		glCullFace(GL_FRONT); 											//GL_FRONT, GL_BACK, or GL_FRONT_AND_BACK.
+		glEnable(GL_CULL_FACE);											// The latter will cull all triangles. Culling both faces will only cull triangles (since only they have faces).
+	}
+	else if (gl_cull_face == false && glIsEnabled(GL_CULL_FACE))
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
+	if (gl_lighting && glIsEnabled(GL_LIGHTING) == false)				// https://www.khronos.org/opengl/wiki/How_lighting_works
+	{
+		glEnable(GL_LIGHTING);
+	}
+	else if (gl_lighting == false && glIsEnabled(GL_LIGHTING))
+	{
+		glDisable(GL_LIGHTING);
+	}
+
+	if (gl_color_material && glIsEnabled(GL_COLOR_MATERIAL) == false)	// https://www.khronos.org/opengl/wiki/How_lighting_works
+	{
+		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE); 
+		glEnable(GL_COLOR_MATERIAL);
+	}
+	else if (gl_color_material == false && glIsEnabled(GL_COLOR_MATERIAL))
+	{
+		glDisable(GL_COLOR_MATERIAL);
+	}
+
+	if (gl_texture_2d && glIsEnabled(GL_TEXTURE_2D) == false)			// https://www.khronos.org/opengl/wiki/Texture
+	{
+		glEnable(GL_TEXTURE_2D);
+	}
+	else if (gl_texture_2d == false && glIsEnabled(GL_TEXTURE_2D))
+		glDisable(GL_TEXTURE_2D);
+
+	// Fill 
+	if (fill_mode && poly_mode != gl_fill)								// https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glPolygonMode.xml
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);			
+		poly_mode = gl_fill;									
+		wireframe_mode = false;								
+		point_mode = false;									
+	} 														
+	
+	//Wireframe
+	if (wireframe_mode && poly_mode != gl_line)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		poly_mode = gl_line;
+		fill_mode = false;
+		point_mode = false;
+	}
+
+	// Point											
+	if (point_mode && poly_mode != gl_point)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		poly_mode = gl_point;
+		fill_mode = false;
+		wireframe_mode = false;
+	}
+
+	// Slider Point
+	if (point_mode)
+	{
+		ImGui::SliderFloat("Point Size", &point_size_slider, 0, 10);
+		glPointSize(point_size_slider);
+	}
 }
 
 void ModuleRenderer3D::SetVsync(bool set)
