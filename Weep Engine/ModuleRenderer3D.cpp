@@ -30,6 +30,11 @@ bool ModuleRenderer3D::Awake()
 
 	if(ret == true)
 	{
+		LOG("Vendor: %s", glGetString(GL_VENDOR));
+		LOG("Renderer: %s", glGetString(GL_RENDERER));
+		LOG("OpenGL version supported %s", glGetString(GL_VERSION));
+		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 		//Use Vsync
 		if(SDL_GL_SetSwapInterval(vsync) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
@@ -92,6 +97,7 @@ bool ModuleRenderer3D::Awake()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
 	clear_color = ImVec4(0.f, 0.f, 0.f, 1.00f); // Color background

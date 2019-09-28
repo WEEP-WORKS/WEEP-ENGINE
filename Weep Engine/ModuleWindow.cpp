@@ -6,6 +6,12 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "ModuleRenderer3D.h"
+#include "SDL/include/SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
+#pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
+#pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
 #pragma comment (lib, "glew/glew32.lib")
 
@@ -91,8 +97,25 @@ bool ModuleWindow::Awake()
 
 		gl_context = SDL_GL_CreateContext(window);
 
+		if (gl_context == NULL)
+		{
+			LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+			ret = false;
+		}
+
 		// Setup Dear ImGui context
-		glewInit();
+		GLenum err = glewInit();
+
+		if (err != GLEW_OK)
+		{
+			LOG("Glew library could not init %s\n", glewGetErrorString(err));
+			ret = false;
+		}
+		else
+		{
+			LOG("Using Glew %s\n", glewGetString(GLEW_VERSION));
+		}
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 
