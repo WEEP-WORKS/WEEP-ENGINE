@@ -71,11 +71,11 @@ bool DebugScene::Start()
 
 	if (!App->renderer3D->GetVsync())
 	{
-		max_fps = App->GetMaxFps();
+		max_fps_slider = App->GetMaxFps();
 	}
 	else
 	{
-		max_fps = App->renderer3D->GetRefreshRate();
+		max_fps_slider = App->renderer3D->GetRefreshRate();
 	}
 
 	return true;
@@ -297,12 +297,13 @@ void DebugScene::AppInfo()
 
 	if (App->renderer3D->GetVsync())
 	{
-		max_fps = App->renderer3D->GetRefreshRate();
+		max_fps_slider = App->renderer3D->GetRefreshRate();
+		App->SetMaxFps(max_fps_slider);
 	}
 
-	if (ImGui::SliderInt("Max FPS (VSYNC ON)", &max_fps, 0, 999))
+	if (ImGui::SliderInt("Max FPS (VSYNC ON)", &max_fps_slider, 0, 999))
 	{
-		App->SetMaxFps(max_fps);
+		App->SetMaxFps(max_fps_slider);
 	}
 	
 }
@@ -837,4 +838,9 @@ void DebugScene::LoadStyle(const char * name)
 	style->Colors[ImGuiCol_TextSelectedBg] = green;
 	style->Colors[ImGuiCol_ModalWindowDarkening] = green;
 	}
+}
+
+void DebugScene::SetFpsMax()
+{
+	max_fps_slider = 999;
 }

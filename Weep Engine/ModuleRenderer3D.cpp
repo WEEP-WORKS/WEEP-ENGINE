@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "DebugScene.h"
+
 #include "glew/glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include "imgui_impl_sdl.h"
@@ -231,7 +233,13 @@ void ModuleRenderer3D::Load(Json::Value& root)
 void ModuleRenderer3D::OnConfiguration()
 {
 	if (ImGui::Checkbox("Vsync", &vsync))
+	{
 		SetVsync(vsync);
+		if (!vsync)
+		{
+			App->debug_scene->SetFpsMax();
+		}
+	}
 
 	ImGui::Separator();
 
