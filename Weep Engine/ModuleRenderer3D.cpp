@@ -238,6 +238,7 @@ void ModuleRenderer3D::OnConfiguration()
 		if (!vsync)
 		{
 			App->debug_scene->SetFpsMax();
+			App->SetMaxFps(999);
 		}
 	}
 

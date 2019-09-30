@@ -298,12 +298,19 @@ void DebugScene::AppInfo()
 	if (App->renderer3D->GetVsync())
 	{
 		max_fps_slider = App->renderer3D->GetRefreshRate();
-		App->SetMaxFps(max_fps_slider);
+		if (ImGui::SliderInt("Max FPS (VSYNC ON)", &max_fps_slider, 0, 999))
+		{
+			App->SetMaxFps(max_fps_slider);
+		}
 	}
 
-	if (ImGui::SliderInt("Max FPS (VSYNC ON)", &max_fps_slider, 0, 999))
+	else
 	{
-		App->SetMaxFps(max_fps_slider);
+		
+		if (ImGui::SliderInt("Max FPS", &max_fps_slider, 0, 999))
+		{
+			App->SetMaxFps(max_fps_slider);
+		}
 	}
 	
 }
