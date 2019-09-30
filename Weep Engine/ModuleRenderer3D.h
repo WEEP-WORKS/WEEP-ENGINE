@@ -32,6 +32,9 @@ public:
 	void OnResize(int width, int height);
 	void DrawGrid(int HALF_GRID_SIZE);
 
+	bool GetVsync() const;
+	int GetRefreshRate() const;
+
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -59,6 +62,8 @@ private:
 	polygon_mode poly_mode = polygon_mode::gl_fill;
 
 	float point_size_slider = 1;
+
+	int refresh_rate = 0;
 
 private:
 

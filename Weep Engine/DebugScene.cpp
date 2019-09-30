@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "App.h"
 #include "DebugScene.h"
+#include "ModuleRenderer3D.h"
 #include <cmath>
 #include "imgui.h"
 
@@ -67,7 +68,15 @@ bool DebugScene::Start()
 	strcpy(name_input_buffer, App->window->GetTitle().c_str());
 	strcpy(organization_input_buffer, App->window->GetAppOrganization());
 	strcpy(version_input_buffer, App->window->GetVersion().c_str());
-	max_fps = App->GetMaxFps();
+
+	if (!App->renderer3D->GetVsync())
+	{
+		max_fps = App->GetMaxFps();
+	}
+	else
+	{
+		max_fps = App->renderer3D->GetRefreshRate();
+	}
 
 	return true;
 }
@@ -286,10 +295,16 @@ void DebugScene::AppInfo()
 		App->window->SetVersion(version_input_buffer);
 	}
 
-	if (ImGui::SliderInt("Max FPS", &max_fps, 0, 999))
+	if (App->renderer3D->GetVsync())
+	{
+		max_fps = App->renderer3D->GetRefreshRate();
+	}
+
+	if (ImGui::SliderInt("Max FPS (VSYNC ON)", &max_fps, 0, 999))
 	{
 		App->SetMaxFps(max_fps);
 	}
+	
 }
 
 void DebugScene::HardwareInfo()

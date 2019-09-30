@@ -260,12 +260,14 @@ void Application::WantToLoad()
 
 void Application::SetMaxFps(int set)
 {
-	if (set > 0) 
+	/*if (!App->renderer3D->GetVsync())
 	{
-		App->profiler->max_fps = set;
-		App->profiler->capped_ms = (1000 / set);
+		set = 60;
 	}
-
+*/
+	App->profiler->max_fps = set;
+	App->profiler->capped_ms = (1000 / set);
+	
 }
 
 int Application::GetMaxFps()

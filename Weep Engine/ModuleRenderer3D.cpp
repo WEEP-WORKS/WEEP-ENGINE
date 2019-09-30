@@ -108,7 +108,29 @@ bool ModuleRenderer3D::Awake()
 	// Projection matrix for
 	OnResize(App->window->GetWidth(), App->window->GetHeight());
 
+	//To get the refresh of the display
+	int display_count = 0, display_index = 0, mode_index = 0;
+	SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+	if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0) {
+		LOG("SDL_GetDisplayMode failed: %s", SDL_GetError());
+		return 1;
+	}
+	else
+	{
+		refresh_rate = mode.refresh_rate;
+	}
+
 	return ret;
+}
+
+bool ModuleRenderer3D::GetVsync() const
+{
+	return vsync;
+}
+
+int ModuleRenderer3D::GetRefreshRate() const
+{
+	return refresh_rate;
 }
 
 // PreUpdate: clear buffer
