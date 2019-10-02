@@ -76,9 +76,9 @@ private:
 
 	ImGuiTextBuffer debug_console_buff;
 
+	uint my_id = 0;
 	uint num_vertices = 36;
-
-	float vertices[36];
+	//GLfloat vertices[];
 
 private:
 	
