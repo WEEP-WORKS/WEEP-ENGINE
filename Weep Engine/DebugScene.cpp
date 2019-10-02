@@ -84,51 +84,51 @@ bool DebugScene::Start()
 	GLfloat vertices [] =
 	{
 
-		4.f, 0.f, 0.f, //A
+		4.f, 0.f, 0.f, //A		//ABC
 		6.f, 0.f, 0.f, //B
 		4.f, 2.f, 0.f, //C
 
-		4.f, 2.f, 0.f,
+		4.f, 2.f, 0.f,			//CBD
 		6.f, 0.f, 0.f,
 		6.f, 2.f, 0.f, //D
 
-		6.f, 0.f, 0.f,
+		6.f, 0.f, 0.f,			//BFD
 		6.f, 0.f, -2.f, //F
 		6.f, 2.f, 0.f,
 
-		6.f, 2.f, 0.f,
+		6.f, 2.f, 0.f,			//DFH
 		6.f, 0.f, -2.f,
 		6.f, 2.f, -2.f, //H
 
-		4.f, 2.f, 0.f,
+		4.f, 2.f, 0.f,			//CDG
 		6.f, 2.f, 0.f,
 		4.f, 2.f, -2.f, //G
 
-		4.f, 2.f, -2.f,
+		4.f, 2.f, -2.f,			//GDH
 		6.f, 2.f, 0.f,
 		6.f, 2.f, -2.f,
 
-		4.f, 0.f, -2.f, //E
+		4.f, 0.f, -2.f, //E		//EAG
 		4.f, 0.f, 0.f,
 		4.f, 2.f, -2.f,
 
-		4.f, 2.f, -2.f,
+		4.f, 2.f, -2.f,			//GAC
 		4.f, 0.f, 0.f,
 		4.f, 2.f, 0.f,
 
-		6.f, 0.f, -2.f,
+		6.f, 0.f, -2.f,			//FEH
 		4.f, 0.f, -2.f,
 		6.f, 2.f, -2.f,
 
-		6.f, 2.f, -2.f,
+		6.f, 2.f, -2.f,			//HEG
 		4.f, 0.f, -2.f,
 		4.f, 2.f, -2.f,
 
-		4.f, 0.f, -2.f,
+		4.f, 0.f, -2.f,			//EFA
 		6.f, 0.f, -2.f,
 		4.f, 0.f, 0.f,
 
-		4.f, 0.f, 0.f,
+		4.f, 0.f, 0.f,			//AFB
 		6.f, 0.f, -2.f,
 		6.f, 0.f, 0.f
 
@@ -299,6 +299,10 @@ bool DebugScene::Update()
 	
 	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	//-------------------------------------------------------------------------
+	//--------------------------MAIN MENU BAR----------------------------------
+	//-------------------------------------------------------------------------
 
 	if (ImGui::BeginMainMenuBar()) 
 	{
