@@ -84,32 +84,32 @@ bool DebugScene::Start()
 	GLfloat vertices [] =
 	{
 
+		4.f, 0.f, 0.f, //A
+		6.f, 0.f, 0.f, //B
+		4.f, 2.f, 0.f, //C
+
+		4.f, 2.f, 0.f,
+		6.f, 0.f, 0.f,
+		6.f, 2.f, 0.f, //D
+
+		6.f, 0.f, 0.f,
+		6.f, 0.f, -2.f, //F
+		6.f, 2.f, 0.f,
+
+		6.f, 2.f, 0.f,
+		6.f, 0.f, -2.f,
+		6.f, 2.f, -2.f, //H
+
+		4.f, 2.f, 0.f,
+		6.f, 2.f, 0.f,
+		4.f, 2.f, -2.f, //G
+
+		4.f, 2.f, -2.f,
+		6.f, 2.f, 0.f,
+		6.f, 2.f, -2.f,
+
+		4.f, 0.f, -2.f, //E
 		4.f, 0.f, 0.f,
-		6.f, 0.f, 0.f,
-		4.f, 2.f, 0.f,
-
-		4.f, 2.f, 0.f,
-		6.f, 0.f, 0.f,
-		6.f, 2.f, 0.f,
-
-		6.f, 0.f, 0.f,
-		6.f, 0.f, -2.f,
-		6.f, 2.f, 0.f,
-
-		6.f, 2.f, 0.f,
-		6.f, 0.f, -2.f,
-		6.f, 2.f, -2.f,
-
-		4.f, 2.f, 0.f,
-		6.f, 2.f, 0.f,
-		4.f, 2.f, -2.f,
-
-		4.f, 2.f, -2.f,
-		6.f, 2.f, 0.f,
-		6.f, 2.f, -2.f,
-
-		4.f, 0.f, -2.f,
-		4.f, 0.f, 0.f,
 		4.f, 2.f, -2.f,
 
 		4.f, 2.f, -2.f,
@@ -126,7 +126,7 @@ bool DebugScene::Start()
 
 		4.f, 0.f, -2.f,
 		6.f, 0.f, -2.f,
-		6.f, 0.f, 0.f,
+		4.f, 0.f, 0.f,
 
 		4.f, 0.f, 0.f,
 		6.f, 0.f, -2.f,
@@ -134,11 +134,40 @@ bool DebugScene::Start()
 
 	};
 
-
 	glGenBuffers(1, (GLuint*) &(my_id));
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
 
+	GLfloat vertices1[] =
+	{
+		0.f, 2.f, 6.f,   //d 0
+		-2.f, 2.f, 6.f,  //c 1
+		-2.f, 0.f, 6.f,  //a 2
+		0.f, 0.f, 6.f,   //b 3
+
+		0.f, 0.f, 4.f,   //f 4
+		0.f, 2.f, 4.f,    //h 5
+		-2.f, 2.f, 4.f,  //g 6
+		-2.f, 0.f, 4.f  //e 7
+
+	};
+
+	GLuint indices[] = 
+	{
+		0,1,2, 2,3,0,
+		0,3,4, 4,5,0,
+		0,5,6, 6,1,0,
+		1,6,7, 7,2,1,
+		7,4,3, 3,2,7,
+		4,7,6, 6,5,4 
+	};
+
+	glGenBuffers(1, (GLuint*) &(my_id1));
+	glGenBuffers(1, (GLuint*) &(my_indices));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 * 3, vertices1, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*number_of_indices, indices, GL_STATIC_DRAW);
 	
 	return true;
 }
@@ -262,6 +291,14 @@ bool DebugScene::Update()
 	//-------------------------------------------------------------------------
 	//----------------------CUBE ELEMENT ARRAY MODE-------------------------------
 	//-------------------------------------------------------------------------
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	
+	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	if (ImGui::BeginMainMenuBar()) 
 	{
