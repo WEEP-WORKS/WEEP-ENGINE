@@ -116,85 +116,80 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	//glLineWidth(2.0f);
-	//glBegin(GL_LINES);
+	//-------------------------------------------------------------------------
+	//------------------------------PLANE--------------------------------------
+	//-------------------------------------------------------------------------
 
-	//for (float i = -10.f; i <= 10.f; i++)					//VERY COOL DRAW
-	//{
-	//	glVertex3f(i, 0.f, 0.f);
-	//	glVertex3f(10.f, 10.f, 0.f);
+	glLineWidth(2.0f);
 
-	//	glVertex3f(0.f, i, 0.f);
-	//	glVertex3f(10.f, 10.f, 0.f);
-	//}
+	glBegin(GL_LINES);
 
+	for (float i = -12.f; i <= 12.f; i++)
+	{
+		glVertex3f(i, 0.f, 12.f);
+		glVertex3f(i, 0.f, -12.f);
 
-	//glEnd();
+		glVertex3f(-12.f, 0.f, -i);
+		glVertex3f(12.f, 0.f, -i);
+	}
 
+	glEnd();
 
-	//glBegin(GL_TRIANGLES);
+	//-------------------------------------------------------------------------
+	//------------------------CUBE DIRECT MODE---------------------------------
+	//-------------------------------------------------------------------------
 
-	//	glVertex3f(-2.f, 0.f, 0.f);							//AVICII
-	//	glVertex3f(3.f, 0.f, 0.f);
-	//	glVertex3f(3.f, 3.f, 0.f);
+	glBegin(GL_TRIANGLES);
 
-	//	glVertex3f(4.f, 0.f, 0.f);
-	//	glVertex3f(9.f, 3.f, 0.f);
-	//	glVertex3f(4.f, 3.f, 0.f);
+	glVertex3f(-2.f, 0.f, 0.f); //a						
+	glVertex3f(0.f, 0.f, 0.f);  //b
+	glVertex3f(-2.f, 2.f, 0.f); //c
 
-	//glEnd();
+	glVertex3f(-2.f, 2.f, 0.f);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 2.f, 0.f);  //d
 
-	//glBegin(GL_TRIANGLES);
+	glVertex3f(0.f, 0.f, 0.f);  
+	glVertex3f(0.f, 0.f, -2.f);  //f
+	glVertex3f(0.f, 2.f, 0.f);  
 
-	//	glVertex3f(-2.f, 0.f, 0.f); //a						//CUBE ez way
-	//	glVertex3f(0.f, 0.f, 0.f);  //b
-	//	glVertex3f(-2.f, 2.f, 0.f); //c
+	glVertex3f(0.f, 2.f, 0.f);  
+	glVertex3f(0.f, 0.f, -2.f);  
+	glVertex3f(0.f, 2.f, -2.f); //h
 
-	//	glVertex3f(-2.f, 2.f, 0.f);
-	//	glVertex3f(0.f, 0.f, 0.f);
-	//	glVertex3f(0.f, 2.f, 0.f);  //d
+	glVertex3f(-2.f, 2.f, 0.f); 
+	glVertex3f(0.f, 2.f, 0.f); 
+	glVertex3f(-2.f, 2.f,-2.f); //g
 
-	//	glVertex3f(0.f, 0.f, 0.f);  
-	//	glVertex3f(0.f, 0.f, -2.f);  //f
-	//	glVertex3f(0.f, 2.f, 0.f);  
+	glVertex3f(-2.f, 2.f,-2.f); 
+	glVertex3f(0.f, 2.f, 0.f);  
+	glVertex3f(0.f, 2.f, -2.f); 
 
-	//	glVertex3f(0.f, 2.f, 0.f);  
-	//	glVertex3f(0.f, 0.f, -2.f);  
-	//	glVertex3f(0.f, 2.f, -2.f); //h
+	glVertex3f(-2.f, 0.f, -2.f); //e
+	glVertex3f(-2.f, 0.f, 0.f); 
+	glVertex3f(-2.f, 2.f, -2.f); 
 
-	//	glVertex3f(-2.f, 2.f, 0.f); 
-	//	glVertex3f(0.f, 2.f, 0.f); 
-	//	glVertex3f(-2.f, 2.f,-2.f); //g
+	glVertex3f(-2.f, 2.f, -2.f);
+	glVertex3f(-2.f, 0.f, 0.f);
+	glVertex3f(-2.f, 2.f, 0.f);
 
-	//	glVertex3f(-2.f, 2.f,-2.f); 
-	//	glVertex3f(0.f, 2.f, 0.f);  
-	//	glVertex3f(0.f, 2.f, -2.f); 
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(-2.f, 0.f, -2.f);
+	glVertex3f(0.f, 2.f, -2.f);
 
-	//	glVertex3f(-2.f, 0.f, -2.f); //e
-	//	glVertex3f(-2.f, 0.f, 0.f); 
-	//	glVertex3f(-2.f, 2.f, -2.f); 
+	glVertex3f(0.f, 2.f, -2.f);
+	glVertex3f(-2.f, 0.f, -2.f);
+	glVertex3f(-2.f, 2.f, -2.f);
 
-	//	glVertex3f(-2.f, 2.f, -2.f);
-	//	glVertex3f(-2.f, 0.f, 0.f);
-	//	glVertex3f(-2.f, 2.f, 0.f);
+	glVertex3f(-2.f, 0.f, -2.f);
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(-2.f, 0.f, 0.f);
 
-	//	glVertex3f(0.f, 0.f, -2.f);
-	//	glVertex3f(-2.f, 0.f, -2.f);
-	//	glVertex3f(0.f, 2.f, -2.f);
+	glVertex3f(-2.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(0.f, 0.f, 0.f);
 
-	//	glVertex3f(0.f, 2.f, -2.f);
-	//	glVertex3f(-2.f, 0.f, -2.f);
-	//	glVertex3f(-2.f, 2.f, -2.f);
-
-	//	glVertex3f(-2.f, 0.f, -2.f);
-	//	glVertex3f(0.f, 0.f, -2.f);
-	//	glVertex3f(-2.f, 0.f, 0.f);
-
-	//	glVertex3f(-2.f, 0.f, 0.f);
-	//	glVertex3f(0.f, 0.f, -2.f);
-	//	glVertex3f(0.f, 0.f, 0.f);
-
-	//glEnd();
+	glEnd();
 
 	if (ImGui::BeginMainMenuBar()) 
 	{
@@ -935,3 +930,30 @@ void DebugScene::SetFpsMax()
 {
 	max_fps_slider = 999;
 }
+
+//glBegin(GL_LINES);
+
+//for (float i = -10.f; i <= 10.f; i++)					//VERY COOL DRAW
+//{
+//	glVertex3f(i, 0.f, 0.f);
+//	glVertex3f(10.f, 10.f, 0.f);
+
+//	glVertex3f(0.f, i, 0.f);
+//	glVertex3f(10.f, 10.f, 0.f);
+//}
+
+
+//glEnd();
+
+
+//glBegin(GL_TRIANGLES);
+
+//	glVertex3f(-2.f, 0.f, 0.f);							//AVICII
+//	glVertex3f(3.f, 0.f, 0.f);
+//	glVertex3f(3.f, 3.f, 0.f);
+
+//	glVertex3f(4.f, 0.f, 0.f);
+//	glVertex3f(9.f, 3.f, 0.f);
+//	glVertex3f(4.f, 3.f, 0.f);
+
+//glEnd();

@@ -11,8 +11,10 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(0.0f, 0.0f, 5.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
+	Position = vec3(5, 5, 5);
+	Reference = vec3(0, 0, 0);
+
+	LookAt(vec3(0, 1, 0));
 
 	camera_distance = 0;
 
