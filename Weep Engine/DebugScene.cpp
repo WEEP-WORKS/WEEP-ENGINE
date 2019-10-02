@@ -5,6 +5,7 @@
 #include <cmath>
 #include "imgui.h"
 
+#include "glew/glew.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "SDL/include/SDL_opengl.h"
@@ -16,6 +17,8 @@
 #include "pcg_random.hpp"
 
 #include "mmgr\mmgr.h" //must be after random !!!!!!
+
+
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -78,6 +81,11 @@ bool DebugScene::Start()
 		max_fps_slider = App->renderer3D->GetRefreshRate();
 	}
 
+	uint my_id = 0;
+	glGenBuffers(1, (GLuint*) &(my_id));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
+
 	return true;
 }
 
@@ -108,9 +116,85 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	/*Plane p(0, 10, 0, 0);
-	p.axis = true;
-	p.Render();*/
+	//glLineWidth(2.0f);
+	//glBegin(GL_LINES);
+
+	//for (float i = -10.f; i <= 10.f; i++)					//VERY COOL DRAW
+	//{
+	//	glVertex3f(i, 0.f, 0.f);
+	//	glVertex3f(10.f, 10.f, 0.f);
+
+	//	glVertex3f(0.f, i, 0.f);
+	//	glVertex3f(10.f, 10.f, 0.f);
+	//}
+
+
+	//glEnd();
+
+
+	//glBegin(GL_TRIANGLES);
+
+	//	glVertex3f(-2.f, 0.f, 0.f);							//AVICII
+	//	glVertex3f(3.f, 0.f, 0.f);
+	//	glVertex3f(3.f, 3.f, 0.f);
+
+	//	glVertex3f(4.f, 0.f, 0.f);
+	//	glVertex3f(9.f, 3.f, 0.f);
+	//	glVertex3f(4.f, 3.f, 0.f);
+
+	//glEnd();
+
+	//glBegin(GL_TRIANGLES);
+
+	//	glVertex3f(-2.f, 0.f, 0.f); //a						//CUBE ez way
+	//	glVertex3f(0.f, 0.f, 0.f);  //b
+	//	glVertex3f(-2.f, 2.f, 0.f); //c
+
+	//	glVertex3f(-2.f, 2.f, 0.f);
+	//	glVertex3f(0.f, 0.f, 0.f);
+	//	glVertex3f(0.f, 2.f, 0.f);  //d
+
+	//	glVertex3f(0.f, 0.f, 0.f);  
+	//	glVertex3f(0.f, 0.f, -2.f);  //f
+	//	glVertex3f(0.f, 2.f, 0.f);  
+
+	//	glVertex3f(0.f, 2.f, 0.f);  
+	//	glVertex3f(0.f, 0.f, -2.f);  
+	//	glVertex3f(0.f, 2.f, -2.f); //h
+
+	//	glVertex3f(-2.f, 2.f, 0.f); 
+	//	glVertex3f(0.f, 2.f, 0.f); 
+	//	glVertex3f(-2.f, 2.f,-2.f); //g
+
+	//	glVertex3f(-2.f, 2.f,-2.f); 
+	//	glVertex3f(0.f, 2.f, 0.f);  
+	//	glVertex3f(0.f, 2.f, -2.f); 
+
+	//	glVertex3f(-2.f, 0.f, -2.f); //e
+	//	glVertex3f(-2.f, 0.f, 0.f); 
+	//	glVertex3f(-2.f, 2.f, -2.f); 
+
+	//	glVertex3f(-2.f, 2.f, -2.f);
+	//	glVertex3f(-2.f, 0.f, 0.f);
+	//	glVertex3f(-2.f, 2.f, 0.f);
+
+	//	glVertex3f(0.f, 0.f, -2.f);
+	//	glVertex3f(-2.f, 0.f, -2.f);
+	//	glVertex3f(0.f, 2.f, -2.f);
+
+	//	glVertex3f(0.f, 2.f, -2.f);
+	//	glVertex3f(-2.f, 0.f, -2.f);
+	//	glVertex3f(-2.f, 2.f, -2.f);
+
+	//	glVertex3f(-2.f, 0.f, -2.f);
+	//	glVertex3f(0.f, 0.f, -2.f);
+	//	glVertex3f(-2.f, 0.f, 0.f);
+
+	//	glVertex3f(-2.f, 0.f, 0.f);
+	//	glVertex3f(0.f, 0.f, -2.f);
+	//	glVertex3f(0.f, 0.f, 0.f);
+
+	//glEnd();
 
 	if (ImGui::BeginMainMenuBar()) 
 	{

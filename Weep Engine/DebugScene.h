@@ -76,6 +76,10 @@ private:
 
 	ImGuiTextBuffer debug_console_buff;
 
+	uint num_vertices = 36;
+
+	float vertices[36];
+
 private:
 	
 	void AppAbout();
