@@ -27,6 +27,7 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
+	void DrawCircle();
 	void Configuration();
 	bool CleanUp();
 	void OnConfiguration();
@@ -76,13 +77,16 @@ private:
 
 	ImGuiTextBuffer debug_console_buff;
 
+	//Cubes
 	uint my_id = 0;
 	uint my_id1 = 2;
 	uint my_indices = 1;
 	uint num_vertices = 36;
 	uint number_of_indices = 36;
 
-	//GLfloat vertices[];
+	// Sphere
+	std::vector<float> vertices;
+	std::vector<uint>  indices;
 
 private:
 	

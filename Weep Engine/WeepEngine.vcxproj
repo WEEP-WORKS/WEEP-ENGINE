@@ -165,6 +165,7 @@
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleWindow.h" />
+    <ClInclude Include="par_shapes.h" />
     <ClInclude Include="pcg_random.hpp" />
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="Profiler.h" />

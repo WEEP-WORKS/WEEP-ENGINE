@@ -18,6 +18,8 @@
 
 #include "mmgr\mmgr.h" //must be after random !!!!!!
 
+#define PAR_SHAPES_IMPLEMENTATION
+#include "par_shapes.h"
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
@@ -169,6 +171,8 @@ bool DebugScene::Start()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 * 3, vertices1, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*number_of_indices, indices, GL_STATIC_DRAW);
 	
+	//DrawCircle();
+
 	return true;
 }
 
@@ -322,6 +326,38 @@ bool DebugScene::Update()
 	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+	//-------------------------------------------------------------------------
+	//----------------------SPHERE ARRAY MODE-------------------------------
+	//-------------------------------------------------------------------------
+
+
+	//glEnableClientState(GL_VERTEX_ARRAY);
+
+	//glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+
+	//glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_INT, &indices[0]);
+
+	//glDisableClientState(GL_VERTEX_ARRAY);
+
+	//-------------------------------------------------------------------------
+	//----------------------PAR SHAPES MODE-------------------------------
+	//-------------------------------------------------------------------------
+
+	par_shapes_mesh* dodecahedron = par_shapes_create_dodecahedron();
+	par_shapes_translate(dodecahedron, 0, 0.934, 0);
+
+	par_shapes_mesh*tetrahedron = par_shapes_create_tetrahedron();
+	par_shapes_translate(tetrahedron, 1, 0, 3.5);
+
+	/*par_shapes_mesh*octohedron = par_shapes_create_octohedron();
+	par_shapes_translate(octohedron, -2.25, 0.9, -.5);*/
+
+	par_shapes_mesh*icosahedron = par_shapes_create_icosahedron();
+	par_shapes_translate(icosahedron, -1, 0.8, 3.5);
+
+	par_shapes_mesh*cube = par_shapes_create_cube();
+	par_shapes_translate(cube, 1, 0, 0.5);
+	par_shapes_scale(cube, 1.2, 1.2, 1.2);
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
@@ -421,6 +457,44 @@ bool DebugScene::Update()
 	}
 
 	return ret;
+}
+
+void DebugScene::DrawCircle()
+{
+	float radius = 1.f;
+	uint rings = 5;
+	uint sectors = 5;
+
+	float const R = 1. / (float)(rings - 1);
+	float const S = 1. / (float)(sectors - 1);
+	int r, s;
+
+	vertices.resize(rings * sectors * 3);
+
+	std::vector<float>::iterator v = vertices.begin();
+
+	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++)
+	{
+		float const y = sin(-M_PI_2 + M_PI * r * R);
+		float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
+		float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+
+		*v++ = x * radius;
+		*v++ = y * radius;
+		*v++ = z * radius;
+	}
+
+	indices.resize(rings * sectors * 4);
+
+	std::vector<uint>::iterator i = indices.begin();
+
+	for (r = 0; r < rings - 1; r++) for (s = 0; s < sectors - 1; s++)
+	{
+		*i++ = r * sectors + s;
+		*i++ = r * sectors + (s + 1);
+		*i++ = (r + 1) * sectors + (s + 1);
+		*i++ = (r + 1) * sectors + s;
+	}
 }
 
 void DebugScene::Configuration()
