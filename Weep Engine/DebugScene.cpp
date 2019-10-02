@@ -205,9 +205,9 @@ bool DebugScene::Update()
 
 	glLineWidth(2.0f);
 
-	glBegin(GL_LINES);
+	glColor3f(1, 1, 1);
 
-	//glColor3f(0, 0, 1);
+	glBegin(GL_LINES);
 
 	for (float i = -12.f; i <= 12.f; i++)
 	{
@@ -218,11 +218,29 @@ bool DebugScene::Update()
 		glVertex3f(12.f, 0.f, -i);
 	}
 
+	glLineWidth(3.0f); // why it doesnt work?
+	glColor3f(1, 0, 0);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(5.f, 0.f, 0.f);
+
+	glColor3f(0, 1, 0);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 5.f, 0.f);
+
+	glColor3f(0, 0, 1);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, 5.f);
+
 	glEnd();
+
+	glLineWidth(1.0f);
 
 	//-------------------------------------------------------------------------
 	//------------------------CUBE DIRECT MODE---------------------------------
 	//-------------------------------------------------------------------------
+
+
+	glColor3f(1, 0, 1);
 
 	glBegin(GL_TRIANGLES);
 
@@ -281,6 +299,8 @@ bool DebugScene::Update()
 	//----------------------CUBE DRAW ARRAY MODE-------------------------------
 	//-------------------------------------------------------------------------
 
+	glColor3f(1, 1, 0);
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -292,6 +312,8 @@ bool DebugScene::Update()
 	//----------------------CUBE ELEMENT ARRAY MODE-------------------------------
 	//-------------------------------------------------------------------------
 
+	glColor3f(0, 1, 1);
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
@@ -299,6 +321,7 @@ bool DebugScene::Update()
 	
 	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
