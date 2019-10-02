@@ -343,21 +343,60 @@ bool DebugScene::Update()
 	//----------------------PAR SHAPES MODE-------------------------------
 	//-------------------------------------------------------------------------
 
-	par_shapes_mesh* dodecahedron = par_shapes_create_dodecahedron();
-	par_shapes_translate(dodecahedron, 0, 0.934, 0);
+	GLuint buffer [3];
+	GLuint vao = 4;
+	GLuint count = 0;
 
-	par_shapes_mesh*tetrahedron = par_shapes_create_tetrahedron();
-	par_shapes_translate(tetrahedron, 1, 0, 3.5);
+	par_shapes_mesh* shape = par_shapes_create_dodecahedron();
 
-	/*par_shapes_mesh*octohedron = par_shapes_create_octohedron();
-	par_shapes_translate(octohedron, -2.25, 0.9, -.5);*/
+	std::vector<vec3> position, normal;
 
-	par_shapes_mesh*icosahedron = par_shapes_create_icosahedron();
-	par_shapes_translate(icosahedron, -1, 0.8, 3.5);
+	PAR_SHAPES_T const* triangle = shape->triangles;
 
-	par_shapes_mesh*cube = par_shapes_create_cube();
-	par_shapes_translate(cube, 1, 0, 0.5);
-	par_shapes_scale(cube, 1.2, 1.2, 1.2);
+	for (int f = 0; f < shape->ntriangles; f++, triangle += 3) {
+		float const* pa = shape->points + 3 * triangle[0];
+		float const* pb = shape->points + 3 * triangle[1];
+		float const* pc = shape->points + 3 * triangle[2];
+
+		vec3 p0(pa[0], pa[1], pa[2]);
+		vec3 p1(pb[0], pb[1], pb[2]);
+		vec3 p2(pc[0], pc[1], pc[2]);
+
+		position.push_back(p0);
+		position.push_back(p1);
+		position.push_back(p2);
+
+		vec3 n = normalize(cross(p1 - p0, p2 - p0));
+
+		normal.push_back(n);
+		normal.push_back(n);
+		normal.push_back(n);
+	}
+
+	count = position.size();
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(3, buffer);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
+	glBufferData(GL_ARRAY_BUFFER, position.size() * sizeof(vec3), position.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(0);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
+	//glBufferData(GL_ARRAY_BUFFER, normal.size() * sizeof(vec3), normal.data(), GL_STATIC_DRAW);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	//glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
+
+	par_shapes_free_mesh(shape);
+
+	//the point is that the above is in a function : GLuint loadParShapesAndNormal(GLuint &count)
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, count);
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
