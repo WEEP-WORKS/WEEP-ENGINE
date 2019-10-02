@@ -169,6 +169,7 @@
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
