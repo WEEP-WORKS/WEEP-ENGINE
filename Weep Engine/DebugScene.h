@@ -7,6 +7,8 @@
 #define MAX_SNAKE 2
 #define LIB_NUM 8
 
+#include "par_shapes.h"
+
 struct hardware_info {
 	const char* gpu_vendor = 0;
 	const char* gpu_device = 0;
@@ -87,6 +89,11 @@ private:
 	// Sphere
 	std::vector<float> vertices;
 	std::vector<uint>  indices;
+
+	//Shapes
+	uint id_vertex = 0;
+	uint id_index = 0;
+	par_shapes_mesh* m = nullptr;
 
 private:
 	

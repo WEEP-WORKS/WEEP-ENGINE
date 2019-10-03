@@ -3,6 +3,8 @@
 #include "DebugScene.h"
 #include "ModuleRenderer3D.h"
 #include <cmath>
+
+//#include "par_shapes.h"
 #include "imgui.h"
 
 #include "glew/glew.h"
@@ -18,8 +20,6 @@
 
 #include "mmgr\mmgr.h" //must be after random !!!!!!
 
-#define PAR_SHAPES_IMPLEMENTATION
-#include "par_shapes.h"
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
@@ -83,6 +83,7 @@ bool DebugScene::Start()
 		max_fps_slider = App->renderer3D->GetRefreshRate();
 	}
 
+	//ARRAY CUBE
 	GLfloat vertices [] =
 	{
 
@@ -140,6 +141,7 @@ bool DebugScene::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
 
+	//ELEMENT CUBE
 	GLfloat vertices1[] =
 	{
 		0.f, 2.f, 6.f,   //d 0
@@ -171,6 +173,22 @@ bool DebugScene::Start()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 * 3, vertices1, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*number_of_indices, indices, GL_STATIC_DRAW);
 	
+	//SHAPES
+	m = par_shapes_create_subdivided_sphere(5);
+	//m = par_shapes_create_rock(30, 3);
+	//m = par_shapes_create_torus(30, 14, 0.8f);
+	//m = par_shapes_create_cone(4, 3); //Piramide
+	//m = par_shapes_create_cone(100, 3); //Cone
+	//m = par_shapes_create_plane(1, 1);
+	
+	glGenBuffers(1, &id_vertex);
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m->npoints * 3, m->points, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &id_index);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T)*m->ntriangles * 3, m->triangles, GL_STATIC_DRAW);
+	
 	//DrawCircle();
 
 	return true;
@@ -180,6 +198,8 @@ bool DebugScene::Start()
 bool DebugScene::CleanUp()
 {
 	bool ret = true;
+
+	par_shapes_free_mesh(m);
 
 	return ret;
 }
@@ -343,65 +363,17 @@ bool DebugScene::Update()
 	//----------------------PAR SHAPES MODE-------------------------------
 	//-------------------------------------------------------------------------
 
-	GLuint buffer [1];
-	//GLuint vao = 4;
-	GLuint count = 0;
-
-	par_shapes_mesh* shape = par_shapes_create_dodecahedron();
-	par_shapes_translate(shape, 1.f, 1.f, 1.f);
-	std::vector<vec3> position, normal;
-
-	PAR_SHAPES_T const* triangle = shape->triangles;
-
-	for (int f = 0; f < shape->ntriangles; f++, triangle += 3) {
-		float const* pa = shape->points + 3 * triangle[0];
-		float const* pb = shape->points + 3 * triangle[1];
-		float const* pc = shape->points + 3 * triangle[2];
-
-		vec3 p0(pa[0], pa[1], pa[2]);
-		vec3 p1(pb[0], pb[1], pb[2]);
-		vec3 p2(pc[0], pc[1], pc[2]);
-
-		position.push_back(p0);
-		position.push_back(p1);
-		position.push_back(p2);
-
-		vec3 n = normalize(cross(p1 - p0, p2 - p0));
-
-		normal.push_back(n);
-		normal.push_back(n);
-		normal.push_back(n);
-	}
-	par_shapes_free_mesh(shape);
-
-	count = position.size();
-
-	//glGenVertexArrays(1, &vao);
-	//glBindVertexArray(vao);
-
-//	glGenBuffers(3, buffer);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
-	glBufferData(GL_ARRAY_BUFFER, position.size() * sizeof(vec3), position.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glColor3f(1.f, 0.f, 0.f);
 	
-
-	//glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
-	//glBufferData(GL_ARRAY_BUFFER, normal.size() * sizeof(vec3), normal.data(), GL_STATIC_DRAW);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	
+	glDrawElements(GL_TRIANGLES, m->ntriangles * 3, GL_UNSIGNED_SHORT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
 
-	//glBindVertexArray(0);
 
-	
-
-	//the point is that the above is in a function : GLuint loadParShapesAndNormal(GLuint &count)
-	//glBindVertexArray(vao);
-	glEnableVertexAttribArray(0);
-
-	glDrawArrays(GL_TRIANGLES, 0, count);
-
-	glDisableVertexAttribArray(0);
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
 	//-------------------------------------------------------------------------
@@ -1210,3 +1182,45 @@ void DebugScene::SetFpsMax()
 //	glVertex3f(4.f, 3.f, 0.f);
 
 //glEnd();
+
+//GLuint buffer[1];
+//GLuint count = 0;
+//
+//par_shapes_mesh* shape = par_shapes_create_dodecahedron();
+//par_shapes_translate(shape, 1.f, 1.f, 1.f);
+//std::vector<vec3> position, normal;
+//
+//PAR_SHAPES_T const* triangle = shape->triangles;
+//
+//for (int f = 0; f < shape->ntriangles; f++, triangle += 3) {
+//	float const* pa = shape->points + 3 * triangle[0];
+//	float const* pb = shape->points + 3 * triangle[1];
+//	float const* pc = shape->points + 3 * triangle[2];
+//
+//	vec3 p0(pa[0], pa[1], pa[2]);
+//	vec3 p1(pb[0], pb[1], pb[2]);
+//	vec3 p2(pc[0], pc[1], pc[2]);
+//
+//	position.push_back(p0);
+//	position.push_back(p1);
+//	position.push_back(p2);
+//
+//	vec3 n = normalize(cross(p1 - p0, p2 - p0));
+//
+//	normal.push_back(n);
+//	normal.push_back(n);
+//	normal.push_back(n);
+//}
+//par_shapes_free_mesh(shape);
+//
+//count = position.size();
+//
+//glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
+//glBufferData(GL_ARRAY_BUFFER, position.size() * sizeof(vec3), position.data(), GL_STATIC_DRAW);
+//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+//
+//glEnableVertexAttribArray(0);
+//
+//glDrawArrays(GL_TRIANGLES, 0, count);
+//
+//glDisableVertexAttribArray(0);
