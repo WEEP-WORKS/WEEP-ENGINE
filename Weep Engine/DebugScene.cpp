@@ -304,7 +304,7 @@ bool DebugScene::Update()
 	//-------------------------------------------------------------------------
 
 	glColor3f(1, 1, 0);
-	glDisableVertexAttribArray(0);
+	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -343,7 +343,7 @@ bool DebugScene::Update()
 	//----------------------PAR SHAPES MODE-------------------------------
 	//-------------------------------------------------------------------------
 
-	GLuint buffer [3];
+	GLuint buffer [1];
 	//GLuint vao = 4;
 	GLuint count = 0;
 
@@ -383,7 +383,7 @@ bool DebugScene::Update()
 	glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
 	glBufferData(GL_ARRAY_BUFFER, position.size() * sizeof(vec3), position.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-	glEnableVertexAttribArray(0);
+	
 
 	//glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);
 	//glBufferData(GL_ARRAY_BUFFER, normal.size() * sizeof(vec3), normal.data(), GL_STATIC_DRAW);
@@ -396,8 +396,11 @@ bool DebugScene::Update()
 
 	//the point is that the above is in a function : GLuint loadParShapesAndNormal(GLuint &count)
 	//glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+
 	glDrawArrays(GL_TRIANGLES, 0, count);
 
+	glDisableVertexAttribArray(0);
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
 	//-------------------------------------------------------------------------
