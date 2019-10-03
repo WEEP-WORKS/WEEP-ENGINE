@@ -13,6 +13,7 @@ class ModuleInput;
 class ModuleRenderer3D;
 class ModuleCamera3D;
 class DebugScene;
+class GeometryShapeManager;
 
 class Application
 {
@@ -58,6 +59,7 @@ public:
 	ModuleRenderer3D*  renderer3D = nullptr;
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
+	GeometryShapeManager* geometry_shape_manager = nullptr;
 
 	Profiler*		   profiler = nullptr;
 		

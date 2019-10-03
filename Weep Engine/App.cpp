@@ -4,6 +4,8 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
+#include "GeometryShape.h"
+
 #include <list>
 #include <fstream>
 #include <iostream>
@@ -18,6 +20,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	debug_scene = new DebugScene();
+	geometry_shape_manager = new GeometryShapeManager();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -28,6 +31,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(camera);
 	AddModule(input);
 	AddModule(debug_scene);
+	AddModule(geometry_shape_manager);
 
 	// Renderer last
 	AddModule(renderer3D);

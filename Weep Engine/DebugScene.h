@@ -39,7 +39,7 @@ public:
 
 	void ConsoleLog(const char * text);
 
-	GeometrySphere* CreateSphere(const int &) const;
+	
 
 public:
 
