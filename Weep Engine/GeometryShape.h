@@ -4,21 +4,27 @@
 #include "Module.h"
 #include "Globals.h"
 #include "par_shapes.h"
+#include "glew/glew.h"
 
 class GeometryShape
 {
 public:
 	par_shapes_mesh* mesh = nullptr;
-	uint id_vertex = 0;
-	uint id_index = 0;
+	GLuint id_vertex = 0;
+	GLuint id_index = 0;
 
 	GeometryShape() {};
 	~GeometryShape()
 	{
 		par_shapes_free_mesh(mesh);
 	};
+	void Start();
+	virtual void Render() {};
+	void MoveShape(float, float, float);
 
-	virtual void Render() const {};
+protected	:
+
+	void SetBuffersWithData(); 
 };
 
 class GeometrySphere : public GeometryShape
@@ -26,7 +32,7 @@ class GeometrySphere : public GeometryShape
 public:
 	GeometrySphere() {}
 
-	void Render() const override;
+	void Render() override;
 
 };
 
@@ -46,6 +52,10 @@ private:
 
 private:
 	std::list<GeometryShape*> shapes;
+
+
+
+	
 };
 
 

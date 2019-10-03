@@ -180,6 +180,7 @@ bool DebugScene::Start()
 	//m = par_shapes_create_cone(100, 3); //Cone
 	//m = par_shapes_create_plane(1, 1);
 	sphere = App->geometry_shape_manager->CreateSphere(5);
+	sphere->MoveShape(1.f, 1.f, 1.f);
 	
 	//DrawCircle();
 
@@ -358,7 +359,7 @@ bool DebugScene::Update()
 	//----------------------PAR SHAPES MODE-------------------------------
 	//-------------------------------------------------------------------------
 
-	sphere->Render();
+
 
 
 	//-------------------------------------------------------------------------
