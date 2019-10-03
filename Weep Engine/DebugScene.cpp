@@ -182,6 +182,8 @@ bool DebugScene::Start()
 	sphere = App->geometry_shape_manager->CreateSphere(5);
 	sphere->MoveShape(1.f, 1.f, 1.f);
 	
+	sphere2 = App->geometry_shape_manager->CreateSphere(5);
+	sphere2->MoveShape(3.f, 3.f, 3.f);
 	//DrawCircle();
 
 	return true;

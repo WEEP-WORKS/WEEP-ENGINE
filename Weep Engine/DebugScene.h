@@ -95,6 +95,7 @@ private:
 
 	//Shapes
 	GeometrySphere* sphere;
+	GeometrySphere* sphere2;
 
 private:
 	

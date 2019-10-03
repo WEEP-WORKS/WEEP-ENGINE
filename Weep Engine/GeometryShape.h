@@ -22,7 +22,7 @@ public:
 	virtual void Render() {};
 	void MoveShape(float, float, float);
 
-protected	:
+protected:
 
 	void SetBuffersWithData(); 
 };
