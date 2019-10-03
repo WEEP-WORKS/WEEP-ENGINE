@@ -372,6 +372,7 @@ bool DebugScene::Update()
 		normal.push_back(n);
 		normal.push_back(n);
 	}
+	par_shapes_free_mesh(shape);
 
 	count = position.size();
 
@@ -392,7 +393,7 @@ bool DebugScene::Update()
 
 	//glBindVertexArray(0);
 
-	par_shapes_free_mesh(shape);
+	
 
 	//the point is that the above is in a function : GLuint loadParShapesAndNormal(GLuint &count)
 	//glBindVertexArray(vao);
