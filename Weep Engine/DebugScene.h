@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "imgui.h"
+#include "GeometryShape.h"
 
 #define MAX_SNAKE 2
 #define LIB_NUM 8
@@ -37,6 +38,8 @@ public:
 	void SetFpsMax();
 
 	void ConsoleLog(const char * text);
+
+	GeometrySphere* CreateSphere(const int &) const;
 
 public:
 
@@ -91,9 +94,7 @@ private:
 	std::vector<uint>  indices;
 
 	//Shapes
-	uint id_vertex = 0;
-	uint id_index = 0;
-	par_shapes_mesh* m = nullptr;
+	GeometrySphere* sphere;
 
 private:
 	

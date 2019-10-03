@@ -336,6 +336,9 @@
     <ClInclude Include="par_shapes.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="GeometryShape.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -505,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Sources\mmgr</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryShape.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
