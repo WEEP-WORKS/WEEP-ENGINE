@@ -21,6 +21,8 @@ public:
 	{
 		par_shapes_free_mesh(mesh);
 	};
+
+
 	void Start();
 	virtual void Render() {};
 	void MoveShape(float, float, float);
@@ -47,6 +49,7 @@ public:
 	~GeometryShapeManager() {};
 
 	bool Update() override;
+	bool CleanUp() override;
 
 	GeometrySphere* CreateSphere(const int &);
 

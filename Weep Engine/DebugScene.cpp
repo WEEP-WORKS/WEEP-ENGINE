@@ -201,8 +201,6 @@ bool DebugScene::CleanUp()
 {
 	bool ret = true;
 
-	delete(sphere);
-
 	return ret;
 }
 

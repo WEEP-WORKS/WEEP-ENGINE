@@ -1,4 +1,5 @@
 #include "GeometryShape.h"
+#include "Globals.h"
 
 GeometrySphere* GeometryShapeManager::CreateSphere(const int& sphere_subdivisions)
 {
@@ -26,6 +27,22 @@ void GeometryShapeManager::DrawAll()
 		(*item)->Render();
 	}
 }
+
+bool GeometryShapeManager::CleanUp()
+{
+	for (list<GeometryShape*>::iterator item = shapes.begin(); item != shapes.end(); ++item)
+	{
+		RELEASE(*item);
+	}
+	return true;
+}
+
+
+
+
+
+
+
 
 void GeometrySphere::Render()
 {
