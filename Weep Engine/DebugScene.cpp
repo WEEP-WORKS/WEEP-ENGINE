@@ -216,13 +216,38 @@ bool DebugScene::Start()
 			model->vertexs = new float[mesh->mNumVertices * 3];
 			memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3);
 			LOG("New mesh with %d vertices", model->num_vertex);
+
+
+			if (mesh->HasFaces())
+			{
+				model->num_index = mesh->mNumFaces * 3;
+				model->indexs = new uint[model->num_index]; // assume each face is a triangle
+				for (uint i = 0; i < mesh->mNumFaces; ++i)
+				{
+					if (mesh->mFaces[i].mNumIndices != 3)
+					{
+						LOG("This face don't have 3 index, only can load faces with 3 indexs");
+					}
+					else
+					{
+						// Every face have 3 indices. 
+						// take the first 3 slots, 
+						//then the next 3 slots, 
+						//then the same ...                                     3 indices * their var type, only copy 1 face (3 indices) every time
+						memcpy(&model->indexs[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+					}
+				}
+			}
 		}
 
-		aiReleaseImport(scene);
+		
 	}
 	else
+	{
 		LOG("Error loading scene %s", path);
+	}
 
+	aiReleaseImport(scene);
 	aiMesh** test = scene->mMeshes;
 
 	//DrawCircle();
