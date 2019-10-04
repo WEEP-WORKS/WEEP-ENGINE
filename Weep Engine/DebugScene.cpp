@@ -201,6 +201,7 @@ bool DebugScene::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	// loading file
 	std::string path = "Models/warrior.fbx";
 	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 
@@ -210,12 +211,13 @@ bool DebugScene::Start()
 		{
 			GeometryShape* model = new GeometryShape();
 			aiMesh* mesh = scene->mMeshes[i];
+
 			model->num_vertex = mesh->mNumVertices;
 			model->vertexs = new float[mesh->mNumVertices * 3];
-			//memcpy(m.vertices, new_mesh->mVertices, sizeof(float) * m.num_vertices * 3);
+			memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3);
 			LOG("New mesh with %d vertices", model->num_vertex);
 		}
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+
 		aiReleaseImport(scene);
 	}
 	else
@@ -259,15 +261,6 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
-
-
-	//-----------------------------Loading fbx--------------------------
-
-	
-
-
-
-
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
