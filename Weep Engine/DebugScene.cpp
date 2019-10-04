@@ -181,17 +181,14 @@ bool DebugScene::Start()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*number_of_indices, indices, GL_STATIC_DRAW);
 	
 	//SHAPES
-	//m = par_shapes_create_rock(30, 3);
-	//m = par_shapes_create_torus(30, 14, 0.8f);
-	//m = par_shapes_create_cone(4, 3); //Piramide
-	//m = par_shapes_create_cone(100, 3); //Cone
-	//m = par_shapes_create_plane(1, 1);
+
 	sphere = App->geometry_shape_manager->CreateSphere(5);
 	sphere->MoveShape(1.f, 1.f, 1.f);
 	sphere->SetColor(1.f, 0.f, 0.f);
 
 	sphere2 = App->geometry_shape_manager->CreateSphere(5);
 	sphere2->MoveShape(3.f, 3.f, 3.f);
+	sphere2->SetColor(0.5f, 0.5f, 1.f);
 	
 	
 
@@ -209,10 +206,10 @@ bool DebugScene::Start()
 	{
 		for (uint i = 0; i < scene->mNumMeshes; ++i)
 		{
-			GeometryShape* model = new GeometryShape();
+			GeometryShape* model = new FBXShape();
 			aiMesh* mesh = scene->mMeshes[i];
 
-			model->num_vertex = v_num = mesh->mNumVertices;
+			model->num_vertex = mesh->mNumVertices;
 			model->vertexs = new float[mesh->mNumVertices * 3];
 			memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3);
 			LOG("New mesh with %d vertices", model->num_vertex);
@@ -220,7 +217,7 @@ bool DebugScene::Start()
 
 			if (mesh->HasFaces())
 			{
-				model->num_triangle_indices = tr_num = mesh->mNumFaces * 3;
+				model->num_triangle_indices = mesh->mNumFaces * 3;
 				model->triangle_indices = new uint[model->num_triangle_indices]; // assume each face is a triangle
 				for (uint i = 0; i < mesh->mNumFaces; ++i)
 				{
@@ -236,16 +233,10 @@ bool DebugScene::Start()
 						//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
 						memcpy(&model->triangle_indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 					}
-				}
-			}
-			//App->geometry_shape_manager->AddShape(model);
-			glGenBuffers(1, &test_id_v);
-			glBindBuffer(GL_ARRAY_BUFFER, test_id_v);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * model->num_vertex * 3 , model->vertexs, GL_STATIC_DRAW);
+				}
 
-			glGenBuffers(1, &test_id_i);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, test_id_i);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*model->num_triangle_indices, model->triangle_indices, GL_STATIC_DRAW);
+			}
+			App->geometry_shape_manager->AddShape(model);
 		}
 		
 		
@@ -256,9 +247,7 @@ bool DebugScene::Start()
 	}
 
 	aiReleaseImport(scene);
-	aiMesh** test = scene->mMeshes;
 
-	//DrawCircle();
 
 	return true;
 }
@@ -295,210 +284,45 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 
-	glColor3f(1.f, 1.f, 1.f);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, test_id_v);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, test_id_i);
-
-
-	glDrawElements(GL_TRIANGLES, tr_num, GL_UNSIGNED_SHORT, NULL);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-
-	//glEnableClientState(GL_VERTEX_ARRAY);
-	//glBindBuffer(GL_ARRAY_BUFFER, test_id_v);
-	//glVertexPointer(3, GL_FLOAT, 0, NULL);
-	//// … draw other buffers
-	//glDrawArrays(GL_TRIANGLES, 0, v_num);
-	//glDisableClientState(GL_VERTEX_ARRAY);
-
-
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
 	//-------------------------------------------------------------------------
 
-	glLineWidth(2.0f);
+	Plane();
 
-	glColor3f(1, 1, 1);
-
-	glBegin(GL_LINES);
-
-	for (float i = -12.f; i <= 12.f; i++)
-	{
-		glVertex3f(i, 0.f, 12.f);
-		glVertex3f(i, 0.f, -12.f);
-
-		glVertex3f(-12.f, 0.f, -i);
-		glVertex3f(12.f, 0.f, -i);
-	}
-
-	glLineWidth(3.0f); // why it doesnt work?
-	glColor3f(1, 0, 0);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(5.f, 0.f, 0.f);
-
-	glColor3f(0, 1, 0);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 5.f, 0.f);
-
-	glColor3f(0, 0, 1);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, 5.f);
-
-	glEnd();
-
-	glLineWidth(1.0f);
-
+	
 	//-------------------------------------------------------------------------
 	//------------------------CUBE DIRECT MODE---------------------------------
 	//-------------------------------------------------------------------------
 
 
-	glColor3f(1, 0, 1);
-
-	glBegin(GL_TRIANGLES);
-
-
-	glVertex3f(-2.f, 0.f, 0.f); //a						
-	glVertex3f(0.f, 0.f, 0.f);  //b
-	glVertex3f(-2.f, 2.f, 0.f); //c
-
-	glVertex3f(-2.f, 2.f, 0.f);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 2.f, 0.f);  //d
-
-	glVertex3f(0.f, 0.f, 0.f);  
-	glVertex3f(0.f, 0.f, -2.f);  //f
-	glVertex3f(0.f, 2.f, 0.f);  
-
-	glVertex3f(0.f, 2.f, 0.f);  
-	glVertex3f(0.f, 0.f, -2.f);  
-	glVertex3f(0.f, 2.f, -2.f); //h
-
-	glVertex3f(-2.f, 2.f, 0.f); 
-	glVertex3f(0.f, 2.f, 0.f); 
-	glVertex3f(-2.f, 2.f,-2.f); //g
-
-	glVertex3f(-2.f, 2.f,-2.f); 
-	glVertex3f(0.f, 2.f, 0.f);  
-	glVertex3f(0.f, 2.f, -2.f); 
-
-	glVertex3f(-2.f, 0.f, -2.f); //e
-	glVertex3f(-2.f, 0.f, 0.f); 
-	glVertex3f(-2.f, 2.f, -2.f); 
-
-	glVertex3f(-2.f, 2.f, -2.f);
-	glVertex3f(-2.f, 0.f, 0.f);
-	glVertex3f(-2.f, 2.f, 0.f);
-
-	glVertex3f(0.f, 0.f, -2.f);
-	glVertex3f(-2.f, 0.f, -2.f);
-	glVertex3f(0.f, 2.f, -2.f);
-
-	glVertex3f(0.f, 2.f, -2.f);
-	glVertex3f(-2.f, 0.f, -2.f);
-	glVertex3f(-2.f, 2.f, -2.f);
-
-	glVertex3f(-2.f, 0.f, -2.f);
-	glVertex3f(0.f, 0.f, -2.f);
-	glVertex3f(-2.f, 0.f, 0.f);
-
-	glVertex3f(-2.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, -2.f);
-	glVertex3f(0.f, 0.f, 0.f);
-
-	glEnd();
+	CubeDirectMode();
 
 	//-------------------------------------------------------------------------
 	//----------------------CUBE DRAW ARRAY MODE-------------------------------
 	//-------------------------------------------------------------------------
 
-	glColor3f(1, 1, 0);
-	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// … draw other buffers
-	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	CubeDrawArrayMode();
 
 	//-------------------------------------------------------------------------
 	//----------------------CUBE ELEMENT ARRAY MODE-------------------------------
 	//-------------------------------------------------------------------------
 
-	glColor3f(0, 1, 1);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	
-	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
-	glDisableClientState(GL_VERTEX_ARRAY);
-
-	//-------------------------------------------------------------------------
-	//----------------------SPHERE ARRAY MODE-------------------------------
-	//-------------------------------------------------------------------------
-
-
-	//glEnableClientState(GL_VERTEX_ARRAY);
-
-	//glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-
-	//glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_INT, &indices[0]);
-
-	//glDisableClientState(GL_VERTEX_ARRAY);
+	CubeElementaArrayMode();
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
 	//-------------------------------------------------------------------------
 
-	if (ImGui::BeginMainMenuBar()) 
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Quit", "Alt+F4 || ESC"))
-			{
-				ret = false;
-			}
-			ImGui::EndMenu();
-		}
+	MenuBar(ret);
 
-		if (ImGui::BeginMenu ("Window"))
-		{
-			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
-			ImGui::EndMenu();
-		}
+	Panels();
 
-		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
-		{
-			ImGui::MenuItem("Debug Console", NULL, &show_debug_console);
-			ImGui::MenuItem("Test Window", NULL, &show_demo_window);
-			ImGui::MenuItem("Geometry Math Test", NULL, &show_geometry_math_test);
-			ImGui::MenuItem("RandomNumber Generator", NULL, &show_random_generator);
-			ImGui::EndMenu();
-		}
+	return ret;
+}
 
-		if (ImGui::BeginMenu("Help"))
-		{
-			ImGui::MenuItem("About Weep Engine", NULL, &show_app_about);
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Options"))
-		{
-			ImGui::MenuItem("Save", NULL, &to_save);
-			ImGui::MenuItem("Load", NULL, &to_load);
-			ImGui::EndMenu();
-		}
-
-		ImGui::Text("Fps: %d", App->profiler->GetFPS());
-
-		ImGui::EndMainMenuBar();
-	}
-
+void DebugScene::Panels()
+{
 	//Configuration
 	if (show_app_configuration)
 	{
@@ -547,8 +371,172 @@ bool DebugScene::Update()
 	{
 		App->WantToLoad();
 	}
+}
 
-	return ret;
+void DebugScene::MenuBar(bool &ret)
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Quit", "Alt+F4 || ESC"))
+			{
+				ret = false;
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Window"))
+		{
+			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
+		{
+			ImGui::MenuItem("Debug Console", NULL, &show_debug_console);
+			ImGui::MenuItem("Test Window", NULL, &show_demo_window);
+			ImGui::MenuItem("Geometry Math Test", NULL, &show_geometry_math_test);
+			ImGui::MenuItem("RandomNumber Generator", NULL, &show_random_generator);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			ImGui::MenuItem("About Weep Engine", NULL, &show_app_about);
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Options"))
+		{
+			ImGui::MenuItem("Save", NULL, &to_save);
+			ImGui::MenuItem("Load", NULL, &to_load);
+			ImGui::EndMenu();
+		}
+
+		ImGui::Text("Fps: %d", App->profiler->GetFPS());
+
+		ImGui::EndMainMenuBar();
+	}
+}
+
+void DebugScene::CubeElementaArrayMode()
+{
+	glColor3f(0, 1, 1);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void DebugScene::CubeDrawArrayMode()
+{
+	glColor3f(1, 1, 0);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	// … draw other buffers
+	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void DebugScene::Plane()
+{
+	//it would be nice to clean this plane ando do it with vars in config.
+
+	glLineWidth(2.0f);
+
+	glColor3f(1.f, 1.f, 1.f);
+
+	glBegin(GL_LINES);
+
+	for (float i = -100.f; i <= 100.f; i++)
+	{
+		glVertex3f(i, 0.f, 100.f);
+		glVertex3f(i, 0.f, -100.f);
+
+		glVertex3f(-100.f, 0.f, -i);
+		glVertex3f(100.f, 0.f, -i);
+	}
+
+	glLineWidth(3.0f); // why it doesnt work?
+	glColor3f(1, 0, 0);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(5.f, 0.f, 0.f);
+
+	glColor3f(0, 1, 0);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 5.f, 0.f);
+
+	glColor3f(0, 0, 1);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, 5.f);
+
+	glEnd();
+}
+
+void DebugScene::CubeDirectMode()
+{
+
+	glColor3f(1, 0, 1);
+
+	glBegin(GL_TRIANGLES);
+
+
+	glVertex3f(-2.f, 0.f, 0.f); //a						
+	glVertex3f(0.f, 0.f, 0.f);  //b
+	glVertex3f(-2.f, 2.f, 0.f); //c
+
+	glVertex3f(-2.f, 2.f, 0.f);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 2.f, 0.f);  //d
+
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, -2.f);  //f
+	glVertex3f(0.f, 2.f, 0.f);
+
+	glVertex3f(0.f, 2.f, 0.f);
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(0.f, 2.f, -2.f); //h
+
+	glVertex3f(-2.f, 2.f, 0.f);
+	glVertex3f(0.f, 2.f, 0.f);
+	glVertex3f(-2.f, 2.f, -2.f); //g
+
+	glVertex3f(-2.f, 2.f, -2.f);
+	glVertex3f(0.f, 2.f, 0.f);
+	glVertex3f(0.f, 2.f, -2.f);
+
+	glVertex3f(-2.f, 0.f, -2.f); //e
+	glVertex3f(-2.f, 0.f, 0.f);
+	glVertex3f(-2.f, 2.f, -2.f);
+
+	glVertex3f(-2.f, 2.f, -2.f);
+	glVertex3f(-2.f, 0.f, 0.f);
+	glVertex3f(-2.f, 2.f, 0.f);
+
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(-2.f, 0.f, -2.f);
+	glVertex3f(0.f, 2.f, -2.f);
+
+	glVertex3f(0.f, 2.f, -2.f);
+	glVertex3f(-2.f, 0.f, -2.f);
+	glVertex3f(-2.f, 2.f, -2.f);
+
+	glVertex3f(-2.f, 0.f, -2.f);
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(-2.f, 0.f, 0.f);
+
+	glVertex3f(-2.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, -2.f);
+	glVertex3f(0.f, 0.f, 0.f);
+
+	glEnd();
 }
 
 void DebugScene::DrawCircle()

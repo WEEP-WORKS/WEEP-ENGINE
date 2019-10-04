@@ -30,6 +30,12 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
+	void Panels();
+	void MenuBar(bool &ret);
+	void CubeElementaArrayMode();
+	void CubeDrawArrayMode();
+	void Plane();
+	void CubeDirectMode();
 	void DrawCircle();
 	void Configuration();
 	bool CleanUp();
@@ -89,11 +95,6 @@ private:
 	uint num_vertices = 36;
 	uint number_of_indices = 36;
 
-	uint test_id_v = 0;
-	uint test_id_i = 0;
-	uint tr_num = 0;
-	uint v_num = 0;
-
 	// Sphere
 	std::vector<float> vertices;
 	std::vector<uint>  indices;
@@ -102,7 +103,6 @@ private:
 	GeometrySphere* sphere;
 	GeometrySphere* sphere2;
 
-	std::list<GeometrySphere*> meshes;
 
 private:
 	

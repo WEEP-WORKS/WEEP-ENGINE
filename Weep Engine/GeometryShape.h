@@ -7,6 +7,9 @@
 #include "glew/glew.h"
 #include "Color.h"
 
+//----------------------------------------------------------------------------------
+//-------------------------------GEOMETRY SHAPE BASIC-------------------------------
+//----------------------------------------------------------------------------------
 
 class GeometryShape
 {
@@ -25,7 +28,10 @@ public:
 	GeometryShape() { color.r = color.g = color.b = 1.f;};
 	~GeometryShape()
 	{
-		par_shapes_free_mesh(mesh);
+		if (mesh != nullptr)
+		{
+			par_shapes_free_mesh(mesh);
+		}
 	};
 
 
@@ -36,17 +42,40 @@ public:
 
 protected:
 
-	void SetBuffersWithData(); 
+	virtual void SetBuffersWithData(); 
 };
+
+//----------------------------------------------------------------------------------
+//--------------------------------------SPHERE--------------------------------------
+//----------------------------------------------------------------------------------
 
 class GeometrySphere : public GeometryShape
 {
 public:
 	GeometrySphere() {}
-
-	//void Render() override;
-
 };
+
+
+//----------------------------------------------------------------------------------
+//-------------------------------------FBX SHAPE------------------------------------
+//----------------------------------------------------------------------------------
+class FBXShape : public GeometryShape
+{
+public:
+	FBXShape() {};
+
+	void Render() override;
+
+	void SetBuffersWithData() override;
+};
+
+
+
+//----------------------------------------------------------------------------------
+//---------------------------------GEOMETRY MANAGER---------------------------------
+//----------------------------------------------------------------------------------
+
+
 
 class GeometryShapeManager : public Module
 {
@@ -66,10 +95,7 @@ private:
 
 private:
 	std::list<GeometryShape*> shapes;
-
-
-
-	
+	   	 
 };
 
 
