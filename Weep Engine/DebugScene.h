@@ -97,6 +97,8 @@ private:
 	GeometrySphere* sphere;
 	GeometrySphere* sphere2;
 
+	std::list<GeometrySphere*> meshes;
+
 private:
 	
 	void AppAbout();

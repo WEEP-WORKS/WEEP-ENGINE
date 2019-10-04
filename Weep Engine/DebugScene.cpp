@@ -201,6 +201,27 @@ bool DebugScene::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	std::string path = "Models/warrior.fbx";
+	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		for (uint i = 0; i < scene->mNumMeshes; ++i)
+		{
+			GeometryShape* model = new GeometryShape();
+			aiMesh* mesh = scene->mMeshes[i];
+			model->num_vertex = mesh->mNumVertices;
+			model->vertexs = new float[mesh->mNumVertices * 3];
+			//memcpy(m.vertices, new_mesh->mVertices, sizeof(float) * m.num_vertices * 3);
+			LOG("New mesh with %d vertices", model->num_vertex);
+		}
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		aiReleaseImport(scene);
+	}
+	else
+		LOG("Error loading scene %s", path);
+
+	aiMesh** test = scene->mMeshes;
 
 	//DrawCircle();
 
@@ -242,15 +263,7 @@ bool DebugScene::Update()
 
 	//-----------------------------Loading fbx--------------------------
 
-	std::string path = "Models/warrior.fbx";
-	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		aiReleaseImport(scene);
-	}
-	else
-		LOG("Error loading scene %s", path);
+	
 
 
 

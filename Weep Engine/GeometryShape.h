@@ -14,9 +14,11 @@ public:
 	par_shapes_mesh* mesh = nullptr;
 	GLuint id_vertex = 0;
 	uint num_vertex = 0;
+	float* vertexs;
 
 	GLuint id_index = 0;
 	uint num_index = 0;
+	uint* indexs;
 	Color color;
 
 	GeometryShape() { color.r = color.g = color.b = 1.f;};
