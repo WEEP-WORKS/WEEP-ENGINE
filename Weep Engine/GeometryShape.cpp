@@ -29,7 +29,7 @@ void GeometryShapeManager::DrawAll()
 
 void GeometrySphere::Render()
 {
-	glColor3f(1.f, 0.f, 0.f);
+	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
@@ -61,4 +61,11 @@ void GeometryShape::MoveShape(float x, float y, float z)
 void GeometryShape::Start()
 {
 	SetBuffersWithData();
+}
+
+void GeometryShape::SetColor(float red, float green, float blue)
+{
+	color.r = red;
+	color.g = green;
+	color.b = blue;
 }

@@ -181,9 +181,13 @@ bool DebugScene::Start()
 	//m = par_shapes_create_plane(1, 1);
 	sphere = App->geometry_shape_manager->CreateSphere(5);
 	sphere->MoveShape(1.f, 1.f, 1.f);
-	
+	sphere->SetColor(1.f, 0.f, 0.f);
+
 	sphere2 = App->geometry_shape_manager->CreateSphere(5);
 	sphere2->MoveShape(3.f, 3.f, 3.f);
+	
+	
+
 	//DrawCircle();
 
 	return true;
@@ -356,13 +360,6 @@ bool DebugScene::Update()
 	//glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_INT, &indices[0]);
 
 	//glDisableClientState(GL_VERTEX_ARRAY);
-
-	//-------------------------------------------------------------------------
-	//----------------------PAR SHAPES MODE-------------------------------
-	//-------------------------------------------------------------------------
-
-
-
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------

@@ -5,6 +5,8 @@
 #include "Globals.h"
 #include "par_shapes.h"
 #include "glew/glew.h"
+#include "Color.h"
+
 
 class GeometryShape
 {
@@ -12,8 +14,9 @@ public:
 	par_shapes_mesh* mesh = nullptr;
 	GLuint id_vertex = 0;
 	GLuint id_index = 0;
+	Color color;
 
-	GeometryShape() {};
+	GeometryShape() { color.r = color.g = color.b = 1.f;};
 	~GeometryShape()
 	{
 		par_shapes_free_mesh(mesh);
@@ -21,6 +24,7 @@ public:
 	void Start();
 	virtual void Render() {};
 	void MoveShape(float, float, float);
+	void SetColor(float, float, float);
 
 protected:
 
