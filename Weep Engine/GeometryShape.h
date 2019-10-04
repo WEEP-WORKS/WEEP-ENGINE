@@ -13,7 +13,10 @@ class GeometryShape
 public:
 	par_shapes_mesh* mesh = nullptr;
 	GLuint id_vertex = 0;
+	uint num_vertex = 0;
+
 	GLuint id_index = 0;
+	uint num_index = 0;
 	Color color;
 
 	GeometryShape() { color.r = color.g = color.b = 1.f;};

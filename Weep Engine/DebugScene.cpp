@@ -15,6 +15,13 @@
 #include "MathGeoLib\include\MathBuildConfig.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 
+
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
+
 #include <random>
 #include "pcg_random.hpp"
 
@@ -188,6 +195,13 @@ bool DebugScene::Start()
 	
 	
 
+
+	//??
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
+
+
 	//DrawCircle();
 
 	return true;
@@ -200,6 +214,8 @@ bool DebugScene::Start()
 bool DebugScene::CleanUp()
 {
 	bool ret = true;
+
+	aiDetachAllLogStreams();
 
 	return ret;
 }
@@ -222,6 +238,23 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
+
+
+	//-----------------------------Loading fbx--------------------------
+
+	std::string path = "Models/warrior.fbx";
+	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		// Use scene->mNumMeshes to iterate on scene->mMeshes array
+		aiReleaseImport(scene);
+	}
+	else
+		LOG("Error loading scene %s", path);
+
+
+
+
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
