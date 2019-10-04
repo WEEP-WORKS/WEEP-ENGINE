@@ -212,7 +212,7 @@ bool DebugScene::Start()
 			GeometryShape* model = new GeometryShape();
 			aiMesh* mesh = scene->mMeshes[i];
 
-			model->num_vertex = mesh->mNumVertices;
+			model->num_vertex = v_num = mesh->mNumVertices;
 			model->vertexs = new float[mesh->mNumVertices * 3];
 			memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3);
 			LOG("New mesh with %d vertices", model->num_vertex);
@@ -220,8 +220,8 @@ bool DebugScene::Start()
 
 			if (mesh->HasFaces())
 			{
-				model->num_index = mesh->mNumFaces * 3;
-				model->indexs = new uint[model->num_index]; // assume each face is a triangle
+				model->num_triangle_indices = tr_num = mesh->mNumFaces * 3;
+				model->triangle_indices = new uint[model->num_triangle_indices]; // assume each face is a triangle
 				for (uint i = 0; i < mesh->mNumFaces; ++i)
 				{
 					if (mesh->mFaces[i].mNumIndices != 3)
@@ -233,13 +233,21 @@ bool DebugScene::Start()
 						// Every face have 3 indices. 
 						// take the first 3 slots, 
 						//then the next 3 slots, 
-						//then the same ...                                     3 indices * their var type, only copy 1 face (3 indices) every time
-						memcpy(&model->indexs[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+						//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
+						memcpy(&model->triangle_indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 					}
 				}
 			}
-		}
+			//App->geometry_shape_manager->AddShape(model);
+			glGenBuffers(1, &test_id_v);
+			glBindBuffer(GL_ARRAY_BUFFER, test_id_v);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * model->num_vertex * 3 , model->vertexs, GL_STATIC_DRAW);
 
+			glGenBuffers(1, &test_id_i);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, test_id_i);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*model->num_triangle_indices, model->triangle_indices, GL_STATIC_DRAW);
+		}
+		
 		
 	}
 	else
@@ -286,6 +294,26 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
+
+	glColor3f(1.f, 1.f, 1.f);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, test_id_v);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, test_id_i);
+
+
+	glDrawElements(GL_TRIANGLES, tr_num, GL_UNSIGNED_SHORT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+	//glEnableClientState(GL_VERTEX_ARRAY);
+	//glBindBuffer(GL_ARRAY_BUFFER, test_id_v);
+	//glVertexPointer(3, GL_FLOAT, 0, NULL);
+	//// … draw other buffers
+	//glDrawArrays(GL_TRIANGLES, 0, v_num);
+	//glDisableClientState(GL_VERTEX_ARRAY);
+
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------

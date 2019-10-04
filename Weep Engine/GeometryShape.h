@@ -16,9 +16,10 @@ public:
 	uint num_vertex = 0;
 	float* vertexs;
 
-	GLuint id_index = 0;
-	uint num_index = 0;
-	uint* indexs;
+	GLuint id_triangle_indices = 0;
+	uint num_triangle_indices = 0;
+	uint* triangle_indices;
+
 	Color color;
 
 	GeometryShape() { color.r = color.g = color.b = 1.f;};
@@ -29,7 +30,7 @@ public:
 
 
 	void Start();
-	virtual void Render() {};
+	virtual void Render();
 	void MoveShape(float, float, float);
 	void SetColor(float, float, float);
 
@@ -43,7 +44,7 @@ class GeometrySphere : public GeometryShape
 public:
 	GeometrySphere() {}
 
-	void Render() override;
+	//void Render() override;
 
 };
 
@@ -57,6 +58,7 @@ public:
 	bool CleanUp() override;
 
 	GeometrySphere* CreateSphere(const int &);
+	void AddShape(GeometryShape*);
 
 private:
 
