@@ -15,6 +15,7 @@ class GeometryShape
 {
 public:
 	par_shapes_mesh* mesh = nullptr;
+
 	GLuint id_vertex = 0;
 	uint num_vertex = 0;
 	float* vertexs;
@@ -22,6 +23,11 @@ public:
 	GLuint id_triangle_indices = 0;
 	uint num_triangle_indices = 0;
 	uint* triangle_indices;
+
+	bool has_normals = false;
+	GLuint id_normals = 0;
+	uint num_normals = 0;
+	float* normals;
 
 	Color color;
 

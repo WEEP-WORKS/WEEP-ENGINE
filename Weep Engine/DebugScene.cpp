@@ -178,21 +178,21 @@ bool DebugScene::Start()
 	
 	//SHAPES
 
-	sphere = App->shape_manager->CreateSphere(5);
+	/*sphere = App->shape_manager->CreateSphere(5);
 	sphere->MoveShape(1.f, 1.f, 1.f);
 	sphere->SetColor(1.f, 0.f, 0.f);
 
 	sphere2 = App->shape_manager->CreateSphere(5);
 	sphere2->MoveShape(3.f, 3.f, 3.f);
-	sphere2->SetColor(0.5f, 0.5f, 1.f);
+	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
 	
 	// loading file
 	//App->importer->LoadPath("Models/warrior.fbx"); //TODO config or other xml specific of models.
 
-	/*if (ret == true)
+	if (ret == true)
 	{
-		ret = App->importer->LoadFBX(App->importer->GetPath());
-	}*/
+		ret = App->importer->LoadFBX("Models/warrior.fbx");
+	}
 
 
 	//??

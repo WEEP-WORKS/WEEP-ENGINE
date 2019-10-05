@@ -89,6 +89,7 @@ void GeometryShape::SetBuffersWithData()
 	glGenBuffers(1, &id_triangle_indices);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_triangle_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*num_triangle_indices*3, triangle_indices, GL_STATIC_DRAW);
+
 }
 
 
@@ -126,6 +127,15 @@ void FBXShape::SetBuffersWithData()
 	glGenBuffers(1, &id_triangle_indices);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_triangle_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*num_triangle_indices, triangle_indices, GL_STATIC_DRAW);
+
+	if (has_normals)
+	{
+		glGenBuffers(1, &id_normals);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_normals * 3, normals, GL_STATIC_DRAW);
+
+	}
+
 }
 
 void FBXShape::Render()
@@ -133,11 +143,27 @@ void FBXShape::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
+
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	if (has_normals)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_triangle_indices);
 
 
+
 	glDrawElements(GL_TRIANGLES, num_triangle_indices, GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_NORMAL_ARRAY);	
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+	
 }

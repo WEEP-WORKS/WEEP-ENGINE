@@ -73,9 +73,27 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			LoadIndices(model, mesh);
 		}
 
+		if (mesh->HasNormals())
+		{
+			model->has_normals = true;
+
+			model->num_normals = model->num_vertex;
+			model->normals = new float[model->num_normals * 3];
+			memcpy(model->normals, mesh->mNormals, sizeof(float) * model->num_normals * 3); //It could be QNaN?
+		}
+
 		App->shape_manager->AddShape(model);
 
 	}
+}
+
+void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
+{
+	model->num_vertex = mesh->mNumVertices; // get number of Vertices
+	model->vertexs = new float[mesh->mNumVertices * 3]; // create array of Vertices with the correct size
+	memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3); // copy the vertices of the mesh to the arrey of vertices
+
+	LOG("New mesh with %d vertices", model->num_vertex);
 }
 
 void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)
@@ -97,15 +115,6 @@ void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)
 			memcpy(&model->triangle_indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
-}
-
-void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
-{
-	model->num_vertex = mesh->mNumVertices; // get number of Vertices
-	model->vertexs = new float[mesh->mNumVertices * 3]; // create array of Vertices with the correct size
-	memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3); // copy the vertices of the mesh to the arrey of vertices
-
-	LOG("New mesh with %d vertices", model->num_vertex);
 }
 
 bool ModuleImporter::CleanUp()
