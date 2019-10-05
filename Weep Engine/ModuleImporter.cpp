@@ -52,21 +52,7 @@ bool ModuleImporter::LoadFBX(std::string &path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		for (uint i = 0; i < scene->mNumMeshes; ++i)
-		{
-			GeometryShape* model = new FBXShape();
-			aiMesh* mesh = scene->mMeshes[i];
-
-			LoadVertices(model, mesh);
-
-			if (mesh->HasFaces())
-			{
-				LoadIndices(model, mesh);
-
-			}
-
-			App->shape_manager->AddShape(model);
-		}
+		LoadAllMeshes(scene);
 	}
 	else
 	{
@@ -77,6 +63,25 @@ bool ModuleImporter::LoadFBX(std::string &path)
 	aiReleaseImport(scene);
 
 	return ret;
+}
+
+void ModuleImporter::LoadAllMeshes(const aiScene * scene)
+{
+	for (uint i = 0; i < scene->mNumMeshes; ++i)
+	{
+		GeometryShape* model = new FBXShape();
+		aiMesh* mesh = scene->mMeshes[i];
+
+		LoadVertices(model, mesh);
+
+		if (mesh->HasFaces())
+		{
+			LoadIndices(model, mesh);
+		}
+
+		App->shape_manager->AddShape(model);
+
+	}
 }
 
 void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)

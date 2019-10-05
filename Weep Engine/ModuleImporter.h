@@ -5,6 +5,7 @@
 #include "Globals.h"
 class aiMesh;
 class GeometryShape;
+class aiScene;
 class ModuleImporter : public Module
 {
 public:
@@ -12,10 +13,13 @@ public:
 	virtual ~ModuleImporter() {};
 
 	bool Start() override;
-	bool LoadFBX(std::string &path);
-	void LoadIndices(GeometryShape * model, aiMesh * mesh);
-	void LoadVertices(GeometryShape * model, aiMesh * mesh);
+
 	bool CleanUp() override;
+
+	bool LoadFBX(std::string &path);
+	void LoadAllMeshes(const aiScene * scene);
+	void LoadVertices(GeometryShape * model, aiMesh * mesh);
+	void LoadIndices(GeometryShape * model, aiMesh * mesh);
 
 	std::string GetPath() const;
 	void LoadPath(const std::string &path);
