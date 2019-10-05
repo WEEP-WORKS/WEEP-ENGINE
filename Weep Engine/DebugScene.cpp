@@ -16,11 +16,7 @@
 #include "MathGeoLib\include\MathGeoLib.h"
 
 
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-#include "Assimp/include/cfileio.h"
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
+
 
 #include <random>
 #include "pcg_random.hpp"
@@ -182,11 +178,11 @@ bool DebugScene::Start()
 	
 	//SHAPES
 
-	sphere = App->geometry_shape_manager->CreateSphere(5);
+	sphere = App->shape_manager->CreateSphere(5);
 	sphere->MoveShape(1.f, 1.f, 1.f);
 	sphere->SetColor(1.f, 0.f, 0.f);
 
-	sphere2 = App->geometry_shape_manager->CreateSphere(5);
+	sphere2 = App->shape_manager->CreateSphere(5);
 	sphere2->MoveShape(3.f, 3.f, 3.f);
 	sphere2->SetColor(0.5f, 0.5f, 1.f);
 	
@@ -194,73 +190,15 @@ bool DebugScene::Start()
 
 
 	//??
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
-
-	// loading file
-	std::string path = "Models/warrior.fbx";
-	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-
-	if (scene != nullptr && scene->HasMeshes())
-	{
-		for (uint i = 0; i < scene->mNumMeshes; ++i)
-		{
-			GeometryShape* model = new FBXShape();
-			aiMesh* mesh = scene->mMeshes[i];
-
-			model->num_vertex = mesh->mNumVertices;
-			model->vertexs = new float[mesh->mNumVertices * 3];
-			memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3);
-			LOG("New mesh with %d vertices", model->num_vertex);
-
-
-			if (mesh->HasFaces())
-			{
-				model->num_triangle_indices = mesh->mNumFaces * 3;
-				model->triangle_indices = new uint[model->num_triangle_indices]; // assume each face is a triangle
-				for (uint i = 0; i < mesh->mNumFaces; ++i)
-				{
-					if (mesh->mFaces[i].mNumIndices != 3)
-					{
-						LOG("This face don't have 3 index, only can load faces with 3 indexs");
-					}
-					else
-					{
-						// Every face have 3 indices. 
-						// take the first 3 slots, 
-						//then the next 3 slots, 
-						//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
-						memcpy(&model->triangle_indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-					}
-				}
-
-			}
-			App->geometry_shape_manager->AddShape(model);
-		}
-		
-		
-	}
-	else
-	{
-		LOG("Error loading scene %s", path);
-	}
-
-	aiReleaseImport(scene);
+	
 
 
 	return true;
 }
 
-
-
-
-// Load assets
 bool DebugScene::CleanUp()
 {
 	bool ret = true;
-
-	aiDetachAllLogStreams();
 
 	return ret;
 }

@@ -77,11 +77,11 @@ public:
 
 
 
-class GeometryShapeManager : public Module
+class ShapeManager : public Module
 {
 public:
-	GeometryShapeManager(bool start_enabled = true) : Module(start_enabled) {};
-	~GeometryShapeManager() {};
+	ShapeManager(bool start_enabled = true);
+	virtual ~ShapeManager() {};
 
 	bool Update() override;
 	bool CleanUp() override;

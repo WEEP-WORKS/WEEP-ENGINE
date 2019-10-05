@@ -5,7 +5,12 @@
 //---------------------------------GEOMETRY MANAGER---------------------------------
 //----------------------------------------------------------------------------------
 
-GeometrySphere* GeometryShapeManager::CreateSphere(const int& sphere_subdivisions)
+ShapeManager::ShapeManager(bool start_enabled) : Module(start_enabled)
+{
+	SetName("ShapeManager");
+}
+
+GeometrySphere* ShapeManager::CreateSphere(const int& sphere_subdivisions)
 {
 	GeometryShape* s = new GeometrySphere();
 	s->mesh = par_shapes_create_subdivided_sphere(sphere_subdivisions);
@@ -22,14 +27,14 @@ GeometrySphere* GeometryShapeManager::CreateSphere(const int& sphere_subdivision
 	return (GeometrySphere*)s;
 }
 
-bool GeometryShapeManager::Update()
+bool ShapeManager::Update()
 {
 	DrawAll();
 
 	return true;
 }
 
-void GeometryShapeManager::DrawAll() 
+void ShapeManager::DrawAll() 
 {
 	for (list<GeometryShape*>::iterator item = shapes.begin(); item != shapes.end(); ++item)
 	{
@@ -37,7 +42,7 @@ void GeometryShapeManager::DrawAll()
 	}
 }
 
-bool GeometryShapeManager::CleanUp()
+bool ShapeManager::CleanUp()
 {
 	for (list<GeometryShape*>::iterator item = shapes.begin(); item != shapes.end(); ++item)
 	{
@@ -46,7 +51,7 @@ bool GeometryShapeManager::CleanUp()
 	return true;
 }
 
-void GeometryShapeManager::AddShape(GeometryShape* shape)
+void ShapeManager::AddShape(GeometryShape* shape)
 {
 	shape->Start();
 	shapes.push_back(shape);

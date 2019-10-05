@@ -12,8 +12,10 @@ class ModuleWindow;
 class ModuleInput;
 class ModuleRenderer3D;
 class ModuleCamera3D;
+class ModuleImporter;
 class DebugScene;
-class GeometryShapeManager;
+class ShapeManager;
+
 
 class Application
 {
@@ -59,7 +61,8 @@ public:
 	ModuleRenderer3D*  renderer3D = nullptr;
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
-	GeometryShapeManager* geometry_shape_manager = nullptr;
+	ShapeManager* shape_manager = nullptr;
+	ModuleImporter* importer = nullptr;
 
 	Profiler*		   profiler = nullptr;
 		

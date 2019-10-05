@@ -1,0 +1,120 @@
+#include "App.h"
+#include "ModuleImporter.h"
+#include "GeometryShape.h"
+
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
+
+
+ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled) 
+{
+	SetName("Importer");
+}
+
+bool ModuleImporter::Start()
+{
+	bool ret = true;
+
+	//?
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
+
+	// loading file
+	LoadPath("Models/warrior.fbx"); //TODO config or other xml specific of models.
+
+	if (ret == true)
+	{
+		ret = LoadFBX(GetPath());
+	}
+
+	return ret;
+}
+
+void ModuleImporter::LoadPath(const std::string& path)
+{
+	this->path = path;
+}
+
+std::string ModuleImporter::GetPath() const
+{
+	return path;
+}
+
+bool ModuleImporter::LoadFBX(std::string &path)
+{
+	bool ret = true;
+
+	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		for (uint i = 0; i < scene->mNumMeshes; ++i)
+		{
+			GeometryShape* model = new FBXShape();
+			aiMesh* mesh = scene->mMeshes[i];
+
+			LoadVertices(model, mesh);
+
+			if (mesh->HasFaces())
+			{
+				LoadIndices(model, mesh);
+
+			}
+
+			App->shape_manager->AddShape(model);
+		}
+	}
+	else
+	{
+		LOG("Error loading scene %s", path);
+		ret = false;
+	}
+
+	aiReleaseImport(scene);
+
+	return ret;
+}
+
+void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)
+{
+	model->num_triangle_indices = mesh->mNumFaces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
+	model->triangle_indices = new uint[model->num_triangle_indices]; // create array of indices with the correct size
+	for (uint i = 0; i < mesh->mNumFaces; ++i)
+	{
+		if (mesh->mFaces[i].mNumIndices != 3) // if the face is not a triangle don't load it.
+		{
+			LOG("This face don't have 3 index, only can load faces with 3 indexs");
+		}
+		else
+		{
+			// Every face have 3 indices. 
+			// take the first 3 slots, 
+			//then the next 3 slots, 
+			//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
+			memcpy(&model->triangle_indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
+		}
+	}
+}
+
+void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
+{
+	model->num_vertex = mesh->mNumVertices; // get number of Vertices
+	model->vertexs = new float[mesh->mNumVertices * 3]; // create array of Vertices with the correct size
+	memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3); // copy the vertices of the mesh to the arrey of vertices
+
+	LOG("New mesh with %d vertices", model->num_vertex);
+}
+
+bool ModuleImporter::CleanUp()
+{
+	bool ret = true;
+
+	aiDetachAllLogStreams();
+
+	return ret;
+
+}
