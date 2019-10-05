@@ -255,6 +255,16 @@ void Application::OpenWeb(string web)
 	ShellExecute(NULL, "open", web.c_str(), NULL, NULL, SW_SHOWMAXIMIZED);
 }
 
+const char * Application::GetBasePath()
+{
+	return SDL_GetBasePath();
+}
+
+void Application::OpenFolder(const char * folder)
+{
+	ShellExecute(NULL, "open", folder, NULL, NULL, SW_SHOWMAXIMIZED);
+}
+
 void Application::WantToSave()
 {
 	want_to_save = true;

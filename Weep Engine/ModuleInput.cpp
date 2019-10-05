@@ -2,6 +2,7 @@
 #include "App.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleInput.h"
+#include "ModuleImporter.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "ModuleWindow.h"
@@ -150,6 +151,11 @@ bool ModuleInput::PreUpdate()
 
 			mouse_x_motion = e.motion.xrel / App->window->GetSize();
 			mouse_y_motion = e.motion.yrel / App->window->GetSize();
+			break;
+
+			case SDL_DROPFILE:
+				App->importer->LoadPath(e.drop.file);
+				SDL_free(e.drop.file);
 			break;
 		}
 	}

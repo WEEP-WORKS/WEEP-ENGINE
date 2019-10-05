@@ -41,6 +41,8 @@ public:
 	void SetDebugMode(bool set);
 
 	void OpenWeb(string web);
+	const char* GetBasePath();
+	void OpenFolder(const char* folder);
 
 	void WantToSave();
 	void WantToLoad();

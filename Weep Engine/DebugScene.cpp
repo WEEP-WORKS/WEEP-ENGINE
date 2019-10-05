@@ -187,12 +187,12 @@ bool DebugScene::Start()
 	sphere2->SetColor(0.5f, 0.5f, 1.f);
 	
 	// loading file
-	App->importer->LoadPath("Models/warrior.fbx"); //TODO config or other xml specific of models.
+	//App->importer->LoadPath("Models/warrior.fbx"); //TODO config or other xml specific of models.
 
-	if (ret == true)
+	/*if (ret == true)
 	{
 		ret = App->importer->LoadFBX(App->importer->GetPath());
-	}
+	}*/
 
 
 	//??
@@ -323,6 +323,10 @@ void DebugScene::MenuBar(bool &ret)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Open in Explorer", ""))
+			{
+				App->OpenFolder(App->GetBasePath());
+			}
 			if (ImGui::MenuItem("Quit", "Alt+F4 || ESC"))
 			{
 				ret = false;
