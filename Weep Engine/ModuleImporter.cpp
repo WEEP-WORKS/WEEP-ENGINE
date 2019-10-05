@@ -23,13 +23,7 @@ bool ModuleImporter::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	// loading file
-	LoadPath("Models/warrior.fbx"); //TODO config or other xml specific of models.
-
-	if (ret == true)
-	{
-		ret = LoadFBX(GetPath());
-	}
+	
 
 	return ret;
 }
