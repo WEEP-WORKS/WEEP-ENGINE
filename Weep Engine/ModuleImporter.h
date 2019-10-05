@@ -16,17 +16,17 @@ public:
 
 	bool CleanUp() override;
 
-	bool LoadFBX(std::string &path);
+	bool LoadFBX(char* path);
 	void LoadAllMeshes(const aiScene * scene);
 	void LoadVertices(GeometryShape * model, aiMesh * mesh);
 	void LoadIndices(GeometryShape * model, aiMesh * mesh);
 
-	std::string GetPath() const;
-	void LoadPath(const std::string &path);
+	char* GetPath() const;
+	void LoadPath(char* path);
 
 private:
 
-	std::string path;
+	char* path;
 };
 
 #endif // !__MODULEIMPORTER_H__

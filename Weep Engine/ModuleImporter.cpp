@@ -34,21 +34,21 @@ bool ModuleImporter::Start()
 	return ret;
 }
 
-void ModuleImporter::LoadPath(const std::string& path)
+void ModuleImporter::LoadPath(char* path)
 {
 	this->path = path;
 }
 
-std::string ModuleImporter::GetPath() const
+char* ModuleImporter::GetPath() const
 {
 	return path;
 }
 
-bool ModuleImporter::LoadFBX(std::string &path)
+bool ModuleImporter::LoadFBX(char* path)
 {
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
