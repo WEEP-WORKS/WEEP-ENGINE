@@ -38,6 +38,7 @@ char* ModuleImporter::GetPath() const
 	return path;
 }
 
+
 bool ModuleImporter::LoadFBX(char* path)
 {
 	bool ret = true;
@@ -70,18 +71,12 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 		if (mesh->HasFaces())
 		{
-			LoadIndices(model, mesh);
+			LoadIndexs(model, mesh);
 		}
 
 		if (mesh->HasNormals())
 		{
-			model->has_normals = true;
-
-			model->num_normals = model->num_vertex;
-			model->normals = new float[model->num_normals * 3];
-			memcpy(model->normals, mesh->mNormals, sizeof(float) * model->num_normals * 3); //It could be QNaN?
-
-			model->CalculateNormals();
+			LoadNormals(model, mesh);
 		}
 
 		App->shape_manager->AddShape(model);
@@ -89,20 +84,25 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 	}
 }
 
+// ----------------------------Vertexs----------------------------
+
 void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
 {
 	model->num_vertex = mesh->mNumVertices; // get number of Vertices
-	model->vertexs = new float[mesh->mNumVertices * 3]; // create array of Vertices with the correct size
-	memcpy(model->vertexs, mesh->mVertices, sizeof(float) * model->num_vertex * 3); // copy the vertices of the mesh to the arrey of vertices
+	model->vertexs_buffer_size = model->num_vertex * 3;
+	model->vertexs_buffer = new float[model->vertexs_buffer_size]; // create array of Vertices with the correct size
+	memcpy(model->vertexs_buffer, mesh->mVertices, sizeof(float) * model->vertexs_buffer_size); // copy the vertices of the mesh to the arrey of vertices
 
 	LOG("New mesh with %d vertices", model->num_vertex);
 }
 
-void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)
+// ----------------------------Indexs----------------------------
+
+void ModuleImporter::LoadIndexs(GeometryShape * model, aiMesh * mesh)
 {
 	model->num_faces = mesh->mNumFaces;
-	model->num_indices = mesh->mNumFaces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
-	model->indices = new uint[model->num_indices]; // create array of indices with the correct size
+	model->num_indexs = model->num_faces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
+	model->indexs_buffer = new uint[model->num_indexs]; // create array of indices with the correct size
 	for (uint i = 0; i < mesh->mNumFaces; ++i)
 	{
 		if (mesh->mFaces[i].mNumIndices != 3) // if the face is not a triangle don't load it.
@@ -115,9 +115,26 @@ void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)
 			// take the first 3 slots, 
 			//then the next 3 slots, 
 			//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
-			memcpy(&model->indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
+			memcpy(&model->indexs_buffer[i * 3], mesh->mFaces[i].mIndices, /*TODO Change 3 by a var*/3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
+}
+
+// ----------------------------Normals----------------------------
+
+void ModuleImporter::LoadNormals(GeometryShape * model, aiMesh * mesh)
+{
+	//load normals direction of the vertex_normals.
+	model->has_normals = true;
+	
+	model->num_vertex_normals = model->num_vertex;
+	model->num_face_normals = model->num_faces;
+
+	model->normals_direction_buffer_size = model->num_vertex_normals * 3/*every vertex_normal have 3 coordinates (x, y, z).*/;
+	model->normals_direction_buffer = new float[model->normals_direction_buffer_size];
+	memcpy(model->normals_direction_buffer, mesh->mNormals, sizeof(float) * model->normals_direction_buffer_size); //It could be QNaN?
+
+	model->CalculateNormals();
 }
 
 bool ModuleImporter::CleanUp()

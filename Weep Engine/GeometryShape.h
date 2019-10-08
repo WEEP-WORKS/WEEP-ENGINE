@@ -17,20 +17,40 @@ class GeometryShape
 public:
 	par_shapes_mesh* mesh = nullptr;
 
-	GLuint id_vertex = 0;
-	uint num_vertex = 0;
-	float* vertexs;
+	//TODO: all repeat values in a struct? values repeat: array, size,array,id,num of x.
+	//Vertexs:------
+	uint num_vertex						= 0;		// Number of vertexs of the mesh without count each coordinate. Only how many indexs are there. (indexed)
+	GLuint id_vertex_buffer				= 0;		// Id of the vertexs_buffer.
+	float* vertexs_buffer				= nullptr;	// Buffer of vertexs coordinates of the mesh.
+	uint vertexs_buffer_size			= 0u;		// Size of the vertexs_buffer.
 
-	GLuint id_indices = 0;
-	uint num_indices = 0;
-	uint* indices;
 
-	bool has_normals = false;
-	GLuint id_vertex_normals = 0;
-	GLuint id_face_normals = 0;
-	uint num_normals = 0;
-	uint num_faces = 0;
-	float* normals = nullptr;
+
+	//Indexs:------
+	uint num_indexs						= 0;		// The number of indexs of the mesh. The same of the indexs_buffer_size, for this reason indexs don't have indexs_buffer_size!!.
+	GLuint id_indexs_buffer				= 0;		// Id of the indexs_buffer.
+	uint* indexs_buffer					= nullptr;	// Buffer of indexs of the mesh.
+
+
+
+	//Normals:------
+	bool has_normals					= false;	// If the mesh have normals.
+	uint num_faces						= 0u;		// Number of faces of the mesh.
+	float normal_lenght					= 0.5f;		// Lenght of all normals.
+
+	uint normals_direction_buffer_size	= 0u;		// Buffer size of the normals_direction_buffer.
+	float* normals_direction_buffer		= nullptr;	// Buffer with the direction of the normals of vertex_normals.
+
+	uint num_vertex_normals				= 0u;		// The number of vertexs normals. The same as the number of vertexs because every vertexs have a vertex_normal.
+	GLuint id_vertex_normals_buffer		= 0u;		// Id of the vertex_normals_buffer.
+	float* vertex_normals_buffer		= nullptr;	// Buffer with the vertexs_normals coordinates of the mesh. 
+	uint vertex_normals_buffer_size		= 0u;		// Size of the vertexs_normals_buffer.
+
+	uint num_face_normals				= 0u;		// Number of face_normals of the mesh.	
+	GLuint id_face_normals_buffer		= 0u;		// Id of the face_normals_buffer.
+	float* face_normals_buffer			= nullptr;	// Buffer with the faces_normals coordinates of the mesh.
+	uint face_normals_buffer_size		= 0u;		// size of the buffer.
+
 
 	Color color;
 
@@ -75,12 +95,6 @@ class FBXShape : public GeometryShape
 {
 public:
 
-	float* vertexs_normals = nullptr;
-
-	float* face_normals = nullptr;
-
-	float normal_lenght = 1.f;
-
 	FBXShape() {};
 
 	void Render() override;
@@ -89,9 +103,15 @@ public:
 
 	void RenderVertexNormals();
 
+	void RenderFaceNormals();
+
 	void SetBuffersWithData() override;
 
 	void CalculateNormals() override;
+
+	void CalculateFacesNormals();
+
+	void CalculateVertexsNormals();
 
 	inline Vector3<float>* ReturnVertexByIndex(const uint&) const;
 
