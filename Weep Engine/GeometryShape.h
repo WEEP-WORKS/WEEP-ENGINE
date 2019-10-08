@@ -6,11 +6,12 @@
 #include "par_shapes.h"
 #include "glew/glew.h"
 #include "Color.h"
+#include "Vector3.h"
+
 
 //----------------------------------------------------------------------------------
 //-------------------------------GEOMETRY SHAPE BASIC-------------------------------
 //----------------------------------------------------------------------------------
-
 class GeometryShape
 {
 public:
@@ -91,6 +92,12 @@ public:
 	void SetBuffersWithData() override;
 
 	void CalculateNormals() override;
+
+	inline Vector3<float>* ReturnVertexByIndex(const uint&) const;
+
+	inline Vector3<float>* ReturnNormalByIndex(const uint&) const;
+
+	 
 };
 
 

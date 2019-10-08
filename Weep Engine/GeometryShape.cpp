@@ -163,9 +163,8 @@ void FBXShape::CalculateNormals()
 	//face_normals
 	face_normals = new float[num_indices/*x, y, z*/ *2 /* start point, end point*/];
 	new_array_pos = 0u;
-	uint n_count = 0u;
 	float * debug_f_vertices = new float[num_indices];
-	for (uint i = 0; i < num_indices; i += 3)
+	for (uint i = 0; i < num_indices; i += 3) // num_indices -> cada cara guarda 3 valores. numero de caras * 3 = num_indices;
 	{
 		/*face_normals[new_array_pos++] = vertexs[i] + vertexs[i + 3] + vertexs[i + 6] / 3.f;
 		face_normals[new_array_pos++] = vertexs[i+1] + vertexs[i + 4] + vertexs[i + 7] / 3.f;
@@ -180,37 +179,68 @@ void FBXShape::CalculateNormals()
 		face_normals[new_array_pos++] = face_normals[i+1] + final_normal_point[1] * normal_lenght;
 		face_normals[new_array_pos++] = face_normals[i+2] + final_normal_point[2] * normal_lenght;
 		*/
-		float* v1 = &vertexs[indices[i] * 3];     // get first face vertex
-		float* v2 = &vertexs[indices[i + 1] * 3]; // get second face vertex
-		float* v3 = &vertexs[indices[i + 2] * 3]; // get third face vertex
+		
 
-		debug_f_vertices[i] = (v1[0] + v2[0] + v3[0]) / 3.0f; // x coord
-		debug_f_vertices[i + 1] = (v1[1] + v2[1] + v3[1]) / 3.0f; // y coord
-		debug_f_vertices[i + 2] = (v1[2] + v2[2] + v3[2]) / 3.0f; // z coord
+		Vector3<float>* v1 = ReturnVertexByIndex(i);
+		Vector3<float>* v2 = ReturnVertexByIndex(i + 1);
+		Vector3<float>* v3 = ReturnVertexByIndex(i + 2);
+		//float* v1 = &vertexs[indices[i] * 3];     // get first face vertex
+		//float* v2 = &vertexs[indices[i + 1] * 3]; // get second face vertex
+		//float* v3 = &vertexs[indices[i + 2] * 3]; // get third face vertex
+
+		//average point of the plane
+		debug_f_vertices[i] = (v1->x + v2->x + v3->x) / 3.0f; // x coord
+		debug_f_vertices[i + 1] = (v1->y + v2->y + v3->y) / 3.0f; // y coord
+		debug_f_vertices[i + 2] = (v1->z + v2->z + v3->z) / 3.0f; // z coord
 
 		// compute the averaged normal of the 3 vertex of each face
 
-		float* n1 = &normals[indices[i] * 3];     // get first face vertex normal
-		float* n2 = &normals[indices[i + 1] * 3]; // get second face vertex normal
-		float* n3 = &normals[indices[i + 2] * 3]; // get third face vertex normal
+		Vector3<float>* n1 = ReturnNormalByIndex(i);
+		Vector3<float>* n2 = ReturnNormalByIndex(i + 1);
+		Vector3<float>* n3 = ReturnNormalByIndex(i + 2);
 
-		float avg_n[3];
-		avg_n[0] = (n1[0] + n2[0] + n3[0]) / 3.0f; // x coord
-		avg_n[1] = (n1[1] + n2[1] + n3[1]) / 3.0f; // x coord
-		avg_n[2] = (n1[2] + n2[2] + n3[2]) / 3.0f; // x coord
+		Vector3<float> final_vertex;
+		final_vertex.x = (n1->x + n2->x + n3->x) / 3.0f; // x coord
+		final_vertex.y = (n1->y + n2->y + n3->y) / 3.0f; // y coord
+		final_vertex.z = (n1->z + n2->z + n3->z) / 3.0f; // z coord
 
-		face_normals[n_count] = debug_f_vertices[i]; // x
-		face_normals[n_count + 1] = debug_f_vertices[i + 1]; // y
-		face_normals[n_count + 2] = debug_f_vertices[i + 2]; //z
+		face_normals[new_array_pos++] = debug_f_vertices[i]; // x
+		face_normals[new_array_pos++] = debug_f_vertices[i + 1]; // y
+		face_normals[new_array_pos++] = debug_f_vertices[i + 2]; //z
 
-		face_normals[n_count + 3] = debug_f_vertices[i] + avg_n[0] * normal_lenght; // x
-		face_normals[n_count + 4] = debug_f_vertices[i + 1] + avg_n[1] * normal_lenght; // y
-		face_normals[n_count + 5] = debug_f_vertices[i + 2] + avg_n[2] * normal_lenght; // z
-		
-		n_count += 6;
+		face_normals[new_array_pos++] = debug_f_vertices[i] + final_vertex.x * normal_lenght; // x
+		face_normals[new_array_pos++] = debug_f_vertices[i + 1] + final_vertex.y * normal_lenght; // y
+		face_normals[new_array_pos++] = debug_f_vertices[i + 2] + final_vertex.z * normal_lenght; // z*/
+
+
 	}
 
 }
+
+Vector3<float>* FBXShape::ReturnVertexByIndex(const uint &index) const
+{
+	Vector3<float>* ret = new Vector3<float>();
+	float* first_vertex = &vertexs[indices[index] * 3/*every index have 3 coords saved in vertexs*/];
+
+	ret->x = first_vertex[0];
+	ret->y = first_vertex[1];
+	ret->z = first_vertex[2];
+
+	return ret;
+}
+
+Vector3<float>* FBXShape::ReturnNormalByIndex(const uint &index) const
+{
+	Vector3<float>* ret = new Vector3<float>();
+	float* first_vertex = &normals[indices[index] * 3/*every index have 3 coords saved in vertexs*/];
+
+	ret->x = first_vertex[0];
+	ret->y = first_vertex[1];
+	ret->z = first_vertex[2];
+
+	return ret;
+}
+
 
 
 void FBXShape::Render()
@@ -251,3 +281,49 @@ void FBXShape::RenderVertexNormals()
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+/*
+Vector3<float>* FBXShape::ReturnVertexByIndice(const uint &index) const
+{
+	Vector3<float>* ret = new Vector3<float>();
+	float* first_vertex = &vertexs[indices[index] * 3/*every index have 3 coords saved in vertexs*///];
+
+	/*ret->x = first_vertex[0];
+	ret->y = first_vertex[1];
+	ret->z = first_vertex[2];*/
+
+
+	/*	Vector3<float>* v1 = ReturnVertexByIndice(i);
+		Vector3<float>* v2 = ReturnVertexByIndice(i + 1);
+		Vector3<float>* v3 = ReturnVertexByIndice(i + 2);
+		//float* v1 = &vertexs[indices[i] * 3];     // get first face vertex
+		//float* v2 = &vertexs[indices[i + 1] * 3]; // get second face vertex
+		//float* v3 = &vertexs[indices[i + 2] * 3]; // get third face vertex
+
+		//average point of the plane
+		debug_f_vertices[i] = (v1->x + v2->x + v3->x) / 3.0f; // x coord
+		debug_f_vertices[i + 1] = (v1->y + v2->y + v3->y) / 3.0f; // y coord
+		debug_f_vertices[i + 2] = (v1->z + v2->z + v3->z) / 3.0f; // z coord
+
+		// compute the averaged normal of the 3 vertex of each face
+
+		Vector3<float>* n1 = ReturnVertexByIndice(i);
+		Vector3<float>* n2 = ReturnVertexByIndice(i + 1);
+		Vector3<float>* n3 = ReturnVertexByIndice(i + 2);
+
+		Vector3<float> final_vertex;
+		final_vertex.x = (n1->x + n2->x + n3->x) / 3.0f; // x coord
+		final_vertex.y = (n1->y + n2->y + n3->y) / 3.0f; // y coord
+		final_vertex.z = (n1->z + n2->z + n3->z) / 3.0f; // z coord
+
+		face_normals[new_array_pos++] = debug_f_vertices[i]; // x
+		face_normals[new_array_pos++] = debug_f_vertices[i + 1]; // y
+		face_normals[new_array_pos++] = debug_f_vertices[i + 2]; //z
+
+		face_normals[new_array_pos++] = debug_f_vertices[i] + final_vertex.x * normal_lenght; // x
+		face_normals[new_array_pos++] = debug_f_vertices[i + 1] + final_vertex.y * normal_lenght; // y
+		face_normals[new_array_pos++] = debug_f_vertices[i + 2] + final_vertex.z * normal_lenght; // z*/
+
+
+	/*return ret;
+}*/
