@@ -20,9 +20,9 @@ public:
 	uint num_vertex = 0;
 	float* vertexs;
 
-	GLuint id_triangle_indices = 0;
-	uint num_triangle_indices = 0;
-	uint* triangle_indices;
+	GLuint id_indices = 0;
+	uint num_indices = 0;
+	uint* indices;
 
 	bool has_normals = false;
 	GLuint id_normals = 0;
@@ -46,9 +46,12 @@ public:
 	void MoveShape(float, float, float);
 	void SetColor(float, float, float);
 
+	virtual void CalculateNormals() {};
+
 protected:
 
 	virtual void SetBuffersWithData(); 
+
 };
 
 //----------------------------------------------------------------------------------
@@ -68,11 +71,18 @@ public:
 class FBXShape : public GeometryShape
 {
 public:
+
+	float* vertexs_normals = nullptr;
+
+	float normal_lenght = 5.0f;
+
 	FBXShape() {};
 
 	void Render() override;
 
 	void SetBuffersWithData() override;
+
+	void CalculateNormals() override;
 };
 
 
