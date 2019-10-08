@@ -186,18 +186,16 @@ bool DebugScene::Start()
 	sphere2->MoveShape(3.f, 3.f, 3.f);
 	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
 	
-	// loading file
-	//App->importer->LoadPath("Models/warrior.fbx"); //TODO config or other xml specific of models.
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/warrior.fbx");
+		ret = App->importer->LoadFBX("Models/suzanne.solid");
 	}
 
-
-	//??
-	
-
+	if (ret == true)
+	{
+		//ret = App->importer->LoadFBX("Models/warrior.fbx");
+	}
 
 	return true;
 }

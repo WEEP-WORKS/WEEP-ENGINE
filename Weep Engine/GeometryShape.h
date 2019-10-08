@@ -25,9 +25,11 @@ public:
 	uint* indices;
 
 	bool has_normals = false;
-	GLuint id_normals = 0;
+	GLuint id_vertex_normals = 0;
+	GLuint id_face_normals = 0;
 	uint num_normals = 0;
-	float* normals;
+	uint num_faces = 0;
+	float* normals = nullptr;
 
 	Color color;
 
@@ -74,11 +76,17 @@ public:
 
 	float* vertexs_normals = nullptr;
 
-	float normal_lenght = 5.0f;
+	float* face_normals = nullptr;
+
+	float normal_lenght = 1.f;
 
 	FBXShape() {};
 
 	void Render() override;
+
+	void RenderVertexsWithIndices();
+
+	void RenderVertexNormals();
 
 	void SetBuffersWithData() override;
 

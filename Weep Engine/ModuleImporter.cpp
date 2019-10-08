@@ -100,6 +100,7 @@ void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
 
 void ModuleImporter::LoadIndices(GeometryShape * model, aiMesh * mesh)
 {
+	model->num_faces = mesh->mNumFaces;
 	model->num_indices = mesh->mNumFaces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
 	model->indices = new uint[model->num_indices]; // create array of indices with the correct size
 	for (uint i = 0; i < mesh->mNumFaces; ++i)
