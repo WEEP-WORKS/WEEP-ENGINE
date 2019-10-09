@@ -265,7 +265,7 @@ void FBXShape::Render()
 
 	RenderVertexsWithIndices();
 
-//	RenderVertexNormals();
+	RenderVertexNormals();
 
 	RenderFaceNormals();
 
@@ -275,7 +275,7 @@ void FBXShape::Render()
 
 void FBXShape::RenderVertexsWithIndices()
 {
-	
+	glColor3f(255.f, 0, 255.f);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
@@ -286,6 +286,7 @@ void FBXShape::RenderVertexsWithIndices()
 
 void FBXShape::RenderVertexNormals()
 {
+	glColor3f(0, 255.f, 255.f);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_normals_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
@@ -295,6 +296,7 @@ void FBXShape::RenderVertexNormals()
 
 void FBXShape::RenderFaceNormals()
 {
+	glColor3f(255.f, 255.f, 0.f);
 	glBindBuffer(GL_ARRAY_BUFFER, id_face_normals_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
