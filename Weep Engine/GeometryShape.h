@@ -38,8 +38,9 @@ public:
 	uint num_faces						= 0u;		// Number of faces of the mesh.
 	float normal_lenght					= 0.5f;		// Lenght of all normals.
 
-	uint normals_direction_buffer_size	= 0u;		// Buffer size of the normals_direction_buffer.
+	GLuint id_normals_direction			= 0u;
 	float* normals_direction_buffer		= nullptr;	// Buffer with the direction of the normals of vertex_normals.
+	uint normals_direction_buffer_size = 0u;		// Buffer size of the normals_direction_buffer.
 
 	uint num_vertex_normals				= 0u;		// The number of vertexs normals. The same as the number of vertexs because every vertexs have a vertex_normal.
 	GLuint id_vertex_normals_buffer		= 0u;		// Id of the vertex_normals_buffer.
@@ -51,6 +52,13 @@ public:
 	float* face_normals_buffer			= nullptr;	// Buffer with the faces_normals coordinates of the mesh.
 	uint face_normals_buffer_size		= 0u;		// size of the buffer.
 
+
+	//UVs
+
+	uint num_uvs						= 0u;
+	GLuint id_uvs_buffer				= 0u;
+	float* uvs_buffer					= nullptr;
+	uint uvs_buffer_size				= 0u;
 
 	Color color;
 

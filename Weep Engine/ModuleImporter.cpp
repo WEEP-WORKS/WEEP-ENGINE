@@ -79,6 +79,16 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			LoadNormals(model, mesh);
 		}
 
+		if (mesh->HasTextureCoords(2))
+		{
+			// is not enetring here :(
+			model->num_uvs = mesh->GetNumUVChannels();
+			model->uvs_buffer_size = model->num_uvs * 3;
+			model->uvs_buffer = new float[model->uvs_buffer_size];
+
+			memcpy(model->uvs_buffer, mesh->mTextureCoords, sizeof(float)* model->uvs_buffer_size);
+		}
+
 		App->shape_manager->AddShape(model);
 
 	}

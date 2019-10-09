@@ -133,6 +133,10 @@ void FBXShape::SetBuffersWithData()
 
 	if (has_normals)
 	{
+		glGenBuffers(1, &id_normals_direction);
+		glBindBuffer(GL_ARRAY_BUFFER, id_normals_direction);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normals_direction_buffer_size, normals_direction_buffer, GL_STATIC_DRAW);
+
 		glGenBuffers(1, &id_vertex_normals_buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, id_vertex_normals_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*vertex_normals_buffer_size, vertex_normals_buffer, GL_STATIC_DRAW);
@@ -262,22 +266,27 @@ void FBXShape::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 
 	RenderVertexsWithIndices();
 
-	RenderVertexNormals();
+//	RenderVertexNormals();
 
-	RenderFaceNormals();
+	//RenderFaceNormals();
 
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 }
 
 void FBXShape::RenderVertexsWithIndices()
 {
-	glColor3f(255.f, 0, 255.f);
+	//glColor3f(255.f, 0, 255.f);
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, id_normals_direction);
+	glNormalPointer(GL_FLOAT, 0, NULL);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indexs_buffer);
 
