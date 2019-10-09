@@ -194,7 +194,7 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/warrior.fbx");
+		//ret = App->importer->LoadFBX("Models/warrior.fbx");
 	}
 
 	return true;

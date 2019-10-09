@@ -55,6 +55,9 @@ public:
 
 	//UVs
 
+	uint num_uvs_channels = 0u;
+	uint channel_buffer_size = 0u;
+
 	uint num_uvs						= 0u;
 	GLuint id_uvs_buffer				= 0u;
 	float* uvs_buffer					= nullptr;

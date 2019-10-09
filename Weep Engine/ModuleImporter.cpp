@@ -79,14 +79,29 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			LoadNormals(model, mesh);
 		}
 
-		if (mesh->HasTextureCoords(2))
+		model->num_uvs_channels = mesh->GetNumUVChannels(); 
+		if (model->num_uvs_channels > 0)
 		{
-			// is not enetring here :(
-			model->num_uvs = mesh->GetNumUVChannels();
-			model->uvs_buffer_size = model->num_uvs * 3;
+			model->num_uvs = model->num_vertex; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
+			model->uvs_buffer_size = model->num_uvs_channels * model->num_uvs * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
 			model->uvs_buffer = new float[model->uvs_buffer_size];
 
-			memcpy(model->uvs_buffer, mesh->mTextureCoords, sizeof(float)* model->uvs_buffer_size);
+			model->channel_buffer_size = model->num_uvs * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
+			for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
+			{
+				if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
+				{
+					
+					if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
+					{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
+						memcpy(&model->uvs_buffer[channel * model->channel_buffer_size], mesh->mTextureCoords[channel], sizeof(float) * model->channel_buffer_size);
+					}
+					else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
+					{
+						memset(&model->uvs_buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
+					}
+				}
+			}
 		}
 
 		App->shape_manager->AddShape(model);
