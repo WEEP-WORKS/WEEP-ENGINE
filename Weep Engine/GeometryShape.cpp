@@ -12,6 +12,7 @@ ShapeManager::ShapeManager(bool start_enabled) : Module(start_enabled)
 
 GeometrySphere* ShapeManager::CreateSphere(const int& sphere_subdivisions)
 {
+	//we should do a primitives panel
 	GeometryShape* s = new GeometrySphere();
 	s->mesh = par_shapes_create_subdivided_sphere(sphere_subdivisions);
 	s->vertexs_buffer = s->mesh->points;
