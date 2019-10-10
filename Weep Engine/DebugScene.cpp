@@ -24,7 +24,6 @@
 #include "mmgr\mmgr.h" //must be after random !!!!!!
 
 
-
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
 
@@ -189,13 +188,37 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/suzanne.solid");
+		//ret = App->importer->LoadFBX("Models/suzanne.solid");
 	}
 
 	if (ret == true)
 	{
 		//ret = App->importer->LoadFBX("Models/warrior.fbx");
 	}
+
+	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+	for (int i = 0; i < checkImageHeight; i++) {
+		for (int j = 0; j < checkImageWidth; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &texName);
+	glBindTexture(GL_TEXTURE_2D, texName);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
+	
 
 	return true;
 }
@@ -236,9 +259,8 @@ bool DebugScene::Update()
 	//-------------------------------------------------------------------------
 	//------------------------CUBE DIRECT MODE---------------------------------
 	//-------------------------------------------------------------------------
-
-
-	//CubeDirectMode();
+	CubeDirectMode();
+	glBindTexture(GL_TEXTURE_2D, texName);
 
 	//-------------------------------------------------------------------------
 	//----------------------CUBE DRAW ARRAY MODE-------------------------------
