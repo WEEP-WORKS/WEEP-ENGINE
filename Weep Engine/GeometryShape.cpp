@@ -15,11 +15,11 @@ GeometrySphere* ShapeManager::CreateSphere(const int& sphere_subdivisions)
 	//we should do a primitives panel
 	GeometryShape* s = new GeometrySphere();
 	s->mesh = par_shapes_create_subdivided_sphere(sphere_subdivisions);
-	s->vertexs_buffer = s->mesh->points;
-	s->indexs_buffer = (uint*)s->mesh->triangles;
+	s->vertexs.buffer = s->mesh->points;
+	s->indexs.buffer = (uint*)s->mesh->triangles;
 
-	s->num_vertex = s->mesh->npoints;
-	s->num_indexs = s->mesh->ntriangles;
+	s->vertexs.num = s->mesh->npoints;
+	s->indexs.num = s->mesh->ntriangles;
 
 	s->Start();
 
@@ -72,24 +72,24 @@ void GeometryShape::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indexs_buffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexs.id_buffer);
 	
 
-	glDrawElements(GL_TRIANGLES, num_indexs * 3, GL_UNSIGNED_SHORT, NULL);
+	glDrawElements(GL_TRIANGLES, indexs.num * 3, GL_UNSIGNED_SHORT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void GeometryShape::SetBuffersWithData()
 {
-	glGenBuffers(1, &id_vertex_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3, vertexs_buffer, GL_STATIC_DRAW);
+	glGenBuffers(1, &vertexs.id_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexs.num * 3, vertexs.buffer, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &id_indexs_buffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indexs_buffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*num_indexs*3, indexs_buffer, GL_STATIC_DRAW);
+	glGenBuffers(1, &indexs.id_buffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexs.id_buffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indexs.num * 3, indexs.buffer, GL_STATIC_DRAW);
 
 }
 
@@ -121,31 +121,39 @@ void GeometryShape::SetColor(float red, float green, float blue)
 
 void FBXShape::SetBuffersWithData()
 {
-	vertexs_buffer_size = num_vertex * 3/*each coordinate. Every vertex have x, y, z in the vertexs buffer.*/;
-	glGenBuffers(1, &id_vertex_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexs_buffer_size, vertexs_buffer, GL_STATIC_DRAW);
-
-	//id_indexs_buffer size == number of indexs
-	glGenBuffers(1, &id_indexs_buffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indexs_buffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*num_indexs, indexs_buffer, GL_STATIC_DRAW);
-
-	if (has_normals)
+	if (vertexs.has_data)
 	{
-		glGenBuffers(1, &id_normals_direction);
-		glBindBuffer(GL_ARRAY_BUFFER, id_normals_direction);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normals_direction_buffer_size, normals_direction_buffer, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &id_vertex_normals_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, id_vertex_normals_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*vertex_normals_buffer_size, vertex_normals_buffer, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &id_face_normals_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, id_face_normals_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_indexs * 2, face_normals_buffer, GL_STATIC_DRAW);
+		glGenBuffers(1, &vertexs.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexs.buffer_size, vertexs.buffer, GL_STATIC_DRAW);
+	}
+	if (indexs.has_data)
+	{
+		glGenBuffers(1, &indexs.id_buffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexs.id_buffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indexs.buffer_size, indexs.buffer, GL_STATIC_DRAW);
 	}
 
+	if (normals_direction.has_data)
+	{
+		glGenBuffers(1, &normals_direction.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normals_direction.id_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normals_direction.buffer_size, normals_direction.buffer, GL_STATIC_DRAW);
+	}
+
+	if (normal_vertexs.has_data)
+	{
+		glGenBuffers(1, &normal_vertexs.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normal_vertexs.id_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normal_vertexs.buffer_size, normal_vertexs.buffer, GL_STATIC_DRAW);
+	}
+
+	if (normal_faces.has_data)
+	{
+		glGenBuffers(1, &normal_faces.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normal_faces.id_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normal_faces.buffer_size, normal_faces.buffer, GL_STATIC_DRAW);
+	}
 }
 
 void FBXShape::CalculateNormals()
@@ -159,24 +167,24 @@ void FBXShape::CalculateNormals()
 void FBXShape::CalculateVertexsNormals()
 {
 	//vertex_normals
-	vertex_normals_buffer_size = num_vertex * 3/*x, y, z*/ * 2 /* start point, end point*/;
-	vertex_normals_buffer = new float[vertex_normals_buffer_size];
+	normal_vertexs.buffer_size = vertexs.num * 3/*x, y, z*/ * 2 /* start point, end point*/;
+	normal_vertexs.buffer = new float[normal_vertexs.buffer_size];
 	uint new_array_pos = 0u;
 
 	//iterate vertexs array to get the normal of each vertex.
-	for (uint i = 0; i < vertexs_buffer_size; i += 3/*each vertex have 3 coords. Every 3 increment we hace another new vertex.x*/)
+	for (uint i = 0; i < vertexs.buffer_size; i += 3/*each vertex have 3 coords. Every 3 increment we hace another new vertex.x*/)
 	{
 		//---Start Points:---
-		vertex_normals_buffer[new_array_pos++] = vertexs_buffer[i];//current_vertex.x
-		vertex_normals_buffer[new_array_pos++] = vertexs_buffer[i + 1];//current_vertex.y
-		vertex_normals_buffer[new_array_pos++] = vertexs_buffer[i + 2];//current_vertex.z
+		normal_vertexs.buffer[new_array_pos++] = vertexs.buffer[i];//current_vertex.x
+		normal_vertexs.buffer[new_array_pos++] = vertexs.buffer[i + 1];//current_vertex.y
+		normal_vertexs.buffer[new_array_pos++] = vertexs.buffer[i + 2];//current_vertex.z
 
 		//---End points:---
 		//the normal_length is to lengthen or shrink the normal.
 		//the normals[i] is to get the coordinate of the normals direction of each corresponding vertex coordinate.
-		vertex_normals_buffer[new_array_pos++] = vertexs_buffer[i] + normals_direction_buffer[i] * normal_lenght;
-		vertex_normals_buffer[new_array_pos++] = vertexs_buffer[i + 1] + normals_direction_buffer[i + 1] * normal_lenght;
-		vertex_normals_buffer[new_array_pos++] = vertexs_buffer[i + 2] + normals_direction_buffer[i + 2] * normal_lenght;
+		normal_vertexs.buffer[new_array_pos++] = vertexs.buffer[i]	   + normals_direction.buffer[i]     * normal_lenght;
+		normal_vertexs.buffer[new_array_pos++] = vertexs.buffer[i + 1] + normals_direction.buffer[i + 1] * normal_lenght;
+		normal_vertexs.buffer[new_array_pos++] = vertexs.buffer[i + 2] + normals_direction.buffer[i + 2] * normal_lenght;
 	}
 }
 
@@ -189,13 +197,13 @@ void FBXShape::CalculateFacesNormals()
 	float * start_vertexs_of_face_normals = new float[start_vertexs_of_face_normals_size]; //aray with start points calculated of the normals. Could be use to render it.
 	
 	//face_normals_buffer and size. each normal have start and end point.
-	face_normals_buffer_size = start_vertexs_of_face_normals_size * 2 /*every start point will have their end point on the face_normals_buffer.*/;
-	face_normals_buffer = new float[face_normals_buffer_size];
+	normal_faces.buffer_size = start_vertexs_of_face_normals_size * 2 /*every start point will have their end point on the face_normals_buffer.*/;
+	normal_faces.buffer = new float[normal_faces.buffer_size];
 
 	uint new_array_pos = 0u;
 
 	//iterate indexs of each face to get the face_normal.
-	for (uint i = 0; i < num_indexs/*iterate indexs to find the normals*/; i += 3/*every 3 indexs we have another face*/) // num_indices -> cada cara guarda 3 valores. numero de caras * 3 = num_indices;
+	for (uint i = 0; i < indexs.buffer_size/*iterate indexs to find the normals*/; i += 3/*every 3 indexs we have another face*/) // num_indices -> cada cara guarda 3 valores. numero de caras * 3 = num_indices;
 	{
 		//---Start point:---
 		// i = first index of the current face. They are ordered, so i+1 is the 2nd index of the current face, and i+3 the final index of the face
@@ -211,9 +219,9 @@ void FBXShape::CalculateFacesNormals()
 
 		//---End point:---
 		 //same as the vertex but with the normals. the vertex_normal of each vertex of the face
-		Vector3<float>* n1 = ReturnNormalByIndex(i);
-		Vector3<float>* n2 = ReturnNormalByIndex(i + 1);
-		Vector3<float>* n3 = ReturnNormalByIndex(i + 2);
+		Vector3<float>* n1 = ReturnNormalDirectionByIndex(i);
+		Vector3<float>* n2 = ReturnNormalDirectionByIndex(i + 1);
+		Vector3<float>* n3 = ReturnNormalDirectionByIndex(i + 2);
 
 		// average normal of the 3 vertex_normal of each vertex of the face.
 		Vector3<float> final_vertex;
@@ -221,14 +229,14 @@ void FBXShape::CalculateFacesNormals()
 		final_vertex.y = (n1->y + n2->y + n3->y) / 3.0f; // y coord
 		final_vertex.z = (n1->z + n2->z + n3->z) / 3.0f; // z coord
 
-		face_normals_buffer[new_array_pos++] = start_vertexs_of_face_normals[i]; // start point coord x
-		face_normals_buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 1]; // start point coord y
-		face_normals_buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 2]; // start point coord z
+		normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i]; // start point coord x
+		normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 1]; // start point coord y
+		normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 2]; // start point coord z
 
 		//the normal_length is to lengthen or shrink the normal.
-		face_normals_buffer[new_array_pos++] = start_vertexs_of_face_normals[i] + final_vertex.x * normal_lenght; // end point coord x
-		face_normals_buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 1] + final_vertex.y * normal_lenght; // end point coord y
-		face_normals_buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 2] + final_vertex.z * normal_lenght; // end point coord z
+		normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i] + final_vertex.x * normal_lenght; // end point coord x
+		normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 1] + final_vertex.y * normal_lenght; // end point coord y
+		normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 2] + final_vertex.z * normal_lenght; // end point coord z
 
 	}
 }
@@ -238,7 +246,7 @@ void FBXShape::CalculateFacesNormals()
 Vector3<float>* FBXShape::ReturnVertexByIndex(const uint &index) const
 {
 	Vector3<float>* ret = new Vector3<float>();
-	float* first_vertex = &vertexs_buffer[indexs_buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
+	float* first_vertex = &vertexs.buffer[indexs.buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
 
 	ret->x = first_vertex[0];
 	ret->y = first_vertex[1];
@@ -247,10 +255,10 @@ Vector3<float>* FBXShape::ReturnVertexByIndex(const uint &index) const
 	return ret;
 }
 
-Vector3<float>* FBXShape::ReturnNormalByIndex(const uint &index) const
+Vector3<float>* FBXShape::ReturnNormalDirectionByIndex(const uint &index) const
 {
 	Vector3<float>* ret = new Vector3<float>();
-	float* first_vertex = &normals_direction_buffer[indexs_buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
+	float* first_vertex = &normals_direction.buffer[indexs.buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
 
 	ret->x = first_vertex[0];
 	ret->y = first_vertex[1];
@@ -266,13 +274,22 @@ void FBXShape::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
+	
 
-	RenderVertexsWithIndices();
+	if (vertexs.has_data && indexs.has_data)
+	{
+		RenderVertexsWithIndices();
+	}
 
-//	RenderVertexNormals();
+	if (normal_vertexs.has_data)
+	{
+		RenderVertexNormals();
+	}
 
-	//RenderFaceNormals();
+	if (normal_faces.has_data)
+	{
+		RenderFaceNormals();
+	}
 
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -282,32 +299,37 @@ void FBXShape::Render()
 void FBXShape::RenderVertexsWithIndices()
 {
 	//glColor3f(255.f, 0, 255.f);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_buffer);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
+	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates
 
-	glBindBuffer(GL_ARRAY_BUFFER, id_normals_direction);
-	glNormalPointer(GL_FLOAT, 0, NULL);
+	if (normals_direction.has_data)
+	{
+		glEnableClientState(GL_NORMAL_ARRAY);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_indexs_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normals_direction.id_buffer);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
 
-	glDrawElements(GL_TRIANGLES, num_indexs, GL_UNSIGNED_INT, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexs.id_buffer);
+
+	glDrawElements(GL_TRIANGLES, indexs.num, GL_UNSIGNED_INT, NULL);
 }
 
 void FBXShape::RenderVertexNormals()
 {
 	glColor3f(0, 255.f, 255.f);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex_normals_buffer);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, normal_vertexs.id_buffer);
+	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates
 
-	glDrawArrays(GL_LINES, 0, num_vertex_normals * 3);
+	glDrawArrays(GL_LINES, 0, normal_vertexs.num * 2/*number of vertexs. each normal have 2 points.*/);
 
 }
 
 void FBXShape::RenderFaceNormals()
 {
 	glColor3f(255.f, 255.f, 0.f);
-	glBindBuffer(GL_ARRAY_BUFFER, id_face_normals_buffer);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ARRAY_BUFFER, normal_faces.id_buffer);
+	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates
 
-	glDrawArrays(GL_LINES, 0, num_indexs);
+	glDrawArrays(GL_LINES, 0, normal_faces.num * 2/*number of vertexs. each normal have 2 points.*/);
 }

@@ -18,6 +18,7 @@ public:
 
 	bool LoadFBX(char* path);
 	void LoadAllMeshes(const aiScene * scene);
+	void LoadUVs(GeometryShape * model, aiMesh * mesh);
 	void LoadNormals(GeometryShape * model, aiMesh * mesh);
 	void LoadVertices(GeometryShape * model, aiMesh * mesh);
 	void LoadIndexs(GeometryShape * model, aiMesh * mesh);

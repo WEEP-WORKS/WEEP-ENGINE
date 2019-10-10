@@ -28,6 +28,16 @@ bool ModuleImporter::Start()
 	return ret;
 }
 
+bool ModuleImporter::CleanUp()
+{
+	bool ret = true;
+
+	aiDetachAllLogStreams();
+
+	return ret;
+
+}
+
 void ModuleImporter::LoadPath(char* path)
 {
 	this->path = path;
@@ -82,26 +92,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		model->num_uvs_channels = mesh->GetNumUVChannels(); 
 		if (model->num_uvs_channels > 0)
 		{
-			model->num_uvs = model->num_vertex; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
-			model->uvs_buffer_size = model->num_uvs_channels * model->num_uvs * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
-			model->uvs_buffer = new float[model->uvs_buffer_size];
-
-			model->channel_buffer_size = model->num_uvs * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
-			for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
-			{
-				if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
-				{
-					
-					if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
-					{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-						memcpy(&model->uvs_buffer[channel * model->channel_buffer_size], mesh->mTextureCoords[channel], sizeof(float) * model->channel_buffer_size);
-					}
-					else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
-					{
-						memset(&model->uvs_buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
-					}
-				}
-			}
+			LoadUVs(model, mesh);
 		}
 
 		App->shape_manager->AddShape(model);
@@ -113,21 +104,30 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
 {
-	model->num_vertex = mesh->mNumVertices; // get number of Vertices
-	model->vertexs_buffer_size = model->num_vertex * 3;
-	model->vertexs_buffer = new float[model->vertexs_buffer_size]; // create array of Vertices with the correct size
-	memcpy(model->vertexs_buffer, mesh->mVertices, sizeof(float) * model->vertexs_buffer_size); // copy the vertices of the mesh to the arrey of vertices
+	model->vertexs.has_data = true;
 
-	LOG("New mesh with %d vertices", model->num_vertex);
+	model->vertexs.num = mesh->mNumVertices; // get number of Vertices
+
+	model->vertexs.buffer_size = model->vertexs.num * 3;
+	model->vertexs.buffer = new float[model->vertexs.buffer_size]; // create array of Vertices with the correct size
+
+	memcpy(model->vertexs.buffer, mesh->mVertices, sizeof(float) * model->vertexs.buffer_size); // copy the vertices of the mesh to the arrey of vertices
+
+	LOG("New mesh with %d vertices", model->vertexs.num);
 }
 
 // ----------------------------Indexs----------------------------
 
 void ModuleImporter::LoadIndexs(GeometryShape * model, aiMesh * mesh)
 {
+	model->indexs.has_data = true;
+
 	model->num_faces = mesh->mNumFaces;
-	model->num_indexs = model->num_faces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
-	model->indexs_buffer = new uint[model->num_indexs]; // create array of indices with the correct size
+	model->indexs.num = model->num_faces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
+
+	model->indexs.buffer_size = model->indexs.num; // don't have coordinates, so the number of indexs == buffer_size.
+	model->indexs.buffer = new uint[model->indexs.buffer_size]; // create array of indices with the correct size
+
 	for (uint i = 0; i < mesh->mNumFaces; ++i)
 	{
 		if (mesh->mFaces[i].mNumIndices != 3) // if the face is not a triangle don't load it.
@@ -140,7 +140,7 @@ void ModuleImporter::LoadIndexs(GeometryShape * model, aiMesh * mesh)
 			// take the first 3 slots, 
 			//then the next 3 slots, 
 			//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
-			memcpy(&model->indexs_buffer[i * 3], mesh->mFaces[i].mIndices, /*TODO Change 3 by a var*/3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
+			memcpy(&model->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, /*TODO Change 3 by a var*/3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
 }
@@ -150,24 +150,47 @@ void ModuleImporter::LoadIndexs(GeometryShape * model, aiMesh * mesh)
 void ModuleImporter::LoadNormals(GeometryShape * model, aiMesh * mesh)
 {
 	//load normals direction of the vertex_normals.
-	model->has_normals = true;
-	
-	model->num_vertex_normals = model->num_vertex;
-	model->num_face_normals = model->num_faces;
+	model->normals_direction.has_data = true;
+	model->normal_vertexs.has_data = true;
+	model->normal_faces.has_data = true;
 
-	model->normals_direction_buffer_size = model->num_vertex_normals * 3/*every vertex_normal have 3 coordinates (x, y, z).*/;
-	model->normals_direction_buffer = new float[model->normals_direction_buffer_size];
-	memcpy(model->normals_direction_buffer, mesh->mNormals, sizeof(float) * model->normals_direction_buffer_size); //It could be QNaN?
+	model->normals_direction.num = model->vertexs.num;
+	model->normal_vertexs.num = model->vertexs.num;
+	model->normal_faces.num = model->num_faces;
+
+	model->normals_direction.buffer_size = model->normal_vertexs.num * 3/*every vertex_normal have 3 coordinates (x, y, z).*/;
+	model->normals_direction.buffer = new float[model->normals_direction.buffer_size];
+	memcpy(model->normals_direction.buffer, mesh->mNormals, sizeof(float) * model->normals_direction.buffer_size); //It could be QNaN?
 
 	model->CalculateNormals();
 }
 
-bool ModuleImporter::CleanUp()
+// ----------------------------UVs----------------------------
+
+void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
 {
-	bool ret = true;
+	model->uvs.has_data = true;
 
-	aiDetachAllLogStreams();
+	model->uvs.num = model->vertexs.num; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
 
-	return ret;
+	model->uvs.buffer_size = model->num_uvs_channels * model->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
+	model->uvs.buffer = new float[model->uvs.buffer_size];
 
+	model->channel_buffer_size = model->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
+	for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
+	{
+		if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
+		{
+
+			if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
+			{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
+				memcpy(&model->uvs.buffer[channel * model->channel_buffer_size], mesh->mTextureCoords[channel], sizeof(float) * model->channel_buffer_size);
+			}
+			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
+			{
+				memset(&model->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
+			}
+		}
+	}
 }
+
