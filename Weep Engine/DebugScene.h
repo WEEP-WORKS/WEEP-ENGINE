@@ -30,6 +30,12 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
+	void Panels();
+	void MenuBar(bool &ret);
+	void CubeElementaArrayMode();
+	void CubeDrawArrayMode();
+	void Plane();
+	void CubeDirectMode();
 	void DrawCircle();
 	void Configuration();
 	bool CleanUp();
