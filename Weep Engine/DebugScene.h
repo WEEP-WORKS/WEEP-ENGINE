@@ -109,6 +109,7 @@ private:
 
 	//Textures
 	GLuint texName;
+	GLuint Texture;
 
 private:
 	

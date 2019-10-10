@@ -90,20 +90,21 @@ bool DebugScene::Start()
 
 	//ilBindImage(ImageName);
 
-	//bool test = ilLoadImage("Images/Lenna.png");
-	//int Width = ilGetInteger(IL_IMAGE_WIDTH);
-	//int Height = ilGetInteger(IL_IMAGE_HEIGHT);
-	//ilutRenderer(ILUT_OPENGL);
-	GLuint Texture;
+	bool test = ilLoadImage("Images/Lenna.png");
+	int Width = ilGetInteger(IL_IMAGE_WIDTH);
+	int Height = ilGetInteger(IL_IMAGE_HEIGHT);
+	ilutRenderer(ILUT_OPENGL);
+	
 	Texture = ilutGLBindTexImage();
-	//if (test)
-	//{
-	//	LOG("Loaded correctly");
-	//}
-	//else 
-	//{
-	//	LOG("Don't loaded correctly");
-	//}
+	glBindTexture(GL_TEXTURE_2D, Texture);
+	if (test)
+	{
+		LOG("Loaded correctly");
+	}
+	else 
+	{
+		LOG("Don't loaded correctly");
+	}
 	strcpy(name_input_buffer, App->window->GetTitle().c_str());
 	strcpy(organization_input_buffer, App->window->GetAppOrganization());
 	strcpy(version_input_buffer, App->window->GetVersion().c_str());
@@ -175,7 +176,7 @@ bool DebugScene::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
 
-
+	/*
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 	for (int i = 0; i < checkImageHeight; i++) {
 		for (int j = 0; j < checkImageWidth; j++) {
@@ -197,7 +198,7 @@ bool DebugScene::Start()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-
+		*/
 	//ELEMENT CUBE
 	GLfloat vertices1[] =
 	{
@@ -493,7 +494,7 @@ void DebugScene::CubeElementaArrayMode()
 	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindTexture(GL_TEXTURE_2D, texName);
+	glBindTexture(GL_TEXTURE_2D, Texture);
 
 	glBindBuffer(GL_ARRAY_BUFFER, uv_id);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
