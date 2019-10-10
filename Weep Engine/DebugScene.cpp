@@ -143,6 +143,29 @@ bool DebugScene::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
 
+
+	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
+	for (int i = 0; i < checkImageHeight; i++) {
+		for (int j = 0; j < checkImageWidth; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &texName);
+	glBindTexture(GL_TEXTURE_2D, texName);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
 	//ELEMENT CUBE
 	GLfloat vertices1[] =
 	{
@@ -168,11 +191,65 @@ bool DebugScene::Start()
 		4,7,6, 6,5,4 
 	};
 
+	GLfloat uv[] =
+	{
+		1,1,
+		0,1,
+		0,0,
+		1,0,
+
+		1,1,
+		0,1,
+		0,0,
+		1,0
+
+		/*1,1,
+		0,1,
+		0,0, 
+		0,0,
+		1,0,
+		1,1,
+		1,1,
+		1,0,
+		1,1, 
+		1,1,
+		0,1,
+		1,1,
+		1,1,
+		0,1,
+		0,0, 
+		0,0,
+		0,1,
+		1,1,
+		0,1,
+		0,0,
+		1,0, 
+		1,0,
+		0,0,
+		0,1,
+		1,0,
+		1,1,
+		1,0, 
+		1,0,
+		0,0,
+		1,0,
+		1,1,
+		1,0,
+		0,0, 
+		0,0,
+		0,1,
+		1,1*/
+
+	};
+
 	glGenBuffers(1, (GLuint*) &(my_id1));
+	glGenBuffers(1, (GLuint*) &(uv_id));
 	glGenBuffers(1, (GLuint*) &(my_indices));
 	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 * 3, vertices1, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, uv_id);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 *2, uv, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*number_of_indices, indices, GL_STATIC_DRAW);
 	
 	//SHAPES
@@ -195,28 +272,6 @@ bool DebugScene::Start()
 	{
 		//ret = App->importer->LoadFBX("Models/warrior.fbx");
 	}
-
-	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	for (int i = 0; i < checkImageHeight; i++) {
-		for (int j = 0; j < checkImageWidth; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &texName);
-	glBindTexture(GL_TEXTURE_2D, texName);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
 	
 
@@ -260,11 +315,11 @@ bool DebugScene::Update()
 	//------------------------CUBE DIRECT MODE---------------------------------
 	//-------------------------------------------------------------------------
 	
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
-	glBindTexture(GL_TEXTURE_2D, texName);
-	CubeDirectMode();
-	glDisable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
+	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
+	//glBindTexture(GL_TEXTURE_2D, texName);
+	//CubeDirectMode();
+	//glDisable(GL_TEXTURE_2D);
 
 	//-------------------------------------------------------------------------
 	//----------------------CUBE DRAW ARRAY MODE-------------------------------
@@ -275,8 +330,12 @@ bool DebugScene::Update()
 	//-------------------------------------------------------------------------
 	//----------------------CUBE ELEMENT ARRAY MODE-------------------------------
 	//-------------------------------------------------------------------------
+	
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
 
-	//CubeElementaArrayMode();
+	CubeElementaArrayMode();
+
+
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
@@ -394,15 +453,28 @@ void DebugScene::MenuBar(bool &ret)
 
 void DebugScene::CubeElementaArrayMode()
 {
-	glColor3f(0, 1, 1);
+	//glColor3f(0, 1, 1);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
+	glBindTexture(GL_TEXTURE_2D, texName);
+
+	glBindBuffer(GL_ARRAY_BUFFER, uv_id);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+
 	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 void DebugScene::CubeDrawArrayMode()
@@ -487,7 +559,7 @@ void DebugScene::CubeDirectMode()
 
 	//2
 	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f); //e
-	glTexCoord2f(1.0, 1.0);  glVertex3f(-2.f, 0.f, 0.f);
+	glTexCoord2f(1.0, 1.0);  glVertex3f(-2.f, 0.f, 0.f); 
 	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 2.f, -2.f);
 
 	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 2.f, -2.f);
@@ -495,9 +567,9 @@ void DebugScene::CubeDirectMode()
 	glTexCoord2f(0.0, 1.0);  glVertex3f(-2.f, 2.f, 0.f);
 
 	//1
-	glTexCoord2f(0.0, 0.0);  glVertex3f(0.f, 0.f, -2.f);
-	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f);
-	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f);
+	glTexCoord2f(0.0, 0.0);  glVertex3f(0.f, 0.f, -2.f);  //f
+	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f); //e
+	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f);  //h
 
 	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f);
 	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f);

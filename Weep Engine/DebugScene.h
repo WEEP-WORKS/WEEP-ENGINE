@@ -95,6 +95,7 @@ private:
 	uint my_id = 0;
 	uint my_id1 = 2;
 	uint my_indices = 1;
+	uint uv_id = 4;
 	uint num_vertices = 36;
 	uint number_of_indices = 36;
 
