@@ -298,12 +298,12 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		//ret = App->importer->LoadFBX("Models/suzanne.solid");
+		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
 	}
 
 	if (ret == true)
 	{
-		//ret = App->importer->LoadFBX("Models/warrior.fbx");
+		//ret = App->importer->LoadFBX("Models/FBX/warrior.fbx");
 	}
 
 	

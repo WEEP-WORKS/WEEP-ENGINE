@@ -154,6 +154,13 @@ void FBXShape::SetBuffersWithData()
 		glBindBuffer(GL_ARRAY_BUFFER, normal_faces.id_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normal_faces.buffer_size, normal_faces.buffer, GL_STATIC_DRAW);
 	}
+
+	if (uvs.has_data)
+	{
+		glGenBuffers(1, &uvs.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*uvs.buffer_size, uvs.buffer, GL_STATIC_DRAW);
+	}
 }
 
 void FBXShape::CalculateNormals()
@@ -272,36 +279,45 @@ Vector3<float>* FBXShape::ReturnNormalDirectionByIndex(const uint &index) const
 void FBXShape::Render()
 {
 	glColor3f(color.r, color.g, color.b);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	if (vertexs.has_data && indexs.has_data)
-	{
-		RenderVertexsWithIndices();
-	}
+	RenderModel();
+	
 
 	if (normal_vertexs.has_data)
 	{
-		RenderVertexNormals();
+		//RenderVertexNormals();
 	}
 
 	if (normal_faces.has_data)
 	{
-		RenderFaceNormals();
+		//RenderFaceNormals();
 	}
 
+
+
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 	
 }
 
-void FBXShape::RenderVertexsWithIndices()
+void FBXShape::RenderModel()
 {
 	//glColor3f(255.f, 0, 255.f);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
-	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates
 
+	//bind vertexs.
+	glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
+	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates.
+	
+
+	//bind normals direction for the ilumination
 	if (normals_direction.has_data)
 	{
 		glEnableClientState(GL_NORMAL_ARRAY);
@@ -310,9 +326,23 @@ void FBXShape::RenderVertexsWithIndices()
 		glNormalPointer(GL_FLOAT, 0, NULL);
 	}
 
+	//bind UVs
+	glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
+
+
+	//bind texture
+	glBindTexture(GL_TEXTURE_2D, id_texture);
+
+
+	//indexs final
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexs.id_buffer);
 
+
+	//Draw
 	glDrawElements(GL_TRIANGLES, indexs.num, GL_UNSIGNED_INT, NULL);
+
+	
 }
 
 void FBXShape::RenderVertexNormals()

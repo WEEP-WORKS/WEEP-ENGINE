@@ -9,6 +9,16 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
+#include "DevIL/il.h"
+#include "DevIL/ilu.h"
+#include "DevIL/ilut.h"//temporally all DevIL
+
+
+#pragma comment ( lib, "DevIL/DevIl.lib")
+#pragma comment ( lib, "DevIL/ILU.lib")
+#pragma comment ( lib, "DevIL/ILUT.lib")
+
+
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled) 
 {
 	SetName("Importer");
@@ -95,8 +105,44 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			LoadUVs(model, mesh);
 		}
 
+		if (scene->HasMaterials())
+		{
+			LoadMaterials(scene, mesh, model);
+		}
+
 		App->shape_manager->AddShape(model);
 
+	}
+}
+
+void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, GeometryShape * model)
+{
+	model->has_texture = true;
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE); //only load DIFFUSE textures.
+
+	if (numTextures > 0)
+	{
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		std::string dir = "Models/Textures/";
+		std::string f_path = dir + path.C_Str();
+
+
+
+		bool test = ilLoadImage(f_path.c_str());
+		if (test)
+		{
+			LOG("Loaded correctly");
+			ilutRenderer(ILUT_OPENGL);
+
+			model->id_texture = ilutGLBindTexImage();
+			glBindTexture(GL_TEXTURE_2D, model->id_texture);
+		}
+		else
+		{
+			LOG("Don't loaded correctly");
+		}
 	}
 }
 
@@ -183,8 +229,12 @@ void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
 		{
 
 			if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
-			{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-				memcpy(&model->uvs.buffer[channel * model->channel_buffer_size], mesh->mTextureCoords[channel], sizeof(float) * model->channel_buffer_size);
+			{
+				for (uint j = 0; j < model->uvs.num; ++j)
+				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
+					memcpy(&model->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
+
+				}
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{

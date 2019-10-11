@@ -54,6 +54,11 @@ public:
 
 	BuffersData<float> uvs;
 
+	//Textures
+	bool has_texture = false;
+	GLuint id_texture = 0;
+	
+
 
 	Color color;
 
@@ -102,7 +107,7 @@ public:
 
 	void Render() override;
 
-	void RenderVertexsWithIndices();
+	void RenderModel();
 
 	void RenderVertexNormals();
 
