@@ -6,6 +6,7 @@
 #include "DebugScene.h"
 #include "GeometryShape.h"
 #include "ModuleImporter.h"
+#include "ModuleTexture.h"
 
 #include <list>
 #include <fstream>
@@ -23,6 +24,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	debug_scene = new DebugScene();
 	shape_manager = new ShapeManager();
 	importer = new ModuleImporter();
+	texture = new ModuleTexture();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -33,8 +35,11 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(camera);
 	AddModule(input);
 	AddModule(importer);
-	AddModule(debug_scene);
+	AddModule(texture);
 	AddModule(shape_manager);
+	AddModule(debug_scene);
+
+
 
 	// Renderer last
 	AddModule(renderer3D);

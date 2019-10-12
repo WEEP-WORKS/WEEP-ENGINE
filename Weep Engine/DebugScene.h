@@ -8,6 +8,9 @@
 #define MAX_SNAKE 2
 #define LIB_NUM 8
 
+#define checkImageWidth 64
+#define checkImageHeight 64
+
 #include "par_shapes.h"
 
 struct hardware_info {
@@ -92,6 +95,7 @@ private:
 	uint my_id = 0;
 	uint my_id1 = 2;
 	uint my_indices = 1;
+	uint uv_id = 4;
 	uint num_vertices = 36;
 	uint number_of_indices = 36;
 
@@ -102,6 +106,10 @@ private:
 	//Shapes
 	GeometrySphere* sphere;
 	GeometrySphere* sphere2;
+
+	//Textures
+	GLuint texName;
+	GLuint Texture;
 
 private:
 	

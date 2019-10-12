@@ -1,12 +1,16 @@
 #include "App.h"
 #include "ModuleImporter.h"
 #include "GeometryShape.h"
+#include "ModuleTexture.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
+
+
+
 
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled) 
@@ -93,6 +97,11 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		if (model->num_uvs_channels > 0)
 		{
 			LoadUVs(model, mesh);
+		}
+
+		if (scene->HasMaterials())
+		{
+			LoadMaterials(scene, mesh, model);
 		}
 
 		App->shape_manager->AddShape(model);
@@ -183,8 +192,12 @@ void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
 		{
 
 			if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
-			{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-				memcpy(&model->uvs.buffer[channel * model->channel_buffer_size], mesh->mTextureCoords[channel], sizeof(float) * model->channel_buffer_size);
+			{
+				for (uint j = 0; j < model->uvs.num; ++j)
+				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
+					memcpy(&model->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
+
+				}
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{
@@ -194,3 +207,23 @@ void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
 	}
 }
 
+// ----------------------------Materials----------------------------
+
+void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, GeometryShape * model)
+{
+	model->has_texture = true;
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE); //only load DIFFUSE textures.
+
+	if (numTextures > 0)
+	{
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		std::string dir = "Models/Textures/";
+
+		model->id_texture = App->texture->LoadTexture(path.C_Str());
+
+
+	
+	}
+}
