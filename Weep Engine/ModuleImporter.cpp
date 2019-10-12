@@ -1,6 +1,7 @@
 #include "App.h"
 #include "ModuleImporter.h"
 #include "GeometryShape.h"
+#include "ModuleTexture.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -9,14 +10,7 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
-#include "DevIL/il.h"
-#include "DevIL/ilu.h"
-#include "DevIL/ilut.h"//temporally all DevIL
 
-
-#pragma comment ( lib, "DevIL/DevIl.lib")
-#pragma comment ( lib, "DevIL/ILU.lib")
-#pragma comment ( lib, "DevIL/ILUT.lib")
 
 
 ModuleImporter::ModuleImporter(bool start_enabled) : Module(start_enabled) 
@@ -112,37 +106,6 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 		App->shape_manager->AddShape(model);
 
-	}
-}
-
-void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, GeometryShape * model)
-{
-	model->has_texture = true;
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE); //only load DIFFUSE textures.
-
-	if (numTextures > 0)
-	{
-		aiString path;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
-		std::string dir = "Models/Textures/";
-		std::string f_path = dir + path.C_Str();
-
-
-
-		bool test = ilLoadImage(f_path.c_str());
-		if (test)
-		{
-			LOG("Loaded correctly");
-			ilutRenderer(ILUT_OPENGL);
-
-			model->id_texture = ilutGLBindTexImage();
-			glBindTexture(GL_TEXTURE_2D, model->id_texture);
-		}
-		else
-		{
-			LOG("Don't loaded correctly");
-		}
 	}
 }
 
@@ -244,3 +207,23 @@ void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
 	}
 }
 
+// ----------------------------Materials----------------------------
+
+void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, GeometryShape * model)
+{
+	model->has_texture = true;
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE); //only load DIFFUSE textures.
+
+	if (numTextures > 0)
+	{
+		aiString path;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+		std::string dir = "Models/Textures/";
+
+		model->id_texture = App->texture->LoadTexture(path.C_Str());
+
+
+	
+	}
+}

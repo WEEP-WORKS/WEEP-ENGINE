@@ -15,6 +15,7 @@ class ModuleCamera3D;
 class ModuleImporter;
 class DebugScene;
 class ShapeManager;
+class ModuleTexture;
 
 
 class Application
@@ -65,6 +66,7 @@ public:
 	DebugScene*        debug_scene = nullptr;
 	ShapeManager* shape_manager = nullptr;
 	ModuleImporter* importer = nullptr;
+	ModuleTexture*	texture = nullptr;
 
 	Profiler*		   profiler = nullptr;
 		

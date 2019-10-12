@@ -15,14 +15,7 @@
 #include "MathGeoLib\include\MathBuildConfig.h"
 #include "MathGeoLib\include\MathGeoLib.h"
 
-#include "DevIL/il.h"
-#include "DevIL/ilu.h"
-#include "DevIL/ilut.h"
-
-
-#pragma comment ( lib, "DevIL/DevIl.lib")
-#pragma comment ( lib, "DevIL/ILU.lib")
-#pragma comment ( lib, "DevIL/ILUT.lib")
+#include "ModuleTexture.h"
 
 #include "ModuleImporter.h"
 
@@ -80,9 +73,7 @@ bool DebugScene::Start()
 {
 	bool ret = true;
 
-	ilInit();
-	iluInit();
-	ilutInit();
+
 	
 	//ILuint ImageName;
 
@@ -90,7 +81,7 @@ bool DebugScene::Start()
 
 	//ilBindImage(ImageName);
 
-	bool test = ilLoadImage("Images/Lenna.png");
+	/*bool test = ilLoadImage("Images/Lenna.png");
 	int Width = ilGetInteger(IL_IMAGE_WIDTH);
 	int Height = ilGetInteger(IL_IMAGE_HEIGHT);
 	ilutRenderer(ILUT_OPENGL);
@@ -104,7 +95,9 @@ bool DebugScene::Start()
 	else 
 	{
 		LOG("Don't loaded correctly");
-	}
+	}*/
+	Texture = App->texture->LoadTexture("Lenna.png");
+
 	strcpy(name_input_buffer, App->window->GetTitle().c_str());
 	strcpy(organization_input_buffer, App->window->GetAppOrganization());
 	strcpy(version_input_buffer, App->window->GetVersion().c_str());
