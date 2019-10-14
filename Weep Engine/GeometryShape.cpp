@@ -305,6 +305,9 @@ void GameObjectManager::AddObject(GameObject* object)
 	objects.push_back(object);
 }
 
+//---------------
+ //All old things like geometry things don't erase yet. (but it's unused)
+//-------------
 
 //----------------------------------------------------------------------------------
 //---------------------------------GEOMETRY MANAGER---------------------------------
