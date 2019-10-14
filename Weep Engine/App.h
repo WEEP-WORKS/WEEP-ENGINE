@@ -14,7 +14,7 @@ class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModuleImporter;
 class DebugScene;
-class ShapeManager;
+class GameObjectManager;
 class ModuleTexture;
 
 
@@ -64,7 +64,7 @@ public:
 	ModuleRenderer3D*  renderer3D = nullptr;
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
-	ShapeManager* shape_manager = nullptr;
+	GameObjectManager* game_object_manager = nullptr;
 	ModuleImporter* importer = nullptr;
 	ModuleTexture*	texture = nullptr;
 

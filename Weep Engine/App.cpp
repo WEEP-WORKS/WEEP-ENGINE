@@ -22,7 +22,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	debug_scene = new DebugScene();
-	shape_manager = new ShapeManager();
+	game_object_manager = new GameObjectManager();
 	importer = new ModuleImporter();
 	texture = new ModuleTexture();
 
@@ -36,7 +36,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(importer);
 	AddModule(texture);
-	AddModule(shape_manager);
+	AddModule(game_object_manager);
 	AddModule(debug_scene);
 
 
