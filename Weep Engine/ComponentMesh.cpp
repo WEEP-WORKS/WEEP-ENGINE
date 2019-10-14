@@ -1,5 +1,5 @@
 #include "ComponentMesh.h"
-
+#include "ComponentTexture.h"
 
 ComponentMesh::ComponentMesh()
 {
@@ -54,7 +54,7 @@ void ComponentMesh::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	RenderModel();
 
@@ -71,7 +71,7 @@ void ComponentMesh::Render()
 
 
 
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -84,7 +84,7 @@ void ComponentMesh::RenderModel()
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates.
 
 
-										   //bind normals direction for the ilumination
+	//bind normals direction for the ilumination
 	if (normals_direction.has_data)
 	{
 		glEnableClientState(GL_NORMAL_ARRAY);
@@ -93,14 +93,16 @@ void ComponentMesh::RenderModel()
 		glNormalPointer(GL_FLOAT, 0, NULL);
 	}
 
-	//bind UVs
-	//glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
-	//glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
+	if (texture != nullptr)
+	{
+		//bind UVs
+		glBindBuffer(GL_ARRAY_BUFFER, texture->uvs.id_buffer);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
 
 
-	////bind texture
-	//glBindTexture(GL_TEXTURE_2D, id_texture);
-
+		//bind texture
+		glBindTexture(GL_TEXTURE_2D, texture->id_texture);
+	}
 
 	//indexs final
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexs.id_buffer);
@@ -108,6 +110,8 @@ void ComponentMesh::RenderModel()
 
 	//Draw
 	glDrawElements(GL_TRIANGLES, indexs.num, GL_UNSIGNED_INT, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 

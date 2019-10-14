@@ -6,6 +6,8 @@
 #include "Color.h"
 #include "Vector3.h"
 
+class ComponentTexture;
+
 class ComponentMesh : public Component
 {
 public:
@@ -28,6 +30,8 @@ public:
 	BuffersData<float> normal_vertexs;
 
 	BuffersData<float> normal_faces;
+
+	ComponentTexture* texture = nullptr;
 
 	Color color;
 

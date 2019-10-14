@@ -97,19 +97,22 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			LoadNormals(model, mesh);
 		}
 
-		ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
-		//model->num_uvs_channels = mesh->GetNumUVChannels(); 
-		if (mesh->GetNumUVChannels() > 0)
+		model->SetBuffersWithData();
+
+		if (mesh->GetNumUVChannels() > 0 && scene->HasMaterials())
 		{
-			LoadUVs(text, mesh);
+
+			ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+			text->num_uvs_channels = mesh->GetNumUVChannels();
+		
+			LoadUVs(text, mesh);		
+			LoadMaterials(scene, mesh, text);
+
+			text->SetBuffersWithData();//this could be in the function of load uvs?
+			model->texture = text;
 		}
 
-		if (scene->HasMaterials())
-		{
-			LoadMaterials(scene, mesh, text);
-		}
-		model->SetBuffersWithData();
-		text->SetBuffersWithData();//this could be in the function of load uvs?
+		
 		App->game_object_manager->AddObject(object);
 
 	}

@@ -10,3 +10,4 @@ void ComponentTexture::SetBuffersWithData()
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*uvs.buffer_size, uvs.buffer, GL_STATIC_DRAW);
 	}
 }
+

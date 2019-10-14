@@ -10,7 +10,6 @@ public:
 	ComponentTexture() {};
 	void SetBuffersWithData();
 	
-	
 public:
 
 	//UVs
