@@ -1,6 +1,8 @@
 #include "App.h"
 #include "ModuleImporter.h"
-#include "GeometryShape.h"
+#include "ModuleGameObjectManager.h"
+#include "GameObject.h"
+#include "ComponentMesh.h"
 #include "ModuleTexture.h"
 
 #include "Assimp/include/cimport.h"

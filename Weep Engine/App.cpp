@@ -4,7 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
-#include "GeometryShape.h"
+#include "ModuleGameObjectManager.h"
 #include "ModuleImporter.h"
 #include "ModuleTexture.h"
 
