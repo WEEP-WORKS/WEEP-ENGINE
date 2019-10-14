@@ -5,6 +5,7 @@
 #include "Globals.h"
 class aiMesh;
 class ComponentMesh;
+class ComponentTexture;
 class aiScene;
 class ModuleImporter : public Module
 {
@@ -18,8 +19,8 @@ public:
 
 	bool LoadFBX(char* path);
 	void LoadAllMeshes(const aiScene * scene);
-	//void LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentMesh * model);
-	//void LoadUVs(ComponentMesh * model, aiMesh * mesh);
+	void LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentTexture * model);
+	void LoadUVs(ComponentTexture * model, aiMesh * mesh);
 	void LoadNormals(ComponentMesh * model, aiMesh * mesh);
 	void LoadVertices(ComponentMesh * model, aiMesh * mesh);
 	void LoadIndexs(ComponentMesh * model, aiMesh * mesh);

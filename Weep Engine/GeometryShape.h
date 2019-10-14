@@ -11,6 +11,11 @@
 
 
 
+//---------------
+ //All old things like geometry things don't erase yet. (but it's unused)
+//-------------
+
+
 
 
 
@@ -21,11 +26,6 @@
 //----------------------------------------------------------------------------------
 
 
-
-
-//---------------
- //All old things like geometry things don't erase yet. (but it's unused)
-//-------------
 
 
 class GeometryShape
