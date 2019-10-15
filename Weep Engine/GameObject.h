@@ -14,6 +14,8 @@ public:
 
 	void Update(); //this is not from the module class. This function will be called from objectManager and will call Components update or something... I don't know yet.
 
+	//Don't have cleanUp for each game objects and their components. TODO
+
 	Component* AddComponent(ComponentType);
 public:
 	std::vector<Component*> components;

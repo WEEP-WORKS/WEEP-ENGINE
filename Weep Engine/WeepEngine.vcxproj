@@ -81,6 +81,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentMesh.h" />
     <ClInclude Include="ComponentTexture.h" />
+    <ClInclude Include="ComponentTransform.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometryShape.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="ComponentMesh.cpp" />
     <ClCompile Include="ComponentTexture.cpp" />
+    <ClCompile Include="ComponentTransform.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GeometryShape.cpp" />

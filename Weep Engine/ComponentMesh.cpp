@@ -74,8 +74,6 @@ void ComponentMesh::Render()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-
-	//glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ComponentMesh::RenderModel()
