@@ -20,7 +20,7 @@ public:
 	bool LoadFBX(char* path);
 	void LoadAllMeshes(const aiScene * scene);
 	void LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentTexture * model);
-	void LoadUVs(ComponentTexture * model, aiMesh * mesh);
+	void LoadUVs(ComponentMesh * model, aiMesh * mesh);
 	void LoadNormals(ComponentMesh * model, aiMesh * mesh);
 	void LoadVertices(ComponentMesh * model, aiMesh * mesh);
 	void LoadIndexs(ComponentMesh * model, aiMesh * mesh);

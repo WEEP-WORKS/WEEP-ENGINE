@@ -2,7 +2,7 @@
 #define __COMPONENT_H__
 #include "glew/glew.h"
 #include "Globals.h"
-
+class GameObject;
 enum class ComponentType
 {
 	NONE = -1,
@@ -29,6 +29,7 @@ class Component
 {
 public:
 	ComponentType type = ComponentType::NONE;
+	GameObject* object = nullptr;
 
 public:
 	virtual void Update() {};

@@ -1,5 +1,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
+#include <vector>
+#include "GameObject.h"
 
 ComponentMesh::ComponentMesh()
 {
@@ -40,6 +42,13 @@ void ComponentMesh::SetBuffersWithData()
 		glGenBuffers(1, &normal_faces.id_buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, normal_faces.id_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*normal_faces.buffer_size, normal_faces.buffer, GL_STATIC_DRAW);
+	}
+
+	if (uvs.has_data)
+	{
+		glGenBuffers(1, &uvs.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*uvs.buffer_size, uvs.buffer, GL_STATIC_DRAW);
 	}
 }
 
@@ -94,7 +103,7 @@ void ComponentMesh::RenderModel()
 	if (texture != nullptr)
 	{
 		//bind UVs
-		glBindBuffer(GL_ARRAY_BUFFER, texture->uvs.id_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
 
 
@@ -240,4 +249,34 @@ Vector3<float>* ComponentMesh::ReturnNormalDirectionByIndex(const uint &index) c
 	ret->z = first_vertex[2];
 
 	return ret;
+}
+
+
+void ComponentMesh::SetTextureActive()
+{
+	for (std::vector<Component*>::iterator iter = object->components.begin(); iter != object->components.end(); ++iter)
+	{
+		if ((*iter)->type == ComponentType::TEXTURE)
+		{
+			ComponentTexture* component_iter = (ComponentTexture*)(*iter);
+			if (component_iter->IsTextureActive())
+			{
+				ComponentTexture* old_texture = texture;
+				texture = component_iter;
+				if (old_texture != texture)
+				{
+					LOG("The new texture has been bind correctly");
+				}
+				else
+				{
+					LOG("The new texture is the same. Chek that the desire texture has been activated before this call or don't call this function, because is not doing anithing!!");
+				}
+				return ;//return because if it check that one texture is activated, it can't be more than one.
+			}
+		}
+	}
+
+	texture = nullptr;
+	LOG("No texture activated has been found. The pointer texture has been set with nullptr.");
+	
 }

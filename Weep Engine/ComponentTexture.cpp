@@ -1,13 +1,32 @@
 #include "ComponentTexture.h"
-
-
-void ComponentTexture::SetBuffersWithData()
+#include "GameObject.h"
+void ComponentTexture::ActivateThisTexture()
 {
-	if (uvs.has_data)
+	texture_active = true;
+
+	LOG("The texture has been activated correctly");
+
+	for (std::vector<Component*>::iterator iter = object->components.begin(); iter != object->components.end(); ++iter)
 	{
-		glGenBuffers(1, &uvs.id_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*uvs.buffer_size, uvs.buffer, GL_STATIC_DRAW);
+		if ((*iter)->type == ComponentType::TEXTURE)
+		{
+			ComponentTexture* component = (ComponentTexture*)(*iter);
+			if (component->IsTextureActive() && component != this)
+			{
+				component->DesactivateTexture();  //only one activated. if this is activated but it exist another texture activated, desactivate the other.
+				LOG("Exist another ComponentTexture which has been desactivated");
+				return; //return because if it check that another texture has been desactivated, it can't be more than one.
+			}
+		}
 	}
 }
 
+bool ComponentTexture::IsTextureActive() const
+{
+	return texture_active;
+}
+
+void ComponentTexture::DesactivateTexture()
+{
+	texture_active = false;
+}

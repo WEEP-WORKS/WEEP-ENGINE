@@ -17,6 +17,7 @@ public:
 	//Don't have cleanUp for each game objects and their components. TODO
 
 	Component* AddComponent(ComponentType);
+	void AddToComonentList(Component * &ret);
 public:
 	std::vector<Component*> components;
 };

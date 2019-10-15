@@ -557,10 +557,10 @@
     <ClCompile Include="ComponentMesh.cpp">
       <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentTexture.cpp">
+    <ClCompile Include="ComponentTransform.cpp">
       <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ComponentTransform.cpp">
+    <ClCompile Include="ComponentTexture.cpp">
       <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
   </ItemGroup>

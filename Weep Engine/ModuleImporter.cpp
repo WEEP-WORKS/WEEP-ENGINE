@@ -85,35 +85,46 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 		aiMesh* mesh = scene->mMeshes[i];
 
-		LoadVertices(model, mesh);
-
-		if (mesh->HasFaces())
+		if (model != nullptr)
 		{
-			LoadIndexs(model, mesh);
-		}
+			LoadVertices(model, mesh);
 
-		if (mesh->HasNormals())
+			if (mesh->HasFaces())
+			{
+				LoadIndexs(model, mesh);
+			}
+
+			if (mesh->HasNormals())
+			{
+				LoadNormals(model, mesh);
+			}
+
+			model->num_uvs_channels = mesh->GetNumUVChannels();
+
+			LoadUVs(model, mesh);
+
+			model->SetBuffersWithData();
+
+			if (model->num_uvs_channels > 0 && scene->HasMaterials())
+			{
+
+				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+				model->num_uvs_channels = mesh->GetNumUVChannels();
+
+				
+				LoadMaterials(scene, mesh, text);
+
+				text->ActivateThisTexture();
+				model->SetTextureActive();
+			}
+
+
+			App->game_object_manager->AddObject(object);
+		}
+		else
 		{
-			LoadNormals(model, mesh);
+			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object");
 		}
-
-		model->SetBuffersWithData();
-
-		if (mesh->GetNumUVChannels() > 0 && scene->HasMaterials())
-		{
-
-			ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
-			text->num_uvs_channels = mesh->GetNumUVChannels();
-		
-			LoadUVs(text, mesh);		
-			LoadMaterials(scene, mesh, text);
-
-			text->SetBuffersWithData();//this could be in the function of load uvs?
-			model->texture = text;
-		}
-
-		
-		App->game_object_manager->AddObject(object);
 
 	}
 }
@@ -185,32 +196,32 @@ void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 
  //----------------------------UVs----------------------------
 
-void ModuleImporter::LoadUVs(ComponentTexture * text, aiMesh * mesh)
+void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 {
-	text->uvs.has_data = true;
+	model->uvs.has_data = true;
 
-	text->uvs.num = mesh->mNumVertices; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
+	model->uvs.num = mesh->mNumVertices; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
 
-	text->uvs.buffer_size = text->num_uvs_channels * text->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
-	text->uvs.buffer = new float[text->uvs.buffer_size];
+	model->uvs.buffer_size = model->num_uvs_channels * model->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
+	model->uvs.buffer = new float[model->uvs.buffer_size];
 
-	text->channel_buffer_size = text->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
-	for (uint channel = 0; channel < text->num_uvs_channels; ++channel)
+	model->channel_buffer_size = model->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
+	for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
 	{
 		if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
 		{
 
 			if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
 			{
-				for (uint j = 0; j < text->uvs.num; ++j)
+				for (uint j = 0; j < model->uvs.num; ++j)
 				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-					memcpy(&text->uvs.buffer[(channel * text->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
+					memcpy(&model->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
 
 				}
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{
-				memset(&text->uvs.buffer[channel * text->channel_buffer_size], 0, sizeof(float) * text->channel_buffer_size);
+				memset(&model->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
 			}
 		}
 	}

@@ -8,19 +8,19 @@ class ComponentTexture : public Component
 {
 public:
 	ComponentTexture() {};
-	void SetBuffersWithData();
+	void ActivateThisTexture();
+	bool IsTextureActive() const;
+	void DesactivateTexture();
 	
 public:
-
-	//UVs
-	uint num_uvs_channels = 0u; //local var?
-	uint channel_buffer_size = 0u; //local var?
-
-	BuffersData<float> uvs;
 
 	//Textures
 	bool has_texture = false;
 	GLuint id_texture = 0;
+
+private:
+
+	bool texture_active = false;
 
 };
 

@@ -31,9 +31,19 @@ public:
 
 	BuffersData<float> normal_faces;
 
-	ComponentTexture* texture = nullptr;
+	//UVs
+	uint num_uvs_channels = 0u; //local var?
+	uint channel_buffer_size = 0u; //local var?
+
+	BuffersData<float> uvs;
+
+	
 
 	Color color;
+
+private:
+
+	ComponentTexture* texture = nullptr;
 
 public:
 	ComponentMesh();
@@ -44,6 +54,8 @@ public:
 	void SetBuffersWithData();
 
 	void CalculateNormals();
+
+	void SetTextureActive();
 
 private:
 

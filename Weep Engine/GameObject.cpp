@@ -21,6 +21,15 @@ Component* GameObject::AddComponent(ComponentType type)
 {
 	Component* ret = nullptr;
 
+	for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == type && type != ComponentType::TEXTURE)
+		{
+			LOG("This game object already has a component of this type. Create another game object and add this component!");
+			return ret;
+		}
+	}
+
 	switch (type)
 	{
 	case ComponentType::NONE:
@@ -29,19 +38,19 @@ Component* GameObject::AddComponent(ComponentType type)
 	case ComponentType::TRANSFORM:
 		ret = new ComponentTransform();
 		ret->type = type;
-		components.push_back(ret);
+		AddToComonentList(ret);
 		LOG("Component Transform added correctly.");
 		break;
 	case ComponentType::MESH:
 		ret = new ComponentMesh();
 		ret->type = type;
-		components.push_back(ret);
+		AddToComonentList(ret);
 		LOG("Component Mesh added correctly.")
 		break;
 	case ComponentType::TEXTURE:
 		ret = new ComponentTexture();
 		ret->type = type;
-		components.push_back(ret);
+		AddToComonentList(ret);
 		LOG("Component Texture added correcly.");
 		break;
 	default:
@@ -50,4 +59,10 @@ Component* GameObject::AddComponent(ComponentType type)
 	}
 
 	return ret;
+}
+
+void GameObject::AddToComonentList(Component * &ret)
+{
+	ret->object = this;
+	components.push_back(ret);
 }
