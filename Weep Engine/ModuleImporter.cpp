@@ -1,4 +1,4 @@
-#include "App.h"
+		#include "App.h"
 #include "ModuleImporter.h"
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
@@ -81,7 +81,10 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
 	for (uint i = 0; i < scene->mNumMeshes; ++i)
 	{
+		//string name = GetPath(); name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
+
 		GameObject* object = new GameObject();
+		//object->SetName(name.c_str());
 		ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 		aiMesh* mesh = scene->mMeshes[i];
 
