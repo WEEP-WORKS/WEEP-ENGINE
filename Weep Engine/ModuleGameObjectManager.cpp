@@ -87,6 +87,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	if (object->GetSelected())
 		flags |= ImGuiTreeNodeFlags_Selected;
 
+	//treenode needs to be more understood
 	bool opened = ImGui::TreeNodeEx(object->GetName(), flags);
 
 	// Input
