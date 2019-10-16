@@ -2,6 +2,7 @@
 #include "ComponentTexture.h"
 #include <vector>
 #include "GameObject.h"
+#include "imgui.h"
 
 ComponentMesh::ComponentMesh()
 {
@@ -67,18 +68,15 @@ void ComponentMesh::Render()
 
 	RenderModel();
 
-	if (normal_vertexs.has_data)
+	if (normal_vertexs.has_data && activate_vertex_normals)
 	{
 		RenderVertexNormals();
 	}
 
-	if (normal_faces.has_data)
+	if (normal_faces.has_data && activate_face_normals)
 	{
 		RenderFaceNormals();
 	}
-
-
-
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
@@ -193,9 +191,9 @@ void ComponentMesh::CalculateFacesNormals()
 	{
 		//---Start point:---
 		// i = first index of the current face. They are ordered, so i+1 is the 2nd index of the current face, and i+3 the final index of the face
-		Vector3<float>* v1 = ReturnVertexByIndex(i);
-		Vector3<float>* v2 = ReturnVertexByIndex(i + 1);
-		Vector3<float>* v3 = ReturnVertexByIndex(i + 2);
+		float3* v1 = ReturnVertexByIndex(i);
+		float3* v2 = ReturnVertexByIndex(i + 1);
+		float3* v3 = ReturnVertexByIndex(i + 2);
 
 
 		//average point of the plane and start point of the normal
@@ -205,12 +203,12 @@ void ComponentMesh::CalculateFacesNormals()
 
 		//---End point:---
 		 //same as the vertex but with the normals. the vertex_normal of each vertex of the face
-		Vector3<float>* n1 = ReturnNormalDirectionByIndex(i);
-		Vector3<float>* n2 = ReturnNormalDirectionByIndex(i + 1);
-		Vector3<float>* n3 = ReturnNormalDirectionByIndex(i + 2);
+		float3* n1 = ReturnNormalDirectionByIndex(i);
+		float3* n2 = ReturnNormalDirectionByIndex(i + 1);
+		float3* n3 = ReturnNormalDirectionByIndex(i + 2);
 
 		// average normal of the 3 vertex_normal of each vertex of the face.
-		Vector3<float> final_vertex;
+		float3 final_vertex;
 		final_vertex.x = (n1->x + n2->x + n3->x) / 3.0f; // x coord
 		final_vertex.y = (n1->y + n2->y + n3->y) / 3.0f; // y coord
 		final_vertex.z = (n1->z + n2->z + n3->z) / 3.0f; // z coord
@@ -227,9 +225,9 @@ void ComponentMesh::CalculateFacesNormals()
 	}
 }
 
-Vector3<float>* ComponentMesh::ReturnVertexByIndex(const uint &index) const
+float3* ComponentMesh::ReturnVertexByIndex(const uint &index) const
 {
-	Vector3<float>* ret = new Vector3<float>();
+	float3* ret = new float3;
 	float* first_vertex = &vertexs.buffer[indexs.buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
 
 	ret->x = first_vertex[0];
@@ -239,9 +237,9 @@ Vector3<float>* ComponentMesh::ReturnVertexByIndex(const uint &index) const
 	return ret;
 }
 
-Vector3<float>* ComponentMesh::ReturnNormalDirectionByIndex(const uint &index) const
+float3* ComponentMesh::ReturnNormalDirectionByIndex(const uint &index) const
 {
-	Vector3<float>* ret = new Vector3<float>();
+	float3* ret = new float3;
 	float* first_vertex = &normals_direction.buffer[indexs.buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
 
 	ret->x = first_vertex[0];
@@ -279,4 +277,14 @@ void ComponentMesh::SetTextureActive()
 	texture = nullptr;
 	LOG("No texture activated has been found. The pointer texture has been set with nullptr.");
 	
+}
+
+void ComponentMesh::InspectorDraw() {
+	if (ImGui::CollapsingHeader("Mesh"))
+	{
+		ImGui::Checkbox("FACE NORMALS", &activate_face_normals);
+		ImGui::SameLine();
+		ImGui::Checkbox("VERTEX NORMALS", &activate_vertex_normals);
+	}
+
 }

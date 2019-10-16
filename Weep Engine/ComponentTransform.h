@@ -2,18 +2,24 @@
 #define __COMPONENTTRANSFORM_H__
 
 #include "Component.h"
-#include "Vector3.h"
+#include "MathGeoLib/include/Math/float3.h"
 
 class ComponentTransform : public Component
 {
 public:
 	ComponentTransform();
 
+	void InspectorDraw();
+
 public:
 
-	Vector3<float> position;
-	Vector3<float> rotation;
-	Vector3<float> scale;
+	float3 position;
+	float3 rotation;
+	float3 scale;
+
+private: 
+	
+	float positionx;
 };
 #endif // !__COMPONENTTRANSFORM_H__
 

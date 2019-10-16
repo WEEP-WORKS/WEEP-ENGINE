@@ -24,6 +24,10 @@
 
 #include "mmgr\mmgr.h" //must be after random !!!!!!
 
+#include "ModuleGameObjectManager.h"
+#include "Component.h";
+#include "GameObject.h";
+
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -370,6 +374,18 @@ bool DebugScene::Update()
 	MenuBar(ret);
 
 	Panels();
+
+	GameObject* go = *(App->game_object_manager->objects.begin());
+
+	if (ImGui::Begin("Inspector"))
+	{
+		for (std::vector<Component*>::iterator iter = go->components.begin(); iter != go->components.end(); ++iter)
+		{
+			(*iter)->InspectorDraw();
+		}
+	}
+
+	ImGui::End();
 
 	return ret;
 }

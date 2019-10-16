@@ -15,8 +15,13 @@ public:
 
 	uint LoadTexture(const char* path); // path without directory.
 
+	std::string GetPathTexture();
+	int Width;
+	int Height;
+
 private:
 	std::string dir;
+	std::string f_path;
 };
 
 #endif // !__MODULETEXTURE_H__

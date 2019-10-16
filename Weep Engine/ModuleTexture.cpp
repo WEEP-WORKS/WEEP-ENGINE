@@ -26,12 +26,13 @@ uint ModuleTexture::LoadTexture(const char* path)
 {
 	uint ret = 0u;
 
-	std::string f_path = dir + path;
+	f_path = dir + path;
 
 	if (ilLoadImage(f_path.c_str()))
 	{
 		LOG("Image Loaded correctly");
-
+		Width = ilGetInteger(IL_IMAGE_WIDTH);
+		Height = ilGetInteger(IL_IMAGE_HEIGHT);
 
 		ret = ilutGLBindTexImage();
 		if (ret > 0)
@@ -50,4 +51,9 @@ uint ModuleTexture::LoadTexture(const char* path)
 	}
 
 	return ret;
+}
+
+std::string ModuleTexture::GetPathTexture()
+{
+	return f_path;
 }

@@ -336,9 +336,6 @@
     <ClInclude Include="mmgr\nommgr.h">
       <Filter>Sources\mmgr</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>Sources\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="par_shapes.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
@@ -397,9 +394,6 @@
     </ClCompile>
     <ClCompile Include="DebugScene.cpp">
       <Filter>Sources\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="App.cpp">
-      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Sources\Tools</Filter>
@@ -562,6 +556,9 @@
     </ClCompile>
     <ClCompile Include="ComponentTexture.cpp">
       <Filter>Sources\GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,8 +17,12 @@ public:
 	//GameObject* CreateSphere(const int &);
 	void AddObject(GameObject*);
 
-private:
+	//should be private
 	std::list<GameObject*> objects; //Vector or list?
+	void Hierarchy();
+
+private:
+	//std::list<GameObject*> objects; //Vector or list?
 };
 
 #endif // !__MODULEGAMEOBJECTMANAGER_H__

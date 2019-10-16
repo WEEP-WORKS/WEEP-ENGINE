@@ -18,8 +18,11 @@ public:
 
 	Component* AddComponent(ComponentType);
 	void AddToComonentList(Component * &ret);
-public:
+
+	//should be private
 	std::vector<Component*> components;
+
+public:
 };
 
 

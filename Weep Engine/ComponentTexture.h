@@ -11,7 +11,8 @@ public:
 	void ActivateThisTexture();
 	bool IsTextureActive() const;
 	void DesactivateTexture();
-	
+	void InspectorDraw();
+
 public:
 
 	//Textures

@@ -4,7 +4,7 @@
 
 #include "Component.h"
 #include "Color.h"
-#include "Vector3.h"
+#include "MathGeoLib/include/Math/float3.h"
 
 class ComponentTexture;
 
@@ -12,15 +12,10 @@ class ComponentMesh : public Component
 {
 public:
 	
-
 	//Vertexs:------
 	BuffersData<float> vertexs;
-
-
 	//Indexs:------
 	BuffersData<uint> indexs;
-
-
 	//Normals:------
 	uint num_faces = 0u;		// Number of faces of the mesh.
 	float normal_lenght = 0.5f;		// Lenght of all normals.
@@ -37,13 +32,14 @@ public:
 
 	BuffersData<float> uvs;
 
-	
-
 	Color color;
 
 private:
 
 	ComponentTexture* texture = nullptr;
+
+	bool activate_face_normals = false;
+	bool activate_vertex_normals = false;
 
 public:
 	ComponentMesh();
@@ -56,6 +52,8 @@ public:
 	void CalculateNormals();
 
 	void SetTextureActive();
+
+	void InspectorDraw();
 
 private:
 
@@ -71,9 +69,9 @@ private:
 
 	void RenderFaceNormals();
 
-	inline Vector3<float>* ReturnVertexByIndex(const uint&) const;
+	inline float3 *ReturnVertexByIndex(const uint&) const;
 
-	inline Vector3<float>* ReturnNormalDirectionByIndex(const uint&) const;
+	inline float3 *ReturnNormalDirectionByIndex(const uint&) const;
 };
 
 #endif //__COMPONENTMESH_H__

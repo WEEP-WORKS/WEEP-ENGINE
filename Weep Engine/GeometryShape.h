@@ -6,7 +6,7 @@
 #include "par_shapes.h"
 #include "glew/glew.h"
 #include "Color.h"
-#include "Vector3.h"
+#include "MathGeoLib/include/Math/float3.h"
 
 
 
@@ -137,9 +137,9 @@ public:
 
 	void CalculateVertexsNormals();
 
-	inline Vector3<float>* ReturnVertexByIndex(const uint&) const;
+	inline float3* ReturnVertexByIndex(const uint&) const;
 
-	inline Vector3<float>* ReturnNormalDirectionByIndex(const uint&) const;
+	inline float3* ReturnNormalDirectionByIndex(const uint&) const;
 
 	 
 };
