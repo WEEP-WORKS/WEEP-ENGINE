@@ -36,6 +36,7 @@ void ComponentTexture::DesactivateTexture()
 }
 
 void ComponentTexture::InspectorDraw() {
+	ImGui::SetNextTreeNodeOpen(true);
 	if (ImGui::CollapsingHeader("Texture"))
 	{
 		ImGui::Text("Texture Path: %s ", App->texture->GetPathTexture().c_str());

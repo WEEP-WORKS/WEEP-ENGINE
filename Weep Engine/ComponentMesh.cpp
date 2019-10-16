@@ -280,6 +280,7 @@ void ComponentMesh::SetTextureActive()
 }
 
 void ComponentMesh::InspectorDraw() {
+	ImGui::SetNextTreeNodeOpen(true);
 	if (ImGui::CollapsingHeader("Mesh"))
 	{
 		ImGui::Checkbox("FACE NORMALS", &activate_face_normals);

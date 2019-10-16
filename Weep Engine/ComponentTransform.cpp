@@ -9,6 +9,7 @@ ComponentTransform::ComponentTransform()
 }
 
 void ComponentTransform::InspectorDraw() {
+	ImGui::SetNextTreeNodeOpen(true);
 	if (ImGui::CollapsingHeader("Transform"))
 	{
 		float3 position1 = position;
