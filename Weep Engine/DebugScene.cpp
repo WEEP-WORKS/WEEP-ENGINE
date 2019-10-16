@@ -375,13 +375,42 @@ bool DebugScene::Update()
 
 	Panels();
 
-	GameObject* go = *(App->game_object_manager->objects.begin());
+	//GameObject* go = *(App->game_object_manager->objects.begin());
 
 	if (ImGui::Begin("Inspector"))
 	{
-		for (std::vector<Component*>::iterator iter = go->components.begin(); iter != go->components.end(); ++iter)
+		vector<GameObject*> selected = App->game_object_manager->GetSelectedGameObjects();
+
+		ImGui::Separator();
+
+		if (selected.size() >= 1)
 		{
-			(*iter)->InspectorDraw();
+
+			// Text rename
+			char name[25];
+			sprintf_s(name, 25, selected[0]->GetName());
+			if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
+				selected[0]->SetName(name);
+
+			ImGui::Separator();
+
+			vector<Component*> components = selected[0]->components;
+
+			for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+			{
+				vector<Component*> same_components;
+
+				if (selected.size() > 1)
+				{
+					for (vector<GameObject*>::iterator obj = ++selected.begin(); obj != selected.end(); obj++)
+					{
+						//Component* comp = (*obj)->FindComponentByType((*it)->GetType());
+					}
+				}
+					(*it)->InspectorDraw();
+
+				ImGui::Separator();
+			}
 		}
 	}
 

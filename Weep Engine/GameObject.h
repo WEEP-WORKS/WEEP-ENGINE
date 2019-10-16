@@ -19,10 +19,24 @@ public:
 	Component* AddComponent(ComponentType);
 	void AddToComonentList(Component * &ret);
 
+	void SetSelected(const bool & set);
+
+	void SetName(const std::string& set);
+
+	const char * GetName() const;
+
+	const bool GetSelected() const;
+
+	const int GetId() const;
+
 	//should be private
 	std::vector<Component*> components;
 
-public:
+private:
+	int			id = 0;
+	bool		selected = false;
+	std::string name;
+
 };
 
 

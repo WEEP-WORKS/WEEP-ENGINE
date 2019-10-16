@@ -66,3 +66,28 @@ void GameObject::AddToComonentList(Component * &ret)
 	ret->object = this;
 	components.push_back(ret);
 }
+
+void GameObject::SetSelected(const bool& set)
+{
+	selected = set;
+}
+
+void GameObject::SetName(const std::string& set)
+{
+	name = set;
+}
+
+const char * GameObject::GetName() const
+{
+	return name.c_str();
+}
+
+const bool GameObject::GetSelected() const
+{
+	return selected;
+}
+
+const int GameObject::GetId() const
+{
+	return id;
+}
