@@ -22,6 +22,14 @@ bool ModuleTexture::Start()
 	return true;
 }
 
+void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
+{
+	if(strcmp("png",file_extension) == 0)
+	{
+		LoadTexture(file_name);
+	}
+}
+
 uint ModuleTexture::LoadTexture(const char* path)
 {
 	uint ret = 0u;

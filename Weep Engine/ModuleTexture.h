@@ -12,6 +12,7 @@ public:
 	~ModuleTexture() {};
 
 	bool Start() override;
+	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
 	uint LoadTexture(const char* path); // path without directory.
 

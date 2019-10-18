@@ -16,8 +16,9 @@ public:
 	bool Start() override;
 
 	bool CleanUp() override;
+	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
-	bool LoadFBX(char* path);
+	bool LoadFBX(const char* path);
 	void LoadAllMeshes(const aiScene * scene);
 	void LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentTexture * model);
 	void LoadUVs(ComponentMesh * model, aiMesh * mesh);

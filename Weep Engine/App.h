@@ -38,6 +38,13 @@ public:
 	void SetMaxFps(int set);
 	int GetMaxFps();
 
+	void LoadFile(const char * filepath);
+
+	std::string GetFilePath(const char * file_path);
+	std::string GetFileName(const char * file_path);
+	string GetFileExtension(const char * file_name);
+	string ToLowerCase(std::string str);
+
 	bool GetDebugMode();
 	void SetDebugMode(bool set);
 

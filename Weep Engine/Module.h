@@ -67,6 +67,9 @@ public:
 	bool GetEnabled() const { return enabled; };
 	void SetEnabled(bool set) { enabled = set; };
 
+	virtual void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension) {};
+
+
 	const char * name = "";
 
 private:

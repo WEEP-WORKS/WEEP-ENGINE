@@ -297,3 +297,81 @@ int Application::GetMaxFps()
 	return App->profiler->max_fps;
 }	
 
+void Application::LoadFile(const char * filepath)
+{
+	string path = ProcessFilePath(filepath);
+	string name = GetFileNameFromFilePath(filepath);
+	string extension = ToLowerCase(GetFileExtension(name.c_str()));
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->OnLoadFile(path.c_str(), name.c_str(), extension.c_str());
+	}
+}
+
+std::string Application::GetFilePath(const char * file_path)
+{
+	string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\')
+		{
+			ret += '/';
+			continue;
+		}
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+std::string Application::GetFileName(const char * file_path)
+{
+	string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			ret.clear();
+			continue;
+		}
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+string Application::GetFileExtension(const char * file_name)
+{
+	string ret;
+
+	bool adding = false;
+	for (int i = 0; file_name[i] != '\0'; i++)
+	{
+		if (file_name[i] == '.')
+		{
+			ret.clear();
+			adding = true;
+			continue;
+		}
+
+		if (adding)
+			ret += file_name[i];
+	}
+
+	return ret;
+}
+
+string Application::ToLowerCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = tolower(str[i]);
+	}
+
+	return str;
+}

@@ -55,8 +55,15 @@ char* ModuleImporter::GetPath() const
 	return path;
 }
 
+void ModuleImporter::OnLoadFile(const char* file_path, const char* file_name, const char* file_extension)
+{
+	if (strcmp("fbx", file_extension) == 0)
+	{
+		LoadFBX(file_path);
+	}
+}
 
-bool ModuleImporter::LoadFBX(char* path)
+bool ModuleImporter::LoadFBX(const char* path)
 {
 	bool ret = true;
 
@@ -244,9 +251,6 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 		std::string dir = "Models/Textures/";
 
-		model->id_texture = App->texture->LoadTexture(path.C_Str());
-
-
-	
+		model->id_texture = App->texture->LoadTexture(path.C_Str());	
 	}
 }
