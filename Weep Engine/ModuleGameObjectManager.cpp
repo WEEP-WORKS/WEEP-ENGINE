@@ -112,4 +112,8 @@ void GameObjectManager::PrintGoList(GameObject * object)
 			AddGameObjectToSelected(object);
 		}
 	}
+	if (opened)
+	{
+		ImGui::TreePop();
+	}
 }
