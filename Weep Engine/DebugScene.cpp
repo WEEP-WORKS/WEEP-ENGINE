@@ -935,9 +935,9 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker"};
-		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr"};
-		const char* version[LIB_NUM] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---"};
+		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker", "Asset Importer Library", "Image Library"};
+		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr", "Assimp", "DevIL"};
+		const char* version[LIB_NUM] = { "v2.0", "v.3.1.0", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---", "v3.1.1", "v1.8.0"};
 		static int selected = -1;
 		for (int i = 0; i < LIB_NUM; i++)
 		{

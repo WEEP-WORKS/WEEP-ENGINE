@@ -7,7 +7,7 @@
 #include "glew/glew.h"
 
 #define MAX_SNAKE 2
-#define LIB_NUM 8
+#define LIB_NUM 10
 
 #define checkImageWidth 64
 #define checkImageHeight 64
