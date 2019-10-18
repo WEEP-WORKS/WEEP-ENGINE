@@ -33,6 +33,7 @@ DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
 
 	SetName("DebugScene");
+	configuration = true;
 
 	memset(name_input_buffer, 0, sizeof(name_input_buffer));
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
@@ -707,7 +708,7 @@ void DebugScene::Configuration()
 
 		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
 		{
-			if ((*it)->name != "Camera") 
+			if ((*it)->configuration == true) //(*it)->name != "Camera"
 			{
 				if (ImGui::CollapsingHeader((*it)->name))
 				{

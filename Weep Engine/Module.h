@@ -71,6 +71,7 @@ public:
 
 
 	const char * name = "";
+	bool configuration = false;
 
 private:
 

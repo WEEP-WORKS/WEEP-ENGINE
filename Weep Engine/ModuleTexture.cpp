@@ -10,8 +10,14 @@
 #pragma comment ( lib, "DevIL/ILU.lib")
 #pragma comment ( lib, "DevIL/ILUT.lib")
 
+ModuleTexture::ModuleTexture(bool start_enabled) : Module(start_enabled)
+{
+	SetName("Texture");
+}
+
 bool ModuleTexture::Start()
 {
+
 	ilInit();
 	iluInit();
 	ilutInit();

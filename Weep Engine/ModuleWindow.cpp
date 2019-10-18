@@ -20,6 +20,7 @@ ModuleWindow::ModuleWindow(bool start_enabled) : Module(start_enabled)
 	window = NULL;
 	screen_surface = NULL;
 	SetName("Window");
+	configuration = true;
 }
 
 // Destructor

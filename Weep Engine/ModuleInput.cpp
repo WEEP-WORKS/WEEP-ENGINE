@@ -16,6 +16,7 @@ ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
 
 	SetName("Input");
+	configuration = true;
 }
 
 // Destructor
