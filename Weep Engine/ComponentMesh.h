@@ -55,6 +55,8 @@ public:
 
 	void InspectorDraw();
 
+	ComponentTexture* GetTexture() const;
+
 private:
 
 	void Render();

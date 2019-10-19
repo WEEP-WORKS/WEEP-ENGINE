@@ -64,7 +64,6 @@ void ComponentMesh::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
 
 	RenderModel();
 
@@ -254,6 +253,11 @@ float3* ComponentMesh::ReturnNormalDirectionByIndex(const uint &index) const
 void ComponentMesh::SetTexture(ComponentTexture* texture)
 {
 	this->texture = texture;	
+}
+
+ComponentTexture* ComponentMesh::GetTexture() const
+{
+	return texture;
 }
 
 void ComponentMesh::InspectorDraw() {

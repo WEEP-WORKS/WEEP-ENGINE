@@ -12,6 +12,7 @@ public:
 	virtual ~GameObjectManager() {};
 
 	bool Update() override;
+	void SetCheckersToGOSelected();
 	bool CleanUp() override;
 
 	//GameObject* CreateSphere(const int &);
