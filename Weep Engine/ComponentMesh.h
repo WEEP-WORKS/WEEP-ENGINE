@@ -51,7 +51,7 @@ public:
 
 	void CalculateNormals();
 
-	void SetTextureActive();
+	void SetTexture(ComponentTexture*);
 
 	void InspectorDraw();
 

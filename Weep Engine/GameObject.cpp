@@ -91,3 +91,32 @@ const int GameObject::GetId() const
 {
 	return id;
 }
+ComponentTexture* GameObject::GetTextureActivated() const
+{
+	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == ComponentType::TEXTURE)
+		{
+			ComponentTexture* component = (ComponentTexture*)(*iter);
+			if (component->IsTextureActive())
+			{
+				return component;
+			}
+		}
+	}
+	LOG("There is no texture activated.");
+	return nullptr;
+}
+
+ComponentMesh* GameObject::GetMesh() const
+{
+	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == ComponentType::MESH)
+		{
+			return (ComponentMesh*)(*iter);
+		}
+	}
+
+	return nullptr;
+}

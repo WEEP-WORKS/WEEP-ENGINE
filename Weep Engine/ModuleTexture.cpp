@@ -1,5 +1,8 @@
 #include "ModuleTexture.h"
-
+#include "App.h"
+#include "ModuleGameObjectManager.h"
+#include "GameObject.h"
+#include "ComponentTexture.h"
 
 #include "DevIL/il.h"
 #include "DevIL/ilu.h"
@@ -32,7 +35,18 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 {
 	if(strcmp("png",file_extension) == 0)
 	{
-		LoadTexture(file_name);
+
+		for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
+		{
+			ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
+
+			text->id_texture = LoadTexture(file_name);
+			text->ActivateThisTexture();
+		}
+		if (App->game_object_manager->selected.size() == 0)
+		{
+			LOG("There is not a object selected to aply this texture. Please, select one Game Object first.");
+		}
 	}
 }
 
@@ -45,8 +59,6 @@ uint ModuleTexture::LoadTexture(const char* path)
 	if (ilLoadImage(f_path.c_str()))
 	{
 		LOG("Image Loaded correctly");
-		Width = ilGetInteger(IL_IMAGE_WIDTH);
-		Height = ilGetInteger(IL_IMAGE_HEIGHT);
 
 		ret = ilutGLBindTexImage();
 		if (ret > 0)

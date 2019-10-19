@@ -4,6 +4,8 @@
 #include <vector>
 
 class Component;
+class ComponentTexture;
+class ComponentMesh;
 enum class ComponentType;
 
 
@@ -28,6 +30,11 @@ public:
 	const bool GetSelected() const;
 
 	const int GetId() const;
+
+	ComponentTexture* GetTextureActivated() const;
+
+	ComponentMesh* GetMesh() const;
+
 
 	//should be private
 	std::vector<Component*> components;

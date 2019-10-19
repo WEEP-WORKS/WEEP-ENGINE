@@ -21,17 +21,17 @@ public:
 
 	void ClearSelection();
 
-	const vector<GameObject*> GetSelectedGameObjects() const;
+	// vector<GameObject*> GetSelectedGameObjects() const;
 
 	//should be private
 	std::list<GameObject*> objects; //Vector or list?
 	void Hierarchy();
+	vector<GameObject*> selected;
 
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
-	vector<GameObject*> selected;
 
 };
 

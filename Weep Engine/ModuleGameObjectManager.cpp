@@ -59,10 +59,10 @@ void GameObjectManager::ClearSelection()
 	}
 }
 
-const vector<GameObject*> GameObjectManager::GetSelectedGameObjects() const
-{
-	return selected;
-}
+// vector<GameObject*> GameObjectManager::GetSelectedGameObjects() const
+//{
+//	return selected;
+//}
 
 
 void GameObjectManager::Hierarchy() {

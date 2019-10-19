@@ -380,7 +380,7 @@ bool DebugScene::Update()
 
 	if (ImGui::Begin("Inspector"))
 	{
-		vector<GameObject*> selected = App->game_object_manager->GetSelectedGameObjects();
+		vector<GameObject*> selected = App->game_object_manager->selected;
 
 		ImGui::Separator();
 

@@ -3,27 +3,38 @@
 #include "imgui.h"
 #include "App.h"
 #include "ModuleTexture.h"
+#include "ComponentMesh.h"
 
 void ComponentTexture::ActivateThisTexture()
 {
-	texture_active = true;
 
-	LOG("The texture has been activated correctly");
-
-	for (std::vector<Component*>::iterator iter = object->components.begin(); iter != object->components.end(); ++iter)
+	//for (std::vector<Component*>::iterator iter = object->components.begin(); iter != object->components.end(); ++iter)
+	//{
+	//	if ((*iter)->type == ComponentType::TEXTURE)
+	//	{
+	//		ComponentTexture* component = (ComponentTexture*)(*iter);
+	//		if (component->IsTextureActive() && component != this)
+	//		{
+	//			component->DesactivateTexture();  //only one activated. if this is activated but it exist another texture activated, desactivate the other.
+	//			LOG("Exist another ComponentTexture which has been desactivated");
+	//			return; //return because if it check that another texture has been desactivated, it can't be more than one.
+	//		}
+	//	}
+	//}
+	
+	ComponentTexture* activated_texture = object->GetTextureActivated();
+	if (activated_texture != nullptr)
 	{
-		if ((*iter)->type == ComponentType::TEXTURE)
-		{
-			ComponentTexture* component = (ComponentTexture*)(*iter);
-			if (component->IsTextureActive() && component != this)
-			{
-				component->DesactivateTexture();  //only one activated. if this is activated but it exist another texture activated, desactivate the other.
-				LOG("Exist another ComponentTexture which has been desactivated");
-				return; //return because if it check that another texture has been desactivated, it can't be more than one.
-			}
-		}
+		activated_texture->DesactivateTexture();
+		LOG("Exist another ComponentTexture which has been desactivated");
+		
+
 	}
+	texture_active = true;
+	object->GetMesh()->SetTexture(this);
+	LOG("The texture has been activated correctly");
 }
+
 
 bool ComponentTexture::IsTextureActive() const
 {

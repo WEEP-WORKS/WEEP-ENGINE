@@ -64,7 +64,7 @@ void ComponentMesh::Render()
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	
 
 	RenderModel();
 
@@ -100,6 +100,7 @@ void ComponentMesh::RenderModel()
 
 	if (texture != nullptr)
 	{
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		//bind UVs
 		glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
@@ -250,33 +251,9 @@ float3* ComponentMesh::ReturnNormalDirectionByIndex(const uint &index) const
 }
 
 
-void ComponentMesh::SetTextureActive()
+void ComponentMesh::SetTexture(ComponentTexture* texture)
 {
-	for (std::vector<Component*>::iterator iter = object->components.begin(); iter != object->components.end(); ++iter)
-	{
-		if ((*iter)->type == ComponentType::TEXTURE)
-		{
-			ComponentTexture* component_iter = (ComponentTexture*)(*iter);
-			if (component_iter->IsTextureActive())
-			{
-				ComponentTexture* old_texture = texture;
-				texture = component_iter;
-				if (old_texture != texture)
-				{
-					LOG("The new texture has been bind correctly");
-				}
-				else
-				{
-					LOG("The new texture is the same. Chek that the desire texture has been activated before this call or don't call this function, because is not doing anithing!!");
-				}
-				return ;//return because if it check that one texture is activated, it can't be more than one.
-			}
-		}
-	}
-
-	texture = nullptr;
-	LOG("No texture activated has been found. The pointer texture has been set with nullptr.");
-	
+	this->texture = texture;	
 }
 
 void ComponentMesh::InspectorDraw() {
