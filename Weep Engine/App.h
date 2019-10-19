@@ -42,6 +42,7 @@ public:
 
 	std::string GetFilePath(const char * file_path);
 	std::string GetFileName(const char * file_path);
+	std::string GetFileNameWithoutExtension(const char * file_path);
 	string GetFileExtension(const char * file_name);
 	string ToLowerCase(std::string str);
 

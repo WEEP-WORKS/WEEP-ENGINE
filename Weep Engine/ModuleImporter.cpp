@@ -71,6 +71,7 @@ bool ModuleImporter::LoadFBX(const char* path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		LoadPath((char*)path);
 		LoadAllMeshes(scene);
 	}
 	else
@@ -88,10 +89,11 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
 	for (uint i = 0; i < scene->mNumMeshes; ++i)
 	{
-		//string name = GetPath(); name += "_"; name += std::to_string(i) += "_"; name += std::to_string(i);
+
+		string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
 
 		GameObject* object = new GameObject();
-		//object->SetName(name.c_str());
+		object->SetName(name.c_str());
 		ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 		aiMesh* mesh = scene->mMeshes[i];
 

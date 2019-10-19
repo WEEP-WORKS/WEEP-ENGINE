@@ -31,7 +31,7 @@ public:
 
 private:
 
-	char* path;
+	char* path = "";
 };
 
 #endif // !__MODULEIMPORTER_H__

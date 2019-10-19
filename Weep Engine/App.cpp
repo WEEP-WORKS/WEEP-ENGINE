@@ -345,6 +345,26 @@ std::string Application::GetFileName(const char * file_path)
 	return ret;
 }
 
+std::string Application::GetFileNameWithoutExtension(const char * file_path)
+{
+	string ret;
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			ret.clear();
+			continue;
+		}
+
+		else if (file_path[i] == '.')
+			return ret;
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
 string Application::GetFileExtension(const char * file_name)
 {
 	string ret;
