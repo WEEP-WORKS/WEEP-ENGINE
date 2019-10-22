@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "ModuleInput.h"
 #include "ComponentMesh.h"
+#include "par_shapes.h"
 #include "ModuleTexture.h"
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
@@ -57,6 +58,40 @@ bool GameObjectManager::CleanUp()
 void GameObjectManager::AddObject(GameObject* object)
 {
 	objects.push_back(object);
+}
+
+GameObject* GameObjectManager::CreateGeometryShape(int sides)
+{
+	GameObject* ret = new GameObject();
+
+	
+	return ret;
+}
+
+void GameObjectManager::CreateCube()
+{
+	GameObject* ret = new GameObject();
+	par_shapes_mesh* mesh = par_shapes_create_cube();
+	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+	{
+		cmesh->vertexs.has_data = true;
+		cmesh->vertexs.buffer = mesh->points;
+		cmesh->vertexs.num = mesh->npoints;
+		cmesh->vertexs.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
+
+		cmesh->indexs.has_data = true;
+		cmesh->indexs.buffer = mesh->triangles;
+		cmesh->indexs.num = mesh->ntriangles;
+		cmesh->indexs.buffer_size = (cmesh->indexs.num * 3);
+
+		cmesh->SetBuffersWithData();
+	}
+
+
+
+	AddObject(ret);
 }
 
 void GameObjectManager::AddGameObjectToSelected(GameObject * go)

@@ -293,6 +293,7 @@ bool DebugScene::Start()
 	sphere2->MoveShape(3.f, 3.f, 3.f);
 	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
 	
+	App->game_object_manager->CreateCube();
 
 	if (ret == true)
 	{

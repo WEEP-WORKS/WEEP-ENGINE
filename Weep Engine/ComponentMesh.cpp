@@ -65,6 +65,7 @@ void ComponentMesh::Render()
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
+
 	RenderModel();
 
 	if (normal_vertexs.has_data && activate_vertex_normals)
@@ -114,7 +115,7 @@ void ComponentMesh::RenderModel()
 
 
 	//Draw
-	glDrawElements(GL_TRIANGLES, indexs.num, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, indexs.buffer_size, GL_UNSIGNED_INT, NULL);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

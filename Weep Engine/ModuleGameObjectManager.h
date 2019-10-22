@@ -18,6 +18,10 @@ public:
 	//GameObject* CreateSphere(const int &);
 	void AddObject(GameObject*);
 
+	GameObject* CreateGeometryShape(int sides);
+
+	void CreateCube();
+
 	void AddGameObjectToSelected(GameObject * go);
 
 	void ClearSelection();
@@ -33,6 +37,8 @@ public:
 private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
+
+
 
 };
 
