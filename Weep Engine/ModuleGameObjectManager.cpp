@@ -5,7 +5,6 @@
 #include "imgui.h"
 #include "ModuleInput.h"
 #include "ComponentMesh.h"
-#include "par_shapes.h"
 #include "ModuleTexture.h"
 #include "DebugScene.h"
 
@@ -77,27 +76,60 @@ void GameObjectManager::CreateCube()
 
 	if (mesh != nullptr)
 	{
-		cmesh->vertexs.has_data = true;
-		cmesh->vertexs.buffer = mesh->points;
-		cmesh->vertexs.num = mesh->npoints;
-		cmesh->vertexs.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
+		LoadGeometryShapeInfo(cmesh, mesh);
+	}
 
-		cmesh->indexs.has_data = true;
-		cmesh->indexs.buffer = mesh->triangles;
-		cmesh->indexs.num = mesh->ntriangles;
-		cmesh->indexs.buffer_size = (cmesh->indexs.num * 3);
+	AddObject(ret);
+}
 
+void GameObjectManager::CreateSphere()
+{
+	GameObject* ret = new GameObject();
+	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(1);
+	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
+
+	if (mesh != nullptr)
+	{
+		LoadGeometryShapeInfo(cmesh, mesh);
+	}
+
+	AddObject(ret);
+}
+
+void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh)
+{
+	cmesh->vertexs.has_data = true;
+	cmesh->vertexs.buffer = mesh->points;
+	cmesh->vertexs.num = mesh->npoints;
+	cmesh->vertexs.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
+
+	cmesh->indexs.has_data = true;
+	cmesh->indexs.buffer = mesh->triangles;
+	cmesh->indexs.num = mesh->ntriangles;
+	cmesh->indexs.buffer_size = (cmesh->indexs.num * 3);
+
+	if (mesh->normals != nullptr)
+	{
+		cmesh->normal_vertexs.has_data = true;
+		cmesh->normal_faces.has_data = true;
 		cmesh->normals_direction.has_data = true;
-		cmesh->normals_direction.buffer = mesh->normals;
+
+		cmesh->num_faces = cmesh->indexs.num-10;
+
+		cmesh->normal_vertexs.num = cmesh->vertexs.num;
+		cmesh->normal_faces.num = cmesh->num_faces;
 		cmesh->normals_direction.num = cmesh->vertexs.num;
+
+		cmesh->normals_direction.buffer = mesh->normals;
 		cmesh->normals_direction.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
 
-		cmesh->SetBuffersWithData();
+
+		cmesh->CalculateNormals();
 	}
 
 
-
-	AddObject(ret);
+	cmesh->SetBuffersWithData();
+		
 }
 
 void GameObjectManager::AddGameObjectToSelected(GameObject * go)

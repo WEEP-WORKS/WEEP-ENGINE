@@ -2,8 +2,11 @@
 #define __MODULEGAMEOBJECTMANAGER_H__
 
 #include "Module.h"
+#include "Globals.h"
+#include "par_shapes.h"
 
 class GameObject;
+class ComponentMesh;
 
 class GameObjectManager : public Module
 {
@@ -21,6 +24,9 @@ public:
 	GameObject* CreateGeometryShape(int sides);
 
 	void CreateCube();
+	void CreateSphere();
+
+	void LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh);
 
 	void AddGameObjectToSelected(GameObject * go);
 
