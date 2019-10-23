@@ -122,20 +122,21 @@ void GameObjectManager::ClearSelection()
 //}
 
 
-void GameObjectManager::Hierarchy() 
+void GameObjectManager::Hierarchy()
 {
-
-	ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowPos(ImVec2(0, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
-	
-	if (ImGui::Begin("Hierarchy",&App->debug_scene->activate_hierarchy, ImGuiWindowFlags_NoSavedSettings))
+	if (App->debug_scene->activate_hierarchy)
 	{
-		for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
+		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(0, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
+		if (ImGui::Begin("Hierarchy",NULL,ImGuiWindowFlags_NoSavedSettings))
 		{
+			for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
+			{
 				PrintGoList((*item));
+			}
 		}
+		ImGui::End();
 	}
-	ImGui::End();
 
 }
 
