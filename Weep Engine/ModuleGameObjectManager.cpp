@@ -87,6 +87,11 @@ void GameObjectManager::CreateCube()
 		cmesh->indexs.num = mesh->ntriangles;
 		cmesh->indexs.buffer_size = (cmesh->indexs.num * 3);
 
+		cmesh->normals_direction.has_data = true;
+		cmesh->normals_direction.buffer = mesh->normals;
+		cmesh->normals_direction.num = cmesh->vertexs.num;
+		cmesh->normals_direction.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
+
 		cmesh->SetBuffersWithData();
 	}
 
