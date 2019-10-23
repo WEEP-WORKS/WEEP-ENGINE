@@ -493,6 +493,7 @@ void DebugScene::MenuBar(bool &ret)
 		if (ImGui::BeginMenu("Window"))
 		{
 			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
+			ImGui::MenuItem("Hierarchy", NULL, &activate_hierarchy);
 			ImGui::EndMenu();
 		}
 

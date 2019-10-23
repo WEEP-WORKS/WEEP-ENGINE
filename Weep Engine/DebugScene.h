@@ -54,6 +54,7 @@ public:
 
 	// Main loop
 	bool done = false;
+	bool activate_hierarchy = true;
 
 private:
 

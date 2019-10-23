@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "par_shapes.h"
 #include "ModuleTexture.h"
+#include "DebugScene.h"
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
@@ -121,15 +122,21 @@ void GameObjectManager::ClearSelection()
 //}
 
 
-void GameObjectManager::Hierarchy() {
-	if (ImGui::Begin("Hierarchy"))
+void GameObjectManager::Hierarchy() 
+{
+
+	ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(0, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
+	
+	if (ImGui::Begin("Hierarchy",&App->debug_scene->activate_hierarchy, ImGuiWindowFlags_NoSavedSettings))
 	{
 		for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
-			PrintGoList((*item));
+				PrintGoList((*item));
 		}
 	}
 	ImGui::End();
+
 }
 
 
