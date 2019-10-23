@@ -124,7 +124,7 @@ void GameObjectManager::ClearSelection()
 
 void GameObjectManager::Hierarchy()
 {
-	if (App->debug_scene->activate_hierarchy)
+	if (App->debug_scene->show_hierarchy)
 	{
 		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowPos(ImVec2(0, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
