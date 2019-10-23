@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "par_shapes.h"
 #include "ModuleTexture.h"
+#include "ComponentTexture.h"
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
@@ -16,10 +17,7 @@ GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 
 bool GameObjectManager::Update() //dt?
 {
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)  //with imgui do this when activate the option to the game object selected or something like that.
-	{
-		SetCheckersToGOSelected();
-	}
+
 	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
 		(*item)->Update();
@@ -28,21 +26,6 @@ bool GameObjectManager::Update() //dt?
 	Hierarchy();
 
 	return true;
-}
-
-void GameObjectManager::SetCheckersToGOSelected()
-{
-	for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
-	{
-		if ((*iter)->GetMesh()->GetTexture() != App->texture->GetCheckersTexture())
-		{
-			(*iter)->GetMesh()->SetTexture(App->texture->GetCheckersTexture());
-		}
-		else
-		{
-			(*iter)->GetMesh()->SetTexture((*iter)->GetTextureActivated());
-		}
-	}
 }
 
 bool GameObjectManager::CleanUp()
