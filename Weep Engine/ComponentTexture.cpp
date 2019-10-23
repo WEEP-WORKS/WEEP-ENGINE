@@ -50,8 +50,11 @@ void ComponentTexture::DesactivateTexture()
 
 void ComponentTexture::Update()
 {
-	if(activate_checkers)
+	if (activate_checkers)
+	{
 		SetCheckersToGOSelected();
+		activate_checkers = false;
+	}
 }
 
 void ComponentTexture::SetCheckersToGOSelected()
