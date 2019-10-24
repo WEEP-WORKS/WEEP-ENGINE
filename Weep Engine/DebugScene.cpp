@@ -293,11 +293,11 @@ bool DebugScene::Start()
 	sphere2->MoveShape(3.f, 3.f, 3.f);
 	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
 	
-	App->game_object_manager->CreateCube();
+	App->game_object_manager->CreateSphere();
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+		//ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
 	}
 
 	if (ret == true)
@@ -379,44 +379,49 @@ bool DebugScene::Update()
 
 	//GameObject* go = *(App->game_object_manager->objects.begin());
 
-	if (ImGui::Begin("Inspector"))
+	if (App->debug_scene->show_inspector)
 	{
-		vector<GameObject*> selected = App->game_object_manager->selected;
-
-		ImGui::Separator();
-
-		if (selected.size() >= 1)
+		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(970, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
+		if (ImGui::Begin("Inspector",NULL, ImGuiWindowFlags_NoSavedSettings))
 		{
-
-			// Text rename
-			char name[25];
-			sprintf_s(name, 25, selected[0]->GetName());
-			if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
-				selected[0]->SetName(name);
+			vector<GameObject*> selected = App->game_object_manager->selected;
 
 			ImGui::Separator();
 
-			vector<Component*> components = selected[0]->components;
-
-			for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+			if (selected.size() >= 1)
 			{
-				vector<Component*> same_components;
 
-				if (selected.size() > 1)
-				{
-					for (vector<GameObject*>::iterator obj = ++selected.begin(); obj != selected.end(); obj++)
-					{
-						//Component* comp = (*obj)->FindComponentByType((*it)->GetType());
-					}
-				}
-					(*it)->InspectorDraw();
+				// Text rename
+				char name[25];
+				sprintf_s(name, 25, selected[0]->GetName());
+				if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
+					selected[0]->SetName(name);
 
 				ImGui::Separator();
+
+				vector<Component*> components = selected[0]->components;
+
+				for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+				{
+					vector<Component*> same_components;
+
+					if (selected.size() > 1)
+					{
+						for (vector<GameObject*>::iterator obj = ++selected.begin(); obj != selected.end(); obj++)
+						{
+							//Component* comp = (*obj)->FindComponentByType((*it)->GetType());
+						}
+					}
+					(*it)->InspectorDraw();
+
+					ImGui::Separator();
+				}
 			}
 		}
-	}
 
-	ImGui::End();
+		ImGui::End();
+	}
 
 	return ret;
 }
@@ -493,6 +498,8 @@ void DebugScene::MenuBar(bool &ret)
 		if (ImGui::BeginMenu("Window"))
 		{
 			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
+			ImGui::MenuItem("Hierarchy", NULL, &show_hierarchy);
+			ImGui::MenuItem("Inspector", NULL, &show_inspector);
 			ImGui::EndMenu();
 		}
 

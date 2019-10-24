@@ -54,6 +54,8 @@ public:
 
 	// Main loop
 	bool done = false;
+	bool show_hierarchy = true;
+	bool show_inspector = true;
 
 private:
 
