@@ -6,40 +6,56 @@
 #include "par_shapes.h"
 #include "glew/glew.h"
 #include "Color.h"
-#include "Vector3.h"
+#include "MathGeoLib/include/Math/float3.h"
+
+
+
+
+//---------------
+ //All old things like geometry things don't erase yet. (but it's unused)
+//-------------
+
+
+
+
+
 
 
 //----------------------------------------------------------------------------------
 //-------------------------------GEOMETRY SHAPE BASIC-------------------------------
 //----------------------------------------------------------------------------------
+
+
+
+
 class GeometryShape
 {
 public:
 	template <typename BufferType>
 	struct BuffersData
 	{
-		bool has_data		= false;	// If exist the data type.
-		uint num			= 0u;		// Number of the data type.
+		bool has_data = false;	// If exist the data type.
+		uint num = 0u;		// Number of the data type.
 
-		GLuint id_buffer	= 0u;		// Id of the buffer.
-		BufferType* buffer		= nullptr;	// The buffer with data.
-		uint buffer_size	= 0u;		// The size of the buffer.
+		GLuint id_buffer = 0u;		// Id of the buffer.
+		BufferType* buffer = nullptr;	// The buffer with data.
+		uint buffer_size = 0u;		// The size of the buffer.
 
 	};
 
-	par_shapes_mesh* mesh = nullptr;
+	
 
 	//Vertexs:------
 	BuffersData<float> vertexs;
-	
+
 
 	//Indexs:------
 	BuffersData<uint> indexs;
 
 
 	//Normals:------
-	uint num_faces						= 0u;		// Number of faces of the mesh.
-	float normal_lenght					= 0.5f;		// Lenght of all normals.
+	uint num_faces = 0u;		// Number of faces of the mesh.
+	float normal_lenght = 0.5f;		// Lenght of all normals.
 
 	BuffersData<float> normals_direction;
 
@@ -47,6 +63,8 @@ public:
 
 	BuffersData<float> normal_faces;
 
+	//----
+	par_shapes_mesh* mesh = nullptr;
 
 	//UVs
 	uint num_uvs_channels				= 0u; //local var?
@@ -65,10 +83,8 @@ public:
 	GeometryShape() { color.r = color.g = color.b = 1.f;};
 	~GeometryShape()
 	{
-		if (mesh != nullptr)
-		{
-			par_shapes_free_mesh(mesh);
-		}
+		par_shapes_free_mesh(mesh);
+	
 	};
 
 
@@ -121,9 +137,9 @@ public:
 
 	void CalculateVertexsNormals();
 
-	inline Vector3<float>* ReturnVertexByIndex(const uint&) const;
+	inline float3* ReturnVertexByIndex(const uint&) const;
 
-	inline Vector3<float>* ReturnNormalDirectionByIndex(const uint&) const;
+	inline float3* ReturnNormalDirectionByIndex(const uint&) const;
 
 	 
 };

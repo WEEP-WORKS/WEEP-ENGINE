@@ -24,6 +24,8 @@ private:
 
 	void CalculateViewMatrix();
 
+	void Focus(const vec3 & focus, const float & distance);
+
 public:
 	
 	vec3 X, Y, Z, Position, Reference;

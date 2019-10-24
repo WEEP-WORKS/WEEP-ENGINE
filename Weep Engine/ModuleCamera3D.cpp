@@ -55,21 +55,14 @@ bool ModuleCamera3D::CleanUp()
 bool ModuleCamera3D::Update()
 {
 	bool ret = true;
-
+	float Sensitivity = 0.25f;
 	vec3 newPos(0, 0, 0);
 	float speed = 3.0f * App->GetDT();
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		speed = 8.0f * App->GetDT();
+		speed = 6.0f * App->GetDT();
 
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed * 1;
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed * 1;
-
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed * 1;
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed * 1;
-
-
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed * 1;
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed * 1;
+	if (App->input->GetMouseZ() == 1) newPos -= Z * speed * 1;
+	else if (App->input->GetMouseZ() == -1)	newPos += Z * speed;
 
 	Position += newPos;
 	Reference += newPos;
@@ -78,10 +71,24 @@ bool ModuleCamera3D::Update()
 
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed * 1;
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed * 1;
+
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed * 1;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed * 1;
+
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed * 1;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed * 1;
+
+		Position += newPos;
+		Reference += newPos;
+
+		Reference = Position;
+
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
-		float Sensitivity = 0.25f;
+		
 
 		Position -= Reference;
 
@@ -109,6 +116,51 @@ bool ModuleCamera3D::Update()
 		}
 
 		Position = Reference + Z * length(Position);
+	}
+	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_LALT) || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT)
+		{
+			if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed * 1;
+
+			if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed * 1;
+
+			Position += newPos;
+			Reference += newPos;
+
+			Reference = vec3(0,0,0);
+
+			int dx = -App->input->GetMouseXMotion();
+			int dy = -App->input->GetMouseYMotion();
+
+			Position -= Reference;
+
+			if (dx != 0)
+			{
+				float DeltaX = (float)dx * Sensitivity;
+
+				// Rotate arround the y axis
+				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			}
+
+			if (dy != 0)
+			{
+				float DeltaY = (float)dy * Sensitivity;
+
+				// Rotate arround the X direction
+				Y = rotate(Y, DeltaY, X);
+				Z = rotate(Z, DeltaY, X);
+			}
+
+			Position = Reference + Z * length(Position);
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		Focus(vec3(0, 0, 0), 10);
 	}
 
 	// Recalculate matrix -------------
@@ -169,4 +221,11 @@ void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+void ModuleCamera3D::Focus(const vec3& focus, const float& distance)
+{
+	Reference = focus;
+
+	Position = Reference + Z * distance;
 }

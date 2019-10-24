@@ -24,11 +24,16 @@
 
 #include "mmgr\mmgr.h" //must be after random !!!!!!
 
+#include "ModuleGameObjectManager.h"
+#include "Component.h";
+#include "GameObject.h";
+
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
 
 	SetName("DebugScene");
+	configuration = true;
 
 	memset(name_input_buffer, 0, sizeof(name_input_buffer));
 	memset(organization_input_buffer, 0, sizeof(organization_input_buffer));
@@ -288,10 +293,11 @@ bool DebugScene::Start()
 	sphere2->MoveShape(3.f, 3.f, 3.f);
 	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
 	
+	App->game_object_manager->CreateSphere();
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+		//ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
 	}
 
 	if (ret == true)
@@ -371,6 +377,52 @@ bool DebugScene::Update()
 
 	Panels();
 
+	//GameObject* go = *(App->game_object_manager->objects.begin());
+
+	if (App->debug_scene->show_inspector)
+	{
+		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(970, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
+		if (ImGui::Begin("Inspector",NULL, ImGuiWindowFlags_NoSavedSettings))
+		{
+			vector<GameObject*> selected = App->game_object_manager->selected;
+
+			ImGui::Separator();
+
+			if (selected.size() >= 1)
+			{
+
+				// Text rename
+				char name[25];
+				sprintf_s(name, 25, selected[0]->GetName());
+				if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
+					selected[0]->SetName(name);
+
+				ImGui::Separator();
+
+				vector<Component*> components = selected[0]->components;
+
+				for (vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+				{
+					vector<Component*> same_components;
+
+					if (selected.size() > 1)
+					{
+						for (vector<GameObject*>::iterator obj = ++selected.begin(); obj != selected.end(); obj++)
+						{
+							//Component* comp = (*obj)->FindComponentByType((*it)->GetType());
+						}
+					}
+					(*it)->InspectorDraw();
+
+					ImGui::Separator();
+				}
+			}
+		}
+
+		ImGui::End();
+	}
+
 	return ret;
 }
 
@@ -446,6 +498,8 @@ void DebugScene::MenuBar(bool &ret)
 		if (ImGui::BeginMenu("Window"))
 		{
 			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
+			ImGui::MenuItem("Hierarchy", NULL, &show_hierarchy);
+			ImGui::MenuItem("Inspector", NULL, &show_inspector);
 			ImGui::EndMenu();
 		}
 
@@ -662,7 +716,7 @@ void DebugScene::Configuration()
 
 		for (list<Module*>::iterator it = App->modules.begin(); it != App->modules.end(); it++)
 		{
-			if ((*it)->name != "Camera") 
+			if ((*it)->configuration == true) //(*it)->name != "Camera"
 			{
 				if (ImGui::CollapsingHeader((*it)->name))
 				{
@@ -890,9 +944,9 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker"};
-		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr"};
-		const char* version[LIB_NUM] = { "v2.0", "v.3._", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---"};
+		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker", "Asset Importer Library", "Image Library"};
+		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr", "Assimp", "DevIL"};
+		const char* version[LIB_NUM] = { "v2.0", "v.3.1.0", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---", "v3.1.1", "v1.8.0"};
 		static int selected = -1;
 		for (int i = 0; i < LIB_NUM; i++)
 		{

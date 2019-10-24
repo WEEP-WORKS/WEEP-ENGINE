@@ -16,6 +16,7 @@ ModuleInput::ModuleInput(bool start_enabled) : Module(start_enabled)
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
 
 	SetName("Input");
+	configuration = true;
 }
 
 // Destructor
@@ -154,7 +155,8 @@ bool ModuleInput::PreUpdate()
 			break;
 
 			case SDL_DROPFILE:
-				App->importer->LoadFBX(e.drop.file);
+				string file = e.drop.file;
+				App->LoadFile(file.c_str());
 				SDL_free(e.drop.file);
 			break;
 		}

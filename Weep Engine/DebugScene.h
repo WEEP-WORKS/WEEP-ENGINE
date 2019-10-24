@@ -3,13 +3,13 @@
 #include "Module.h"
 #include "Globals.h"
 #include "imgui.h"
-#include "GeometryShape.h"
+//#include "GeometryShape.h"
+#include "glew/glew.h"
 
 #define MAX_SNAKE 2
-#define LIB_NUM 8
+#define LIB_NUM 10
 
-#define checkImageWidth 64
-#define checkImageHeight 64
+
 
 #include "par_shapes.h"
 
@@ -54,6 +54,8 @@ public:
 
 	// Main loop
 	bool done = false;
+	bool show_hierarchy = true;
+	bool show_inspector = true;
 
 private:
 
@@ -103,9 +105,9 @@ private:
 	std::vector<float> vertices;
 	std::vector<uint>  indices;
 
-	//Shapes
+	/*//Shapes
 	GeometrySphere* sphere;
-	GeometrySphere* sphere2;
+	GeometrySphere* sphere2;*/
 
 	//Textures
 	GLuint texName;

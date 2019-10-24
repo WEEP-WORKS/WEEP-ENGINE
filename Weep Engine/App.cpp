@@ -4,7 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
-#include "GeometryShape.h"
+#include "ModuleGameObjectManager.h"
 #include "ModuleImporter.h"
 #include "ModuleTexture.h"
 
@@ -22,7 +22,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	renderer3D = new ModuleRenderer3D();
 	camera = new ModuleCamera3D();
 	debug_scene = new DebugScene();
-	shape_manager = new ShapeManager();
+	game_object_manager = new GameObjectManager();
 	importer = new ModuleImporter();
 	texture = new ModuleTexture();
 
@@ -36,7 +36,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(importer);
 	AddModule(texture);
-	AddModule(shape_manager);
+	AddModule(game_object_manager);
 	AddModule(debug_scene);
 
 
@@ -297,3 +297,101 @@ int Application::GetMaxFps()
 	return App->profiler->max_fps;
 }	
 
+void Application::LoadFile(const char * filepath)
+{
+	string path = GetFilePath(filepath);
+	string name = GetFileName(filepath);
+	string extension = ToLowerCase(GetFileExtension(name.c_str()));
+
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end(); it++)
+	{
+		(*it)->OnLoadFile(path.c_str(), name.c_str(), extension.c_str());
+	}
+}
+
+std::string Application::GetFilePath(const char * file_path)
+{
+	string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\')
+		{
+			ret += '/';
+			continue;
+		}
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+std::string Application::GetFileName(const char * file_path)
+{
+	string ret;
+
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			ret.clear();
+			continue;
+		}
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+std::string Application::GetFileNameWithoutExtension(const char * file_path)
+{
+	string ret;
+	for (int i = 0; file_path[i] != '\0'; i++)
+	{
+		if (file_path[i] == '\\' || file_path[i] == '/')
+		{
+			ret.clear();
+			continue;
+		}
+
+		else if (file_path[i] == '.')
+			return ret;
+
+		ret += file_path[i];
+	}
+
+	return ret;
+}
+
+string Application::GetFileExtension(const char * file_name)
+{
+	string ret;
+
+	bool adding = false;
+	for (int i = 0; file_name[i] != '\0'; i++)
+	{
+		if (file_name[i] == '.')
+		{
+			ret.clear();
+			adding = true;
+			continue;
+		}
+
+		if (adding)
+			ret += file_name[i];
+	}
+
+	return ret;
+}
+
+string Application::ToLowerCase(std::string str)
+{
+	for (uint i = 0; i < str.size(); i++)
+	{
+		str[i] = tolower(str[i]);
+	}
+
+	return str;
+}

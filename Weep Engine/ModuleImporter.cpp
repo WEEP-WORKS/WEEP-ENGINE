@@ -1,6 +1,9 @@
 #include "App.h"
 #include "ModuleImporter.h"
-#include "GeometryShape.h"
+#include "ModuleGameObjectManager.h"
+#include "GameObject.h"
+#include "ComponentMesh.h"
+#include "ComponentTexture.h"
 #include "ModuleTexture.h"
 
 #include "Assimp/include/cimport.h"
@@ -52,8 +55,15 @@ char* ModuleImporter::GetPath() const
 	return path;
 }
 
+void ModuleImporter::OnLoadFile(const char* file_path, const char* file_name, const char* file_extension)
+{
+	if (strcmp("fbx", file_extension) == 0)
+	{
+		LoadFBX(file_path);
+	}
+}
 
-bool ModuleImporter::LoadFBX(char* path)
+bool ModuleImporter::LoadFBX(const char* path)
 {
 	bool ret = true;
 
@@ -61,6 +71,7 @@ bool ModuleImporter::LoadFBX(char* path)
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		LoadPath((char*)path);
 		LoadAllMeshes(scene);
 	}
 	else
@@ -78,40 +89,60 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
 	for (uint i = 0; i < scene->mNumMeshes; ++i)
 	{
-		GeometryShape* model = new FBXShape();
+
+		string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
+
+		GameObject* object = new GameObject();
+		object->SetName(name.c_str());
+		ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 		aiMesh* mesh = scene->mMeshes[i];
 
-		LoadVertices(model, mesh);
-
-		if (mesh->HasFaces())
+		if (model != nullptr)
 		{
-			LoadIndexs(model, mesh);
-		}
+			LoadVertices(model, mesh);
 
-		if (mesh->HasNormals())
-		{
-			LoadNormals(model, mesh);
-		}
+			if (mesh->HasFaces())
+			{
+				LoadIndexs(model, mesh);
+			}
 
-		model->num_uvs_channels = mesh->GetNumUVChannels(); 
-		if (model->num_uvs_channels > 0)
-		{
+			if (mesh->HasNormals())
+			{
+				LoadNormals(model, mesh);
+			}
+
+			model->num_uvs_channels = mesh->GetNumUVChannels();
+
 			LoadUVs(model, mesh);
-		}
 
-		if (scene->HasMaterials())
+			model->SetBuffersWithData();
+
+			if (model->num_uvs_channels > 0 && scene->HasMaterials())
+			{
+
+				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+				model->num_uvs_channels = mesh->GetNumUVChannels();
+
+				
+				LoadMaterials(scene, mesh, text);
+
+				text->ActivateThisTexture();
+			}
+
+
+			App->game_object_manager->AddObject(object);
+		}
+		else
 		{
-			LoadMaterials(scene, mesh, model);
+			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object");
 		}
-
-		App->shape_manager->AddShape(model);
 
 	}
 }
 
 // ----------------------------Vertexs----------------------------
 
-void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
+void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
 {
 	model->vertexs.has_data = true;
 
@@ -127,7 +158,7 @@ void ModuleImporter::LoadVertices(GeometryShape * model, aiMesh * mesh)
 
 // ----------------------------Indexs----------------------------
 
-void ModuleImporter::LoadIndexs(GeometryShape * model, aiMesh * mesh)
+void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 {
 	model->indexs.has_data = true;
 
@@ -156,7 +187,7 @@ void ModuleImporter::LoadIndexs(GeometryShape * model, aiMesh * mesh)
 
 // ----------------------------Normals----------------------------
 
-void ModuleImporter::LoadNormals(GeometryShape * model, aiMesh * mesh)
+void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 {
 	//load normals direction of the vertex_normals.
 	model->normals_direction.has_data = true;
@@ -174,13 +205,13 @@ void ModuleImporter::LoadNormals(GeometryShape * model, aiMesh * mesh)
 	model->CalculateNormals();
 }
 
-// ----------------------------UVs----------------------------
+ //----------------------------UVs----------------------------
 
-void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
+void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 {
 	model->uvs.has_data = true;
 
-	model->uvs.num = model->vertexs.num; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
+	model->uvs.num = mesh->mNumVertices; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
 
 	model->uvs.buffer_size = model->num_uvs_channels * model->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
 	model->uvs.buffer = new float[model->uvs.buffer_size];
@@ -207,9 +238,9 @@ void ModuleImporter::LoadUVs(GeometryShape * model, aiMesh * mesh)
 	}
 }
 
-// ----------------------------Materials----------------------------
+ //----------------------------Materials----------------------------
 
-void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, GeometryShape * model)
+void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentTexture * model)
 {
 	model->has_texture = true;
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -221,9 +252,6 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Geometr
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 		std::string dir = "Models/Textures/";
 
-		model->id_texture = App->texture->LoadTexture(path.C_Str());
-
-
-	
+		model->id_texture = App->texture->LoadTexture(path.C_Str());	
 	}
 }
