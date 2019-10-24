@@ -38,8 +38,8 @@ private:
 
 	ComponentTexture* texture = nullptr;
 
-	bool activate_face_normals = true;
-	bool activate_vertex_normals = true;
+	bool activate_face_normals = false;
+	bool activate_vertex_normals = false;
 
 public:
 	ComponentMesh();

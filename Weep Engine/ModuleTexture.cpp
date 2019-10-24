@@ -33,7 +33,7 @@ bool ModuleTexture::Start()
 
 void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
 {
-	if(strcmp("png",file_extension) == 0)
+	if(strcmp("png",file_extension) == 0 || strcmp("dds", file_extension) == 0)
 	{
 
 		for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)

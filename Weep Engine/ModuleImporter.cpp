@@ -252,6 +252,6 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 		std::string dir = "Models/Textures/";
 
-		model->id_texture = App->texture->LoadTexture(path.C_Str());	
+		//model->id_texture = App->texture->LoadTexture(path.C_Str());	
 	}
 }
