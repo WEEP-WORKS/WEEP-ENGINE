@@ -335,6 +335,8 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		resettest(ret);
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
@@ -423,7 +425,14 @@ bool DebugScene::Update()
 		ImGui::End();
 	}
 
+	
 	return ret;
+}
+
+void DebugScene::resettest(bool &ret)
+{
+	App->game_object_manager->CleanUp();
+	ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
 }
 
 void DebugScene::Panels()
