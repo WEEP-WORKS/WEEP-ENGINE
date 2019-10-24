@@ -73,8 +73,8 @@ void ComponentTexture::SetCheckersToGOSelected()
 }
 
 void ComponentTexture::InspectorDraw() {
-	ImGui::SetNextTreeNodeOpen(true);
-	if (ImGui::CollapsingHeader("Texture"))
+
+	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Text("Texture Path: %s ", App->texture->GetPathTexture().c_str());
 		ImGui::Separator();

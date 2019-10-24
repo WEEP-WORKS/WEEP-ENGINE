@@ -6,11 +6,12 @@ ComponentTransform::ComponentTransform()
 	position = float3::zero;
 	rotation = float3::zero;
 	scale = float3::zero;
+	
 }
 
 void ComponentTransform::InspectorDraw() {
-	ImGui::SetNextTreeNodeOpen(true);
-	if (ImGui::CollapsingHeader("Transform"))
+	
+	if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		float3 position1 = position;
 		float3 rotation1 = rotation;
