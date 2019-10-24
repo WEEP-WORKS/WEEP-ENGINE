@@ -13,7 +13,8 @@ void GameObject::Update()
 {
 	for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
 	{
-		(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
+		if ((*iter)->IsActive())
+			(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
 	}
 }
 
@@ -91,6 +92,17 @@ const int GameObject::GetId() const
 {
 	return id;
 }
+
+bool GameObject::IsActive() const
+{
+	return active;
+}
+
+void GameObject::SetActive(const bool & to_active)
+{
+	active = to_active;
+}
+
 ComponentTexture* GameObject::GetTextureActivated() const
 {
 	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)

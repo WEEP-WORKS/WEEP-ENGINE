@@ -72,10 +72,13 @@ void ComponentTexture::SetCheckersToGOSelected()
 	}
 }
 
-void ComponentTexture::InspectorDraw() {
+void ComponentTexture::InspectorDraw()
+{
+	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
 
-	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen))
-	{
+		ImGui::SameLine();
+		ActiveImGui();
+
 		ImGui::Text("Texture Path: %s ", App->texture->GetPathTexture().c_str());
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");

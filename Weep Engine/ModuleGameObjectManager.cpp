@@ -21,7 +21,8 @@ bool GameObjectManager::Update() //dt?
 
 	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
-		(*item)->Update();
+		if((*item)->IsActive())
+			(*item)->Update();
 	}
 
 	Hierarchy();
@@ -164,6 +165,9 @@ void GameObjectManager::Hierarchy()
 
 void GameObjectManager::PrintGoList(GameObject * object)
 {
+	if (object->IsActive() == false)
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
+
 	if (object == nullptr)
 		return;
 
@@ -201,4 +205,6 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	{
 		ImGui::TreePop();
 	}
+	if (object->IsActive() == false)
+		ImGui::PopStyleColor();
 }

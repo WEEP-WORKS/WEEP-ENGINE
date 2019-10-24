@@ -31,6 +31,10 @@ public:
 
 	const int GetId() const;
 
+	bool IsActive() const;
+
+	void SetActive(const bool &to_active);
+
 	ComponentTexture* GetTextureActivated() const;
 
 	ComponentMesh* GetMesh() const;
@@ -43,6 +47,7 @@ private:
 	int			id = 0;
 	bool		selected = false;
 	std::string name;
+	bool active = true;
 
 };
 

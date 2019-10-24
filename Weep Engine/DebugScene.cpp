@@ -391,7 +391,12 @@ bool DebugScene::Update()
 
 			if (selected.size() >= 1)
 			{
-
+				ImGui::PushID(selected[0]);
+				bool to_active = selected[0]->IsActive();
+				if (ImGui::Checkbox("", &to_active))
+					selected[0]->SetActive(to_active);
+				ImGui::PopID();
+				ImGui::SameLine();
 				// Text rename
 				char name[25];
 				sprintf_s(name, 25, selected[0]->GetName());
