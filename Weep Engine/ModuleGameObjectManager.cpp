@@ -85,7 +85,7 @@ void GameObjectManager::CreateCube()
 void GameObjectManager::CreateSphere()
 {
 	GameObject* ret = new GameObject();
-	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(1);
+	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(2);
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 
 	if (mesh != nullptr)
@@ -114,7 +114,7 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 		cmesh->normal_faces.has_data = true;
 		cmesh->normals_direction.has_data = true;
 
-		cmesh->num_faces = cmesh->indexs.num-10;
+		cmesh->num_faces = cmesh->indexs.num;
 
 		cmesh->normal_vertexs.num = cmesh->vertexs.num;
 		cmesh->normal_faces.num = cmesh->num_faces;
