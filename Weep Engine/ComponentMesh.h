@@ -1,7 +1,7 @@
 #ifndef __COMPONENTMESH_H__
 #define __COMPONENTMESH_H__
 
-
+#include "Globals.h"
 #include "Component.h"
 #include "Color.h"
 #include "MathGeoLib/include/Math/float3.h"
@@ -14,8 +14,10 @@ public:
 	
 	//Vertexs:------
 	BuffersData<float> vertexs;
+
 	//Indexs:------
 	BuffersData<uint> indexs;
+
 	//Normals:------
 	uint num_faces = 0u;		// Number of faces of the mesh.
 	float normal_lenght = 0.5f;		// Lenght of all normals.
@@ -43,9 +45,11 @@ private:
 
 public:
 	ComponentMesh();
-	~ComponentMesh() {};
+
 
 	void Update() override;
+
+	void CleanUp() override;
 
 	void SetBuffersWithData();
 

@@ -58,6 +58,15 @@ void ComponentMesh::Update()
 	Render();
 }
 
+void ComponentMesh::CleanUp()
+{
+	RELEASE_ARRAY(vertexs.buffer);
+	RELEASE_ARRAY(indexs.buffer);
+	RELEASE_ARRAY(normals_direction.buffer);
+	RELEASE_ARRAY(normal_vertexs.buffer);
+	RELEASE_ARRAY(normal_faces.buffer);
+	RELEASE_ARRAY(uvs.buffer);
+}
 
 void ComponentMesh::Render()
 {

@@ -17,6 +17,17 @@ void GameObject::Update()
 	}
 }
 
+void GameObject::CleanUp()
+{
+	for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		(*iter)->CleanUp();
+		RELEASE(*iter);
+		
+	}
+	components.clear();
+}
+
 Component* GameObject::AddComponent(ComponentType type)
 {
 	Component* ret = nullptr;

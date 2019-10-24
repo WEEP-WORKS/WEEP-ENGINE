@@ -15,6 +15,10 @@ enum class ComponentType
 template <typename BufferType>
 struct BuffersData
 {
+	~BuffersData()
+	{
+		RELEASE_ARRAY(buffer);
+	}
 	bool has_data = false;	// If exist the data type.
 	uint num = 0u;		// Number of the data type.
 
@@ -33,6 +37,7 @@ public:
 
 public:
 	virtual void Update() {};
+	virtual void CleanUp() {};
 	virtual void InspectorDraw() {};
 };
 

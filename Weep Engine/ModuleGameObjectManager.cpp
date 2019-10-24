@@ -33,6 +33,7 @@ bool GameObjectManager::CleanUp()
 {
 	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
+		(*item)->CleanUp();
 		RELEASE(*item);
 	}
 	objects.clear();
