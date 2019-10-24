@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "ModuleTexture.h"
+#include "ModuleGameObjectManager.h"
 #include "ComponentMesh.h"
 
 void ComponentTexture::ActivateThisTexture()
@@ -33,6 +34,7 @@ void ComponentTexture::ActivateThisTexture()
 	texture_active = true;
 	object->GetMesh()->SetTexture(this);
 	LOG("The texture has been activated correctly");
+
 }
 
 
@@ -46,6 +48,30 @@ void ComponentTexture::DesactivateTexture()
 	texture_active = false;
 }
 
+void ComponentTexture::Update()
+{
+	if (activate_checkers)
+	{
+		SetCheckersToGOSelected();
+		activate_checkers = false;
+	}
+}
+
+void ComponentTexture::SetCheckersToGOSelected()
+{
+	for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
+	{
+		if ((*iter)->GetMesh()->GetTexture() != App->texture->GetCheckersTexture())
+		{
+			(*iter)->GetMesh()->SetTexture(App->texture->GetCheckersTexture());
+		}
+		else
+		{
+			(*iter)->GetMesh()->SetTexture((*iter)->GetTextureActivated());
+		}
+	}
+}
+
 void ComponentTexture::InspectorDraw() {
 	ImGui::SetNextTreeNodeOpen(true);
 	if (ImGui::CollapsingHeader("Texture"))
@@ -55,6 +81,8 @@ void ComponentTexture::InspectorDraw() {
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");
 		ImGui::Text("Width: %i px", App->texture->Width);
 		ImGui::Text("Height: %i px", App->texture->Height);
+		ImGui::Checkbox("Activate Checkers", &activate_checkers);
+
 	}
 
 }

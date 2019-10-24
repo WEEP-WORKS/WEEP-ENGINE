@@ -15,7 +15,6 @@ public:
 	virtual ~GameObjectManager() {};
 
 	bool Update() override;
-	void SetCheckersToGOSelected();
 	bool CleanUp() override;
 
 	//GameObject* CreateSphere(const int &);
@@ -38,7 +37,6 @@ public:
 	std::list<GameObject*> objects; //Vector or list?
 	void Hierarchy();
 	vector<GameObject*> selected;
-
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?

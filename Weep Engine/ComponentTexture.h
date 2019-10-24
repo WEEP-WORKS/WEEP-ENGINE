@@ -12,12 +12,15 @@ public:
 	bool IsTextureActive() const;
 	void DesactivateTexture();
 	void InspectorDraw();
+	void SetCheckersToGOSelected();
+	void Update() override;
 
 public:
 
 	//Textures
 	bool has_texture = false;
 	GLuint id_texture = 0;
+	bool activate_checkers = false;
 
 private:
 
