@@ -116,19 +116,31 @@ void GameObject::SetActive(const bool & to_active)
 
 ComponentTexture* GameObject::GetTextureActivated() const
 {
+	std::vector<ComponentTexture*> textures = GetTextures();
+	for (std::vector<ComponentTexture*>::const_iterator iter = textures.begin(); iter != textures.end(); ++iter)
+	{
+		if ((*iter)->IsTextureActive())
+		{
+			return (*iter);
+		}
+	}
+	LOG("There is no texture activated.");
+	return nullptr;
+}
+
+std::vector<ComponentTexture*> GameObject::GetTextures() const
+{
+	std::vector<ComponentTexture*> textures;
 	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)
 	{
 		if ((*iter)->type == ComponentType::TEXTURE)
 		{
 			ComponentTexture* component = (ComponentTexture*)(*iter);
-			if (component->IsTextureActive())
-			{
-				return component;
-			}
+			textures.push_back(component);
 		}
 	}
 	LOG("There is no texture activated.");
-	return nullptr;
+	return textures;
 }
 
 ComponentMesh* GameObject::GetMesh() const
