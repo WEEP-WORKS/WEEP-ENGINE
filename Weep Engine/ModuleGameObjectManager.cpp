@@ -84,15 +84,15 @@ void GameObjectManager::CreateSphere()
 
 void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh)
 {
-	cmesh->vertexs.has_data = true;
-	cmesh->vertexs.buffer = mesh->points;
-	cmesh->vertexs.num = mesh->npoints;
-	cmesh->vertexs.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
+	cmesh->mesh_data->vertexs.has_data = true;
+	cmesh->mesh_data->vertexs.buffer = mesh->points;
+	cmesh->mesh_data->vertexs.num = mesh->npoints;
+	cmesh->mesh_data->vertexs.buffer_size = (cmesh->mesh_data->vertexs.num * 3/*num of coordinates by vertex*/);
 
-	cmesh->indexs.has_data = true;
-	cmesh->indexs.buffer = mesh->triangles;
-	cmesh->indexs.num = mesh->ntriangles;
-	cmesh->indexs.buffer_size = (cmesh->indexs.num * 3);
+	cmesh->mesh_data->indexs.has_data = true;
+	cmesh->mesh_data->indexs.buffer = mesh->triangles;
+	cmesh->mesh_data->indexs.num = mesh->ntriangles;
+	cmesh->mesh_data->indexs.buffer_size = (cmesh->mesh_data->indexs.num * 3);
 
 	//if (cmesh->object->parametric)
 	//{
@@ -102,18 +102,18 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 
 	if (mesh->normals != nullptr)
 	{
-		cmesh->normal_vertexs.has_data = true;
-		cmesh->normal_faces.has_data = true;
-		cmesh->normals_direction.has_data = true;
+		cmesh->mesh_data->normal_vertexs.has_data = true;
+		cmesh->mesh_data->normal_faces.has_data = true;
+		cmesh->mesh_data->normals_direction.has_data = true;
 
-		cmesh->num_faces = cmesh->indexs.num;
+		cmesh->num_faces = cmesh->mesh_data->indexs.num;
 
-		cmesh->normal_vertexs.num = cmesh->vertexs.num;
-		cmesh->normal_faces.num = cmesh->num_faces;
-		cmesh->normals_direction.num = cmesh->vertexs.num;
+		cmesh->mesh_data->normal_vertexs.num = cmesh->mesh_data->vertexs.num;
+		cmesh->mesh_data->normal_faces.num = cmesh->num_faces;
+		cmesh->mesh_data->normals_direction.num = cmesh->mesh_data->vertexs.num;
 
-		cmesh->normals_direction.buffer = mesh->normals;
-		cmesh->normals_direction.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
+		cmesh->mesh_data->normals_direction.buffer = mesh->normals;
+		cmesh->mesh_data->normals_direction.buffer_size = (cmesh->mesh_data->vertexs.num * 3/*num of coordinates by vertex*/);
 
 		
 		

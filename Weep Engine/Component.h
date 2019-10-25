@@ -30,6 +30,36 @@ struct BuffersData
 
 };
 
+struct MeshData
+{
+	~MeshData()
+	{
+		RELEASE_ARRAY(vertexs.buffer);
+		RELEASE_ARRAY(indexs.buffer);
+		RELEASE_ARRAY(normals_direction.buffer);
+		RELEASE_ARRAY(normal_vertexs.buffer);
+		RELEASE_ARRAY(normal_faces.buffer);
+		RELEASE_ARRAY(uvs.buffer)
+
+		glDeleteBuffers(1, &vertexs.id_buffer);
+		glDeleteBuffers(1, &indexs.id_buffer);
+		glDeleteBuffers(1, &normals_direction.id_buffer);
+		glDeleteBuffers(1, &normal_vertexs.id_buffer);
+		glDeleteBuffers(1, &normal_faces.id_buffer);
+		glDeleteBuffers(1, &uvs.id_buffer);
+	}
+	BuffersData<float> vertexs;
+
+	BuffersData<uint> indexs;
+
+	BuffersData<float> normals_direction;
+
+	BuffersData<float> normal_vertexs;
+
+	BuffersData<float> normal_faces;
+
+	BuffersData<float> uvs;
+};
 
 class Component
 {
