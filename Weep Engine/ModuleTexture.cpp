@@ -63,6 +63,8 @@ uint ModuleTexture::LoadTexture(const char* path)
 		ret = ilutGLBindTexImage();
 		if (ret > 0)
 		{
+			Width = ilGetInteger(IL_IMAGE_WIDTH);
+			Height = ilGetInteger(IL_IMAGE_HEIGHT);
 
 			//glBindTexture(GL_TEXTURE_2D, model->id_texture);   test with loading more modesl with texture TODO
 			ilDeleteImages(1, &ret);

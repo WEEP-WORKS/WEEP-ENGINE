@@ -2,7 +2,7 @@
 #define __COMPONENTTEXTURE_H__
 
 #include "Component.h"
-
+#include <string>
 
 class ComponentTexture : public Component
 {
@@ -21,6 +21,7 @@ public:
 	bool has_texture = false;
 	GLuint id_texture = 0;
 	bool activate_checkers = false;
+	std::string texture_path;
 
 private:
 

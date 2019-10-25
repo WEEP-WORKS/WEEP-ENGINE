@@ -253,5 +253,6 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		std::string dir = "Models/Textures/";
 
 		model->id_texture = App->texture->LoadTexture(path.C_Str());	
+		model->texture_path = path.C_Str();
 	}
 }
