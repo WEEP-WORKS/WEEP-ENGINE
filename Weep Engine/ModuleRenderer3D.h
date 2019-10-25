@@ -51,10 +51,10 @@ private:
 	bool gl_blend = false;
 	bool gl_depth = true;
 	bool gl_scissor = false;
-	bool gl_cull_face = false;
-	bool gl_lighting = false;
+	bool gl_cull_face = true;
+	bool gl_lighting = true;
 	bool gl_color_material = true;
-	bool gl_texture_2d = false;
+	bool gl_texture_2d = true;
 	bool fill_mode = true;
 	bool wireframe_mode = false;
 	bool point_mode = false;

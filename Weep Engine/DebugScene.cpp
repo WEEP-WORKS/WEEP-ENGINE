@@ -293,11 +293,12 @@ bool DebugScene::Start()
 	sphere2->MoveShape(3.f, 3.f, 3.f);
 	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
 	
+	App->game_object_manager->CreateCube();
 	//App->game_object_manager->CreateSphere();
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+		//ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
 	}
 
 	if (ret == true)
@@ -393,7 +394,12 @@ bool DebugScene::Update()
 
 			if (selected.size() >= 1)
 			{
-
+				ImGui::PushID(selected[0]);
+				bool to_active = selected[0]->IsActive();
+				if (ImGui::Checkbox("", &to_active))
+					selected[0]->SetActive(to_active);
+				ImGui::PopID();
+				ImGui::SameLine();
 				// Text rename
 				char name[25];
 				sprintf_s(name, 25, selected[0]->GetName());
@@ -415,7 +421,9 @@ bool DebugScene::Update()
 							//Component* comp = (*obj)->FindComponentByType((*it)->GetType());
 						}
 					}
+					ImGui::PushID(*it);
 					(*it)->InspectorDraw();
+					ImGui::PopID();
 
 					ImGui::Separator();
 				}

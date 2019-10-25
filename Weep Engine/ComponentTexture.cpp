@@ -72,10 +72,15 @@ void ComponentTexture::SetCheckersToGOSelected()
 	}
 }
 
-void ComponentTexture::InspectorDraw() {
+void ComponentTexture::InspectorDraw()
+{
+	bool to_active = IsActive();
+	if (ImGui::Checkbox("", &to_active))
+		SetActive(to_active);
+	ImGui::SameLine();
 
-	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen))
-	{
+	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen)) {
+
 		ImGui::Text("Texture Path: %s ", App->texture->GetPathTexture().c_str());
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");

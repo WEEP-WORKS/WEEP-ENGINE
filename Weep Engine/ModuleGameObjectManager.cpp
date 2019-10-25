@@ -21,7 +21,8 @@ bool GameObjectManager::Update() //dt?
 
 	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
-		(*item)->Update();
+		if((*item)->IsActive())
+			(*item)->Update();
 	}
 
 	Hierarchy();
@@ -58,7 +59,7 @@ void GameObjectManager::CreateCube()
 	GameObject* ret = new GameObject();
 	par_shapes_mesh* mesh = par_shapes_create_cube();
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
-
+	ret->parametric = true;
 	if (mesh != nullptr)
 	{
 		LoadGeometryShapeInfo(cmesh, mesh);
@@ -93,6 +94,12 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 	cmesh->indexs.num = mesh->ntriangles;
 	cmesh->indexs.buffer_size = (cmesh->indexs.num * 3);
 
+	//if (cmesh->object->parametric)
+	//{
+	//	par_shapes_unweld(mesh, true);
+	//	par_shapes_compute_normals(mesh);
+	//}
+
 	if (mesh->normals != nullptr)
 	{
 		cmesh->normal_vertexs.has_data = true;
@@ -108,7 +115,8 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 		cmesh->normals_direction.buffer = mesh->normals;
 		cmesh->normals_direction.buffer_size = (cmesh->vertexs.num * 3/*num of coordinates by vertex*/);
 
-
+		
+		
 		cmesh->CalculateNormals();
 	}
 
@@ -165,6 +173,9 @@ void GameObjectManager::Hierarchy()
 
 void GameObjectManager::PrintGoList(GameObject * object)
 {
+	if (object->IsActive() == false)
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
+
 	if (object == nullptr)
 		return;
 
@@ -202,4 +213,6 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	{
 		ImGui::TreePop();
 	}
+	if (object->IsActive() == false)
+		ImGui::PopStyleColor();
 }

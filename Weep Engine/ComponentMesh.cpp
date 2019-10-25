@@ -277,8 +277,12 @@ ComponentTexture* ComponentMesh::GetTexture() const
 	return texture;
 }
 
-void ComponentMesh::InspectorDraw() {
-
+void ComponentMesh::InspectorDraw() 
+{
+	bool to_active = IsActive();
+	if (ImGui::Checkbox("", &to_active))
+		SetActive(to_active);
+	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::Checkbox("FACE NORMALS", &activate_face_normals);

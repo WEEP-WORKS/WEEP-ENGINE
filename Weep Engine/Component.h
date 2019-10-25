@@ -2,6 +2,8 @@
 #define __COMPONENT_H__
 #include "glew/glew.h"
 #include "Globals.h"
+#include "imgui.h"
+
 class GameObject;
 enum class ComponentType
 {
@@ -39,6 +41,12 @@ public:
 	virtual void Update() {};
 	virtual void CleanUp() {};
 	virtual void InspectorDraw() {};
+
+	const bool Component::IsActive() const { return is_active; };
+	void Component::SetActive(bool to_active) { is_active = to_active; };
+
+private:
+	bool is_active = true;
 };
 
 
