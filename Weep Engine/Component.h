@@ -36,10 +36,9 @@ public:
 public:
 	virtual void Update() {};
 	virtual void InspectorDraw() {};
-	const bool Component::IsActive() const { return is_active; };
 
+	const bool Component::IsActive() const { return is_active; };
 	void Component::SetActive(bool to_active) { is_active = to_active; };
-	void Component::ActiveImGui(const char* checkbox_name = "") { ImGui::Checkbox(checkbox_name, &is_active); };
 
 private:
 	bool is_active = true;
