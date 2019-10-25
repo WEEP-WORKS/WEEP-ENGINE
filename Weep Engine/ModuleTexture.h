@@ -11,10 +11,17 @@ class ModuleTexture : public Module
 {
 public:
 
+	struct TextureInfo
+	{
+		uint id = 0;
+		string path;
+	};
+
 	ModuleTexture(bool start_enabled = true);
 	~ModuleTexture() {};
 
 	bool Start() override;
+	bool CleanUp() override;
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
 	uint LoadTexture(const char* path); // path without directory.
@@ -30,6 +37,7 @@ private:
 	std::string f_path;
 
 	ComponentTexture* checkersTexture = 0u;
+	std::vector<TextureInfo*> textures_paths;
 
 private: 
 

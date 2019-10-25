@@ -38,6 +38,8 @@ public:
 
 	ComponentTexture* GetTextureActivated() const;
 
+	std::vector<ComponentTexture*> GetTextures() const;
+
 	ComponentMesh* GetMesh() const;
 
 

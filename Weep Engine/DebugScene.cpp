@@ -101,7 +101,7 @@ bool DebugScene::Start()
 	{
 		LOG("Don't loaded correctly");
 	}*/
-	Texture = App->texture->LoadTexture("Lenna.png");
+	//Texture = App->texture->LoadTexture("Lenna.png");
 
 	strcpy(name_input_buffer, App->window->GetTitle().c_str());
 	strcpy(organization_input_buffer, App->window->GetAppOrganization());
@@ -337,7 +337,7 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 	//if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		resettest(ret);
+	//	resettest(ret);
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
@@ -368,7 +368,7 @@ bool DebugScene::Update()
 	
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
 
-	CubeElementaArrayMode();
+	//CubeElementaArrayMode();
 
 
 

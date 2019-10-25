@@ -46,23 +46,28 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 {
 	if (strcmp("png", file_extension) == 0 || strcmp("dds", file_extension) == 0)
 	{
-
 		for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
 		{
+			bool to_load = true;
 			std::vector<ComponentTexture*> textures = (*iter)->GetTextures();
+
 			for (std::vector<ComponentTexture*>::iterator iter2 = textures.begin(); iter2 != textures.end(); ++iter2)
 			{
 				if ((*iter2)->texture_path == file_name)
 				{
 					LOG("there is a texture component with the same texture in this game object");
-					return;
+					to_load = false;;
 				}
 			}
-			ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
 
-			text->id_texture = LoadTexture(file_name);
-			text->texture_path = file_name;
-			text->ActivateThisTexture();
+			if (to_load)
+			{
+				ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
+
+				text->id_texture = LoadTexture(file_name);
+				text->texture_path = file_name;
+				text->ActivateThisTexture();
+			}
 		}
 		if (App->game_object_manager->selected.size() == 0)
 		{
@@ -93,6 +98,7 @@ uint ModuleTexture::LoadTexture(const char* path)
 	{
 		if (path == (*iter)->path)
 		{
+			LOG("The texture had already been loaded. returning saved texture...")
 			return (*iter)->id;
 		}
 	}
