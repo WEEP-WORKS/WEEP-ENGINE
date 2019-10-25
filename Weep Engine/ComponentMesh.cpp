@@ -66,6 +66,13 @@ void ComponentMesh::CleanUp()
 	RELEASE_ARRAY(normal_vertexs.buffer);
 	RELEASE_ARRAY(normal_faces.buffer);
 	RELEASE_ARRAY(uvs.buffer);
+
+	glDeleteBuffers(1, &vertexs.id_buffer);
+	glDeleteBuffers(1, &indexs.id_buffer);
+	glDeleteBuffers(1, &normals_direction.id_buffer);
+	glDeleteBuffers(1, &normal_vertexs.id_buffer);
+	glDeleteBuffers(1, &normal_faces.id_buffer);
+	glDeleteBuffers(1, &uvs.id_buffer);
 }
 
 void ComponentMesh::Render()
