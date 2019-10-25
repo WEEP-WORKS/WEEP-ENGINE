@@ -263,7 +263,9 @@ ComponentTexture* ComponentMesh::GetTexture() const
 
 void ComponentMesh::InspectorDraw() 
 {
-	ActiveImGui();
+	bool to_active = IsActive();
+	if (ImGui::Checkbox("", &to_active))
+		SetActive(to_active);
 	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Mesh", ImGuiTreeNodeFlags_DefaultOpen))
 	{

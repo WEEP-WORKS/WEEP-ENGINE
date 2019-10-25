@@ -74,10 +74,12 @@ void ComponentTexture::SetCheckersToGOSelected()
 
 void ComponentTexture::InspectorDraw()
 {
-	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_DefaultOpen)) {
+	bool to_active = IsActive();
+	if (ImGui::Checkbox("", &to_active))
+		SetActive(to_active);
+	ImGui::SameLine();
 
-		ImGui::SameLine();
-		ActiveImGui();
+	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 		ImGui::Text("Texture Path: %s ", App->texture->GetPathTexture().c_str());
 		ImGui::Separator();

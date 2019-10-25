@@ -418,7 +418,9 @@ bool DebugScene::Update()
 							//Component* comp = (*obj)->FindComponentByType((*it)->GetType());
 						}
 					}
+					ImGui::PushID(*it);
 					(*it)->InspectorDraw();
+					ImGui::PopID();
 
 					ImGui::Separator();
 				}
