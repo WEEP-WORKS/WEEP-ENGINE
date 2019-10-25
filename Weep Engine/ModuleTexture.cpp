@@ -31,16 +31,37 @@ bool ModuleTexture::Start()
 	return true;
 }
 
+bool ModuleTexture::CleanUp()
+{
+	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
+	{
+		RELEASE(*iter);
+	}
+	textures_paths.clear();
+
+	return true;
+}
+
 void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
 {
-	if(strcmp("png",file_extension) == 0 || strcmp("dds", file_extension) == 0)
+	if (strcmp("png", file_extension) == 0 || strcmp("dds", file_extension) == 0)
 	{
 
 		for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
 		{
+			std::vector<ComponentTexture*> textures = (*iter)->GetTextures();
+			for (std::vector<ComponentTexture*>::iterator iter2 = textures.begin(); iter2 != textures.end(); ++iter2)
+			{
+				if ((*iter2)->texture_path == file_name)
+				{
+					LOG("there is a texture component with the same texture in this game object");
+					return;
+				}
+			}
 			ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
 
 			text->id_texture = LoadTexture(file_name);
+			text->texture_path = file_name;
 			text->ActivateThisTexture();
 		}
 		if (App->game_object_manager->selected.size() == 0)
@@ -56,6 +77,26 @@ uint ModuleTexture::LoadTexture(const char* path)
 
 	f_path = dir + path;
 
+	//for (list<GameObject*>::iterator iter = App->game_object_manager->objects.begin(); iter != App->game_object_manager->objects.end(); ++iter)
+	//{
+	//	std::vector<ComponentTexture*> textures = (*iter)->GetTextures();
+	//	for (std::vector<ComponentTexture*>::iterator iter_text = textures.begin(); iter_text != textures.end(); ++iter_text)
+	//	{
+	//		if ((*iter_text)->texture_path == path)
+	//		{
+	//			return (*iter_text)->id_texture;
+	//		}
+	//	}
+	//}
+
+	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
+	{
+		if (path == (*iter)->path)
+		{
+			return (*iter)->id;
+		}
+	}
+
 	if (ilLoadImage(f_path.c_str()))
 	{
 		LOG("Image Loaded correctly");
@@ -66,7 +107,11 @@ uint ModuleTexture::LoadTexture(const char* path)
 			Width = ilGetInteger(IL_IMAGE_WIDTH);
 			Height = ilGetInteger(IL_IMAGE_HEIGHT);
 
-			//glBindTexture(GL_TEXTURE_2D, model->id_texture);   test with loading more modesl with texture TODO
+			TextureInfo* new_texture = new TextureInfo();
+			new_texture->id = ret;
+			new_texture->path = path;
+			textures_paths.push_back(new_texture);
+
 			ilDeleteImages(1, &ret);
 		}
 		else
