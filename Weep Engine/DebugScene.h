@@ -33,6 +33,7 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
+	void resettest(bool &ret);
 	void Panels();
 	void MenuBar(bool &ret);
 	void CubeElementaArrayMode();

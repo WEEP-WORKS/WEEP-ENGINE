@@ -17,6 +17,10 @@ enum class ComponentType
 template <typename BufferType>
 struct BuffersData
 {
+	~BuffersData()
+	{
+		RELEASE_ARRAY(buffer);
+	}
 	bool has_data = false;	// If exist the data type.
 	uint num = 0u;		// Number of the data type.
 
@@ -26,6 +30,36 @@ struct BuffersData
 
 };
 
+struct MeshData
+{
+	~MeshData()
+	{
+		RELEASE_ARRAY(vertexs.buffer);
+		RELEASE_ARRAY(indexs.buffer);
+		RELEASE_ARRAY(normals_direction.buffer);
+		RELEASE_ARRAY(normal_vertexs.buffer);
+		RELEASE_ARRAY(normal_faces.buffer);
+		RELEASE_ARRAY(uvs.buffer)
+
+		glDeleteBuffers(1, &vertexs.id_buffer);
+		glDeleteBuffers(1, &indexs.id_buffer);
+		glDeleteBuffers(1, &normals_direction.id_buffer);
+		glDeleteBuffers(1, &normal_vertexs.id_buffer);
+		glDeleteBuffers(1, &normal_faces.id_buffer);
+		glDeleteBuffers(1, &uvs.id_buffer);
+	}
+	BuffersData<float> vertexs;
+
+	BuffersData<uint> indexs;
+
+	BuffersData<float> normals_direction;
+
+	BuffersData<float> normal_vertexs;
+
+	BuffersData<float> normal_faces;
+
+	BuffersData<float> uvs;
+};
 
 class Component
 {
@@ -35,6 +69,7 @@ public:
 
 public:
 	virtual void Update() {};
+	virtual void CleanUp() {};
 	virtual void InspectorDraw() {};
 
 	const bool Component::IsActive() const { return is_active; };

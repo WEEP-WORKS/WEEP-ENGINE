@@ -144,29 +144,29 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
 {
-	model->vertexs.has_data = true;
+	model->mesh_data->vertexs.has_data = true;
 
-	model->vertexs.num = mesh->mNumVertices; // get number of Vertices
+	model->mesh_data->vertexs.num = mesh->mNumVertices; // get number of Vertices
 
-	model->vertexs.buffer_size = model->vertexs.num * 3;
-	model->vertexs.buffer = new float[model->vertexs.buffer_size]; // create array of Vertices with the correct size
+	model->mesh_data->vertexs.buffer_size = model->mesh_data->vertexs.num * 3;
+	model->mesh_data->vertexs.buffer = new float[model->mesh_data->vertexs.buffer_size]; // create array of Vertices with the correct size
 
-	memcpy(model->vertexs.buffer, mesh->mVertices, sizeof(float) * model->vertexs.buffer_size); // copy the vertices of the mesh to the arrey of vertices
+	memcpy(model->mesh_data->vertexs.buffer, mesh->mVertices, sizeof(float) * model->mesh_data->vertexs.buffer_size); // copy the vertices of the mesh to the arrey of vertices
 
-	LOG("New mesh with %d vertices", model->vertexs.num);
+	LOG("New mesh with %d vertices", model->mesh_data->vertexs.num);
 }
 
 // ----------------------------Indexs----------------------------
 
 void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 {
-	model->indexs.has_data = true;
+	model->mesh_data->indexs.has_data = true;
 
 	model->num_faces = mesh->mNumFaces;
-	model->indexs.num = model->num_faces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
+	model->mesh_data->indexs.num = model->num_faces * 3; // get number of indices. Every face has 3 indices, assuming each face is a triangle
 
-	model->indexs.buffer_size = model->indexs.num; // don't have coordinates, so the number of indexs == buffer_size.
-	model->indexs.buffer = new uint[model->indexs.buffer_size]; // create array of indices with the correct size
+	model->mesh_data->indexs.buffer_size = model->mesh_data->indexs.num; // don't have coordinates, so the number of indexs == buffer_size.
+	model->mesh_data->indexs.buffer = new uint[model->mesh_data->indexs.buffer_size]; // create array of indices with the correct size
 
 	for (uint i = 0; i < mesh->mNumFaces; ++i)
 	{
@@ -180,7 +180,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 			// take the first 3 slots, 
 			//then the next 3 slots, 
 			//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
-			memcpy(&model->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, /*TODO Change 3 by a var*/3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
+			memcpy(&model->mesh_data->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, /*TODO Change 3 by a var*/3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
 }
@@ -190,17 +190,17 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 {
 	//load normals direction of the vertex_normals.
-	model->normals_direction.has_data = true;
-	model->normal_vertexs.has_data = true;
-	model->normal_faces.has_data = true;
+	model->mesh_data->normals_direction.has_data = true;
+	model->mesh_data->normal_vertexs.has_data = true;
+	model->mesh_data->normal_faces.has_data = true;
 
-	model->normals_direction.num = model->vertexs.num;
-	model->normal_vertexs.num = model->vertexs.num;
-	model->normal_faces.num = model->num_faces;
+	model->mesh_data->normals_direction.num = model->mesh_data->vertexs.num;
+	model->mesh_data->normal_vertexs.num = model->mesh_data->vertexs.num;
+	model->mesh_data->normal_faces.num = model->num_faces;
 
-	model->normals_direction.buffer_size = model->normal_vertexs.num * 3/*every vertex_normal have 3 coordinates (x, y, z).*/;
-	model->normals_direction.buffer = new float[model->normals_direction.buffer_size];
-	memcpy(model->normals_direction.buffer, mesh->mNormals, sizeof(float) * model->normals_direction.buffer_size); //It could be QNaN?
+	model->mesh_data->normals_direction.buffer_size = model->mesh_data->normal_vertexs.num * 3/*every vertex_normal have 3 coordinates (x, y, z).*/;
+	model->mesh_data->normals_direction.buffer = new float[model->mesh_data->normals_direction.buffer_size];
+	memcpy(model->mesh_data->normals_direction.buffer, mesh->mNormals, sizeof(float) * model->mesh_data->normals_direction.buffer_size); //It could be QNaN?
 
 	model->CalculateNormals();
 }
@@ -209,14 +209,14 @@ void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 
 void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 {
-	model->uvs.has_data = true;
+	model->mesh_data->uvs.has_data = true;
 
-	model->uvs.num = mesh->mNumVertices; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
+	model->mesh_data->uvs.num = mesh->mNumVertices; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
 
-	model->uvs.buffer_size = model->num_uvs_channels * model->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
-	model->uvs.buffer = new float[model->uvs.buffer_size];
+	model->mesh_data->uvs.buffer_size = model->num_uvs_channels * model->mesh_data->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
+	model->mesh_data->uvs.buffer = new float[model->mesh_data->uvs.buffer_size];
 
-	model->channel_buffer_size = model->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
+	model->channel_buffer_size = model->mesh_data->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
 	for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
 	{
 		if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
@@ -224,15 +224,15 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 
 			if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
 			{
-				for (uint j = 0; j < model->uvs.num; ++j)
+				for (uint j = 0; j < model->mesh_data->uvs.num; ++j)
 				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-					memcpy(&model->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
+					memcpy(&model->mesh_data->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
 
 				}
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{
-				memset(&model->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
+				memset(&model->mesh_data->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
 			}
 		}
 	}
