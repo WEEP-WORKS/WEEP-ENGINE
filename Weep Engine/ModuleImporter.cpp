@@ -114,7 +114,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			model->SetBuffersWithData();
 
-			if (model->num_uvs_channels > 0 && scene->HasMaterials())
+			/*if (model->num_uvs_channels > 0 && scene->HasMaterials())
 			{
 
 				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
@@ -125,7 +125,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 				text->ActivateThisTexture();
 			}
-
+			*/
 			App->game_object_manager->AddObject(object);
 		}
 		else
@@ -247,8 +247,8 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		aiString path;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 		std::string dir = "Models/Textures/";
-
-		model->id_texture = App->texture->LoadTexture(path.C_Str());	
+		std::string f_path = dir + path.C_Str();
+		model->id_texture = App->texture->LoadTexture(f_path.c_str());
 		model->texture_path = path.C_Str();
 	}
 }

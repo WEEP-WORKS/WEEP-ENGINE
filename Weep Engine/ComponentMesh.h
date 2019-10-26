@@ -66,10 +66,6 @@ private:
 	void RenderVertexNormals();
 
 	void RenderFaceNormals();
-
-	inline float3 *ReturnVertexByIndex(const uint&) const;
-
-	inline float3 *ReturnNormalDirectionByIndex(const uint&) const;
 };
 
 #endif //__COMPONENTMESH_H__

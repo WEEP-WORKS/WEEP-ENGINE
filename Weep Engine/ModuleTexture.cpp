@@ -64,7 +64,7 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 			{
 				ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
 
-				text->id_texture = LoadTexture(file_name);
+				text->id_texture = LoadTexture(file_path);
 				text->texture_path = file_name;
 				text->ActivateThisTexture();
 			}
@@ -103,7 +103,7 @@ uint ModuleTexture::LoadTexture(const char* path)
 		}
 	}
 
-	if (ilLoadImage(f_path.c_str()))
+	if (ilLoadImage(path))
 	{
 		LOG("Image Loaded correctly");
 

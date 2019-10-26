@@ -226,43 +226,10 @@ void ComponentMesh::CalculateFacesNormals()
 		mesh_data->normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i] + final_vertex.x * normal_lenght; // end point coord x
 		mesh_data->normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 1] + final_vertex.y * normal_lenght; // end point coord y
 		mesh_data->normal_faces.buffer[new_array_pos++] = start_vertexs_of_face_normals[i + 2] + final_vertex.z * normal_lenght; // end point coord z
-
-	/*	RELEASE_ARRAY(v1);
-		RELEASE_ARRAY(v2);
-		RELEASE_ARRAY(v3);
-		RELEASE_ARRAY(n1);
-		RELEASE_ARRAY(n2);
-		RELEASE_ARRAY(n3);*/
 	}
 
 	RELEASE_ARRAY(start_vertexs_of_face_normals);
 }
-
-float3* ComponentMesh::ReturnVertexByIndex(const uint &index) const
-{
-	float3* ret = new float3;
-
-	float* first_vertex = &mesh_data->vertexs.buffer[mesh_data->indexs.buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
-
-	ret->x = first_vertex[0];
-	ret->y = first_vertex[1];
-	ret->z = first_vertex[2];
-
-	return ret;
-}
-
-float3* ComponentMesh::ReturnNormalDirectionByIndex(const uint &index) const
-{
-	float3* ret = new float3;
-	float* first_vertex = &mesh_data->normals_direction.buffer[mesh_data->indexs.buffer[index] * 3/*every index have 3 coords saved in vertexs*/];
-
-	ret->x = first_vertex[0];
-	ret->y = first_vertex[1];
-	ret->z = first_vertex[2];
-
-	return ret;
-}
-
 
 void ComponentMesh::SetTexture(ComponentTexture* texture)
 {
