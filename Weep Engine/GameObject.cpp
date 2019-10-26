@@ -99,11 +99,6 @@ const bool GameObject::GetSelected() const
 	return selected;
 }
 
-const int GameObject::GetId() const
-{
-	return id;
-}
-
 bool GameObject::IsActive() const
 {
 	return active;

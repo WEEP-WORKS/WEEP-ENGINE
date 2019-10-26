@@ -30,8 +30,6 @@ public:
 
 	const bool GetSelected() const;
 
-	const int GetId() const;
-
 	bool IsActive() const;
 
 	void SetActive(const bool &to_active);

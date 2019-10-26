@@ -2,13 +2,6 @@
 #include "Globals.h"
 
 
-
-
-
-
-
-
-
 //---------------
  //All old things like geometry things don't erase yet. (but it's unused)
 //-------------
