@@ -520,12 +520,12 @@ void DebugScene::MenuBar(bool &ret)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Edit"))
+		if (ImGui::BeginMenu("Game Object"))
 		{
-			if (ImGui::BeginMenu("Create"))
+			if (ImGui::BeginMenu("Create Primitive"))
 			{
-				ImGui::MenuItem("Create Cube", NULL, &App->game_object_manager->create_cube);
-				ImGui::MenuItem("Create Sphere", NULL, &App->game_object_manager->create_sphere);
+				ImGui::MenuItem("Cube", NULL, &App->game_object_manager->create_cube);
+				ImGui::MenuItem("Sphere", NULL, &App->game_object_manager->create_sphere);
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
