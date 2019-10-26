@@ -169,6 +169,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 		if (mesh->mFaces[i].mNumIndices != 3) // if the face is not a triangle don't load it.
 		{
 			LOG("This face don't have 3 index, only can load faces with 3 indexs");
+			memset(&model->mesh_data->indexs.buffer[i * 3], 0, sizeof(uint) * 3);
 		}
 		else
 		{
@@ -176,7 +177,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 			// take the first 3 slots, 
 			//then the next 3 slots, 
 			//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
-			memcpy(&model->mesh_data->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, /*TODO Change 3 by a var*/3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
+			memcpy(&model->mesh_data->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
 }
