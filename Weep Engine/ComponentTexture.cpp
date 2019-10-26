@@ -46,6 +46,7 @@ bool ComponentTexture::IsTextureActive() const
 void ComponentTexture::DesactivateTexture()
 {
 	texture_active = false;
+	object->GetMesh()->SetTexture(nullptr);
 }
 
 void ComponentTexture::Update()
@@ -74,9 +75,17 @@ void ComponentTexture::SetCheckersToGOSelected()
 
 void ComponentTexture::InspectorDraw()
 {
-	bool to_active = IsActive();
+	bool to_active = IsTextureActive();
 	if (ImGui::Checkbox("", &to_active))
-		SetActive(to_active);
+	if (to_active == true)
+	{
+		ActivateThisTexture();
+	}
+	else
+	{
+		DesactivateTexture();
+	}
+
 	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen)) {
