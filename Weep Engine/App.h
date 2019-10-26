@@ -46,9 +46,6 @@ public:
 	string GetFileExtension(const char * file_name);
 	string ToLowerCase(std::string str);
 
-	bool GetDebugMode();
-	void SetDebugMode(bool set);
-
 	void OpenWeb(string web);
 	const char* GetBasePath();
 	void OpenFolder(const char* folder);
@@ -86,9 +83,7 @@ private:
 	int				   argc;
 	char**			   args;
 
-	bool		       close_app = false;
-
-	bool			   debug_mode = false;
+	bool close_app = false;
 
 	bool want_to_save = false;
 	bool want_to_load = false;

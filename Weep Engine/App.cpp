@@ -45,7 +45,6 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(renderer3D);
 
 	profiler = new Profiler();
-	SetDebugMode(true);
 }
 
 Application::~Application()
@@ -238,16 +237,6 @@ const char * Application::GetArgv(int index) const
 float Application::GetDT()
 {
 	return profiler->GetFrameTime() / 1000;
-}
-
-bool Application::GetDebugMode()
-{
-	return debug_mode;
-}
-
-void Application::SetDebugMode(bool set)
-{
-	debug_mode = set;
 }
 
 void Application::AddModule(Module* mod)

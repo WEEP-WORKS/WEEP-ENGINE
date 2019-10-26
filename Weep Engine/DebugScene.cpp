@@ -531,7 +531,7 @@ void DebugScene::MenuBar(bool &ret)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
+		if (ImGui::BeginMenu("Debug"))
 		{
 			ImGui::MenuItem("Debug Console", NULL, &show_debug_console);
 			ImGui::MenuItem("Test Window", NULL, &show_demo_window);

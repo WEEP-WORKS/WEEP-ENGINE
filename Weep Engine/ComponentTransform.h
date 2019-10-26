@@ -11,15 +11,12 @@ public:
 
 	void InspectorDraw();
 
-public:
+private:
 
 	float3 position;
 	float3 rotation;
 	float3 scale;
 
-private: 
-	
-	float positionx;
 };
 #endif // !__COMPONENTTRANSFORM_H__
 

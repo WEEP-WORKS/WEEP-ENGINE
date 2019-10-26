@@ -27,24 +27,21 @@ public:
 	void StartTime();
 	void UpdateFinish();
 
-	float GetAwakeTime();
-	float GetStartTime();
+	float GetAwakeTime(); //?
+	float GetStartTime(); //?
 	float GetFrameTime();
 	int GetFPS();
-	float GetAvgFPS();
-	int GetFramesSinceStartup();
-	int GetTimeSinceStartup();
+	float GetAvgFPS(); //?
+	int GetFramesSinceStartup(); //?
+	int GetTimeSinceStartup(); //?
 
 	void StartProfile(const char* name);
 	void FinishProfile();
-	Profile* GetProfile(const char* name);
+	Profile* GetProfile(const char* name); //?
 
 	std::vector<float> GetFramesVector();
 	std::vector<float> GetMillisecondsVector();
 	std::vector<float> GetMemoryVector();
-
-	//void SetMaxFps(int fps);
-	//int GetMaxFps();
 
 public:
 	int	  capped_ms = -1;

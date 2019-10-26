@@ -35,7 +35,7 @@ public:
 	bool GetVsync() const;
 	int GetRefreshRate() const;
 
-public:
+private:
 
 	Light lights[MAX_LIGHTS];
 	//SDL_GLContext context;
