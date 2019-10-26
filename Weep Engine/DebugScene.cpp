@@ -336,8 +336,8 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
-	//if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	//	resettest(ret);
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		resettest(ret);
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
