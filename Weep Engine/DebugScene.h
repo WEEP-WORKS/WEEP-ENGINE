@@ -3,13 +3,10 @@
 #include "Module.h"
 #include "Globals.h"
 #include "imgui.h"
-//#include "GeometryShape.h"
 #include "glew/glew.h"
 
 #define MAX_SNAKE 2
 #define LIB_NUM 10
-
-
 
 #include "par_shapes.h"
 
@@ -33,33 +30,20 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
-	void resettest(bool &ret);
-	void Panels();
-	void MenuBar(bool &ret);
-	void CubeElementaArrayMode();
-	void CubeDrawArrayMode();
-	void Plane();
-	void CubeDirectMode();
-	void DrawCircle();
-	void Configuration();
 	bool CleanUp();
-	void OnConfiguration();
 
+	void Configuration();
+	void OnConfiguration();
 	void SetFpsMax();
 
 	void ConsoleLog(const char * text);
 
-	
-
 public:
-
-	// Main loop
-	bool done = false;
 	bool show_hierarchy = true;
-	bool show_inspector = true;
 
 private:
 
+	bool show_inspector = true;
 	bool show_app_about = false;
 	bool show_demo_window = false;
 	bool show_geometry_math_test = false;
@@ -94,28 +78,12 @@ private:
 
 	ImGuiTextBuffer debug_console_buff;
 
-	//Cubes
-	uint my_id = 0;
-	uint my_id1 = 2;
-	uint my_indices = 1;
-	uint uv_id = 4;
-	uint num_vertices = 36;
-	uint number_of_indices = 36;
-
-	// Sphere
-	std::vector<float> vertices;
-	std::vector<uint>  indices;
-
-	/*//Shapes
-	GeometrySphere* sphere;
-	GeometrySphere* sphere2;*/
-
-	//Textures
-	GLuint texName;
-	GLuint Texture;
-
 private:
 	
+	void resettest(bool &ret);
+	void Panels();
+	void MenuBar(bool &ret);
+	void Plane();
 	void AppAbout();
 	void DebugConsole();
 
