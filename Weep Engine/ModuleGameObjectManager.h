@@ -37,6 +37,8 @@ public:
 	std::list<GameObject*> objects; //Vector or list?
 	void Hierarchy();
 	vector<GameObject*> selected;
+	bool create_cube = false;
+	bool create_sphere = false;
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?

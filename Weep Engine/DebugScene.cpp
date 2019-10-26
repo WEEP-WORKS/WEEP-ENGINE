@@ -520,6 +520,17 @@ void DebugScene::MenuBar(bool &ret)
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Edit"))
+		{
+			if (ImGui::BeginMenu("Create"))
+			{
+				ImGui::MenuItem("Create Cube", NULL, &App->game_object_manager->create_cube);
+				ImGui::MenuItem("Create Sphere", NULL, &App->game_object_manager->create_sphere);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
 		{
 			ImGui::MenuItem("Debug Console", NULL, &show_debug_console);

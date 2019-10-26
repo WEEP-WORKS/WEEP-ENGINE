@@ -18,7 +18,6 @@ GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 
 bool GameObjectManager::Update() //dt?
 {
-
 	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
 		if((*item)->IsActive())
@@ -64,7 +63,9 @@ void GameObjectManager::CreateCube()
 	{
 		LoadGeometryShapeInfo(cmesh, mesh);
 	}
-
+	ret->SetName("cube");
+	ClearSelection();
+	AddGameObjectToSelected(ret);
 	AddObject(ret);
 }
 
@@ -78,7 +79,9 @@ void GameObjectManager::CreateSphere()
 	{
 		LoadGeometryShapeInfo(cmesh, mesh);
 	}
-
+	ret->SetName("sphere");
+	ClearSelection();
+	AddGameObjectToSelected(ret);
 	AddObject(ret);
 }
 
@@ -160,12 +163,28 @@ void GameObjectManager::Hierarchy()
 		ImGui::SetNextWindowPos(ImVec2(0, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
 		if (ImGui::Begin("Hierarchy",NULL,ImGuiWindowFlags_NoSavedSettings))
 		{
+
+			//create primitives should be here
+
 			for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 			{
 				PrintGoList((*item));
 			}
+
 		}
 		ImGui::End();
+	}
+
+	if (create_cube)
+	{
+		CreateCube();
+		create_cube = false;
+	}
+
+	if (create_sphere)
+	{
+		CreateSphere();
+		create_sphere = false;
 	}
 
 }
