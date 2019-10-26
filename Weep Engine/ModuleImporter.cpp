@@ -114,7 +114,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			model->SetBuffersWithData();
 
-			/*if (model->num_uvs_channels > 0 && scene->HasMaterials())
+			if (model->num_uvs_channels > 0 && scene->HasMaterials())
 			{
 
 				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
@@ -125,7 +125,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 				text->ActivateThisTexture();
 			}
-			*/
+			
 			App->game_object_manager->AddObject(object);
 		}
 		else

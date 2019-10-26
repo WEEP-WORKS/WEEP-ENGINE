@@ -157,12 +157,12 @@ void ComponentMesh::CalculateNormals()
 void ComponentMesh::CalculateVertexsNormals()
 {
 	//vertex_normals
-	mesh_data->normal_vertexs.buffer_size = mesh_data->vertexs.num * 3/*x, y, z*/ * 2 /* start point, end point*/;
+	mesh_data->normal_vertexs.buffer_size = mesh_data->normals_direction.num * 3/*x, y, z*/ * 2 /* start point, end point*/;
 	mesh_data->normal_vertexs.buffer = new float[mesh_data->normal_vertexs.buffer_size];
 	uint new_array_pos = 0u;
 
 	//iterate vertexs array to get the normal of each vertex.
-	for (uint i = 0; i < mesh_data->vertexs.buffer_size; i += 3/*each vertex have 3 coords. Every 3 increment we hace another new vertex.x*/)
+	for (uint i = 0; i < mesh_data->normals_direction.buffer_size; i += 3/*each vertex have 3 coords. Every 3 increment we hace another new vertex.x*/)
 	{
 		//---Start Points:---
 		mesh_data->normal_vertexs.buffer[new_array_pos++] = mesh_data->vertexs.buffer[i];//current_vertex.x

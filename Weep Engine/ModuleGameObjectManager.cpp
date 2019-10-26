@@ -100,11 +100,11 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 	memcpy(cmesh->mesh_data->indexs.buffer, mesh->triangles, sizeof(uint) * cmesh->mesh_data->indexs.buffer_size);
 
 
-	//if (cmesh->object->parametric)
-	//{
-	//	par_shapes_unweld(mesh, true);
-	//	par_shapes_compute_normals(mesh);
-	//}
+	if (cmesh->object->parametric)
+	{
+		//par_shapes_unweld(mesh, true);
+		par_shapes_compute_normals(mesh);
+	}
 
 	if (mesh->normals != nullptr)
 	{
@@ -116,7 +116,7 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 
 		cmesh->mesh_data->normal_vertexs.num = cmesh->mesh_data->vertexs.num;
 		cmesh->mesh_data->normal_faces.num = cmesh->num_faces;
-		cmesh->mesh_data->normals_direction.num = cmesh->mesh_data->vertexs.num;
+		cmesh->mesh_data->normals_direction.num = cmesh->mesh_data->vertexs.num *3;
 
 		cmesh->mesh_data->normals_direction.buffer_size = (cmesh->mesh_data->vertexs.num * 3/*num of coordinates by vertex*/);
 		cmesh->mesh_data->normals_direction.buffer = new float[cmesh->mesh_data->normals_direction.buffer_size];
