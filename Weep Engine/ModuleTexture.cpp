@@ -80,7 +80,7 @@ uint ModuleTexture::LoadTexture(const char* path)
 {
 	uint ret = 0u;
 
-	f_path = dir + path;
+	f_path = path;
 
 	//for (list<GameObject*>::iterator iter = App->game_object_manager->objects.begin(); iter != App->game_object_manager->objects.end(); ++iter)
 	//{
