@@ -73,7 +73,7 @@ bool ModuleImporter::LoadFBX(const char* path)
 	}
 	else
 	{
-		LOG("Error loading scene %s", path);
+		LOG("Error loading scene %s.", path);
 		ret = false;
 	}
 
@@ -130,7 +130,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		}
 		else
 		{
-			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object");
+			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
 		}
 
 	}
@@ -149,7 +149,7 @@ void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
 
 	memcpy(model->mesh_data->vertexs.buffer, mesh->mVertices, sizeof(float) * model->mesh_data->vertexs.buffer_size); // copy the vertices of the mesh to the arrey of vertices
 
-	LOG("New mesh with %d vertices", model->mesh_data->vertexs.num);
+	LOG("New mesh with %i vertices.", model->mesh_data->vertexs.num);
 }
 
 // ----------------------------Indexs----------------------------
@@ -168,7 +168,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 	{
 		if (mesh->mFaces[i].mNumIndices != 3) // if the face is not a triangle don't load it.
 		{
-			LOG("This face don't have 3 index, only can load faces with 3 indexs");
+			LOG("This face don't have 3 index, only can load faces with 3 indexs.");
 			memset(&model->mesh_data->indexs.buffer[i * 3], 0, sizeof(uint) * 3);
 		}
 		else
@@ -180,6 +180,8 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 			memcpy(&model->mesh_data->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
+
+	LOG("New mesh with %i faces and %i indexs.", model->num_faces, model->mesh_data->indexs.num);
 }
 
 // ----------------------------Normals----------------------------
@@ -198,6 +200,8 @@ void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 	model->mesh_data->normals_direction.buffer_size = model->mesh_data->normal_vertexs.num * 3/*every vertex_normal have 3 coordinates (x, y, z).*/;
 	model->mesh_data->normals_direction.buffer = new float[model->mesh_data->normals_direction.buffer_size];
 	memcpy(model->mesh_data->normals_direction.buffer, mesh->mNormals, sizeof(float) * model->mesh_data->normals_direction.buffer_size); //It could be QNaN?
+
+	LOG("Normals loaded correcly.");
 
 	model->CalculateNormals();
 }
@@ -229,22 +233,25 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{
+				LOG("This channel of the UVs don't have 2 components by vector.");
 				memset(&model->mesh_data->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
 			}
 		}
 	}
+	LOG("UVs loaded correcly.")
 }
 
  //----------------------------Materials----------------------------
 
 void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentTexture * model)
 {
-	model->has_texture = true;
+	
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE); //only load DIFFUSE textures.
 
 	if (numTextures > 0)
 	{
+		model->has_texture = true;
 		aiString path;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 

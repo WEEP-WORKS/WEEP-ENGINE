@@ -86,7 +86,7 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 	{
 		if (path == (*iter)->path)
 		{
-			LOG("The texture had already been loaded. returning saved texture...");
+			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path);
 			width = (*iter)->width;
 			height = (*iter)->height;
 			return (*iter)->id;
@@ -95,7 +95,7 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 
 	if (ilLoadImage(path))
 	{
-		LOG("Image Loaded correctly");
+		LOG("Image Loaded correctly. The texture was %s", path);
 
 		ret = ilutGLBindTexImage();
 		if (ret > 0)
@@ -103,6 +103,9 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 		
 			width = ilGetInteger(IL_IMAGE_WIDTH);
 			height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+			LOG("Size texture: %i x %i", width, height);
+
 			TextureInfo* new_texture = new TextureInfo();
 			new_texture->width = width;
 			new_texture->height = height;
@@ -119,7 +122,7 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 	}
 	else
 	{
-		LOG("Image Don't loaded correctly");
+		LOG("Image Don't loaded correctly. the path %s is not found", path);
 	}
 
 	return ret;

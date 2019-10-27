@@ -6,6 +6,7 @@
 
 GameObject::GameObject()
 {
+	LOG("New Game Object created!");
 	AddComponent(ComponentType::TRANSFORM);
 }
 
