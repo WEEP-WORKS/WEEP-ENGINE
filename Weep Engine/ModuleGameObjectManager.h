@@ -31,11 +31,16 @@ public:
 
 	void ClearSelection();
 
+	void Hierarchy();
 	// vector<GameObject*> GetSelectedGameObjects() const;
+
+public:
+	bool create_cube = false;
+	bool create_sphere = false;
 
 	//should be private
 	std::list<GameObject*> objects; //Vector or list?
-	void Hierarchy();
+
 	vector<GameObject*> selected;
 
 private:

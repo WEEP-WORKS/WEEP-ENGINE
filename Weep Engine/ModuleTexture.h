@@ -29,6 +29,8 @@ public:
 	ComponentTexture* GetCheckersTexture() const;
 
 	std::string GetPathTexture();
+
+public:
 	int Width;
 	int Height;
 

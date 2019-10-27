@@ -18,7 +18,6 @@ GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 
 bool GameObjectManager::Update() //dt?
 {
-
 	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
 		if((*item)->IsActive())
@@ -64,7 +63,9 @@ void GameObjectManager::CreateCube()
 	{
 		LoadGeometryShapeInfo(cmesh, mesh);
 	}
-
+	ret->SetName("cube");
+	ClearSelection();
+	AddGameObjectToSelected(ret);
 	AddObject(ret);
 }
 
@@ -78,27 +79,32 @@ void GameObjectManager::CreateSphere()
 	{
 		LoadGeometryShapeInfo(cmesh, mesh);
 	}
-
+	ret->SetName("sphere");
+	ClearSelection();
+	AddGameObjectToSelected(ret);
 	AddObject(ret);
 }
 
 void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh)
 {
 	cmesh->mesh_data->vertexs.has_data = true;
-	cmesh->mesh_data->vertexs.buffer = mesh->points;
 	cmesh->mesh_data->vertexs.num = mesh->npoints;
 	cmesh->mesh_data->vertexs.buffer_size = (cmesh->mesh_data->vertexs.num * 3/*num of coordinates by vertex*/);
+	cmesh->mesh_data->vertexs.buffer = new float[cmesh->mesh_data->vertexs.buffer_size];
+	memcpy(cmesh->mesh_data->vertexs.buffer, mesh->points, sizeof(float) * cmesh->mesh_data->vertexs.buffer_size);
 
 	cmesh->mesh_data->indexs.has_data = true;
-	cmesh->mesh_data->indexs.buffer = mesh->triangles;
 	cmesh->mesh_data->indexs.num = mesh->ntriangles;
 	cmesh->mesh_data->indexs.buffer_size = (cmesh->mesh_data->indexs.num * 3);
+	cmesh->mesh_data->indexs.buffer = new uint[cmesh->mesh_data->indexs.buffer_size];
+	memcpy(cmesh->mesh_data->indexs.buffer, mesh->triangles, sizeof(uint) * cmesh->mesh_data->indexs.buffer_size);
 
-	//if (cmesh->object->parametric)
-	//{
-	//	par_shapes_unweld(mesh, true);
-	//	par_shapes_compute_normals(mesh);
-	//}
+
+	if (cmesh->object->parametric)
+	{
+		//par_shapes_unweld(mesh, true);
+		par_shapes_compute_normals(mesh);
+	}
 
 	if (mesh->normals != nullptr)
 	{
@@ -110,10 +116,11 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 
 		cmesh->mesh_data->normal_vertexs.num = cmesh->mesh_data->vertexs.num;
 		cmesh->mesh_data->normal_faces.num = cmesh->num_faces;
-		cmesh->mesh_data->normals_direction.num = cmesh->mesh_data->vertexs.num;
+		cmesh->mesh_data->normals_direction.num = cmesh->mesh_data->vertexs.num *3;
 
-		cmesh->mesh_data->normals_direction.buffer = mesh->normals;
 		cmesh->mesh_data->normals_direction.buffer_size = (cmesh->mesh_data->vertexs.num * 3/*num of coordinates by vertex*/);
+		cmesh->mesh_data->normals_direction.buffer = new float[cmesh->mesh_data->normals_direction.buffer_size];
+		memcpy(cmesh->mesh_data->normals_direction.buffer, mesh->normals, sizeof(float) * cmesh->mesh_data->normals_direction.buffer_size);
 
 		
 		
@@ -160,12 +167,28 @@ void GameObjectManager::Hierarchy()
 		ImGui::SetNextWindowPos(ImVec2(0, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
 		if (ImGui::Begin("Hierarchy",NULL,ImGuiWindowFlags_NoSavedSettings))
 		{
+
+			//create primitives should be here
+
 			for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 			{
 				PrintGoList((*item));
 			}
+
 		}
 		ImGui::End();
+	}
+
+	if (create_cube)
+	{
+		CreateCube();
+		create_cube = false;
+	}
+
+	if (create_sphere)
+	{
+		CreateSphere();
+		create_sphere = false;
 	}
 
 }

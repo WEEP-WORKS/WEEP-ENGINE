@@ -19,7 +19,6 @@ public:
 	uint num_faces = 0u;		// Number of faces of the mesh.
 	float normal_lenght = 0.5f;		// Lenght of all normals.
 
-
 	//UVs
 	uint num_uvs_channels = 0u; //local var?
 	uint channel_buffer_size = 0u; //local var?
@@ -66,10 +65,6 @@ private:
 	void RenderVertexNormals();
 
 	void RenderFaceNormals();
-
-	inline float3 *ReturnVertexByIndex(const uint&) const;
-
-	inline float3 *ReturnNormalDirectionByIndex(const uint&) const;
 };
 
 #endif //__COMPONENTMESH_H__

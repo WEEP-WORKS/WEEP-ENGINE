@@ -17,15 +17,14 @@ public:
 
 public:
 
-	//Textures
 	bool has_texture = false;
 	GLuint id_texture = 0;
-	bool activate_checkers = false;
 	std::string texture_path;
 
 private:
 
 	bool texture_active = false;
+	bool activate_checkers = false;
 
 };
 

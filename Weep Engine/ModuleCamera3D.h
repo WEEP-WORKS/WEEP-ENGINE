@@ -28,11 +28,13 @@ private:
 
 public:
 	
-	vec3 X, Y, Z, Position, Reference;
-
-	float camera_distance;
+	vec3 Position;
 
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
+
+	vec3 X, Y, Z, Reference;
+	float camera_distance;
+
 };

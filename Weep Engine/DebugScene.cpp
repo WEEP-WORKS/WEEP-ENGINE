@@ -63,7 +63,7 @@ bool DebugScene::Awake()
 
 	SDL_VERSION(&compiled_version);
 
-	// Initial range set
+	// Initial range set of random numbers
 	range_demo.x = 0;
 	range_demo.y = 1;
 
@@ -77,32 +77,7 @@ bool DebugScene::Awake()
 bool DebugScene::Start()
 {
 	bool ret = true;
-
-
 	
-	//ILuint ImageName;
-
-	//ilGenImages(1, &ImageName);
-
-	//ilBindImage(ImageName);
-
-	/*bool test = ilLoadImage("Images/Lenna.png");
-	int Width = ilGetInteger(IL_IMAGE_WIDTH);
-	int Height = ilGetInteger(IL_IMAGE_HEIGHT);
-	ilutRenderer(ILUT_OPENGL);
-	
-	Texture = ilutGLBindTexImage();
-	glBindTexture(GL_TEXTURE_2D, Texture);
-	if (test)
-	{
-		LOG("Loaded correctly");
-	}
-	else 
-	{
-		LOG("Don't loaded correctly");
-	}*/
-	//Texture = App->texture->LoadTexture("Lenna.png");
-
 	strcpy(name_input_buffer, App->window->GetTitle().c_str());
 	strcpy(organization_input_buffer, App->window->GetAppOrganization());
 	strcpy(version_input_buffer, App->window->GetVersion().c_str());
@@ -116,186 +91,6 @@ bool DebugScene::Start()
 		max_fps_slider = App->renderer3D->GetRefreshRate();
 	}
 
-	//ARRAY CUBE
-	GLfloat vertices [] =
-	{
-
-		4.f, 0.f, 0.f, //A		//ABC
-		6.f, 0.f, 0.f, //B
-		4.f, 2.f, 0.f, //C
-
-		4.f, 2.f, 0.f,			//CBD
-		6.f, 0.f, 0.f,
-		6.f, 2.f, 0.f, //D
-
-		6.f, 0.f, 0.f,			//BFD
-		6.f, 0.f, -2.f, //F
-		6.f, 2.f, 0.f,
-
-		6.f, 2.f, 0.f,			//DFH
-		6.f, 0.f, -2.f,
-		6.f, 2.f, -2.f, //H
-
-		4.f, 2.f, 0.f,			//CDG
-		6.f, 2.f, 0.f,
-		4.f, 2.f, -2.f, //G
-
-		4.f, 2.f, -2.f,			//GDH
-		6.f, 2.f, 0.f,
-		6.f, 2.f, -2.f,
-
-		4.f, 0.f, -2.f, //E		//EAG
-		4.f, 0.f, 0.f,
-		4.f, 2.f, -2.f,
-
-		4.f, 2.f, -2.f,			//GAC
-		4.f, 0.f, 0.f,
-		4.f, 2.f, 0.f,
-
-		6.f, 0.f, -2.f,			//FEH
-		4.f, 0.f, -2.f,
-		6.f, 2.f, -2.f,
-
-		6.f, 2.f, -2.f,			//HEG
-		4.f, 0.f, -2.f,
-		4.f, 2.f, -2.f,
-
-		4.f, 0.f, -2.f,			//EFA
-		6.f, 0.f, -2.f,
-		4.f, 0.f, 0.f,
-
-		4.f, 0.f, 0.f,			//AFB
-		6.f, 0.f, -2.f,
-		6.f, 0.f, 0.f
-
-	};
-
-	glGenBuffers(1, (GLuint*) &(my_id));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_vertices * 3, vertices, GL_STATIC_DRAW);
-
-	/*
-	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-	for (int i = 0; i < checkImageHeight; i++) {
-		for (int j = 0; j < checkImageWidth; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &texName);
-	glBindTexture(GL_TEXTURE_2D, texName);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-		*/
-	//ELEMENT CUBE
-	GLfloat vertices1[] =
-	{
-		0.f, 2.f, 6.f,   //d 0
-		-2.f, 2.f, 6.f,  //c 1
-		-2.f, 0.f, 6.f,  //a 2
-		0.f, 0.f, 6.f,   //b 3
-
-		0.f, 0.f, 4.f,   //f 4
-		0.f, 2.f, 4.f,    //h 5
-		-2.f, 2.f, 4.f,  //g 6
-		-2.f, 0.f, 4.f  //e 7
-
-	};
-
-	GLuint indices[] = 
-	{
-		0,1,2, 2,3,0,
-		0,3,4, 4,5,0,
-		0,5,6, 6,1,0,
-		1,6,7, 7,2,1,
-		7,4,3, 3,2,7,
-		4,7,6, 6,5,4 
-	};
-
-	GLfloat uv[] =
-	{
-		1,1,
-		0,1,
-		0,0,
-		1,0,
-
-		1,1,
-		0,1,
-		0,0,
-		1,0
-
-		/*1,1,
-		0,1,
-		0,0, 
-		0,0,
-		1,0,
-		1,1,
-		1,1,
-		1,0,
-		1,1, 
-		1,1,
-		0,1,
-		1,1,
-		1,1,
-		0,1,
-		0,0, 
-		0,0,
-		0,1,
-		1,1,
-		0,1,
-		0,0,
-		1,0, 
-		1,0,
-		0,0,
-		0,1,
-		1,0,
-		1,1,
-		1,0, 
-		1,0,
-		0,0,
-		1,0,
-		1,1,
-		1,0,
-		0,0, 
-		0,0,
-		0,1,
-		1,1*/
-
-	};
-
-	glGenBuffers(1, (GLuint*) &(my_id1));
-	glGenBuffers(1, (GLuint*) &(uv_id));
-	glGenBuffers(1, (GLuint*) &(my_indices));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 * 3, vertices1, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, uv_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*8 *2, uv, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*number_of_indices, indices, GL_STATIC_DRAW);
-	
-	//SHAPES
-
-	/*sphere = App->shape_manager->CreateSphere(5);
-	sphere->MoveShape(1.f, 1.f, 1.f);
-	sphere->SetColor(1.f, 0.f, 0.f);
-
-	sphere2 = App->shape_manager->CreateSphere(5);
-	sphere2->MoveShape(3.f, 3.f, 3.f);
-	sphere2->SetColor(0.5f, 0.5f, 1.f);*/
-	
-	//App->game_object_manager->CreateCube();
-	//App->game_object_manager->CreateSphere();
-
 	if (ret == true)
 	{
 		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
@@ -305,8 +100,6 @@ bool DebugScene::Start()
 	{
 		//ret = App->importer->LoadFBX("Models/FBX/warrior.fbx");
 	}
-
-	
 
 	return true;
 }
@@ -336,41 +129,16 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
-	//if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	//	resettest(ret);
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		resettest(ret);
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
 	//-------------------------------------------------------------------------
 
 	Plane();
-
 	
-	//-------------------------------------------------------------------------
-	//------------------------CUBE DIRECT MODE---------------------------------
-	//-------------------------------------------------------------------------
-	
-	//glEnable(GL_TEXTURE_2D);
 	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
-	//glBindTexture(GL_TEXTURE_2D, texName);
-	//CubeDirectMode();
-	//glDisable(GL_TEXTURE_2D);
-
-	//-------------------------------------------------------------------------
-	//----------------------CUBE DRAW ARRAY MODE-------------------------------
-	//-------------------------------------------------------------------------
-
-	//CubeDrawArrayMode();
-
-	//-------------------------------------------------------------------------
-	//----------------------CUBE ELEMENT ARRAY MODE-------------------------------
-	//-------------------------------------------------------------------------
-	
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
-
-	//CubeElementaArrayMode();
-
-
 
 	//-------------------------------------------------------------------------
 	//--------------------------MAIN MENU BAR----------------------------------
@@ -380,7 +148,9 @@ bool DebugScene::Update()
 
 	Panels();
 
-	//GameObject* go = *(App->game_object_manager->objects.begin());
+	//-------------------------------------------------------------------------
+	//----------------------------INSPECTOR------------------------------------
+	//-------------------------------------------------------------------------
 
 	if (App->debug_scene->show_inspector)
 	{
@@ -433,7 +203,6 @@ bool DebugScene::Update()
 		ImGui::End();
 	}
 
-	
 	return ret;
 }
 
@@ -474,7 +243,6 @@ void DebugScene::Panels()
 	{
 		MathGeoTest();
 	}
-
 
 	// Random Number
 	if (show_random_generator)
@@ -520,7 +288,18 @@ void DebugScene::MenuBar(bool &ret)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Debug") && App->GetDebugMode())
+		if (ImGui::BeginMenu("Game Object"))
+		{
+			if (ImGui::BeginMenu("Create Primitive"))
+			{
+				ImGui::MenuItem("Cube", NULL, &App->game_object_manager->create_cube);
+				ImGui::MenuItem("Sphere", NULL, &App->game_object_manager->create_sphere);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Debug"))
 		{
 			ImGui::MenuItem("Debug Console", NULL, &show_debug_console);
 			ImGui::MenuItem("Test Window", NULL, &show_demo_window);
@@ -546,44 +325,6 @@ void DebugScene::MenuBar(bool &ret)
 
 		ImGui::EndMainMenuBar();
 	}
-}
-
-void DebugScene::CubeElementaArrayMode()
-{
-	//glColor3f(0, 1, 1);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glBindBuffer(GL_ARRAY_BUFFER, my_id1);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glBindTexture(GL_TEXTURE_2D, Texture);
-
-	glBindBuffer(GL_ARRAY_BUFFER, uv_id);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-
-	glDrawElements(GL_TRIANGLES, number_of_indices, GL_UNSIGNED_INT, NULL);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-}
-
-void DebugScene::CubeDrawArrayMode()
-{
-	glColor3f(1, 1, 0);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// … draw other buffers
-	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void DebugScene::Plane()
@@ -619,107 +360,6 @@ void DebugScene::Plane()
 	glVertex3f(0.f, 0.f, 5.f);
 
 	glEnd();
-}
-
-void DebugScene::CubeDirectMode()
-{
-
-	glColor3f(1, 0, 1);
-
-	glBegin(GL_TRIANGLES);
-	//1
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 0.f, 0.f); //a						
-	glTexCoord2f(1.0, 0.0);  glVertex3f(0.f, 0.f, 0.f);  //b
-	glTexCoord2f(0.0, 1.0);  glVertex3f(-2.f, 2.f, 0.f); //c
-
-	glTexCoord2f(0.0, 1.0);  glVertex3f(-2.f, 2.f, 0.f); //c
-	glTexCoord2f(1.0, 0.0);  glVertex3f(0.f, 0.f, 0.f);  //b
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 2.f, 0.f);  //d
-
-	//2
-	glTexCoord2f(1.0, 0.0);  glVertex3f(0.f, 0.f, 0.f);  //b
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 0.f, -2.f);  //f
-	glTexCoord2f(0.0, 0.0);  glVertex3f(0.f, 2.f, 0.f);  //d
-
-	glTexCoord2f(0.0, 0.0);  glVertex3f(0.f, 2.f, 0.f);  //d
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 0.f, -2.f); //f
-	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f); //h
-
-	//2
-	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 2.f, 0.f);
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 2.f, 0.f);
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 2.f, -2.f); //g
-
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 2.f, -2.f);
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 2.f, 0.f);
-	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f);
-
-	//2
-	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f); //e
-	glTexCoord2f(1.0, 1.0);  glVertex3f(-2.f, 0.f, 0.f); 
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 2.f, -2.f);
-
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 2.f, -2.f);
-	glTexCoord2f(1.0, 1.0);  glVertex3f(-2.f, 0.f, 0.f);
-	glTexCoord2f(0.0, 1.0);  glVertex3f(-2.f, 2.f, 0.f);
-
-	//1
-	glTexCoord2f(0.0, 0.0);  glVertex3f(0.f, 0.f, -2.f);  //f
-	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f); //e
-	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f);  //h
-
-	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 2.f, -2.f);
-	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f);
-	glTexCoord2f(1.0, 1.0);  glVertex3f(-2.f, 2.f, -2.f);
-
-	//2
-	glTexCoord2f(1.0, 0.0);  glVertex3f(-2.f, 0.f, -2.f);
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 0.f, -2.f);
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 0.f, 0.f);
-
-	glTexCoord2f(0.0, 0.0);  glVertex3f(-2.f, 0.f, 0.f);
-	glTexCoord2f(1.0, 1.0);  glVertex3f(0.f, 0.f, -2.f);
-	glTexCoord2f(0.0, 1.0);  glVertex3f(0.f, 0.f, 0.f);
-
-	glEnd();
-}
-
-void DebugScene::DrawCircle()
-{
-	float radius = 1.f;
-	uint rings = 5;
-	uint sectors = 5;
-
-	float const R = 1. / (float)(rings - 1);
-	float const S = 1. / (float)(sectors - 1);
-	int r, s;
-
-	vertices.resize(rings * sectors * 3);
-
-	std::vector<float>::iterator v = vertices.begin();
-
-	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++)
-	{
-		float const y = sin(-M_PI_2 + M_PI * r * R);
-		float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
-		float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
-
-		*v++ = x * radius;
-		*v++ = y * radius;
-		*v++ = z * radius;
-	}
-
-	indices.resize(rings * sectors * 4);
-
-	std::vector<uint>::iterator i = indices.begin();
-
-	for (r = 0; r < rings - 1; r++) for (s = 0; s < sectors - 1; s++)
-	{
-		*i++ = r * sectors + s;
-		*i++ = r * sectors + (s + 1);
-		*i++ = (r + 1) * sectors + (s + 1);
-		*i++ = (r + 1) * sectors + s;
-	}
 }
 
 void DebugScene::Configuration()
@@ -829,12 +469,15 @@ void DebugScene::AppInfo()
 	
 }
 
+void DebugScene::SetFpsMax()
+{
+	max_fps_slider = 999;
+}
+
 void DebugScene::HardwareInfo()
 {
-
 	UpdateVRAMInfo1();
-
-
+	
 	ImGui::Text("SDL Version:");
 	ImGui::SameLine();
 	std::string temp = std::to_string(compiled_version.major) + "." + std::to_string(compiled_version.minor) + "." + std::to_string(compiled_version.patch);
@@ -922,7 +565,6 @@ void DebugScene::UpdateVRAMInfo1()
 	info1.vram_mb_current /= 1024;
 	glGetIntegerv(GL_GPU_MEMORY_INFO_EVICTED_MEMORY_NVX, &info1.vram_mb_evicted);
 	info1.vram_mb_evicted /= 1024;
-
 }
 
 void DebugScene::AppAbout()
@@ -1158,9 +800,6 @@ float DebugScene::GetFloatRandomValue(float range_f1, float range_f2)
 
 	LOG("float num is: %f", mean);
 
-	//ImGui::Text("float num is: %f", mean);
-
-
 	return mean;
 }
 
@@ -1175,9 +814,8 @@ int DebugScene::GetIntRandomValue(float range_i1, float range_i2)
 	// Choose a random mean between 1 and 6
 	std::uniform_int_distribution<int> uniform_dist1((int)range_i1, (int)range_i2);
 	int mean1 = uniform_dist1(rng);
-	LOG("int num is: %i", mean1);
 
-	//ImGui::Text("int num is: %i", mean1);
+	LOG("int num is: %i", mean1);
 
 	return mean1;
 }
@@ -1360,77 +998,3 @@ void DebugScene::LoadStyle(const char * name)
 	style->Colors[ImGuiCol_ModalWindowDarkening] = green;
 	}
 }
-
-void DebugScene::SetFpsMax()
-{
-	max_fps_slider = 999;
-}
-
-//glBegin(GL_LINES);
-
-//for (float i = -10.f; i <= 10.f; i++)					//VERY COOL DRAW
-//{
-//	glVertex3f(i, 0.f, 0.f);
-//	glVertex3f(10.f, 10.f, 0.f);
-
-//	glVertex3f(0.f, i, 0.f);
-//	glVertex3f(10.f, 10.f, 0.f);
-//}
-
-
-//glEnd();
-
-
-//glBegin(GL_TRIANGLES);
-
-//	glVertex3f(-2.f, 0.f, 0.f);							//AVICII
-//	glVertex3f(3.f, 0.f, 0.f);
-//	glVertex3f(3.f, 3.f, 0.f);
-
-//	glVertex3f(4.f, 0.f, 0.f);
-//	glVertex3f(9.f, 3.f, 0.f);
-//	glVertex3f(4.f, 3.f, 0.f);
-
-//glEnd();
-
-//GLuint buffer[1];
-//GLuint count = 0;
-//
-//par_shapes_mesh* shape = par_shapes_create_dodecahedron();
-//par_shapes_translate(shape, 1.f, 1.f, 1.f);
-//std::vector<vec3> position, normal;
-//
-//PAR_SHAPES_T const* triangle = shape->triangles;
-//
-//for (int f = 0; f < shape->ntriangles; f++, triangle += 3) {
-//	float const* pa = shape->points + 3 * triangle[0];
-//	float const* pb = shape->points + 3 * triangle[1];
-//	float const* pc = shape->points + 3 * triangle[2];
-//
-//	vec3 p0(pa[0], pa[1], pa[2]);
-//	vec3 p1(pb[0], pb[1], pb[2]);
-//	vec3 p2(pc[0], pc[1], pc[2]);
-//
-//	position.push_back(p0);
-//	position.push_back(p1);
-//	position.push_back(p2);
-//
-//	vec3 n = normalize(cross(p1 - p0, p2 - p0));
-//
-//	normal.push_back(n);
-//	normal.push_back(n);
-//	normal.push_back(n);
-//}
-//par_shapes_free_mesh(shape);
-//
-//count = position.size();
-//
-//glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);
-//glBufferData(GL_ARRAY_BUFFER, position.size() * sizeof(vec3), position.data(), GL_STATIC_DRAW);
-//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-//
-//glEnableVertexAttribArray(0);
-//
-//glDrawArrays(GL_TRIANGLES, 0, count);
-//
-//glDisableVertexAttribArray(0);

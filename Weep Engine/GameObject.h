@@ -41,11 +41,12 @@ public:
 	ComponentMesh* GetMesh() const;
 
 
+public:
+	bool parametric = false;
+
 	//should be private
 	std::vector<Component*> components;
 
-public:
-	bool parametric = false;
 private:
 	int			id = 0;
 	bool		selected = false;
