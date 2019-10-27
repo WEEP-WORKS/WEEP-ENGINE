@@ -61,8 +61,8 @@ bool ModuleCamera3D::Update()
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 12.0f * App->GetDT();
 
-	if (App->input->GetMouseZ() == 1) newPos -= Z * speed * 1;
-	else if (App->input->GetMouseZ() == -1)	newPos += Z * speed;
+	if (App->input->GetMouseZ() == 1) newPos -= Z * speed * 10;
+	else if (App->input->GetMouseZ() == -1)	newPos += Z * speed * 10;
 
 	Position += newPos;
 	Reference += newPos;
