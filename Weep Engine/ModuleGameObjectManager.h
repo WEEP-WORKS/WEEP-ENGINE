@@ -3,10 +3,11 @@
 
 #include "Module.h"
 #include "Globals.h"
-#include "par_shapes.h"
 
 class GameObject;
 class ComponentMesh;
+
+typedef struct par_shapes_mesh_s par_shapes_mesh;
 
 class GameObjectManager : public Module
 {

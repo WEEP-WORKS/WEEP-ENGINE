@@ -8,7 +8,7 @@
 #include "ModuleTexture.h"
 #include "ComponentTexture.h"
 #include "DebugScene.h"
-
+#include "par_shapes.h"
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {

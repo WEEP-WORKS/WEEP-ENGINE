@@ -8,8 +8,6 @@
 #define MAX_SNAKE 2
 #define LIB_NUM 10
 
-#include "par_shapes.h"
-
 struct hardware_info {
 	const char* gpu_vendor = 0;
 	const char* gpu_device = 0;
