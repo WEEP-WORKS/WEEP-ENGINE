@@ -2,6 +2,10 @@
 #include "App.h"
 #include "ModuleInput.h"
 #include "ModuleCamera3D.h"
+#include "GameObject.h"
+#include "ModuleGameObjectManager.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+#include "ComponentMesh.h"
 
 ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
@@ -160,7 +164,7 @@ bool ModuleCamera3D::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		Focus(vec3(0, 0, 0), 10);
+		Focus();
 	}
 
 	// Recalculate matrix -------------
@@ -223,9 +227,31 @@ void ModuleCamera3D::CalculateViewMatrix()
 	ViewMatrixInverse = inverse(ViewMatrix);
 }
 
-void ModuleCamera3D::Focus(const vec3& focus, const float& distance)
+void ModuleCamera3D::Focus()
 {
-	Reference = focus;
+	GameObject* selected = App->game_object_manager->selected.back();
 
-	Position = Reference + Z * distance;
+	ComponentMesh* c_mesh = selected->GetMesh();
+		
+		if (selected != nullptr)
+		{
+			AABB mesh_aabb = c_mesh->mesh_data->aabb;
+
+			Sphere sphere = mesh_aabb.MinimalEnclosingSphere();
+
+			if (sphere.Diameter() != 0)
+			{
+				float distance = sphere.Diameter() * 1.5f;
+				
+				Reference.x = mesh_aabb.CenterPoint().x;
+				Reference.y = mesh_aabb.CenterPoint().y;
+				Reference.z = mesh_aabb.CenterPoint().z;
+
+				Position = Reference + Z * distance;
+			}
+
+			//Reference = focus;
+
+			//Position = Reference + Z * distance;
+		}
 }

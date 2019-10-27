@@ -24,7 +24,7 @@ private:
 
 	void CalculateViewMatrix();
 
-	void Focus(const vec3 & focus, const float & distance);
+	void Focus();
 
 public:
 	

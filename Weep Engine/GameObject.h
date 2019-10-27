@@ -2,6 +2,7 @@
 #define __GAMEOBJECT_H__
 
 #include <vector>
+#include "MathGeoLib/include\MathGeoLib.h"
 
 class Component;
 class ComponentTexture;
@@ -20,7 +21,7 @@ public:
 	//Don't have cleanUp for each game objects and their components. TODO
 
 	Component* AddComponent(ComponentType);
-	void AddToComonentList(Component * &ret);
+	void AddToComponentList(Component * &ret);
 
 	void SetSelected(const bool & set);
 
@@ -40,14 +41,15 @@ public:
 
 	ComponentMesh* GetMesh() const;
 
-
 public:
 	bool parametric = false;
 
 	//should be private
 	std::vector<Component*> components;
 
+
 private:
+
 	int			id = 0;
 	bool		selected = false;
 	std::string name;

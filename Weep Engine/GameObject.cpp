@@ -50,19 +50,19 @@ Component* GameObject::AddComponent(ComponentType type)
 	case ComponentType::TRANSFORM:
 		ret = new ComponentTransform();
 		ret->type = type;
-		AddToComonentList(ret);
+		AddToComponentList(ret);
 		LOG("Component Transform added correctly.");
 		break;
 	case ComponentType::MESH:
 		ret = new ComponentMesh();
 		ret->type = type;
-		AddToComonentList(ret);
+		AddToComponentList(ret);
 		LOG("Component Mesh added correctly.")
 		break;
 	case ComponentType::TEXTURE:
 		ret = new ComponentTexture();
 		ret->type = type;
-		AddToComonentList(ret);
+		AddToComponentList(ret);
 		LOG("Component Texture added correcly.");
 		break;
 	default:
@@ -73,7 +73,7 @@ Component* GameObject::AddComponent(ComponentType type)
 	return ret;
 }
 
-void GameObject::AddToComonentList(Component * &ret)
+void GameObject::AddToComponentList(Component * &ret)
 {
 	ret->object = this;
 	components.push_back(ret);
