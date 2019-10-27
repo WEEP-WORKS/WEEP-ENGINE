@@ -90,7 +90,7 @@ void ComponentTexture::InspectorDraw()
 
 	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen)) {
 
-		ImGui::Text("Texture Path: %s ", App->texture->GetPathTexture().c_str());
+		ImGui::Text("Texture Path: %s ", texture_path.c_str());
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");
 		ImGui::Text("Width: %i px", App->texture->Width);
