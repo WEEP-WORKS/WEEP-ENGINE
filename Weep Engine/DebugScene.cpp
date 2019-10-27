@@ -575,7 +575,7 @@ void DebugScene::AppAbout()
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
 	ImGui::Text("This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa");
 	if (ImGui::Button("Jorge's Github")) {
-		App->OpenWeb("https://github.com/https://github.com/jorgegh2");
+		App->OpenWeb("https://github.com/jorgegh2");
 	}
 	ImGui::SameLine();
 	if (ImGui::Button("Lluis' Github")) {

@@ -36,13 +36,13 @@ public:
 	// vector<GameObject*> GetSelectedGameObjects() const;
 
 public:
-	bool create_cube = false;
-	bool create_sphere = false;
+	bool						create_cube		= false;
+	bool						create_sphere	= false;
 
 	//should be private
-	std::list<GameObject*> objects; //Vector or list?
+	std::list<GameObject*>		objects; //Vector or list?
 
-	vector<GameObject*> selected;
+	vector<GameObject*>			selected;
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?

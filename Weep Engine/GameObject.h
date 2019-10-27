@@ -42,16 +42,16 @@ public:
 
 
 public:
-	bool parametric = false;
+	bool					parametric		= false;
 
 	//should be private
 	std::vector<Component*> components;
 
 private:
-	int			id = 0;
-	bool		selected = false;
-	std::string name;
-	bool active = true;
+	int						id				= 0;
+	bool					selected		= false;
+	std::string				name			= "";
+	bool					active			= true;
 
 };
 

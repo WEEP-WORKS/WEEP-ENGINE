@@ -16,23 +16,23 @@ public:
 	
 
 	//Normals:------
-	uint num_faces = 0u;		// Number of faces of the mesh.
-	float normal_lenght = 0.5f;		// Lenght of all normals.
+	uint				num_faces					= 0u;		// Number of faces of the mesh.
+	float				normal_lenght				= 0.5f;		// Lenght of all normals.
 
 	//UVs
-	uint num_uvs_channels = 0u; //local var?
-	uint channel_buffer_size = 0u; //local var?
+	uint				num_uvs_channels			= 0u; 
+	uint				channel_buffer_size			= 0u; 
 
-	MeshData* mesh_data;
+	MeshData*			mesh_data;
 
-	Color color;
+	Color				color;
 
 private:
 
-	ComponentTexture* texture = nullptr;
+	ComponentTexture*	texture						= nullptr;
 
-	bool activate_face_normals = false;
-	bool activate_vertex_normals = false;
+	bool				activate_face_normals		= false;
+	bool				activate_vertex_normals		= false;
 
 public:
 	ComponentMesh();

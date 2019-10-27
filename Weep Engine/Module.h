@@ -70,10 +70,10 @@ public:
 	virtual void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension) {};
 
 
-	const char * name = "";
-	bool configuration = false;
+	const char *	name = "";
+	bool			configuration = false;
 
 private:
 
-	bool   enabled = false;
+	bool			enabled = false;
 };
