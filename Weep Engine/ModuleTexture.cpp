@@ -64,7 +64,7 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 			{
 				ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
 
-				text->id_texture = LoadTexture(file_path);
+				text->id_texture = LoadTexture(file_path, text->texture_width, text->texture_height);
 				text->texture_path = file_name;
 				text->ActivateThisTexture();
 			}
@@ -76,29 +76,19 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 	}
 }
 
-uint ModuleTexture::LoadTexture(const char* path)
+uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 {
 	uint ret = 0u;
 
 	f_path = path;
 
-	//for (list<GameObject*>::iterator iter = App->game_object_manager->objects.begin(); iter != App->game_object_manager->objects.end(); ++iter)
-	//{
-	//	std::vector<ComponentTexture*> textures = (*iter)->GetTextures();
-	//	for (std::vector<ComponentTexture*>::iterator iter_text = textures.begin(); iter_text != textures.end(); ++iter_text)
-	//	{
-	//		if ((*iter_text)->texture_path == path)
-	//		{
-	//			return (*iter_text)->id_texture;
-	//		}
-	//	}
-	//}
-
 	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
 	{
 		if (path == (*iter)->path)
 		{
-			LOG("The texture had already been loaded. returning saved texture...")
+			LOG("The texture had already been loaded. returning saved texture...");
+			width = (*iter)->width;
+			height = (*iter)->height;
 			return (*iter)->id;
 		}
 	}
@@ -110,10 +100,12 @@ uint ModuleTexture::LoadTexture(const char* path)
 		ret = ilutGLBindTexImage();
 		if (ret > 0)
 		{
-			Width = ilGetInteger(IL_IMAGE_WIDTH);
-			Height = ilGetInteger(IL_IMAGE_HEIGHT);
-
+		
+			width = ilGetInteger(IL_IMAGE_WIDTH);
+			height = ilGetInteger(IL_IMAGE_HEIGHT);
 			TextureInfo* new_texture = new TextureInfo();
+			new_texture->width = width;
+			new_texture->height = height;
 			new_texture->id = ret;
 			new_texture->path = path;
 			textures_paths.push_back(new_texture);

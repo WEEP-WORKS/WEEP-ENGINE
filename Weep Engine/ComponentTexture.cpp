@@ -8,20 +8,6 @@
 
 void ComponentTexture::ActivateThisTexture()
 {
-
-	//for (std::vector<Component*>::iterator iter = object->components.begin(); iter != object->components.end(); ++iter)
-	//{
-	//	if ((*iter)->type == ComponentType::TEXTURE)
-	//	{
-	//		ComponentTexture* component = (ComponentTexture*)(*iter);
-	//		if (component->IsTextureActive() && component != this)
-	//		{
-	//			component->DesactivateTexture();  //only one activated. if this is activated but it exist another texture activated, desactivate the other.
-	//			LOG("Exist another ComponentTexture which has been desactivated");
-	//			return; //return because if it check that another texture has been desactivated, it can't be more than one.
-	//		}
-	//	}
-	//}
 	
 	ComponentTexture* activated_texture = object->GetTextureActivated();
 	if (activated_texture != nullptr)
@@ -93,8 +79,8 @@ void ComponentTexture::InspectorDraw()
 		ImGui::Text("Texture Path: %s ", texture_path.c_str());
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");
-		ImGui::Text("Width: %i px", App->texture->Width);
-		ImGui::Text("Height: %i px", App->texture->Height);
+		ImGui::Text("Width: %i px", texture_width);
+		ImGui::Text("Height: %i px", texture_height);
 		ImGui::Checkbox("Activate Checkers", &activate_checkers);
 
 	}

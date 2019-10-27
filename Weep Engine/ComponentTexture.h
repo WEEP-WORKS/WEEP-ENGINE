@@ -20,6 +20,8 @@ public:
 	bool has_texture = false;
 	GLuint id_texture = 0;
 	std::string texture_path;
+	int texture_width;
+	int texture_height;
 
 private:
 
