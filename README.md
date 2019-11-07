@@ -13,7 +13,7 @@ This Engine made for educational porpouses on the Game Engines' subject during t
 
 Lluis Moreu https://github.com/youis11 
 
-Jorge Gemas Herencia: https://github.com/https://github.com/jorgegh2
+Jorge Gemas Herencia: https://github.com/jorgegh2
 
 Github repository: https://github.com/WEEP-WORKS/WEEP-ENGINE
 
