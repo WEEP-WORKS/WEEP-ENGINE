@@ -10,6 +10,8 @@
 #include "DebugScene.h"
 #include "par_shapes.h"
 
+//#include <functional>
+
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("GameObjectManager");
@@ -178,16 +180,24 @@ void GameObjectManager::Hierarchy()
 		}
 		ImGui::End();
 	}
-
+	//std::function<void(GameObjectManager*)> funct_var =&GameObjectManager::print1;
 	if (create_cube)
 	{
-		CreateCube();
+		printThisFunction(&GameObjectManager::print1);
+		//CreateCube();
+		//funct_var = std::bind(&GameObjectManager::print1, this);
+		//printThis(&GameObjectManager::print1);
+		//funct_var(this);
 		create_cube = false;
 	}
 
 	if (create_sphere)
 	{
-		CreateSphere();
+		printThisFunction(&GameObjectManager::print2);
+		//funct_var = &GameObjectManager::print2;
+		//printThis(&GameObjectManager::print2);
+		//funct_var(this);
+		//CreateSphere();
 		create_sphere = false;
 	}
 

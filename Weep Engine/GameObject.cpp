@@ -135,7 +135,6 @@ std::vector<ComponentTexture*> GameObject::GetTextures() const
 			textures.push_back(component);
 		}
 	}
-	LOG("There is no texture activated.");
 	return textures;
 }
 

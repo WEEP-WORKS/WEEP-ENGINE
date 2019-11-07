@@ -8,6 +8,8 @@ using namespace std;
 #include <list>
 #include <queue>
 #include <iostream>
+#include <functional>
+
 
 #include "SDL\include\SDL.h"
 

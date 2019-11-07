@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 
+
 class GameObject;
 class ComponentMesh;
 
@@ -35,6 +36,17 @@ public:
 	void Hierarchy();
 	// vector<GameObject*> GetSelectedGameObjects() const;
 
+	void print1() { 
+		LOG("FUNCT 1");
+	};
+
+	void print2() { LOG("FUNCT 2"); }
+
+	void printThisFunction(std::function<void(GameObjectManager*)> functVar)
+	{
+		functVar(this);
+	}
+
 public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
@@ -43,6 +55,8 @@ public:
 	std::list<GameObject*>		objects; //Vector or list?
 
 	vector<GameObject*>			selected;
+
+
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?
