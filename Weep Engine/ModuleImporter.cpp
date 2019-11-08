@@ -84,56 +84,76 @@ bool ModuleImporter::LoadFBX(const char* path)
 
 void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
-	for (uint i = 0; i < scene->mNumMeshes; ++i)
+
+	std::list<aiNode*> list;
+	list.push_back(scene->mRootNode);
+
+	while (!list.empty())
 	{
-
-		string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
-
-		GameObject* object = new GameObject();
-		object->SetName(name.c_str());
-		ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-		aiMesh* mesh = scene->mMeshes[i];
-
-		if (model != nullptr)
+		aiNode* current = (*list.begin());
+		list.pop_front();
+		for (uint i = 0; i < current->mNumChildren; ++i)
 		{
-			LoadVertices(model, mesh);
+			//children of the current
+			aiNode* children_current = current->mChildren[i];
+			list.push_back(children_current);
 
-			if (mesh->HasFaces())
+		}
+
+		for (uint i = 0; i < current->mNumMeshes; ++i)
+		{
+			//load current
+			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
+
+			GameObject* object = new GameObject();
+			object->SetName(name.c_str()); //constructor... TODO
+			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
+			aiMesh* mesh = scene->mMeshes[current->mMeshes[i]];
+
+
+			if (model != nullptr)
 			{
-				LoadIndexs(model, mesh);
-			}
+				LoadVertices(model, mesh);
 
-			if (mesh->HasNormals())
-			{
-				LoadNormals(model, mesh);
-			}
+				if (mesh->HasFaces())
+				{
+					LoadIndexs(model, mesh);
+				}
 
-			model->num_uvs_channels = mesh->GetNumUVChannels();
+				if (mesh->HasNormals())
+				{
+					LoadNormals(model, mesh);
+				}
 
-			LoadUVs(model, mesh);
-
-			model->SetBuffersWithData();
-
-			if (model->num_uvs_channels > 0 && scene->HasMaterials())
-			{
-
-				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
 				model->num_uvs_channels = mesh->GetNumUVChannels();
 
-				
-				LoadMaterials(scene, mesh, text);
+				LoadUVs(model, mesh);
 
-				text->ActivateThisTexture();
+				model->SetBuffersWithData();
+
+				if (model->num_uvs_channels > 0 && scene->HasMaterials())
+				{
+
+					ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+					model->num_uvs_channels = mesh->GetNumUVChannels();
+
+
+					LoadMaterials(scene, mesh, text);
+
+					text->ActivateThisTexture();
+				}
+
+				App->game_object_manager->AddObject(object);
 			}
-			
-			App->game_object_manager->AddObject(object);
-		}
-		else
-		{
-			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
-		}
+			else
+			{
+				LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
+			}
 
+		}
+		
 	}
+
 }
 
 // ----------------------------Vertexs----------------------------
