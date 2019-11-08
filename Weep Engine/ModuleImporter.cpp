@@ -85,22 +85,25 @@ bool ModuleImporter::LoadFBX(const char* path)
 void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
 
-	std::list<aiNode*> list;
-	list.push_back(scene->mRootNode);
+	std::list<Node<aiNode>> list;
+
+	Node<aiNode> root(scene->mRootNode, nullptr);
+	list.push_back(root);
 
 	while (!list.empty())
 	{
-		aiNode* current = (*list.begin());
+		Node<aiNode> current = (*list.begin());
 		list.pop_front();
-		for (uint i = 0; i < current->mNumChildren; ++i)
+		for (uint i = 0; i < current.current_node->mNumChildren; ++i)
 		{
 			//children of the current
-			aiNode* children_current = current->mChildren[i];
+
+			Node<aiNode> children_current(current.current_node->mChildren[i], &current);
 			list.push_back(children_current);
 
 		}
 
-		for (uint i = 0; i < current->mNumMeshes; ++i)
+		for (uint i = 0; i < current.current_node->mNumMeshes; ++i)
 		{
 			//load current
 			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
@@ -108,7 +111,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			GameObject* object = new GameObject();
 			object->SetName(name.c_str()); //constructor... TODO
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-			aiMesh* mesh = scene->mMeshes[current->mMeshes[i]];
+			aiMesh* mesh = scene->mMeshes[current.current_node->mMeshes[i]];
 
 
 			if (model != nullptr)

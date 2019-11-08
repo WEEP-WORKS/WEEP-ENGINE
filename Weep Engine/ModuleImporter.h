@@ -7,6 +7,22 @@ class aiMesh;
 class ComponentMesh;
 class ComponentTexture;
 class aiScene;
+
+template<class my_node>
+class Node
+{
+public:
+	my_node* current_node;
+	Node<my_node>* parent = nullptr;
+public:
+
+	Node(my_node* current, Node<my_node>* parent)
+	{
+		current_node = current;
+		this->parent = parent;
+	}
+};
+
 class ModuleImporter : public Module
 {
 public:
