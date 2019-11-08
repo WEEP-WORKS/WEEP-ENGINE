@@ -183,8 +183,8 @@ void GameObjectManager::Hierarchy()
 	//std::function<void(GameObjectManager*)> funct_var =&GameObjectManager::print1;
 	if (create_cube)
 	{
-		printThisFunction(&GameObjectManager::print1);
-		//CreateCube();
+		//printThisFunction(std::bind(&GameObjectManager::print1, this));
+	//CreateCube();
 		//funct_var = std::bind(&GameObjectManager::print1, this);
 		//printThis(&GameObjectManager::print1);
 		//funct_var(this);
@@ -193,7 +193,8 @@ void GameObjectManager::Hierarchy()
 
 	if (create_sphere)
 	{
-		printThisFunction(&GameObjectManager::print2);
+		std::list<GameObject*>::iterator GO = objects.begin();
+		printThisFunction(&GameObject::printGO);
 		//funct_var = &GameObjectManager::print2;
 		//printThis(&GameObjectManager::print2);
 		//funct_var(this);

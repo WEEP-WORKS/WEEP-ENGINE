@@ -2,6 +2,7 @@
 #define __GAMEOBJECT_H__
 
 #include <vector>
+#include "Globals.h"
 
 class Component;
 class ComponentTexture;
@@ -39,6 +40,8 @@ public:
 	std::vector<ComponentTexture*> GetTextures() const;
 
 	ComponentMesh* GetMesh() const;
+
+	void printGO() { LOG("%i", active); }
 
 
 public:

@@ -42,9 +42,14 @@ public:
 
 	void print2() { LOG("FUNCT 2"); }
 
-	void printThisFunction(std::function<void(GameObjectManager*)> functVar)
+	void printThisFunction(std::function<void(GameObject*)> functVar)
 	{
-		functVar(this);
+		//std::list<GameObject*>::iterator GO = objects.begin();
+		//std::function<void()> functionbinded = std::bind(&GameObject::printGO, (*GO));
+		for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
+		{
+			functVar(*item);
+		}
 	}
 
 public:
