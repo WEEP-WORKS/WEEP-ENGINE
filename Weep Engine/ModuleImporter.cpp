@@ -87,8 +87,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 	std::list<Node<aiNode>> go_to_create;
 	std::list<Node<aiNode>> go_created;
-
-	GameObject* root_go = new GameObject("root_house", App->game_object_manager->root);
+	std::string n = "root_"; n += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
+	GameObject* root_go = new GameObject(n, App->game_object_manager->root);
 
 	
 	go_to_create.push_back(Node<aiNode>(scene->mRootNode, nullptr, root_go));

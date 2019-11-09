@@ -56,7 +56,11 @@ public:
 
 	int DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)>);
 
+	int DoForAllChildrensVertical(std::function<void(GameObjectManager*, GameObject*)>);
+
 	uint GetAllGameObjectNumber();
+
+
 
 
 public:
@@ -70,11 +74,16 @@ public:
 
 	vector<GameObject*>			selected;
 
+	list<GameObject*>			printed_hierarchy;
+
+
+
 
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
+	void AllTreePop(GameObject* object);
 
 
 

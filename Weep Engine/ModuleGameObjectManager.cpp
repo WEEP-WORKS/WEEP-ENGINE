@@ -183,10 +183,10 @@ void GameObjectManager::Hierarchy()
 
 			//create primitives should be here
 
-
-			DoForAllChildrens(&GameObjectManager::PrintGoList);
 			
+			DoForAllChildrensVertical(&GameObjectManager::PrintGoList);
 
+			printed_hierarchy.clear();
 		}
 		ImGui::End();
 	}
@@ -204,7 +204,7 @@ void GameObjectManager::Hierarchy()
 	if (create_sphere)
 	{
 		//std::list<GameObject*>::iterator GO = objects.begin();
-		printThisFunction(&GameObject::printGO);			//-> with void(GameObject) 
+		//printThisFunction(&GameObject::printGO);			//-> with void(GameObject) 
 		//printThisFunction(std::bind(&GameObject::printGO, (*GO)));			//-> with void() problem if GO function need some var from itself, because we have to bind the function to wich entity will execute the function. 
 		//funct_var = &GameObjectManager::print2;
 		//printThis(&GameObjectManager::print2);
@@ -218,48 +218,102 @@ void GameObjectManager::Hierarchy()
 
 void GameObjectManager::PrintGoList(GameObject * object)
 {
-	if (object->IsActive() == false)
-		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
-
-	if (object == nullptr)
+	if (root == object)
 		return;
 
-	uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
 
-	if (object->GetSelected())
-		flags |= ImGuiTreeNodeFlags_Selected;
 
-	//treenode needs to be more understood
-	bool opened = ImGui::TreeNodeEx(object->GetName(), flags);
 
-	// Input
-	if (ImGui::IsItemClicked(0))
+	bool is_first_children = false;
+	for (std::vector<GameObject*>::const_iterator iter = root->childrens.cbegin(); iter != root->childrens.cend(); ++iter)
 	{
-		//If ctrl is pressed do multiselection
-		if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
-		{
-			AddGameObjectToSelected(object);
-		}
-
-		// If shift is pressed do fill gap selection
-		else if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		{
-			//TODO
-		}
-
-		// Monoselection
-		else
-		{
-			ClearSelection();
-			AddGameObjectToSelected(object);
-		}
+		if ((*iter) == object)
+			is_first_children = true;
 	}
-	if (opened)
+
+
+	if (object->parent->hierarchy_opnened || is_first_children)
+	{
+		
+		if (object->parent->hierarchy_opnened)
+		{
+			uint i = 0u;
+		}
+		if (object->IsActive() == false)
+			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
+
+		if (object == nullptr)
+			return;
+
+		uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
+
+		if (object->childrens.empty())
+		{
+			flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+		}
+
+		if (object->GetSelected())
+		{
+			flags |= ImGuiTreeNodeFlags_Selected;
+		}
+
+		//treenode needs to be more understood
+		object->hierarchy_opnened = ImGui::TreeNodeEx(object->GetName(), flags);
+
+		// Input
+		if (ImGui::IsItemClicked(0))
+		{
+			//If ctrl is pressed do multiselection
+			if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+			{
+				AddGameObjectToSelected(object);
+			}
+
+			// If shift is pressed do fill gap selection
+			else if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+			{
+				//TODO
+			}
+
+			// Monoselection
+			else
+			{
+				ClearSelection();
+				AddGameObjectToSelected(object);
+			}
+		}
+
+		if (object->IsActive() == false)
+			ImGui::PopStyleColor();
+
+		for (std::list<GameObject*>::const_iterator iter = printed_hierarchy.cbegin(); iter != printed_hierarchy.cend(); ++iter)
+		{
+			if (object->IsMyBrother(*iter))
+			{
+				if(!is_first_children)
+				ImGui::TreePop();
+
+
+				GameObject* before = (*printed_hierarchy.begin());
+
+				while (before->parent != object->parent)
+				{
+					//ImGui::TreePop();
+					before = before->parent;
+				}
+			}
+		}
+		printed_hierarchy.push_front(object);
+	}
+
+}
+
+void GameObjectManager::AllTreePop(GameObject* object)
+{
+	if (object->hierarchy_opnened)
 	{
 		ImGui::TreePop();
 	}
-	if (object->IsActive() == false)
-		ImGui::PopStyleColor();
 }
 
 int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct)
@@ -285,7 +339,33 @@ int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, 
 	return number_childrens;
 }
 
+int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectManager*, GameObject*)> funct)
+{
+	int number_childrens = -1; //-1 to not count the root GameObject.
+	std::list<GameObject*> all_childrens;
+
+	all_childrens.push_back(root);
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		for (std::vector<GameObject*>::const_reverse_iterator iter = current->childrens.crbegin(); iter != current->childrens.crend(); ++iter)
+		{
+			all_childrens.push_front(*iter);
+		}
+
+		funct(this, current);
+		++number_childrens;
+	}
+
+	return number_childrens;
+}
+
+
 uint GameObjectManager::GetAllGameObjectNumber()
 {
 	return (uint)root->DoForAllChildrens(&GameObject::CalculateNumberOfChildrens);
 }
+
+

@@ -192,3 +192,43 @@ void GameObject::SelectThis()
 	App->game_object_manager->selected.push_back(this);
 	SetSelected(true);
 }
+
+bool GameObject::IsMyBrother(GameObject* object) const
+{
+
+	for (std::vector<GameObject*>::const_iterator iter = parent->childrens.cbegin(); iter != parent->childrens.cend(); ++iter)
+	{
+		if (object == (*iter))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool GameObject::HasChildrens() const
+{
+	return childrens.empty();
+}
+
+//uint GameObject::CountChildrensLayers()
+//{
+//	uint count = 0u;
+//	std::list<GameObject*> all_childrens;
+//
+//	all_childrens.push_back(this);
+//
+//	while (!all_childrens.empty())
+//	{
+//		GameObject* current = (*all_childrens.begin());
+//		all_childrens.pop_front();
+//		for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+//		{
+//			all_childrens.push_back(*iter);
+//		}
+//
+//		if(current)
+//	}
+//	return count
+//}

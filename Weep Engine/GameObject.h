@@ -49,11 +49,18 @@ public:
 
 	void CalculateNumberOfChildrens() {}
 
-	void printGO() { LOG("%i", active); }
+	bool IsMyBrother(GameObject* object) const;
+
+	bool HasChildrens() const;
+
+	uint CountChildrensLayers();
+
+
 
 
 public:
 	bool					parametric		= false;
+	bool hierarchy_opnened = false;
 
 	GameObject* parent = nullptr;
 	std::vector<GameObject*> childrens;
