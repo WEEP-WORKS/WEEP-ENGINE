@@ -13,7 +13,7 @@ enum class ComponentType;
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(std::string name, GameObject* parent);
 
 	void Update(); //this is not from the module class. This function will be called from objectManager and will call Components update or something... I don't know yet.
 

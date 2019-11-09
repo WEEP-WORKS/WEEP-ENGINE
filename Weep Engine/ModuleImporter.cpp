@@ -89,11 +89,9 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 	std::list<Node<aiNode>> to_delete;
 
 
-	GameObject* root_go = new GameObject();
-	root_go->parent = App->game_object_manager->root;
-	App->game_object_manager->root->childrens.push_back(root_go);
+	GameObject* root_go = new GameObject("root_house", App->game_object_manager->root);
 
-	root_go->SetName("root_house");
+
 	App->game_object_manager->AddObject(root_go);
 
 	Node<aiNode> root(scene->mRootNode, nullptr);
@@ -119,15 +117,13 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			//load current
 			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
 
-			GameObject* object = new GameObject();
-			object->SetName(name.c_str()); //constructor... TODO
+			GameObject* object = new GameObject(name.c_str(), current->parent->go);
+
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
 
 
 			current->go = object;
-			object->parent = current->parent->go;
-			current->parent->go->childrens.push_back(object);
 
 
 			if (model != nullptr)

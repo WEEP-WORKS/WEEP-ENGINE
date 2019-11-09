@@ -15,7 +15,7 @@
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("GameObjectManager");
-	root = new GameObject();
+	root = new GameObject("root", nullptr);
 	root->SetName("root");
 }
 
@@ -49,17 +49,18 @@ void GameObjectManager::AddObject(GameObject* object)
 	objects.push_back(object);
 }
 
-GameObject* GameObjectManager::CreateGeometryShape(int sides)
-{
-	GameObject* ret = new GameObject();
-
-	
-	return ret;
-}
+//to create a geometry shape automatically by their sides.
+//GameObject* GameObjectManager::CreateGeometryShape(int sides)
+//{
+//	GameObject* ret = new GameObject();
+//
+//	
+//	return ret;
+//}
 
 void GameObjectManager::CreateCube()
 {
-	GameObject* ret = new GameObject();
+	GameObject* ret = new GameObject("Cube", nullptr);
 	par_shapes_mesh* mesh = par_shapes_create_cube();
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 	ret->parametric = true;
@@ -75,7 +76,7 @@ void GameObjectManager::CreateCube()
 
 void GameObjectManager::CreateSphere()
 {
-	GameObject* ret = new GameObject();
+	GameObject* ret = new GameObject("Sphere", nullptr);
 	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(2);
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 

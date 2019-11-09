@@ -4,9 +4,13 @@
 #include "ComponentTexture.h"
 #include "ComponentTransform.h"
 
-GameObject::GameObject()
+GameObject::GameObject(std::string name, GameObject* parent) : name(name), parent(parent)
 {
 	LOG("New Game Object created!");
+	if (parent != nullptr)
+	{
+		parent->childrens.push_back(this);
+	}
 	AddComponent(ComponentType::TRANSFORM);
 }
 
