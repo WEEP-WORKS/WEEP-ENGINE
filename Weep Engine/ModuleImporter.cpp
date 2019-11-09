@@ -113,7 +113,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
 		{
 			//load current
-			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
+			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
 
 			GameObject* object = new GameObject(name.c_str(), current->parent->current_go);
 

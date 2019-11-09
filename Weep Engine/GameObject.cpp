@@ -14,21 +14,24 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	{
 		parent->childrens.push_back(this);
 	}
-	App->game_object_manager->AddObject(this);
 	AddComponent(ComponentType::TRANSFORM);
 }
 
 void GameObject::Update()
 {
-	for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+	if (IsActive())
 	{
-		if ((*iter)->IsActive())
-			(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
+		for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+		{
+			if ((*iter)->IsActive())
+				(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
+		}
 	}
 }
 
 void GameObject::CleanUp()
 {
+
 	for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
 	{
 		(*iter)->CleanUp();
@@ -36,6 +39,8 @@ void GameObject::CleanUp()
 		
 	}
 	components.clear();
+
+	//RELEASE(this);
 }
 
 Component* GameObject::AddComponent(ComponentType type)
@@ -159,8 +164,9 @@ ComponentMesh* GameObject::GetMesh() const
 	return nullptr;
 }
 
-void GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
+int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 {
+	int number_childrens = -1; // -1 to not count this game object and only his childrens.
 	std::list<GameObject*> all_childrens;
 
 	all_childrens.push_back(this);
@@ -175,7 +181,10 @@ void GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 		}
 
 		funct(current);
+		++number_childrens;
 	}
+
+	return number_childrens;
 }
 
 void GameObject::SelectThis()

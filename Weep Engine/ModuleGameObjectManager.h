@@ -18,6 +18,7 @@ public:
 
 	bool Awake() override;
 	bool Update() override;
+	void DoUpdateIfActivated(GameObject * go);
 	bool CleanUp() override;
 
 	//GameObject* CreateSphere(const int &);
@@ -47,11 +48,16 @@ public:
 	{
 		//std::list<GameObject*>::iterator GO = objects.begin();
 		//std::function<void()> functionbinded = std::bind(&GameObject::printGO, (*GO));
-		for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
+		/*for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
 			functVar(*item);
-		}
+		}*/
 	}
+
+	int DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)>);
+
+	uint GetAllGameObjectNumber();
+
 
 public:
 	bool						create_cube		= false;
@@ -60,7 +66,7 @@ public:
 	GameObject* root;
 
 	//should be private
-	std::list<GameObject*>		objects; //Vector or list?
+	//std::list<GameObject*>		objects; //Vector or list?
 
 	vector<GameObject*>			selected;
 

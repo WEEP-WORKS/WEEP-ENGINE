@@ -26,34 +26,38 @@ bool GameObjectManager::Awake()
 }
 
 
-bool GameObjectManager::Update() //dt?
+bool GameObjectManager::Update() 
 {
-	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
-	{
-		if((*item)->IsActive())
-			(*item)->Update();
-	}
+	root->DoForAllChildrens(&GameObject::Update);
 
 	Hierarchy();
 
 	return true;
 }
 
+void GameObjectManager::DoUpdateIfActivated(GameObject* go)
+{
+	if (go->IsActive())
+		go->Update();
+}
+
 bool GameObjectManager::CleanUp()
 {
-	for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
+	/*for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
 		(*item)->CleanUp();
 		RELEASE(*item);
-	}
-	objects.clear();
+	}*/
+
+	root->DoForAllChildrens(&GameObject::CleanUp);
+	
 	return true;
 }
 
-void GameObjectManager::AddObject(GameObject* object)
-{
-	objects.push_back(object);
-}
+//void GameObjectManager::AddObject(GameObject* object)
+//{
+//	objects.push_back(object);
+//}
 
 //to create a geometry shape automatically by their sides.
 //GameObject* GameObjectManager::CreateGeometryShape(int sides)
@@ -179,10 +183,9 @@ void GameObjectManager::Hierarchy()
 
 			//create primitives should be here
 
-			for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
-			{
-				PrintGoList((*item));
-			}
+
+			DoForAllChildrens(&GameObjectManager::PrintGoList);
+			
 
 		}
 		ImGui::End();
@@ -200,7 +203,7 @@ void GameObjectManager::Hierarchy()
 
 	if (create_sphere)
 	{
-		std::list<GameObject*>::iterator GO = objects.begin();
+		//std::list<GameObject*>::iterator GO = objects.begin();
 		printThisFunction(&GameObject::printGO);			//-> with void(GameObject) 
 		//printThisFunction(std::bind(&GameObject::printGO, (*GO)));			//-> with void() problem if GO function need some var from itself, because we have to bind the function to wich entity will execute the function. 
 		//funct_var = &GameObjectManager::print2;
@@ -241,7 +244,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		// If shift is pressed do fill gap selection
 		else if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		{
-
+			//TODO
 		}
 
 		// Monoselection
@@ -257,4 +260,32 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	}
 	if (object->IsActive() == false)
 		ImGui::PopStyleColor();
+}
+
+int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct)
+{
+	int number_childrens = -1; //-1 to not count the root GameObject.
+	std::list<GameObject*> all_childrens;
+
+	all_childrens.push_back(root);
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+		{
+			all_childrens.push_back(*iter);
+		}
+
+		funct(this, current);
+		++number_childrens;
+	}
+
+	return number_childrens;
+}
+
+uint GameObjectManager::GetAllGameObjectNumber()
+{
+	return (uint)root->DoForAllChildrens(&GameObject::CalculateNumberOfChildrens);
 }

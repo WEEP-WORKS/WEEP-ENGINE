@@ -42,9 +42,11 @@ public:
 
 	ComponentMesh* GetMesh() const;
 
-	void DoForAllChildrens(std::function<void(GameObject*)>);
+	int DoForAllChildrens(std::function<void(GameObject*)>);
 
 	void SelectThis();
+
+	void CalculateNumberOfChildrens() {}
 
 	void printGO() { LOG("%i", active); }
 
