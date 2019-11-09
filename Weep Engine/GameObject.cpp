@@ -14,7 +14,7 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	{
 		parent->childrens.push_back(this);
 	}
-	AddComponent(ComponentType::TRANSFORM);
+	transform = (ComponentTransform*)AddComponent(ComponentType::TRANSFORM);
 }
 
 void GameObject::Update()

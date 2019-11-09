@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 #include "Globals.h"
+#include "ComponentTransform.h"
 
 class Component;
 class ComponentTexture;
@@ -59,6 +60,8 @@ public:
 
 	//should be private
 	std::vector<Component*> components;
+
+	ComponentTransform* transform = nullptr;
 
 private:
 	int						id				= 0;

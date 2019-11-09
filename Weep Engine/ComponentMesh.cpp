@@ -1,5 +1,6 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
+#include "ComponentTransform.h"
 #include <vector>
 #include "GameObject.h"
 #include "imgui.h"
@@ -90,6 +91,10 @@ void ComponentMesh::Render()
 
 void ComponentMesh::RenderModel()
 {
+	// Push matrix
+	//glPushMatrix();
+	//glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
+
 	glBindBuffer(GL_ARRAY_BUFFER, mesh_data->vertexs.id_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates.
 

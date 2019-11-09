@@ -5,7 +5,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ModuleTexture.h"
-
+#include "MathGeoLib/include/MathGeoLib.h"
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -123,6 +123,27 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			current->current_go = object;
 
+			// Set mesh pos, rot and scale
+			float3 position_i(0, 0, 0);
+			Quat rotation_i(0, 0, 0, 0);
+			float3 scale_i(0, 0, 0);
+
+			aiVector3D translation;
+			aiVector3D scaling;
+			aiQuaternion rotation;
+
+			aiNode* node = scene->mRootNode->mChildren[i];
+			if (node != nullptr)
+			{
+				node->mTransformation.Decompose(scaling, rotation, translation);
+				position_i = float3 (translation.x, translation.y, translation.z);
+				scale_i = float3 (scaling.x, scaling.y, scaling.z);
+				rotation_i = Quat (rotation.x, rotation.y, rotation.z, rotation.w);
+			}
+
+			object->transform->SetPosition(float3(position_i.x, position_i.y, position_i.z));
+			object->transform->SetRotationQuat(Quat(rotation_i.x, rotation_i.y, rotation_i.w, rotation_i.z));
+			//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
 
 			if (model != nullptr)
 			{
