@@ -2,6 +2,7 @@
 #define __GAMEOBJECT_H__
 
 #include <vector>
+#include <functional>
 #include "Globals.h"
 
 class Component;
@@ -40,6 +41,10 @@ public:
 	std::vector<ComponentTexture*> GetTextures() const;
 
 	ComponentMesh* GetMesh() const;
+
+	void DoForAllChildrens(std::function<void(GameObject*)>);
+
+	void SelectThis();
 
 	void printGO() { LOG("%i", active); }
 

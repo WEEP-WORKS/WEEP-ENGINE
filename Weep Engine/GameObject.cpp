@@ -5,6 +5,7 @@
 #include "ComponentTransform.h"
 #include "App.h"
 #include "ModuleGameObjectManager.h"
+#include <list>
 
 GameObject::GameObject(std::string name, GameObject* parent) : name(name), parent(parent)
 {
@@ -156,4 +157,29 @@ ComponentMesh* GameObject::GetMesh() const
 	}
 
 	return nullptr;
+}
+
+void GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
+{
+	std::list<GameObject*> all_childrens;
+
+	all_childrens.push_back(this);
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+		{
+			all_childrens.push_back(*iter);
+		}
+
+		funct(current);
+	}
+}
+
+void GameObject::SelectThis()
+{
+	App->game_object_manager->selected.push_back(this);
+	SetSelected(true);
 }

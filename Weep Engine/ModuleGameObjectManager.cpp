@@ -149,13 +149,8 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 			return;
 	}
 
-	go->SetSelected(true);
-	selected.push_back(go);
-	for (vector<GameObject*>::iterator iter_children = go->childrens.begin(); iter_children != go->childrens.end(); ++iter_children)
-	{
-		(*iter_children)->SetSelected(true);
-		selected.push_back(*iter_children);
-	}
+	go->DoForAllChildrens(&GameObject::SelectThis);
+	
 }
 
 void GameObjectManager::ClearSelection()
