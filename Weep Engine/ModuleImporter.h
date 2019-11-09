@@ -7,6 +7,7 @@ class aiMesh;
 class ComponentMesh;
 class ComponentTexture;
 class aiScene;
+class GameObject;
 
 template<class my_node>
 class Node
@@ -14,6 +15,7 @@ class Node
 public:
 	my_node* current_node;
 	Node<my_node>* parent = nullptr;
+	GameObject* go = nullptr;
 public:
 
 	Node(my_node* current, Node<my_node>* parent)

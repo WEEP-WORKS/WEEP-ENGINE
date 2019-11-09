@@ -56,6 +56,8 @@ public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
 
+	GameObject* root;
+
 	//should be private
 	std::list<GameObject*>		objects; //Vector or list?
 

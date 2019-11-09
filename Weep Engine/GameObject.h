@@ -47,6 +47,9 @@ public:
 public:
 	bool					parametric		= false;
 
+	GameObject* parent = nullptr;
+	std::vector<GameObject*> childrens;
+
 	//should be private
 	std::vector<Component*> components;
 

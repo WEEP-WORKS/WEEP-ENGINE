@@ -86,24 +86,35 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
 
 	std::list<Node<aiNode>> list;
+	std::list<Node<aiNode>> to_delete;
+
+
+	GameObject* root_go = new GameObject();
+	root_go->parent = App->game_object_manager->root;
+	App->game_object_manager->root->childrens.push_back(root_go);
+
+	root_go->SetName("root_house");
+	App->game_object_manager->AddObject(root_go);
 
 	Node<aiNode> root(scene->mRootNode, nullptr);
+	root.go = root_go;
 	list.push_back(root);
 
 	while (!list.empty())
 	{
-		Node<aiNode> current = (*list.begin());
+		to_delete.push_front(*list.begin());
+		Node<aiNode>* current = &(*to_delete.begin());
 		list.pop_front();
-		for (uint i = 0; i < current.current_node->mNumChildren; ++i)
+		for (uint i = 0; i < current->current_node->mNumChildren; ++i)
 		{
 			//children of the current
 
-			Node<aiNode> children_current(current.current_node->mChildren[i], &current);
+			Node<aiNode> children_current(current->current_node->mChildren[i], current);
 			list.push_back(children_current);
 
 		}
 
-		for (uint i = 0; i < current.current_node->mNumMeshes; ++i)
+		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
 		{
 			//load current
 			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
@@ -111,7 +122,12 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			GameObject* object = new GameObject();
 			object->SetName(name.c_str()); //constructor... TODO
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-			aiMesh* mesh = scene->mMeshes[current.current_node->mMeshes[i]];
+			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
+
+
+			current->go = object;
+			object->parent = current->parent->go;
+			current->parent->go->childrens.push_back(object);
 
 
 			if (model != nullptr)
@@ -156,6 +172,9 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		}
 		
 	}
+
+	to_delete.clear();
+	list.clear();
 
 }
 

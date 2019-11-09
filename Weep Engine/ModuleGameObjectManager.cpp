@@ -15,6 +15,8 @@
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("GameObjectManager");
+	root = new GameObject();
+	root->SetName("root");
 }
 
 
@@ -144,6 +146,11 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 
 	go->SetSelected(true);
 	selected.push_back(go);
+	for (vector<GameObject*>::iterator iter_children = go->childrens.begin(); iter_children != go->childrens.end(); ++iter_children)
+	{
+		(*iter_children)->SetSelected(true);
+		selected.push_back(*iter_children);
+	}
 }
 
 void GameObjectManager::ClearSelection()
