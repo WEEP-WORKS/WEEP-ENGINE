@@ -15,8 +15,14 @@
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("GameObjectManager");
+
+}
+
+bool GameObjectManager::Awake()
+{
 	root = new GameObject("root", nullptr);
-	root->SetName("root");
+
+	return true;
 }
 
 
@@ -71,7 +77,6 @@ void GameObjectManager::CreateCube()
 	ret->SetName("cube");
 	ClearSelection();
 	AddGameObjectToSelected(ret);
-	AddObject(ret);
 }
 
 void GameObjectManager::CreateSphere()
@@ -87,7 +92,6 @@ void GameObjectManager::CreateSphere()
 	ret->SetName("sphere");
 	ClearSelection();
 	AddGameObjectToSelected(ret);
-	AddObject(ret);
 }
 
 void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh)

@@ -3,6 +3,8 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ComponentTransform.h"
+#include "App.h"
+#include "ModuleGameObjectManager.h"
 
 GameObject::GameObject(std::string name, GameObject* parent) : name(name), parent(parent)
 {
@@ -11,6 +13,7 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	{
 		parent->childrens.push_back(this);
 	}
+	App->game_object_manager->AddObject(this);
 	AddComponent(ComponentType::TRANSFORM);
 }
 

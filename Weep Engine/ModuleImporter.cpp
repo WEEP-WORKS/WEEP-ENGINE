@@ -85,31 +85,29 @@ bool ModuleImporter::LoadFBX(const char* path)
 void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
 
-	std::list<Node<aiNode>> list;
-	std::list<Node<aiNode>> to_delete;
-
+	std::list<Node<aiNode>> go_to_create;
+	std::list<Node<aiNode>> go_created;
 
 	GameObject* root_go = new GameObject("root_house", App->game_object_manager->root);
 
+	
+	go_to_create.push_back(Node<aiNode>(scene->mRootNode, nullptr, root_go));
 
-	App->game_object_manager->AddObject(root_go);
-
-	Node<aiNode> root(scene->mRootNode, nullptr);
-	root.go = root_go;
-	list.push_back(root);
-
-	while (!list.empty())
+	while (!go_to_create.empty())
 	{
-		to_delete.push_front(*list.begin());
-		Node<aiNode>* current = &(*to_delete.begin());
-		list.pop_front();
+		//Take the first element in list go_to_create and add to the front of the list to_delete.
+		go_created.push_front(*go_to_create.begin());
+
+		//Take the first element every time because the push is for the front, and the new element will be in te begin of the list.
+		Node<aiNode>* current = &(*go_created.begin());
+
+		//We are evaluating the first node in the list go_to_create, once is evaluated we don't want to reevaluate... so pop it!
+		go_to_create.pop_front();
+
 		for (uint i = 0; i < current->current_node->mNumChildren; ++i)
 		{
-			//children of the current
-
-			Node<aiNode> children_current(current->current_node->mChildren[i], current);
-			list.push_back(children_current);
-
+			//add all the childrens of the current node to the list go_to_create, and set the parent as the current node.
+			go_to_create.push_back(Node<aiNode>(current->current_node->mChildren[i], current));
 		}
 
 		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
@@ -117,13 +115,13 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			//load current
 			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
 
-			GameObject* object = new GameObject(name.c_str(), current->parent->go);
+			GameObject* object = new GameObject(name.c_str(), current->parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
 
 
-			current->go = object;
+			current->current_go = object;
 
 
 			if (model != nullptr)
@@ -158,7 +156,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 					text->ActivateThisTexture();
 				}
 
-				App->game_object_manager->AddObject(object);
+				
 			}
 			else
 			{
@@ -169,8 +167,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		
 	}
 
-	to_delete.clear();
-	list.clear();
+	go_created.clear();
+	go_to_create.clear();
 
 }
 

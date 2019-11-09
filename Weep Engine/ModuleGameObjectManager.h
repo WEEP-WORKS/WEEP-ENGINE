@@ -16,13 +16,14 @@ public:
 	GameObjectManager(bool start_enabled = true);
 	virtual ~GameObjectManager() {};
 
+	bool Awake() override;
 	bool Update() override;
 	bool CleanUp() override;
 
 	//GameObject* CreateSphere(const int &);
 	void AddObject(GameObject*);
 
-	GameObject* CreateGeometryShape(int sides);
+	//GameObject* CreateGeometryShape(int sides);
 
 	void CreateCube();
 	void CreateSphere();
