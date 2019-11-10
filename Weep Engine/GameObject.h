@@ -5,6 +5,7 @@
 #include <functional>
 #include "Globals.h"
 #include "ComponentTransform.h"
+#include "MathGeoLib/include\MathGeoLib.h"
 
 class Component;
 class ComponentTexture;
@@ -23,7 +24,7 @@ public:
 	//Don't have cleanUp for each game objects and their components. TODO
 
 	Component* AddComponent(ComponentType);
-	void AddToComonentList(Component * &ret);
+	void AddToComponentList(Component * &ret);
 
 	void SetSelected(const bool & set);
 
