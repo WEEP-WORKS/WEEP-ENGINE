@@ -21,9 +21,6 @@ public:
 	void DoUpdateIfActivated(GameObject * go);
 	bool CleanUp() override;
 
-	//GameObject* CreateSphere(const int &);
-	void AddObject(GameObject*);
-
 	//GameObject* CreateGeometryShape(int sides);
 
 	void CreateCube();

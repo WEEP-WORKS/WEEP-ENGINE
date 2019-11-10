@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Component.h"
+#include "ComponentCamera.h"
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ComponentTransform.h"
@@ -78,6 +79,12 @@ Component* GameObject::AddComponent(ComponentType type)
 		ret->type = type;
 		AddToComponentList(ret);
 		LOG("Component Texture added correcly.");
+		break;
+	case ComponentType::CAMERA:
+		ret = new ComponentCamera();
+		ret->type = type;
+		AddToComponentList(ret);
+		LOG("Component Camera added correcly.");
 		break;
 	default:
 		LOG("Component not found in the function. Not accepted.");

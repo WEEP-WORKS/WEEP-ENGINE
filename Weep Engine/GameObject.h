@@ -10,6 +10,7 @@
 class Component;
 class ComponentTexture;
 class ComponentMesh;
+class ComponentCamera;
 enum class ComponentType;
 
 
