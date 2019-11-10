@@ -115,12 +115,14 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			//load current
 			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
 
+			// ignore aiNodes with no game object, all transformation, rotations...
 			Node<aiNode>* parent = current->parent;
 			while (parent->current_go == nullptr)
 			{
 				parent = parent->parent;
 			}
 
+			//create gameObject.
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);

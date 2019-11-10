@@ -285,15 +285,21 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 		if (object->IsActive() == false)
 			ImGui::PopStyleColor();
-
+		uint count = 0;
 		for (std::list<GameObject*>::const_iterator iter = printed_hierarchy.cbegin(); iter != printed_hierarchy.cend(); ++iter)
 		{
 			if (object->IsMyBrother(*iter))
 			{
-				if(!is_first_children)
-				ImGui::TreePop();
 
-
+				if (!is_first_children)
+				{
+					//ImGui::TreePop();
+					++count;
+				}
+				if (count == object->parent->childrens.size() - 1)
+				{
+					ImGui::TreePop();
+				}
 				GameObject* before = (*printed_hierarchy.begin());
 
 				while (before->parent != object->parent)
@@ -303,18 +309,17 @@ void GameObjectManager::PrintGoList(GameObject * object)
 				}
 			}
 		}
+		if (object->parent->childrens.size() == 1 && object->childrens.empty())
+		{
+			ImGui::TreePop();
+		}
+	
 		printed_hierarchy.push_front(object);
 	}
 
 }
 
-void GameObjectManager::AllTreePop(GameObject* object)
-{
-	if (object->hierarchy_opnened)
-	{
-		ImGui::TreePop();
-	}
-}
+
 
 int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct)
 {
