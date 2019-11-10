@@ -115,7 +115,13 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			//load current
 			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
 
-			GameObject* object = new GameObject(name.c_str(), current->parent->current_go);
+			Node<aiNode>* parent = current->parent;
+			while (parent->current_go == nullptr)
+			{
+				parent = parent->parent;
+			}
+
+			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
