@@ -31,6 +31,7 @@ bool GameObjectManager::Update()
 	root->DoForAllChildrens(&GameObject::Update);
 
 	Hierarchy();
+	
 
 	return true;
 }
@@ -154,7 +155,6 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 	}
 
 	go->DoForAllChildrens(&GameObject::SelectThis);
-	
 }
 
 void GameObjectManager::ClearSelection()
@@ -221,9 +221,6 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	if (root == object)
 		return;
 
-
-
-
 	bool is_first_children = false;
 	for (std::vector<GameObject*>::const_iterator iter = root->childrens.cbegin(); iter != root->childrens.cend(); ++iter)
 	{
@@ -255,6 +252,71 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		if (object->GetSelected())
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
+
+			if (object->GetMesh())
+			{
+				ComponentMesh* c_mesh = object->GetMesh();
+
+				AABB mesh_aabb = c_mesh->mesh_data->aabb;
+
+				static float3 corners[8];
+				mesh_aabb.GetCornerPoints(corners);
+
+				const float4x4 &transform = float4x4::identity;
+
+				glPushMatrix();
+				glMultMatrixf((GLfloat*)transform.Transposed().ptr());
+				GLint previous[2];
+				glGetIntegerv(GL_POLYGON_MODE, previous);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+				glColor3f(255.f, 45.f, 26.f);
+
+				glLineWidth(4.0);
+
+				glBegin(GL_QUADS);
+
+				glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy, sz);
+				glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy, sz);
+				glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx,  sy, sz);
+				glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy, sz);
+
+				glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
+				glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+				glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
+				glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx,  sy, -sz);
+
+				glVertex3fv((GLfloat*)&corners[5]); //glVertex3f(sx, -sy,  sz);
+				glVertex3fv((GLfloat*)&corners[4]); //glVertex3f(sx, -sy, -sz);
+				glVertex3fv((GLfloat*)&corners[6]); //glVertex3f(sx,  sy, -sz);
+				glVertex3fv((GLfloat*)&corners[7]); //glVertex3f(sx,  sy,  sz);
+
+				glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+				glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
+				glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy,  sz);
+				glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
+
+				glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx, sy,  sz);
+				glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx, sy,  sz);
+				glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx, sy, -sz);
+				glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx, sy, -sz);
+
+				glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+				glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
+				glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy,  sz);
+				glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
+
+				glEnd();
+
+				glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
+
+				glLineWidth(1.0f);
+
+				glColor3f(255, 255, 255);
+				glPopMatrix();
+
+			}
+			
 		}
 
 		//treenode needs to be more understood

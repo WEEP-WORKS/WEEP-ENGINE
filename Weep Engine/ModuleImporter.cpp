@@ -190,23 +190,26 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			aabb.SetNegativeInfinity();
 
-			aabb.minPoint.x = mesh->mAABB.mMin.x;
-			aabb.minPoint.y = mesh->mAABB.mMin.y;
-			aabb.minPoint.z = mesh->mAABB.mMin.z;
+			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
 
-			aabb.maxPoint.x = mesh->mAABB.mMax.x;
-			aabb.maxPoint.y = mesh->mAABB.mMax.y;
-			aabb.maxPoint.z = mesh->mAABB.mMax.z; 
+			//aabb.minPoint.x = mesh->mAABB.mMin.x;
+			//aabb.minPoint.y = mesh->mAABB.mMin.y;
+			//aabb.minPoint.z = mesh->mAABB.mMin.z;
+
+			//aabb.maxPoint.x = mesh->mAABB.mMax.x;
+			//aabb.maxPoint.y = mesh->mAABB.mMax.y;
+			//aabb.maxPoint.z = mesh->mAABB.mMax.z; 
 
 			model->mesh_data->aabb = aabb;
 
-			App->game_object_manager->AddObject(object);
-		}
-		else
-		{
-			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object");
-		}
+			// Generate global OBB
+			OBB obb = aabb;
+			obb.Transform(object->transform->GetGlobalTransform());
+			// Generate global AABB
+			aabb.SetNegativeInfinity();
+			aabb.Enclose(obb);
 
+			//App->game_object_manager->AddObject(object);
 		}
 		
 	}
