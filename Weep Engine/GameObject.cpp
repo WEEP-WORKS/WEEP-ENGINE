@@ -120,7 +120,24 @@ bool GameObject::IsActive() const
 
 void GameObject::SetActive(const bool & to_active)
 {
-	active = to_active;
+	if (to_active)
+	{
+		DoForAllChildrens(&GameObject::SetActiveTrue);
+	}
+	else
+	{
+		DoForAllChildrens(&GameObject::SetActiveFalse);
+	}
+}
+
+void GameObject::SetActiveFalse()
+{
+	active = false;
+}
+
+void GameObject::SetActiveTrue()
+{
+	active = true;
 }
 
 ComponentTexture* GameObject::GetTextureActivated() const

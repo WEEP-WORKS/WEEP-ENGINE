@@ -37,6 +37,10 @@ public:
 
 	void SetActive(const bool &to_active);
 
+	void SetActiveFalse();
+
+	void SetActiveTrue();
+
 	ComponentTexture* GetTextureActivated() const;
 
 	std::vector<ComponentTexture*> GetTextures() const;
