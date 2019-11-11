@@ -27,6 +27,8 @@
 #include "ModuleGameObjectManager.h"
 #include "Component.h";
 #include "GameObject.h";
+#include "ComponentCamera.h"
+#include "ModuleCamera3D.h"
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
@@ -69,6 +71,12 @@ bool DebugScene::Awake()
 
 	range_demo1.x = 1;
 	range_demo1.y = 6;
+
+	GameObject* go = new GameObject("Camera", nullptr);
+	go->SetName("CAMERA");
+	go->AddComponent(ComponentType::CAMERA);
+	ComponentCamera* c = (ComponentCamera*)go->GetCam();
+	c->GetCamera()->SetFarPlaneDistance(100.0f);
 
 	return ret;
 }

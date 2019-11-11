@@ -45,6 +45,8 @@ public:
 
 	ComponentMesh* GetMesh() const;
 
+	ComponentCamera * GetCam() const;
+
 	int DoForAllChildrens(std::function<void(GameObject*)>);
 
 	void SelectThis();

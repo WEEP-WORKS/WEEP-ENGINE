@@ -171,6 +171,20 @@ ComponentMesh* GameObject::GetMesh() const
 	return nullptr;
 }
 
+ComponentCamera* GameObject::GetCam() const
+{
+	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == ComponentType::CAMERA)
+		{
+			return (ComponentCamera*)(*iter);
+		}
+	}
+
+	return nullptr;
+}
+
+
 int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 {
 	int number_childrens = -1; // -1 to not count this game object and only his childrens.

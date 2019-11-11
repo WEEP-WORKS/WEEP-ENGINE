@@ -14,6 +14,8 @@ public:
 	void Update();
 	void CleanUp() override;
 
+	Camera3D * GetCamera() const;
+
 	void InspectorDraw();
 
 private:
