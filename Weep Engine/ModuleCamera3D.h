@@ -12,6 +12,9 @@ public:
 
 	void SetPosition(const float3& pos);
 	const float3 GetPosition();
+	void SetZDir(const float3 & front);
+	void SetYDir(const float3 & front);
+	void GetCorners(float3* corners);
 
 	void SetNearPlaneDistance(const float& set);
 	void SetFarPlaneDistance(const float& set);
@@ -23,6 +26,8 @@ public:
 	const float GetHorizontalFOV() const;
 	const float4x4 GetViewMatrix() const;
 	const float4x4 GetProjectionMatrix() const;
+	const float * GetOpenGLViewMatrix() const;
+	const float * GetOpenGLProjectionMatrix() const;
 
 	void MoveFront(const float& speed);
 	void MoveBack(const float& speed);
@@ -40,6 +45,7 @@ public:
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;
+	float   vertical_fov = 0.0f;
 
 };
 

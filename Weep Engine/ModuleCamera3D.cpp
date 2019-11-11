@@ -126,22 +126,23 @@ bool ModuleCamera3D::Update()
 
 Camera3D::Camera3D()
 {
-	frustum.pos = float3::zero;
+	frustum.type = FrustumType::PerspectiveFrustum;
+
+	frustum.pos = (float3)(0.f,0.f,-1.f);	
 	frustum.front = float3::unitZ;
 	frustum.up = float3::unitY;
+	aspect_ratio = 0;
 
 	frustum.verticalFov = 0;
 	frustum.horizontalFov = 0;
-	frustum.farPlaneDistance = 0;
-	frustum.nearPlaneDistance = 0;
 
 	SetNearPlaneDistance(0.1f);
-	SetFarPlaneDistance(1000.0f);
+	SetFarPlaneDistance(500.0f);
 	SetAspectRatio(1.3f);
 	SetFOV(60);
 
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 1000.0f;
+	//frustum.nearPlaneDistance = 0.1f;
+	//frustum.farPlaneDistance = 1000.0f;
 	frustum.verticalFov = DEGTORAD * 120.0f;
 }
 
@@ -155,16 +156,30 @@ const float3 Camera3D::GetPosition()
 	return frustum.pos;
 }
 
+void Camera3D::SetZDir(const float3 & front)
+{
+	frustum.front = front.Normalized();
+}
+
+void Camera3D::SetYDir(const float3 & front)
+{
+	frustum.up = front.Normalized();
+}
+
+void Camera3D::GetCorners(float3* corners)
+{
+	frustum.GetCornerPoints(corners);
+}
 
 void Camera3D::SetNearPlaneDistance(const float & set)
 {
-	if (set > 0 && set < frustum.farPlaneDistance)
+	//if (set > 0 && set < frustum.farPlaneDistance)
 		frustum.nearPlaneDistance = set;
 }
 
 void Camera3D::SetFarPlaneDistance(const float & set)
 {
-	if (set < 0 && set > frustum.nearPlaneDistance)
+	//if (set > 0 && set > frustum.nearPlaneDistance)
 		frustum.farPlaneDistance = set;
 }
 
@@ -172,12 +187,19 @@ void Camera3D::SetFOV(const float & set)
 {
 	frustum.verticalFov = DEGTORAD * set;
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
+	/*if (set > 0)
+		frustum.verticalFov = DEGTORAD * set;
+
+	if (aspect_ratio > 0)
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);*/
+
 }
 
 void Camera3D::SetAspectRatio(const float & set)
 {
 	aspect_ratio = set;
 
+	//if (frustum.verticalFov > 0)
 	if (frustum.horizontalFov > 0 && frustum.verticalFov > 0)
 		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
 }
@@ -199,7 +221,7 @@ const float Camera3D::GetVerticalFOV() const
 
 const float Camera3D::GetHorizontalFOV() const
 {
-	return frustum.horizontalFov;
+	return frustum.horizontalFov * RADTODEG;
 }
 
 const float4x4 Camera3D::GetViewMatrix() const
@@ -210,6 +232,18 @@ const float4x4 Camera3D::GetViewMatrix() const
 const float4x4 Camera3D::GetProjectionMatrix() const
 {
 	return frustum.ProjectionMatrix();
+}
+
+const float * Camera3D::GetOpenGLViewMatrix() const
+{
+	static float4x4 view = frustum.ViewMatrix();
+	view.Transpose();
+	return view.ptr();
+}
+
+const float * Camera3D::GetOpenGLProjectionMatrix() const
+{
+	return frustum.ProjectionMatrix().Transposed().ptr();
 }
 
 
@@ -309,8 +343,8 @@ void Camera3D::Look(const float3 & look_pos)
 
 void Camera3D::Focus(const float3 & focus_center, const float & distance)
 {
-	Look(focus_center);
-
 	float3 dir = frustum.pos - focus_center;
 	frustum.pos = dir.Normalized() * distance;
+
+	Look(focus_center);
 }
