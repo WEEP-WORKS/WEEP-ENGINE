@@ -40,23 +40,7 @@ public:
 	void ClearSelection();
 
 	void Hierarchy();
-	// vector<GameObject*> GetSelectedGameObjects() const;
-
-	void print1() { 
-		LOG("FUNCT 1");
-	};
-
-	void print2() { LOG("FUNCT 2"); }
-
-	void printThisFunction(std::function<void(GameObject*)> functVar)
-	{
-		//std::list<GameObject*>::iterator GO = objects.begin();
-		//std::function<void()> functionbinded = std::bind(&GameObject::printGO, (*GO));
-		/*for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
-		{
-			functVar(*item);
-		}*/
-	}
+	// vector<GameObject*> GetSelectedGameObjects() const
 
 	int DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)>);
 

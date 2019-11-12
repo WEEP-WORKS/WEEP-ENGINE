@@ -53,6 +53,8 @@ public:
 
 	int DoForAllChildrens(std::function<void(GameObject*)>);
 
+	int DoForAllSelected(std::function<bool(GameObject*, GameObject*)>);
+
 	void SelectThis();
 
 	void CalculateNumberOfChildrens() {}
@@ -61,7 +63,9 @@ public:
 
 	bool HasChildrens() const;
 
-	uint CountChildrensLayers();
+	bool SetAsNewChildren(GameObject* new_children);
+
+	void SetGoSelectedAsChildrenFromThis();
 
 
 

@@ -227,25 +227,15 @@ void GameObjectManager::Hierarchy()
 		}
 		ImGui::End();
 	}
-	//std::function<void(GameObjectManager*)> funct_var =&GameObjectManager::print1;
 	if (create_cube)
 	{
-		//printThisFunction(std::bind(&GameObjectManager::print1, this));    //-> with void()
 		CreateCube();
-		//funct_var = std::bind(&GameObjectManager::print1, this);
-		//printThis(&GameObjectManager::print1);
-		//funct_var(this);
+
 		create_cube = false;
 	}
 
 	if (create_sphere)
 	{
-		//std::list<GameObject*>::iterator GO = objects.begin();
-		//printThisFunction(&GameObject::printGO);			//-> with void(GameObject) 
-		//printThisFunction(std::bind(&GameObject::printGO, (*GO)));			//-> with void() problem if GO function need some var from itself, because we have to bind the function to wich entity will execute the function. 
-		//funct_var = &GameObjectManager::print2;
-		//printThis(&GameObjectManager::print2);
-		//funct_var(this);
 		CreateSphere();
 		create_sphere = false;
 	}

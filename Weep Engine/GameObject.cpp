@@ -225,6 +225,19 @@ int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 	return number_childrens;
 }
 
+int GameObject::DoForAllSelected(std::function<bool(GameObject* /*from*/, GameObject*/*target*/ )> funct)
+{
+	int number_of_selected = -1; // -1 to not count this game object and only his childrens.
+	bool ret = true;
+		for (std::vector<GameObject*>::const_iterator iter = App->game_object_manager->selected.cbegin(); iter != App->game_object_manager->selected.cend() && ret; ++iter)
+		{
+			ret = funct(this,*iter);
+			++number_of_selected;
+		}
+
+	return number_of_selected;
+}
+
 void GameObject::SelectThis()
 {
 	App->game_object_manager->selected.push_back(this);
@@ -250,23 +263,24 @@ bool GameObject::HasChildrens() const
 	return childrens.empty();
 }
 
-//uint GameObject::CountChildrensLayers()
-//{
-//	uint count = 0u;
-//	std::list<GameObject*> all_childrens;
-//
-//	all_childrens.push_back(this);
-//
-//	while (!all_childrens.empty())
-//	{
-//		GameObject* current = (*all_childrens.begin());
-//		all_childrens.pop_front();
-//		for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
-//		{
-//			all_childrens.push_back(*iter);
-//		}
-//
-//		if(current)
-//	}
-//	return count
-//}
+
+bool GameObject::SetAsNewChildren(GameObject* new_children)
+{
+	if (std::find(childrens.begin(), childrens.end(), new_children) == childrens.end()) //if it isn't a children of this GameObject.
+	{
+		new_children->parent->childrens.erase(std::find(new_children->parent->childrens.begin(), new_children->parent->childrens.end(), new_children));
+		new_children->parent = this;
+		childrens.push_back(new_children);
+		return true;
+	}
+	else
+		return false;
+	
+
+}
+
+
+void GameObject::SetGoSelectedAsChildrenFromThis()
+{
+	DoForAllSelected(&GameObject::SetAsNewChildren);
+}
