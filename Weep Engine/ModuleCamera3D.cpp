@@ -11,8 +11,10 @@ ModuleCamera3D::ModuleCamera3D(bool start_enabled) : Module(start_enabled)
 {
 	SetName("Camera3D");
 
-	editor_camera = new Camera3D();
+	editor_camera = CreateCamera();
 	current_camera = editor_camera;
+	current_camera->SetFrustumCulling(false);
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -42,11 +44,50 @@ bool ModuleCamera3D::CleanUp()
 {
 	bool ret = true;
 
-	LOG("Cleaning camera");
+	LOG("Cleaning cameras");
 
-	delete editor_camera;
+	DestroyAllCameras();
 
 	return ret;
+}
+
+Camera3D * ModuleCamera3D::CreateCamera()
+{
+	Camera3D* ret = nullptr;
+
+	ret = new Camera3D;
+	cameras.push_back(ret);
+
+	return ret;
+}
+
+void ModuleCamera3D::DestroyCamera(Camera3D * cam)
+{
+	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end();)
+	{
+		if (cam == (*it))
+		{
+			RELEASE(*it);
+			cameras.erase(it);
+			break;
+		}
+		else
+			++it;
+	}
+}
+
+void ModuleCamera3D::DestroyAllCameras()
+{
+	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end();)
+	{
+		RELEASE(*it);
+		it = cameras.erase(it);
+	}
+}
+
+vector<Camera3D*> ModuleCamera3D::GetCameras()
+{
+	return cameras;
 }
 
 Camera3D * ModuleCamera3D::GetEditorCamera() const
@@ -146,6 +187,11 @@ Camera3D::Camera3D()
 	frustum.verticalFov = DEGTORAD * 120.0f;
 }
 
+Frustum Camera3D::GetFrustum()
+{
+	return frustum;
+}
+
 void Camera3D::SetPosition(const float3 & pos)
 {
 	frustum.pos = pos;
@@ -204,7 +250,7 @@ void Camera3D::SetAspectRatio(const float & set)
 		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspect_ratio);
 }
 
-const float Camera3D::GetNearPlaneFistance() const
+const float Camera3D::GetNearPlaneDistance() const
 {
 	return frustum.nearPlaneDistance;
 }
@@ -347,4 +393,74 @@ void Camera3D::Focus(const float3 & focus_center, const float & distance)
 	frustum.pos = dir.Normalized() * distance;
 
 	Look(focus_center);
+}
+
+void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
+{
+	//vector<GameObject*> to_check = App->game_object_manager->DoForAllChildrens();
+
+	//Clean all objects that doesn't have aabb
+	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end();)
+	//{
+	//	if ((*it)->GetMesh() == nullptr)
+	//		it = to_check.erase(it);
+	//	else
+	//		it++;
+	//}
+
+	////test elements with frustum
+	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end(); ++it)
+	//{
+	//	if (CheckInsideFrustum((*it)->GetMesh()->GetBbox()))
+	//	{
+	//		bool found = false;
+	//		if (std::find(inside.begin(), inside.end(), (*it)) != inside.end())
+	//			found = true;
+
+	//		if (!found)
+	//			inside.push_back((*it));
+	//	}
+	//}
+}
+
+bool Camera3D::CheckInsideFrustum(const AABB & box)
+{
+	bool ret = true;
+
+	// Get aabb corners
+	float3 corners[8];
+	box.GetCornerPoints(corners);
+
+	// Test all corners for each plane
+	for (int p = 0; p < 6; ++p)
+	{
+		uint corners_in = 8;
+
+		for (int c = 0; c < 8; ++c)
+		{
+			if (frustum.GetPlane(p).IsOnPositiveSide(corners[c]))
+			{
+				corners_in--;
+			}
+		}
+
+		if (corners_in == 0)
+		{
+			ret = false;
+			break;
+		}
+	}
+
+	return ret;
+}
+
+void Camera3D::SetFrustumCulling(bool set)
+{
+	frustum_culling = set;
+}	
+
+
+bool Camera3D::GetFrustumCulling()
+{
+	return frustum_culling;
 }

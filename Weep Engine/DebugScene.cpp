@@ -367,6 +367,9 @@ void DebugScene::Plane()
 	glVertex3f(0.f, 0.f, 0.f);
 	glVertex3f(0.f, 0.f, 5.f);
 
+	glColor3f(255.f, 255.f, 255.f);
+	glLineWidth(1.0f);
+
 	glEnd();
 }
 

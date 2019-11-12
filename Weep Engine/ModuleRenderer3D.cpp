@@ -217,6 +217,7 @@ void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)
 		glVertex3f((float)HALF_GRID_SIZE, 0, (float)i);
 	}
 	glEnd();
+	glColor3f(255.f, 255.f, 255.f);
 
 }
 

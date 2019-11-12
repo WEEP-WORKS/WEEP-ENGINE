@@ -43,6 +43,8 @@ public:
 
 	void CleanUp() override;
 
+	AABB GetBbox();
+
 	void SetBuffersWithData();
 
 	void CalculateNormals();

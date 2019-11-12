@@ -6,7 +6,7 @@
 
 ComponentCamera::ComponentCamera()
 {
-	camera = new Camera3D();
+	camera = App->camera->CreateCamera();
 }
 
 void ComponentCamera::Update()
@@ -15,87 +15,65 @@ void ComponentCamera::Update()
 	camera->SetZDir(object->transform->GetGlobalTransform().WorldZ());
 	camera->SetYDir(object->transform->GetGlobalTransform().WorldY());
 
-	float3 corners[8];
-	camera->GetCorners(corners);
+	//float3 corners[8];
+	//camera->GetCorners(corners);
 
-	float3 color = (float3)(255.f,0.f,255.f);
+	float3 vertices[8];
+	camera->GetFrustum().GetCornerPoints(vertices);
 
-	const int s = 24;
+	GLint previous[2];
 
-	float3* lines = new float3[s];
-	float3* colors = new float3[s];
+	glGetIntegerv(GL_POLYGON_MODE, previous);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	lines[0] = float3(corners[0].x, corners[0].y, corners[0].z);
-	lines[1] = float3(corners[2].x, corners[2].y, corners[2].z);
+	glColor3f(255, 255, 255);
 
-	lines[2] = float3(corners[2].x, corners[2].y, corners[2].z);
-	lines[3] = float3(corners[6].x, corners[6].y, corners[6].z);
+	glLineWidth(5);
 
-	lines[4] = float3(corners[4].x, corners[4].y, corners[4].z);
-	lines[5] = float3(corners[6].x, corners[6].y, corners[6].z);
+	glBegin(GL_QUADS);
 
-	lines[6] = float3(corners[4].x, corners[4].y, corners[4].z);
-	lines[7] = float3(corners[0].x, corners[0].y, corners[0].z);
+	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy, sz);
+	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f( sx, -sy, sz);
+	glVertex3fv((GLfloat*)&vertices[7]); //glVertex3f( sx,  sy, sz);
+	glVertex3fv((GLfloat*)&vertices[3]); //glVertex3f(-sx,  sy, sz);
 
-	//
+	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f( sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[2]); //glVertex3f(-sx,  sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[6]); //glVertex3f( sx,  sy, -sz);
 
-	lines[8] = float3(corners[1].x, corners[1].y, corners[1].z);
-	lines[9] = float3(corners[3].x, corners[3].y, corners[3].z);
+	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f(sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f(sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[6]); //glVertex3f(sx,  sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[7]); //glVertex3f(sx,  sy,  sz);
 
-	lines[10] = float3(corners[3].x, corners[3].y, corners[3].z);
-	lines[11] = float3(corners[7].x, corners[7].y, corners[7].z);
+	glVertex3fv((GLfloat*)&vertices[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[3]); //glVertex3f(-sx,  sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[2]); //glVertex3f(-sx,  sy, -sz);
 
-	lines[12] = float3(corners[5].x, corners[5].y, corners[5].z);
-	lines[13] = float3(corners[7].x, corners[7].y, corners[7].z);
+	glVertex3fv((GLfloat*)&vertices[3]); //glVertex3f(-sx, sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[7]); //glVertex3f( sx, sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[6]); //glVertex3f( sx, sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[2]); //glVertex3f(-sx, sy, -sz);
 
-	lines[14] = float3(corners[5].x, corners[5].y, corners[5].z);
-	lines[15] = float3(corners[1].x, corners[1].y, corners[1].z);
+	glVertex3fv((GLfloat*)&vertices[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[4]); //glVertex3f( sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&vertices[5]); //glVertex3f( sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&vertices[1]); //glVertex3f(-sx, -sy,  sz);
 
-	//
+	glEnd();
 
-	lines[16] = float3(corners[0].x, corners[0].y, corners[0].z);
-	lines[17] = float3(corners[1].x, corners[1].y, corners[1].z);
+	glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
 
-	lines[18] = float3(corners[2].x, corners[2].y, corners[2].z);
-	lines[19] = float3(corners[3].x, corners[3].y, corners[3].z);
+	glColor3f(255, 255, 255);
 
-	lines[20] = float3(corners[4].x, corners[4].y, corners[4].z);
-	lines[21] = float3(corners[5].x, corners[5].y, corners[5].z);
-
-	lines[22] = float3(corners[6].x, corners[6].y, corners[6].z);
-	lines[23] = float3(corners[7].x, corners[7].y, corners[7].z);
-
-
-	for (int i = 0; i < s; i++)
-	{
-		colors[i] = color;
-	}
-
-	glLineWidth((float)2);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, (float*)lines->ptr());
-
-	if (colors != nullptr)
-	{
-		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(3, GL_FLOAT, 0, (float*)colors->ptr());
-	}
-
-	glDrawArrays(GL_LINES, 0, s);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-
-	glLineWidth(1);
-
-	delete[] lines;
-	delete[] colors;
+	glLineWidth(1.0f);
 }
 
 void ComponentCamera::CleanUp()
 {
-	delete camera;
+	App->camera->DestroyCamera(camera);
 }
 
 Camera3D * ComponentCamera::GetCamera() const
@@ -111,6 +89,27 @@ void ComponentCamera::InspectorDraw()
 	ImGui::SameLine();
 	if (ImGui::CollapsingHeader("Camera", ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		float near_plane = camera->GetNearPlaneDistance();
+		if (ImGui::DragFloat("Near plane", &near_plane, 0.2f, 0.01f, 1000))
+		{
+			camera->SetNearPlaneDistance(near_plane);
+		}
 
+		float far_plane = camera->GetFarPlaneDistance();
+		if (ImGui::DragFloat("Far plane", &far_plane, 10, near_plane, 10000))
+		{
+			camera->SetFarPlaneDistance(far_plane);
+		}
+
+		float fov = camera->GetVerticalFOV();
+		if (ImGui::DragFloat("Field of view", &fov, 1, 1, 179.9f))
+		{
+			camera->SetFOV(fov);
+		}
+		bool frustum_culling = camera->GetFrustumCulling();
+		if (ImGui::Checkbox("Frustum culling", &frustum_culling))
+		{
+			camera->SetFrustumCulling(frustum_culling);
+		}
 	}
 }

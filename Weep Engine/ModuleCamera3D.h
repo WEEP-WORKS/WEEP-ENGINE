@@ -1,5 +1,5 @@
 #pragma once
-
+#include "GameObject.h"
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
@@ -9,6 +9,8 @@ class Camera3D
 {
 public:
 	Camera3D();
+
+	Frustum GetFrustum();
 
 	void SetPosition(const float3& pos);
 	const float3 GetPosition();
@@ -20,7 +22,7 @@ public:
 	void SetFarPlaneDistance(const float& set);
 	void SetFOV(const float& set);
 	void SetAspectRatio(const float& set);
-	const float GetNearPlaneFistance() const;
+	const float GetNearPlaneDistance() const;
 	const float GetFarPlaneDistance() const;
 	const float GetVerticalFOV() const;
 	const float GetHorizontalFOV() const;
@@ -42,10 +44,16 @@ public:
 
 	void Look(const float3& look_pos);
 
+	void GetElementsToDraw(vector<GameObject*>& inside);
+	bool CheckInsideFrustum(const AABB& box);
+	void SetFrustumCulling(bool set);
+	bool GetFrustumCulling();
+
 private:
 	Frustum frustum;
 	float	aspect_ratio = 0.0f;
 	float   vertical_fov = 0.0f;
+	bool	frustum_culling = true;
 
 };
 
@@ -61,6 +69,10 @@ public:
 	bool Update();
 	bool CleanUp();
 
+	Camera3D* CreateCamera();
+	void DestroyCamera(Camera3D* cam);
+	void DestroyAllCameras();
+	vector<Camera3D*> GetCameras();
 	Camera3D* GetEditorCamera() const;
 	void SetCurrentCamera(Camera3D* set);
 	Camera3D* GetCurrentCamera() const;
@@ -72,4 +84,5 @@ private:
 	Camera3D* editor_camera = nullptr;
 	Camera3D* current_camera = nullptr;
 
+	vector<Camera3D*> cameras;
 };

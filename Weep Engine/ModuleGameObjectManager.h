@@ -80,6 +80,7 @@ public:
 private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
+	void DrawBBox(GameObject * object);
 	void AllTreePop(GameObject* object);
 
 
