@@ -57,6 +57,8 @@ public:
 
 	void SelectThis();
 
+	void DeselectThis();
+
 	void CalculateNumberOfChildrens() {}
 
 	bool IsMyBrother(GameObject* object) const;

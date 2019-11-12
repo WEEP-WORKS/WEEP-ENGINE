@@ -37,7 +37,6 @@ bool GameObjectManager::Update()
 
 bool GameObjectManager::PostUpdate()
 {
-	DestroyGameObjects();
 
 	return true;
 }
@@ -57,8 +56,13 @@ bool GameObjectManager::CleanUp()
 	}*/
 
 	root->DoForAllChildrens(&GameObject::CleanUp);
-	
+	DoForAllChildrens(&GameObjectManager::DeleteGameObject);
 	return true;
+}
+
+void GameObjectManager::DeleteGameObject(GameObject* object)
+{
+	RELEASE(object);
 }
 
 //void GameObjectManager::AddObject(GameObject* object)
@@ -160,14 +164,16 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 			return;
 	}
 
-	go->DoForAllChildrens(&GameObject::SelectThis);
+	go->SelectThis();
 }
 
 void GameObjectManager::DestroySelectedGameObjects()
 {
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); it++)
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); )
 	{
 		Destroy((*it));
+		it = selected.begin();
+		//it = selected.erase(it);
 	}
 }
 
@@ -180,21 +186,13 @@ void GameObjectManager::Destroy(GameObject * go)
 	}
 
 	to_delete.push_back(go);*/
+	go->DoForAllChildrens(&GameObject::DeselectThis);
 	go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
 	go->DoForAllChildrens(&GameObject::CleanUp);
+	DoForAllChildrens(&GameObjectManager::DeleteGameObject, go);
 }
 
-void GameObjectManager::DestroyGameObjects()
-{
-	for (list<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
-	{
-		// Free
-		//(*to_del)->CleanUp();
-		//delete (*to_del);
 
-		//to_del = to_delete.erase(to_del);
-	}
-}
 
 void GameObjectManager::ClearSelection()
 {
@@ -221,9 +219,14 @@ void GameObjectManager::Hierarchy()
 		{
 
 			//create primitives should be here
-
+			for (std::vector<GameObject*>::iterator iter = root->childrens.begin(); iter != root->childrens.end(); ++iter)
+			{
+				bool ret = PrintGoList(*iter);
+				if (!ret)
+					break;
+			}
 			
-			DoForAllChildrensVertical(&GameObjectManager::PrintGoList);
+		//	DoForAllChildrensVertical(&GameObjectManager::PrintGoList);
 
 			printed_hierarchy.clear();
 		}
@@ -245,126 +248,94 @@ void GameObjectManager::Hierarchy()
 }
 
 
-void GameObjectManager::PrintGoList(GameObject * object)
+bool GameObjectManager::PrintGoList(GameObject * object)
 {
-	if (root == object)
-		return;
+	bool ret = true;
+	if (root == object || object == nullptr)
+		return true;
+		
 
-	bool is_first_children = false;
-	for (std::vector<GameObject*>::const_iterator iter = root->childrens.cbegin(); iter != root->childrens.cend(); ++iter)
+	if (object->IsActive() == false)
+		ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
+
+	uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
+
+	if (object->childrens.empty())
 	{
-		if ((*iter) == object)
-			is_first_children = true;
+		flags |= ImGuiTreeNodeFlags_Leaf;// | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+	}
+
+	if (object->GetSelected())
+	{
+		flags |= ImGuiTreeNodeFlags_Selected;
+
+		if (object->GetMesh())
+		{
+			DrawBBox(object);
+		}		
+
+		
+	}
+
+	//treenode needs to be more understood
+	bool opened = ImGui::TreeNodeEx(object->GetName(), flags);
+
+	// Input
+	if (ImGui::IsItemClicked(0))
+	{
+		//If ctrl is pressed do multiselection
+		if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+		{
+			AddGameObjectToSelected(object);
+		}
+
+		// If shift is pressed do fill gap selection
+		else if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		{
+			//TODO
+		}
+
+		// Monoselection
+		else
+		{
+			ClearSelection();
+			AddGameObjectToSelected(object);
+		}
 	}
 
 
-	if (object->parent->hierarchy_opnened || is_first_children)
+
+	if (opened)
 	{
-		
-		if (object->parent->hierarchy_opnened)
+		for (std::vector<GameObject*>::iterator iter = object->childrens.begin(); iter != object->childrens.end(); ++iter)
 		{
-			uint i = 0u;
+			ret = PrintGoList(*iter);
+			if (!ret)
+				break;
 		}
-		if (object->IsActive() == false)
-			ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.3f, 1.f));
-
-		if (object == nullptr)
-			return;
-
-		uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
-
-		if (object->childrens.empty())
-		{
-			flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
-		}
-
-		if (object->GetSelected())
-		{
-			flags |= ImGuiTreeNodeFlags_Selected;
-
-			if (object->GetMesh())
-			{
-				DrawBBox(object);
-			}		
-
-			
-		}
-
-		//treenode needs to be more understood
-		object->hierarchy_opnened = ImGui::TreeNodeEx(object->GetName(), flags);
-
-		// Input
-		if (ImGui::IsItemClicked(0))
-		{
-			//If ctrl is pressed do multiselection
-			if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
-			{
-				AddGameObjectToSelected(object);
-			}
-
-			// If shift is pressed do fill gap selection
-			else if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-			{
-				//TODO
-			}
-
-			// Monoselection
-			else
-			{
-				ClearSelection();
-				AddGameObjectToSelected(object);
-			}
-		}
-		
-		
-
-		if (object->IsActive() == false)
-			ImGui::PopStyleColor();
-		uint count = 0;
-		for (std::list<GameObject*>::const_iterator iter = printed_hierarchy.cbegin(); iter != printed_hierarchy.cend(); ++iter)
-		{
-			if (object->IsMyBrother(*iter))
-			{
-
-				if (!is_first_children)
-				{
-					//ImGui::TreePop();
-					++count;
-				}
-				if (count == object->parent->childrens.size() - 1)
-				{
-					ImGui::TreePop();
-				}
-				GameObject* before = (*printed_hierarchy.begin());
-
-				while (before->parent != object->parent)
-				{
-					//ImGui::TreePop();
-					before = before->parent;
-				}
-			}
-		}
-		if (object->parent->childrens.size() == 1 && object->childrens.empty())
-		{
-			ImGui::TreePop();
-		}
-		if (object->GetSelected())
-		{
-			if (ImGui::BeginPopupContextItem("HerarchyPopup"))
-			{
-				if (ImGui::Button("Delete"))
-				{
-					DestroySelectedGameObjects();
-					
-				}
-
-				ImGui::EndPopup();
-			}
-		}
-		printed_hierarchy.push_front(object);
-
-
+		ImGui::TreePop();
 	}
+
+	if (object->IsActive() == false)
+		ImGui::PopStyleColor();
+	
+	if (object->GetSelected())
+	{
+		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+		{
+			if (ImGui::Button("Delete"))
+			{
+				DestroySelectedGameObjects();
+				ret = false;
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
+	return ret;
+
+	
 
 }
 
@@ -440,24 +411,30 @@ void GameObjectManager::AllTreePop(GameObject* object)
 }
 
 
-int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct)
+int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)
 {
 	int number_childrens = -1; //-1 to not count the root GameObject.
 	std::list<GameObject*> all_childrens;
+	if(start != nullptr)
+		all_childrens.push_back(start);
+	else
+		all_childrens.push_back(root);
 
-	all_childrens.push_back(root);
 
 	while (!all_childrens.empty())
 	{
 		GameObject* current = (*all_childrens.begin());
 		all_childrens.pop_front();
-		for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+		if (current != nullptr)
 		{
-			all_childrens.push_back(*iter);
-		}
+			for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+			{
+				all_childrens.push_back(*iter);
+			}
 
-		funct(this, current);
-		++number_childrens;
+			funct(this, current);
+			++number_childrens;
+		}
 	}
 
 	return number_childrens;
@@ -474,13 +451,20 @@ int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectMa
 	{
 		GameObject* current = (*all_childrens.begin());
 		all_childrens.pop_front();
-		for (std::vector<GameObject*>::const_reverse_iterator iter = current->childrens.crbegin(); iter != current->childrens.crend(); ++iter)
+		if (current != nullptr)
 		{
-			all_childrens.push_front(*iter);
-		}
+			funct(this, current);
 
-		funct(this, current);
-		++number_childrens;
+			if (!current->childrens.empty())
+			{
+				for (std::vector<GameObject*>::const_reverse_iterator iter = current->childrens.crbegin(); iter != current->childrens.crend(); ++iter)
+				{
+					all_childrens.push_front(*iter);
+				}
+			}
+
+			++number_childrens;
+		}
 	}
 
 	return number_childrens;

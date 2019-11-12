@@ -31,18 +31,18 @@ public:
 
 	void AddGameObjectToSelected(GameObject * go);
 
+	void DeleteGameObject(GameObject* object);
+
 	void DestroySelectedGameObjects();
 
 	void Destroy(GameObject * go);
-
-	void DestroyGameObjects();
 
 	void ClearSelection();
 
 	void Hierarchy();
 	// vector<GameObject*> GetSelectedGameObjects() const
 
-	int DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)>);
+	int DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
 
 	int DoForAllChildrensVertical(std::function<void(GameObjectManager*, GameObject*)>);
 
@@ -70,7 +70,7 @@ public:
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?
-	void PrintGoList(GameObject * object);
+	bool PrintGoList(GameObject * object);
 
 	void DrawBBox(GameObject * object);
 	void AllTreePop(GameObject* object);

@@ -213,13 +213,16 @@ int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 	{
 		GameObject* current = (*all_childrens.begin());
 		all_childrens.pop_front();
-		for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+		if (current != nullptr)
 		{
-			all_childrens.push_back(*iter);
-		}
+			for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+			{
+				all_childrens.push_back(*iter);
+			}
 
-		funct(current);
-		++number_childrens;
+			funct(current);
+			++number_childrens;
+		}
 	}
 
 	return number_childrens;
@@ -242,6 +245,15 @@ void GameObject::SelectThis()
 {
 	App->game_object_manager->selected.push_back(this);
 	SetSelected(true);
+}
+
+void GameObject::DeselectThis()
+{
+	std::vector<GameObject*>* selected = &App->game_object_manager->selected;
+	std::vector<GameObject*>::iterator iter = std::find(selected->begin(), selected->end(), this);
+	if(iter != selected->end())
+		selected->erase(iter);
+	SetSelected(false);
 }
 
 bool GameObject::IsMyBrother(GameObject* object) const
