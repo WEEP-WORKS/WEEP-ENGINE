@@ -72,7 +72,7 @@ bool DebugScene::Awake()
 	range_demo1.x = 1;
 	range_demo1.y = 6;
 
-	GameObject* go = new GameObject("Camera", nullptr);
+	GameObject* go = new GameObject("Camera", App->game_object_manager->root);
 	go->SetName("CAMERA");
 	go->AddComponent(ComponentType::CAMERA);
 	ComponentCamera* c = (ComponentCamera*)go->GetCam();
