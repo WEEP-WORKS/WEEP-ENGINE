@@ -3,6 +3,7 @@
 #include "glew/glew.h"
 #include "Globals.h"
 #include "imgui.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 enum class ComponentType
@@ -10,7 +11,8 @@ enum class ComponentType
 	NONE = -1,
 	TRANSFORM,
 	MESH,
-	TEXTURE
+	TEXTURE,
+	CAMERA
 };
 
 
@@ -59,6 +61,9 @@ struct MeshData
 	BuffersData<float> normal_faces;
 
 	BuffersData<float> uvs;
+
+	AABB aabb;
+
 };
 
 class Component

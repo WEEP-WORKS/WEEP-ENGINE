@@ -5,10 +5,12 @@
 #include <functional>
 #include "Globals.h"
 #include "ComponentTransform.h"
+#include "MathGeoLib/include\MathGeoLib.h"
 
 class Component;
 class ComponentTexture;
 class ComponentMesh;
+class ComponentCamera;
 enum class ComponentType;
 
 
@@ -23,7 +25,7 @@ public:
 	//Don't have cleanUp for each game objects and their components. TODO
 
 	Component* AddComponent(ComponentType);
-	void AddToComonentList(Component * &ret);
+	void AddToComponentList(Component * &ret);
 
 	void SetSelected(const bool & set);
 
@@ -46,6 +48,8 @@ public:
 	std::vector<ComponentTexture*> GetTextures() const;
 
 	ComponentMesh* GetMesh() const;
+
+	ComponentCamera * GetCam() const;
 
 	int DoForAllChildrens(std::function<void(GameObject*)>);
 

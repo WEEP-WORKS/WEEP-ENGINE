@@ -35,6 +35,13 @@ bool GameObjectManager::Update()
 	return true;
 }
 
+bool GameObjectManager::PostUpdate()
+{
+	DestroyGameObjects();
+
+	return true;
+}
+
 void GameObjectManager::DoUpdateIfActivated(GameObject* go)
 {
 	if (go->IsActive())
@@ -70,7 +77,7 @@ bool GameObjectManager::CleanUp()
 
 void GameObjectManager::CreateCube()
 {
-	GameObject* ret = new GameObject("Cube", nullptr);
+	GameObject* ret = new GameObject("Cube", root);
 	par_shapes_mesh* mesh = par_shapes_create_cube();
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 	ret->parametric = true;
@@ -85,7 +92,7 @@ void GameObjectManager::CreateCube()
 
 void GameObjectManager::CreateSphere()
 {
-	GameObject* ret = new GameObject("Sphere", nullptr);
+	GameObject* ret = new GameObject("Sphere", root);
 	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(2);
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 
@@ -154,7 +161,37 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 	}
 
 	go->DoForAllChildrens(&GameObject::SelectThis);
-	
+}
+
+void GameObjectManager::DestroySelectedGameObjects()
+{
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); it++)
+	{
+		Destroy((*it));
+	}
+}
+
+void GameObjectManager::Destroy(GameObject * go)
+{
+	for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	{
+		if (go == (*it))
+			return;
+	}
+
+	to_delete.push_back(go);
+}
+
+void GameObjectManager::DestroyGameObjects()
+{
+	for (list<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
+	{
+		// Free
+		//(*to_del)->CleanUp();
+		//delete (*to_del);
+
+		//to_del = to_delete.erase(to_del);
+	}
 }
 
 void GameObjectManager::ClearSelection()
@@ -194,7 +231,7 @@ void GameObjectManager::Hierarchy()
 	if (create_cube)
 	{
 		//printThisFunction(std::bind(&GameObjectManager::print1, this));    //-> with void()
-	//CreateCube();
+		CreateCube();
 		//funct_var = std::bind(&GameObjectManager::print1, this);
 		//printThis(&GameObjectManager::print1);
 		//funct_var(this);
@@ -209,7 +246,7 @@ void GameObjectManager::Hierarchy()
 		//funct_var = &GameObjectManager::print2;
 		//printThis(&GameObjectManager::print2);
 		//funct_var(this);
-		//CreateSphere();
+		CreateSphere();
 		create_sphere = false;
 	}
 
@@ -220,9 +257,6 @@ void GameObjectManager::PrintGoList(GameObject * object)
 {
 	if (root == object)
 		return;
-
-
-
 
 	bool is_first_children = false;
 	for (std::vector<GameObject*>::const_iterator iter = root->childrens.cbegin(); iter != root->childrens.cend(); ++iter)
@@ -255,6 +289,11 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		if (object->GetSelected())
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
+
+			if (object->GetMesh())
+			{
+				DrawBBox(object);
+			}			
 		}
 
 		//treenode needs to be more understood
@@ -281,6 +320,16 @@ void GameObjectManager::PrintGoList(GameObject * object)
 				ClearSelection();
 				AddGameObjectToSelected(object);
 			}
+		}
+
+		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+		{
+			if (ImGui::Button("Delete"))
+			{
+				//DestroySelectedGameObjects();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		if (object->IsActive() == false)
@@ -319,6 +368,76 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 }
 
+void GameObjectManager::DrawBBox(GameObject * object)
+{
+	ComponentMesh* c_mesh = object->GetMesh();
+
+	AABB mesh_aabb = c_mesh->GetBbox();
+
+	static float3 corners[8];
+	mesh_aabb.GetCornerPoints(corners);
+
+	const float4x4 &transform = float4x4::identity;
+
+	glPushMatrix();
+	glMultMatrixf((GLfloat*)transform.Transposed().ptr());
+	GLint previous[2];
+	glGetIntegerv(GL_POLYGON_MODE, previous);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glColor3f(255.f, 45.f, 26.f);
+
+	glLineWidth(4.0);
+
+	glBegin(GL_QUADS);
+
+	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy, sz);
+	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy, sz);
+	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx,  sy, sz);
+	glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy, sz);
+
+	glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
+	glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx,  sy, -sz);
+
+	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f(sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&corners[4]); //glVertex3f(sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&corners[6]); //glVertex3f(sx,  sy, -sz);
+	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f(sx,  sy,  sz);
+
+	glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy,  sz);
+	glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
+
+	glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx, sy,  sz);
+	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx, sy,  sz);
+	glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx, sy, -sz);
+	glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx, sy, -sz);
+
+	glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
+	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy,  sz);
+	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
+
+	glEnd();
+
+	glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
+
+	glLineWidth(1.0f);
+
+	glColor3f(255, 255, 255);
+	glPopMatrix();
+}
+
+void GameObjectManager::AllTreePop(GameObject* object)
+{
+	if (object->hierarchy_opnened)
+	{
+		ImGui::TreePop();
+	}
+}
 
 
 int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct)

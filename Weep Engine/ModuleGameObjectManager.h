@@ -18,11 +18,9 @@ public:
 
 	bool Awake() override;
 	bool Update() override;
+	bool PostUpdate();
 	void DoUpdateIfActivated(GameObject * go);
 	bool CleanUp() override;
-
-	//GameObject* CreateSphere(const int &);
-	void AddObject(GameObject*);
 
 	//GameObject* CreateGeometryShape(int sides);
 
@@ -32,6 +30,12 @@ public:
 	void LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh);
 
 	void AddGameObjectToSelected(GameObject * go);
+
+	void DestroySelectedGameObjects();
+
+	void Destroy(GameObject * go);
+
+	void DestroyGameObjects();
 
 	void ClearSelection();
 
@@ -84,7 +88,11 @@ private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
 
+	void DrawBBox(GameObject * object);
+	void AllTreePop(GameObject* object);
 
+
+	list<GameObject*> to_delete;
 
 };
 

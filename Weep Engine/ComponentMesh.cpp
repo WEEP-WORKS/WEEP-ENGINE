@@ -65,6 +65,10 @@ void ComponentMesh::CleanUp()
 	RELEASE(mesh_data);
 }
 
+AABB ComponentMesh::GetBbox() {
+	return mesh_data->aabb;
+}
+
 void ComponentMesh::Render()
 {
 	glColor3f(color.r, color.g, color.b);
@@ -87,13 +91,16 @@ void ComponentMesh::Render()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	glColor3f(255, 255, 255);
+
 }
 
 void ComponentMesh::RenderModel()
 {
 	// Push matrix
-	//glPushMatrix();
-	//glMultMatrixf(transform->GetGlobalTransform().Transposed().ptr());
+	glPushMatrix();
+	glMultMatrixf(object->transform->GetLocalTransform().Transposed().ptr());
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh_data->vertexs.id_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates.
@@ -138,7 +145,7 @@ void ComponentMesh::RenderVertexNormals()
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates
 
 	glDrawArrays(GL_LINES, 0, mesh_data->normal_vertexs.num * 2/*number of vertexs. each normal have 2 points.*/);
-
+	glColor3f(255.f, 255.f, 255.f);
 }
 
 void ComponentMesh::RenderFaceNormals()
@@ -148,6 +155,8 @@ void ComponentMesh::RenderFaceNormals()
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates
 
 	glDrawArrays(GL_LINES, 0, mesh_data->normal_faces.num * 2/*number of vertexs. each normal have 2 points.*/);
+	glColor3f(255.f, 255.f, 255.f);
+
 }
 
 

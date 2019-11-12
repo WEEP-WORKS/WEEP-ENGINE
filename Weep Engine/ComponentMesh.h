@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "Color.h"
 #include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include\MathGeoLib.h"
 
 class ComponentTexture;
 
@@ -41,6 +42,8 @@ public:
 	void Update() override;
 
 	void CleanUp() override;
+
+	AABB GetBbox();
 
 	void SetBuffersWithData();
 
