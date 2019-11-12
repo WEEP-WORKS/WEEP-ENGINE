@@ -399,7 +399,7 @@ void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
 {
 	//vector<GameObject*> to_check = App->game_object_manager->DoForAllChildrens();
 
-	//Clean all objects that doesn't have aabb
+	////Clean all objects that doesn't have aabb
 	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end();)
 	//{
 	//	if ((*it)->GetMesh() == nullptr)

@@ -92,3 +92,8 @@ const float4x4 ComponentTransform::GetGlobalTransform() const
 {
 	return global_transform;
 }
+
+const float4x4 ComponentTransform::GetLocalTransform() const
+{
+	return local_transform;
+}
