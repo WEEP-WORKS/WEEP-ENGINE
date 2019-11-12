@@ -18,6 +18,7 @@ public:
 
 	bool Awake() override;
 	bool Update() override;
+	bool PostUpdate();
 	void DoUpdateIfActivated(GameObject * go);
 	bool CleanUp() override;
 
@@ -29,6 +30,12 @@ public:
 	void LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh);
 
 	void AddGameObjectToSelected(GameObject * go);
+
+	void DestroySelectedGameObjects();
+
+	void Destroy(GameObject * go);
+
+	void DestroyGameObjects();
 
 	void ClearSelection();
 
@@ -83,7 +90,7 @@ private:
 	void DrawBBox(GameObject * object);
 	void AllTreePop(GameObject* object);
 
-
+	list<GameObject*> to_delete;
 
 };
 

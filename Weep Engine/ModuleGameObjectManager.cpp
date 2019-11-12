@@ -31,7 +31,13 @@ bool GameObjectManager::Update()
 	root->DoForAllChildrens(&GameObject::Update);
 
 	Hierarchy();
-	
+
+	return true;
+}
+
+bool GameObjectManager::PostUpdate()
+{
+	DestroyGameObjects();
 
 	return true;
 }
@@ -71,7 +77,7 @@ bool GameObjectManager::CleanUp()
 
 void GameObjectManager::CreateCube()
 {
-	GameObject* ret = new GameObject("Cube", nullptr);
+	GameObject* ret = new GameObject("Cube", root);
 	par_shapes_mesh* mesh = par_shapes_create_cube();
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 	ret->parametric = true;
@@ -86,7 +92,7 @@ void GameObjectManager::CreateCube()
 
 void GameObjectManager::CreateSphere()
 {
-	GameObject* ret = new GameObject("Sphere", nullptr);
+	GameObject* ret = new GameObject("Sphere", root);
 	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(2);
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
 
@@ -157,6 +163,37 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 	go->DoForAllChildrens(&GameObject::SelectThis);
 }
 
+void GameObjectManager::DestroySelectedGameObjects()
+{
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); it++)
+	{
+		Destroy((*it));
+	}
+}
+
+void GameObjectManager::Destroy(GameObject * go)
+{
+	for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	{
+		if (go == (*it))
+			return;
+	}
+
+	to_delete.push_back(go);
+}
+
+void GameObjectManager::DestroyGameObjects()
+{
+	for (list<GameObject*>::iterator to_del = to_delete.begin(); to_del != to_delete.end();)
+	{
+		// Free
+		//(*to_del)->CleanUp();
+		//delete (*to_del);
+
+		//to_del = to_delete.erase(to_del);
+	}
+}
+
 void GameObjectManager::ClearSelection()
 {
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end();)
@@ -194,7 +231,7 @@ void GameObjectManager::Hierarchy()
 	if (create_cube)
 	{
 		//printThisFunction(std::bind(&GameObjectManager::print1, this));    //-> with void()
-	//CreateCube();
+		CreateCube();
 		//funct_var = std::bind(&GameObjectManager::print1, this);
 		//printThis(&GameObjectManager::print1);
 		//funct_var(this);
@@ -209,7 +246,7 @@ void GameObjectManager::Hierarchy()
 		//funct_var = &GameObjectManager::print2;
 		//printThis(&GameObjectManager::print2);
 		//funct_var(this);
-		//CreateSphere();
+		CreateSphere();
 		create_sphere = false;
 	}
 
@@ -283,6 +320,16 @@ void GameObjectManager::PrintGoList(GameObject * object)
 				ClearSelection();
 				AddGameObjectToSelected(object);
 			}
+		}
+
+		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+		{
+			if (ImGui::Button("Delete"))
+			{
+				//DestroySelectedGameObjects();
+			}
+
+			ImGui::EndPopup();
 		}
 
 		if (object->IsActive() == false)
