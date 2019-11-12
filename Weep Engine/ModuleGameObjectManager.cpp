@@ -173,13 +173,15 @@ void GameObjectManager::DestroySelectedGameObjects()
 
 void GameObjectManager::Destroy(GameObject * go)
 {
-	for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	/*for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
 	{
 		if (go == (*it))
 			return;
 	}
 
-	to_delete.push_back(go);
+	to_delete.push_back(go);*/
+	go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
+	go->DoForAllChildrens(&GameObject::CleanUp);
 }
 
 void GameObjectManager::DestroyGameObjects()
@@ -283,7 +285,9 @@ void GameObjectManager::PrintGoList(GameObject * object)
 			if (object->GetMesh())
 			{
 				DrawBBox(object);
-			}			
+			}		
+
+			
 		}
 
 		//treenode needs to be more understood
@@ -311,16 +315,8 @@ void GameObjectManager::PrintGoList(GameObject * object)
 				AddGameObjectToSelected(object);
 			}
 		}
-
-		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
-		{
-			if (ImGui::Button("Delete"))
-			{
-				//DestroySelectedGameObjects();
-			}
-
-			ImGui::EndPopup();
-		}
+		
+		
 
 		if (object->IsActive() == false)
 			ImGui::PopStyleColor();
@@ -352,8 +348,22 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		{
 			ImGui::TreePop();
 		}
-	
+		if (object->GetSelected())
+		{
+			if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+			{
+				if (ImGui::Button("Delete"))
+				{
+					DestroySelectedGameObjects();
+					
+				}
+
+				ImGui::EndPopup();
+			}
+		}
 		printed_hierarchy.push_front(object);
+
+
 	}
 
 }
