@@ -89,8 +89,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 	std::list<Node<aiNode>> go_to_create;
 	std::list<Node<aiNode>> go_created;
-	std::string n = "root_"; n += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
-	GameObject* root_go = new GameObject(n, App->game_object_manager->root);
+	std::string n = "group_"; n += App->GetFileNameWithoutExtension(GetPath()); n += "_"; n += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
+	GameObject* root_go = new GameObject(n, nullptr);
 
 	aiVector3D translation;
 	aiVector3D scaling;
@@ -128,7 +128,6 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
 		{
 			//load current
-			string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
 
 			// ignore aiNodes with no game object, all transformation, rotations...
 			Node<aiNode>* parent = current->parent;
@@ -141,7 +140,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 
 			//create gameObject.
-			GameObject* object = new GameObject(current->current_node->mName.C_Str(), parent->current_go);
+			string name = current->current_node->mName.C_Str();//App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(parent->current_go->childrens.size() + 1/*plus 1 to start in 1 nad not in 0*/);
+			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
@@ -220,6 +220,23 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			//App->game_object_manager->AddObject(object);
 		}
 		
+	}
+
+	//if only load one mesh, add this to he hierarchy.
+	if (root_go->childrens.size() == 1)
+	{
+		root_go->childrens[0]->parent = App->game_object_manager->root;
+		App->game_object_manager->root->childrens.push_back(root_go->childrens[0]);
+		
+
+		//once we loaded the mesh to the hierarchy, delete the Game Object "group" because we will not use it in this case.
+		root_go->childrens.erase(root_go->childrens.cbegin()); // don't delete the children, only the group. The function deletes the childrens too. For this reason erase the game object from the children list.
+		App->game_object_manager->Destroy(root_go);
+	}
+	else //if we load more than one mesh, add the group with the meshes loaded as childrens.
+	{
+		root_go->parent = App->game_object_manager->root;
+		App->game_object_manager->root->childrens.push_back(root_go);
 	}
 
 	go_created.clear();
