@@ -186,10 +186,15 @@ void GameObjectManager::Destroy(GameObject * go)
 	}
 
 	to_delete.push_back(go);*/
+
+	LOG("deleting GameObject '%s'", go->GetName());
 	go->DoForAllChildrens(&GameObject::DeselectThis);
-	go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
+	if(go->parent != nullptr)
+		go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
+
 	go->DoForAllChildrens(&GameObject::CleanUp);
 	DoForAllChildrens(&GameObjectManager::DeleteGameObject, go);
+	
 }
 
 
