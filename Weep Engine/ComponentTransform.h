@@ -14,7 +14,6 @@ public:
 	void InspectorDraw();
 
 	const float4x4 GetGlobalTransform() const;
-
 	const float4x4 GetLocalTransform() const;
 
 	const void SetPosition(const float3& pos);

@@ -25,6 +25,13 @@ bool GameObjectManager::Awake()
 	return true;
 }
 
+bool GameObjectManager::PreUpdate()
+{
+	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
+	root->DoForAllChildrens(&GameObject::CalcBBox);
+
+	return true;
+}
 
 bool GameObjectManager::Update() 
 {
