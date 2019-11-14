@@ -25,7 +25,9 @@ void GameObject::Update()
 		for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
 		{
 			if ((*iter)->IsActive())
+			{
 				(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
+			}
 		}
 	}
 }
@@ -289,12 +291,32 @@ bool GameObject::SetAsNewChildren(GameObject* new_children)
 	}
 	else
 		return false;
-	
-
 }
-
 
 void GameObject::SetGoSelectedAsChildrenFromThis()
 {
 	DoForAllSelected(&GameObject::SetAsNewChildren);
+}
+
+void GameObject::CalcGlobalTransform()
+{
+	float4x4 global_transform = transform->GetGlobalTransform();
+
+	if (parent != nullptr)
+	{
+		global_transform = parent->transform->GetGlobalTransform() * transform->GetLocalTransform();
+	}
+}
+
+void GameObject::CalcBBox()
+{
+	AABB local_bbox;
+
+	local_bbox.SetNegativeInfinity();
+
+	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
+		(*it)->OnGetBoundingBox(local_bbox);
+
+	if (local_bbox.IsFinite())
+		local_bbox.Transform(transform->GetGlobalTransform());
 }

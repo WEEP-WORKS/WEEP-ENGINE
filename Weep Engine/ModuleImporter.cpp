@@ -92,6 +92,19 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 	std::string n = "group_"; n += App->GetFileNameWithoutExtension(GetPath()); n += "_"; n += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
 	GameObject* root_go = new GameObject(n, nullptr);
 
+	aiVector3D translation;
+	aiVector3D scaling;
+	aiQuaternion rotation;
+	if (scene->mRootNode != nullptr)
+	{
+		scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+		float3 pos(translation.x, translation.y, translation.z);
+		float3 scale(scaling.x, scaling.y, scaling.z);
+		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+	}
+
+	root_go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+	root_go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 	
 	go_to_create.push_back(Node<aiNode>(scene->mRootNode, nullptr, root_go));
 
@@ -123,6 +136,9 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				parent = parent->parent;
 			}
 
+			//aiNode* node = scene->mRootNode->mChildren[i];
+
+
 			//create gameObject.
 			string name = current->current_node->mName.C_Str();//App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(parent->current_go->childrens.size() + 1/*plus 1 to start in 1 nad not in 0*/);
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
@@ -130,14 +146,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
 
-
-			current->current_go = object;
-
 			// Set mesh pos, rot and scale
-			float3 position_i(0, 0, 0);
-			Quat rotation_i(0, 0, 0, 0);
-			float3 scale_i(0, 0, 0);
-
 			aiVector3D translation;
 			aiVector3D scaling;
 			aiQuaternion rotation;
@@ -146,14 +155,13 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			if (node != nullptr)
 			{
 				node->mTransformation.Decompose(scaling, rotation, translation);
-				position_i = float3 (translation.x, translation.y, translation.z);
-				scale_i = float3 (scaling.x, scaling.y, scaling.z);
-				rotation_i = Quat (rotation.x, rotation.y, rotation.z, rotation.w);
+				float3 pos(translation.x, translation.y, translation.z);
+				float3 scale(scaling.x, scaling.y, scaling.z);
+				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 			}
 
-			object->transform->SetPosition(float3(position_i.x, position_i.y, position_i.z));
-			object->transform->SetRotationQuat(Quat(rotation_i.x, rotation_i.y, rotation_i.w, rotation_i.z));
-			//go->transform->SetScale(float3(scaling.x, scaling.y, scaling.z));
+			object->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+			object->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 
 			if (model != nullptr)
 			{
@@ -200,22 +208,14 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
 
-			//aabb.minPoint.x = mesh->mAABB.mMin.x;
-			//aabb.minPoint.y = mesh->mAABB.mMin.y;
-			//aabb.minPoint.z = mesh->mAABB.mMin.z;
-
-			//aabb.maxPoint.x = mesh->mAABB.mMax.x;
-			//aabb.maxPoint.y = mesh->mAABB.mMax.y;
-			//aabb.maxPoint.z = mesh->mAABB.mMax.z; 
-
 			model->mesh_data->aabb = aabb;
 
-			// Generate global OBB
-			OBB obb = aabb;
-			obb.Transform(object->transform->GetGlobalTransform());
-			// Generate global AABB
-			aabb.SetNegativeInfinity();
-			aabb.Enclose(obb);
+			//// Generate global OBB
+			//OBB obb = aabb;
+			//obb.Transform(object->transform->GetGlobalTransform());
+			//// Generate global AABB
+			//aabb.SetNegativeInfinity();
+			//aabb.Enclose(obb);
 
 			//App->game_object_manager->AddObject(object);
 		}

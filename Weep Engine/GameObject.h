@@ -69,8 +69,8 @@ public:
 
 	void SetGoSelectedAsChildrenFromThis();
 
-
-
+	void CalcGlobalTransform();
+	void CalcBBox();
 
 public:
 	bool					parametric		= false;

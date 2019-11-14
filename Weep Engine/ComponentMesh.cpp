@@ -65,16 +65,25 @@ void ComponentMesh::CleanUp()
 	RELEASE(mesh_data);
 }
 
+void ComponentMesh::OnGetBoundingBox(AABB& box)
+{
+	box.Enclose(GetBbox());
+}
+
 AABB ComponentMesh::GetBbox() {
 	return mesh_data->aabb;
 }
 
 void ComponentMesh::Render()
 {
+	// Push matrix
+	glPushMatrix();
+	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
+
+
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-
 
 	RenderModel();
 
@@ -94,13 +103,17 @@ void ComponentMesh::Render()
 
 	glColor3f(255, 255, 255);
 
+	// Pop matrix
+	glPopMatrix();
+
+	// Pop matrix
+	glPopMatrix();
+
 }
 
 void ComponentMesh::RenderModel()
 {
-	// Push matrix
-	glPushMatrix();
-	glMultMatrixf(object->transform->GetLocalTransform().Transposed().ptr());
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, mesh_data->vertexs.id_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates.

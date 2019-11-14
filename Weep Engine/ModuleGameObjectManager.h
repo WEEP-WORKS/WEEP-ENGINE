@@ -17,6 +17,7 @@ public:
 	virtual ~GameObjectManager() {};
 
 	bool Awake() override;
+	bool PreUpdate();
 	bool Update() override;
 	bool PostUpdate();
 	void DoUpdateIfActivated(GameObject * go);
