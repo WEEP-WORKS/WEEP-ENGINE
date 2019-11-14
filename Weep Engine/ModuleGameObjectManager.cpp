@@ -345,20 +345,24 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 			AddGameObjectToSelected(object);
 		}
 	}
-	if (object->GetSelected())
-	{
+
 		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 		{
 			if (!ImGui::IsPopupOpen(0))
 			{
 				if (ImGui::Button("Delete"))
 				{
-					AddGameObjectsSelectedToDestroy();
+					if (object->GetSelected())
+						AddGameObjectsSelectedToDestroy();
+
+					else
+						AddGameObjectToDestroy(object);
 				}
 			}
 			ImGui::EndPopup();
 		}
-	}
+	
+	
 
 	if (opened)
 	{
