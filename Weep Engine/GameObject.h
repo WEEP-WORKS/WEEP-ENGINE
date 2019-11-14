@@ -84,6 +84,8 @@ public:
 
 	ComponentTransform* transform = nullptr;
 
+	AABB local_bbox;
+
 private:
 	int						id				= 0;
 	bool					selected		= false;

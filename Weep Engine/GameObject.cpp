@@ -314,7 +314,6 @@ void GameObject::CalcGlobalTransform()
 
 void GameObject::CalcBBox()
 {
-	AABB local_bbox;
 
 	local_bbox.SetNegativeInfinity();
 

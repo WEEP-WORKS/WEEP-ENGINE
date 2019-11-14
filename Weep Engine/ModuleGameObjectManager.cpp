@@ -413,17 +413,13 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 
 void GameObjectManager::DrawBBox(GameObject * object)
 {
-	ComponentMesh* c_mesh = object->GetMesh();
-
-	AABB mesh_aabb = c_mesh->GetBbox();
+	AABB mesh_aabb = object->local_bbox;	
 
 	static float3 corners[8];
 	mesh_aabb.GetCornerPoints(corners);
 
-	const float4x4 &transform = float4x4::identity;
-
 	glPushMatrix();
-	glMultMatrixf((GLfloat*)transform.Transposed().ptr());
+	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
 	GLint previous[2];
 	glGetIntegerv(GL_POLYGON_MODE, previous);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
