@@ -6,6 +6,7 @@
 
 class ComponentTransform : public Component
 {
+
 public:
 	ComponentTransform();
 
@@ -13,8 +14,9 @@ public:
 
 	void InspectorDraw();
 
-	const float4x4 GetGlobalTransform() const;
-	const float4x4 GetLocalTransform() const;
+	float4x4 GetGlobalTransform() const;
+	void SetGlobalTransform(const float4x4& global);
+	float4x4 GetLocalTransform() const;
 
 	const void SetPosition(const float3& pos);
 	const void SetRotation(const float3& rotation);

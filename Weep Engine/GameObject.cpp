@@ -304,11 +304,11 @@ void GameObject::SetGoSelectedAsChildrenFromThis()
 
 void GameObject::CalcGlobalTransform()
 {
-	float4x4 global_transform = transform->GetGlobalTransform();
-
+	float4x4 global;
 	if (parent != nullptr)
 	{
-		global_transform = parent->transform->GetGlobalTransform() * transform->GetLocalTransform();
+		global = parent->transform->GetGlobalTransform() * transform->GetLocalTransform();
+		transform->SetGlobalTransform(global);
 	}
 }
 

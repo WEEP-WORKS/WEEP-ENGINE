@@ -88,12 +88,17 @@ const void ComponentTransform::SetRotationQuat(const Quat & quat)
 	RecalculateLocalTransform();
 }
 
-const float4x4 ComponentTransform::GetGlobalTransform() const
+float4x4 ComponentTransform::GetGlobalTransform() const
 {
 	return global_transform;
 }
 
-const float4x4 ComponentTransform::GetLocalTransform() const
+void ComponentTransform::SetGlobalTransform(const float4x4& global)
+{
+	global_transform = global;
+}
+
+float4x4 ComponentTransform::GetLocalTransform() const
 {
 	return local_transform;
 }

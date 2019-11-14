@@ -80,7 +80,6 @@ void ComponentMesh::Render()
 	glPushMatrix();
 	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
 
-
 	glColor3f(color.r, color.g, color.b);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -102,9 +101,6 @@ void ComponentMesh::Render()
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glColor3f(255, 255, 255);
-
-	// Pop matrix
-	glPopMatrix();
 
 	// Pop matrix
 	glPopMatrix();

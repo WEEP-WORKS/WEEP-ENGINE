@@ -355,8 +355,13 @@ void DebugScene::Plane()
 		glVertex3f(-100.f, 0.f, -i);
 		glVertex3f(100.f, 0.f, -i);
 	}
+	glLineWidth(1.0f); // why it doesnt work?
+	glEnd();
 
-	glLineWidth(3.0f); // why it doesnt work?
+	glLineWidth(5.0f); // why it doesnt work?
+
+	glBegin(GL_LINES);
+
 	glColor3f(1, 0, 0);
 	glVertex3f(0.f, 0.f, 0.f);
 	glVertex3f(5.f, 0.f, 0.f);
