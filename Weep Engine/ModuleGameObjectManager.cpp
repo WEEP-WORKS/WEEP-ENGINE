@@ -7,6 +7,7 @@
 #include "ComponentMesh.h"
 #include "ModuleTexture.h"
 #include "ComponentTexture.h"
+#include "ModuleCamera3D.h"
 #include "DebugScene.h"
 #include "par_shapes.h"
 
@@ -35,6 +36,20 @@ bool GameObjectManager::PreUpdate()
 
 bool GameObjectManager::Update() 
 {
+	vector<Camera3D*> cameras = App->camera->GetCameras();
+	vector<GameObject*> to_draw;
+
+	// Get elements to draw from all cameras
+	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+	{
+		if ((*it)->GetFrustumCulling())
+			(*it)->GetElementsToDraw(to_draw);
+	}
+
+	// Draw
+	for (vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
+		(*it)->DoForAllChildrens(&GameObject::Update);
+
 	root->DoForAllChildrens(&GameObject::Update);
 
 	Hierarchy();
