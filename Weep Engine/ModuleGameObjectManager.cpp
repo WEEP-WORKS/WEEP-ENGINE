@@ -307,7 +307,7 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 			AddGameObjectToSelected(object);
 		}
 	}
-
+	
 
 
 	if (opened)
@@ -324,14 +324,23 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 	if (object->IsActive() == false)
 		ImGui::PopStyleColor();
 	
+
+	//this has to be before the if(opened) but the game Objects has to be removed after this function.(queue events).
 	if (object->GetSelected())
 	{
 		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 		{
-			if (ImGui::Button("Delete"))
+			if (!ImGui::IsPopupOpen(0))
 			{
-				DestroySelectedGameObjects();
-				ret = false;
+
+				if (ImGui::Button("Delete"))
+				{
+					DestroySelectedGameObjects();
+					ret = false;
+
+
+				}
+
 			}
 
 			ImGui::EndPopup();
