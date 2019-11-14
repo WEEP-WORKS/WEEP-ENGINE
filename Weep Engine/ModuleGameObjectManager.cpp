@@ -273,6 +273,14 @@ void GameObjectManager::Hierarchy()
 		}
 		ImGui::End();
 	}
+	if (create_go_empty)
+	{
+		string name = "new_game_object_"; name += std::to_string(GetAllGameObjectNumber());
+		GameObject* new_go = new GameObject(name, root);
+
+		create_go_empty = false;
+	}
+
 	if (create_cube)
 	{
 		CreateCube();

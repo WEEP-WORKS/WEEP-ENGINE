@@ -54,6 +54,7 @@ public:
 public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
+	bool						create_go_empty = false;
 
 	GameObject* root;
 

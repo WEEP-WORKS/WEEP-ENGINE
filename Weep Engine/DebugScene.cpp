@@ -298,8 +298,10 @@ void DebugScene::MenuBar(bool &ret)
 
 		if (ImGui::BeginMenu("Game Object"))
 		{
+			ImGui::MenuItem("Game Object Empty", NULL, &App->game_object_manager->create_go_empty);
 			if (ImGui::BeginMenu("Create Primitive"))
 			{
+
 				ImGui::MenuItem("Cube", NULL, &App->game_object_manager->create_cube);
 				ImGui::MenuItem("Sphere", NULL, &App->game_object_manager->create_sphere);
 				ImGui::EndMenu();
