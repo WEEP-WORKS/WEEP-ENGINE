@@ -273,7 +273,7 @@ bool GameObject::HasChildrens() const
 
 bool GameObject::SetAsNewChildren(GameObject* new_children)
 {
-	if (std::find(childrens.begin(), childrens.end(), new_children) == childrens.end()) //if it isn't a children of this GameObject.
+	if (std::find(childrens.begin(), childrens.end(), new_children) == childrens.end() && !IsParentOfMyParents(new_children)) //if it isn't a children of this GameObject and is not a parent o parents of this game object.
 	{
 		new_children->parent->childrens.erase(std::find(new_children->parent->childrens.begin(), new_children->parent->childrens.end(), new_children));
 		new_children->parent = this;
@@ -282,6 +282,19 @@ bool GameObject::SetAsNewChildren(GameObject* new_children)
 	}
 	else
 		return false;
+}
+
+bool GameObject::IsParentOfMyParents( GameObject* possible_parent)
+{
+	GameObject* current_go = parent;
+	while (current_go->parent != nullptr)
+	{
+		if (possible_parent == current_go)
+			return true;
+
+		current_go = current_go->parent;
+	}
+	return false;
 }
 
 void GameObject::SetGoSelectedAsChildrenFromThis()

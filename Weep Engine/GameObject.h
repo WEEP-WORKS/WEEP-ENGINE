@@ -70,6 +70,8 @@ public:
 	void CalcGlobalTransform();
 	void CalcBBox();
 
+	bool IsParentOfMyParents(GameObject* possible_parent);
+
 public:
 	bool					parametric		= false;
 	bool hierarchy_opnened = false;

@@ -331,6 +331,22 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 	//treenode needs to be more understood
 	bool opened = ImGui::TreeNodeEx(object->GetName(), flags);
 
+
+	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+	{
+		ImGui::SetDragDropPayload("DND_DEMO_CELL", &object, sizeof(int));        // Set payload to carry the index of our item (could be anything)
+
+		ImGui::EndDragDropSource();
+	}
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
+		{
+			object->SetAsNewChildren(*(GameObject**)payload->Data);
+		}
+		ImGui::EndDragDropTarget();
+	}
+
 	// Input
 	if (ImGui::IsItemClicked(0))
 	{
