@@ -249,16 +249,7 @@ void GameObject::SelectThis()
 	SetSelected(true);
 }
 
-void GameObject::DeselectThis()
-{
-	std::vector<GameObject*>* selected = &App->game_object_manager->selected;
-	std::vector<GameObject*>::iterator iter = std::find(selected->begin(), selected->end(), this);
-	if (iter != selected->end())
-	{
-		selected->erase(iter);
-		SetSelected(false);
-	}
-}
+
 
 bool GameObject::IsMyBrother(GameObject* object) const
 {

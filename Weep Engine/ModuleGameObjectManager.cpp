@@ -28,6 +28,17 @@ bool GameObjectManager::Awake()
 
 bool GameObjectManager::PreUpdate()
 {
+	if (!to_delete.empty())
+	{
+		//reverse iter to destroy first the childrens.
+		for (list<GameObject*>::iterator iter = to_delete.begin(); iter != to_delete.end(); ++iter)
+		{
+			Destroy(*iter);
+		}
+		to_delete.clear();
+	}
+
+
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
 	root->DoForAllChildrens(&GameObject::CalcBBox);
 
@@ -54,6 +65,11 @@ bool GameObjectManager::Update()
 
 	Hierarchy();
 
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+	{
+		AddGameObjectsSelectedToDestroy();
+	}
+
 	return true;
 }
 
@@ -63,11 +79,6 @@ bool GameObjectManager::PostUpdate()
 	return true;
 }
 
-void GameObjectManager::DoUpdateIfActivated(GameObject* go)
-{
-	if (go->IsActive())
-		go->Update();
-}
 
 bool GameObjectManager::CleanUp()
 {
@@ -78,13 +89,34 @@ bool GameObjectManager::CleanUp()
 	}*/
 
 	root->DoForAllChildrens(&GameObject::CleanUp);
-	DoForAllChildrens(&GameObjectManager::DeleteGameObject);
+	DoForAllChildrens(&GameObjectManager::ReleaseGameObject);
 	return true;
 }
 
-void GameObjectManager::DeleteGameObject(GameObject* object)
+void GameObjectManager::ReleaseGameObject(GameObject* object)
 {
 	RELEASE(object);
+}
+
+void GameObjectManager::Destroy(GameObject * go)
+{
+	LOG("deleting GameObject '%s'", go->GetName());
+
+	//if the Game Object is selected, deselectect it. 
+	std::vector<GameObject*>::iterator iter = std::find(selected.begin(), selected.end(), go);
+	if (iter != selected.cend())
+	{
+		selected.erase(iter);
+		go->SetSelected(false);
+	}
+
+
+	if (go->parent != nullptr)
+		go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
+
+	go->CleanUp();
+	ReleaseGameObject(go);
+
 }
 
 //void GameObjectManager::AddObject(GameObject* object)
@@ -189,37 +221,23 @@ void GameObjectManager::AddGameObjectToSelected(GameObject * go)
 	go->SelectThis();
 }
 
-void GameObjectManager::DestroySelectedGameObjects()
+void GameObjectManager::AddGameObjectsSelectedToDestroy()
 {
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); )
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
-		Destroy((*it));
-		it = selected.begin();
-		//it = selected.erase(it);
+		
+		//(*it)->DoForAllChildrens(&GameObject::AddThisGameObjectToDelete);
+		DoForAllChildrens(&GameObjectManager::AddGameObjectToDestroy, (*it));
 	}
 }
 
-void GameObjectManager::Destroy(GameObject * go)
+void GameObjectManager::AddGameObjectToDestroy(GameObject* go)
 {
-	/*for (list<GameObject*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it)
+	if (std::find(to_delete.begin(), to_delete.end(), go) == to_delete.end())
 	{
-		if (go == (*it))
-			return;
+		to_delete.push_front(go); //push_front to have childrens--->parent to destroy in this order.
 	}
-
-	to_delete.push_back(go);*/
-
-	LOG("deleting GameObject '%s'", go->GetName());
-	go->DoForAllChildrens(&GameObject::DeselectThis);
-	if(go->parent != nullptr)
-		go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
-
-	go->DoForAllChildrens(&GameObject::CleanUp);
-	DoForAllChildrens(&GameObjectManager::DeleteGameObject, go);
-	
 }
-
-
 
 void GameObjectManager::ClearSelection()
 {
@@ -230,10 +248,6 @@ void GameObjectManager::ClearSelection()
 	}
 }
 
-// vector<GameObject*> GameObjectManager::GetSelectedGameObjects() const
-//{
-//	return selected;
-//}
 
 
 void GameObjectManager::Hierarchy()
@@ -302,6 +316,8 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 		}		
 
 		
+
+		
 	}
 
 	//treenode needs to be more understood
@@ -329,8 +345,20 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 			AddGameObjectToSelected(object);
 		}
 	}
-	
-
+	if (object->GetSelected())
+	{
+		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
+		{
+			if (!ImGui::IsPopupOpen(0))
+			{
+				if (ImGui::Button("Delete"))
+				{
+					AddGameObjectsSelectedToDestroy();
+				}
+			}
+			ImGui::EndPopup();
+		}
+	}
 
 	if (opened)
 	{
@@ -347,33 +375,13 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 		ImGui::PopStyleColor();
 	
 
-	//this has to be before the if(opened) but the game Objects has to be removed after this function.(queue events).
-	if (object->GetSelected())
-	{
-		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
-		{
-			if (!ImGui::IsPopupOpen(0))
-			{
-
-				if (ImGui::Button("Delete"))
-				{
-					DestroySelectedGameObjects();
-					ret = false;
-
-
-				}
-
-			}
-
-			ImGui::EndPopup();
-		}
-	}
-
 	return ret;
 
 	
 
 }
+
+
 
 void GameObjectManager::DrawBBox(GameObject * object)
 {
@@ -438,13 +446,6 @@ void GameObjectManager::DrawBBox(GameObject * object)
 	glPopMatrix();
 }
 
-void GameObjectManager::AllTreePop(GameObject* object)
-{
-	if (object->hierarchy_opnened)
-	{
-		ImGui::TreePop();
-	}
-}
 
 
 int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)

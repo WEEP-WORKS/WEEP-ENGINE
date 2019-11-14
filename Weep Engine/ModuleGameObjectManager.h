@@ -17,10 +17,9 @@ public:
 	virtual ~GameObjectManager() {};
 
 	bool Awake() override;
-	bool PreUpdate();
+	bool PreUpdate() override;
 	bool Update() override;
-	bool PostUpdate();
-	void DoUpdateIfActivated(GameObject * go);
+	bool PostUpdate() override;
 	bool CleanUp() override;
 
 	//GameObject* CreateGeometryShape(int sides);
@@ -32,9 +31,7 @@ public:
 
 	void AddGameObjectToSelected(GameObject * go);
 
-	void DeleteGameObject(GameObject* object);
-
-	void DestroySelectedGameObjects();
+	void ReleaseGameObject(GameObject* object);
 
 	void Destroy(GameObject * go);
 
@@ -52,6 +49,8 @@ public:
 
 
 
+
+
 public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
@@ -65,6 +64,7 @@ public:
 
 	list<GameObject*>			printed_hierarchy;
 
+	list<GameObject*> to_delete;
 
 
 
@@ -73,11 +73,14 @@ private:
 	//std::list<GameObject*> objects; //Vector or list?
 	bool PrintGoList(GameObject * object);
 
+	void AddGameObjectsSelectedToDestroy();
+
+	void AddGameObjectToDestroy(GameObject* go);
+
 	void DrawBBox(GameObject * object);
-	void AllTreePop(GameObject* object);
 
 
-	list<GameObject*> to_delete;
+
 
 };
 
