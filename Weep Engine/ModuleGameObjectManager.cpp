@@ -397,10 +397,9 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 	if (opened)
 	{
-		for (std::vector<GameObject*>::iterator iter = object->childrens.begin(); iter != object->childrens.end(); ++iter)
-		{
-			PrintGoList(*iter);
-		}
+		if(!object->childrens.empty())
+			DoForFirstChildrens(&GameObjectManager::PrintGoList, object);
+
 		ImGui::TreePop();
 	}
 
@@ -501,13 +500,14 @@ int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, 
 void GameObjectManager::DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)
 {
 	std::list<GameObject*> all_childrens;
+
+
+	GameObject* current;
 	if (start != nullptr)
-		all_childrens.push_back(start);
+		current = start;
 	else
-		all_childrens.push_back(root);
+		current = root;
 
-
-	GameObject* current = (*all_childrens.begin());
 	for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
 	{
 		all_childrens.push_back(*iter);

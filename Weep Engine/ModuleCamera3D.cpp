@@ -169,8 +169,8 @@ Camera3D::Camera3D()
 {
 	frustum.type = FrustumType::PerspectiveFrustum;
 
-	frustum.pos = (float3)(0.f,0.f,-1.f);	
-	frustum.front = float3::unitZ;
+	frustum.pos = float3::zero;
+	frustum.front = float3::unitX;
 	frustum.up = float3::unitY;
 	aspect_ratio = 0;
 
