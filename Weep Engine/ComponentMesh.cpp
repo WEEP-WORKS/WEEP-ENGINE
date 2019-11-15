@@ -55,9 +55,10 @@ void ComponentMesh::SetBuffersWithData()
 	}
 }
 
-void ComponentMesh::Update()
+void ComponentMesh::PostUpdate()
 {
-	Render();
+	if(object->isInsideFrustum)
+		Render();
 }
 
 void ComponentMesh::CleanUp()

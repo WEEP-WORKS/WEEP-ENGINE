@@ -74,6 +74,8 @@ public:
 
 public:
 	virtual void Update() {};
+	virtual void PostUpdate() {};
+
 	virtual void CleanUp() {};
 	virtual void InspectorDraw() {};
 

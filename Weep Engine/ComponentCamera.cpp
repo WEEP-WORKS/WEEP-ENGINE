@@ -3,6 +3,8 @@
 #include "ModuleCamera3D.h"
 #include "App.h"
 #include "ModuleRenderer3D.h"
+#include "ComponentMesh.h"
+#include "ModuleGameObjectManager.h"
 
 ComponentCamera::ComponentCamera()
 {
@@ -14,6 +16,37 @@ void ComponentCamera::Update()
 	camera->SetPosition(object->transform->GetPosition());
 	camera->SetZDir(object->transform->GetGlobalTransform().WorldZ());
 	camera->SetYDir(object->transform->GetGlobalTransform().WorldY());
+
+	if (camera->GetFrustumCulling())
+	{
+		std::list<GameObject*> all_childrens;
+
+		all_childrens.push_back(App->game_object_manager->root);
+
+		while (!all_childrens.empty())
+		{
+			GameObject* current = (*all_childrens.begin());
+			all_childrens.pop_front();
+			if (current != nullptr)
+			{
+				for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+				{
+					all_childrens.push_back(*iter);
+				}
+
+				if (current->GetMesh())
+				{
+					if (camera->CheckInsideFrustum(current->GetMesh()->GetBbox()))
+					{
+						if(current != nullptr)
+							current->isInsideFrustum = true;
+					}
+				}
+			}
+		}
+
+		
+	}
 
 	//float3 corners[8];
 	//camera->GetCorners(corners);

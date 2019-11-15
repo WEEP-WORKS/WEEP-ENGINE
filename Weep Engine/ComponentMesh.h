@@ -39,7 +39,7 @@ public:
 	ComponentMesh();
 
 
-	void Update() override;
+	void PostUpdate();
 
 	void CleanUp() override;
 

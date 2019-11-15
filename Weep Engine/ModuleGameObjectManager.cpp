@@ -38,7 +38,7 @@ bool GameObjectManager::PreUpdate()
 		to_delete.clear();
 	}
 
-
+	root->DoForAllChildrens(&GameObject::PreUpdate);
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
 	root->DoForAllChildrens(&GameObject::CalcBBox);
 
@@ -47,21 +47,27 @@ bool GameObjectManager::PreUpdate()
 
 bool GameObjectManager::Update() 
 {
-	vector<Camera3D*> cameras = App->camera->GetCameras();
-	vector<GameObject*> to_draw;
-
-	// Get elements to draw from all cameras
-	for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
-	{
-		if ((*it)->GetFrustumCulling())
-			(*it)->GetElementsToDraw(to_draw);
-	}
-
-	// Draw
-	for (vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
-		(*it)->DoForAllChildrens(&GameObject::Update);
-
 	root->DoForAllChildrens(&GameObject::Update);
+
+	//vector<Camera3D*> cameras = App->camera->GetCameras();
+	//vector<GameObject*> to_draw;
+
+	//// Get elements to draw from all cameras
+	//for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
+	//{
+	//	if ((*it)->GetFrustumCulling())
+	//		
+	//}
+
+	//// Draw
+	//for (vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
+	//	(*it)->DoForAllChildrens(&GameObject::PostUpdate);
+
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		if((*it)->GetMesh())
+			DrawBBox(*it);
+	}
 
 	Hierarchy();
 
@@ -75,6 +81,7 @@ bool GameObjectManager::Update()
 
 bool GameObjectManager::PostUpdate()
 {
+	root->DoForAllChildrens(&GameObject::PostUpdate);
 
 	return true;
 }
@@ -318,10 +325,10 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
 
-		if (object->GetMesh())
-		{
-			DrawBBox(object);
-		}		
+		//if (object->GetMesh())
+		//{
+		//	DrawBBox(object);
+		//}		
 
 		
 
@@ -408,8 +415,6 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 	
 
 }
-
-
 
 void GameObjectManager::DrawBBox(GameObject * object)
 {

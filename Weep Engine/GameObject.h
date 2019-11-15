@@ -19,7 +19,11 @@ class GameObject
 public:
 	GameObject(std::string name, GameObject* parent);
 
+	void PreUpdate();
+
 	void Update(); //this is not from the module class. This function will be called from objectManager and will call Components update or something... I don't know yet.
+
+	void PostUpdate();
 
 	void CleanUp();
 	//Don't have cleanUp for each game objects and their components. TODO
@@ -85,6 +89,8 @@ public:
 	ComponentTransform* transform = nullptr;
 
 	AABB local_bbox;
+
+	bool isInsideFrustum = false;
 
 private:
 	int						id				= 0;

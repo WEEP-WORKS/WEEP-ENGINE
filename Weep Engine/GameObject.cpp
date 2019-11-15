@@ -18,6 +18,14 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	transform = (ComponentTransform*)AddComponent(ComponentType::TRANSFORM);
 }
 
+void GameObject::PreUpdate()
+{
+	if (IsActive())
+	{
+		isInsideFrustum = false;
+	}
+}
+
 void GameObject::Update()
 {
 	if (IsActive())
@@ -27,6 +35,20 @@ void GameObject::Update()
 			if ((*iter)->IsActive())
 			{
 				(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
+			}
+		}
+	}
+}
+
+void GameObject::PostUpdate()
+{
+	if (IsActive())
+	{
+		for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+		{
+			if ((*iter)->IsActive())
+			{
+				(*iter)->PostUpdate();//Render
 			}
 		}
 	}

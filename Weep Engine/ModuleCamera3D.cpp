@@ -397,7 +397,7 @@ void Camera3D::Focus(const float3 & focus_center, const float & distance)
 
 void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
 {
-	//vector<GameObject*> to_check = App->game_object_manager->DoForAllChildrens();
+	//vector<GameObject*> to_check = 
 
 	////Clean all objects that doesn't have aabb
 	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end();)
@@ -408,7 +408,7 @@ void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
 	//		it++;
 	//}
 
-	////test elements with frustum
+	//test elements with frustum
 	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end(); ++it)
 	//{
 	//	if (CheckInsideFrustum((*it)->GetMesh()->GetBbox()))
