@@ -11,6 +11,7 @@
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
 #include "Assimp/include/version.h"
+#include "ModuleFileSystem.h"
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
@@ -195,6 +196,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 					text->ActivateThisTexture();
 				}
 
+				CreateOwnFile(model, name);
 				
 			}
 			else
@@ -369,4 +371,54 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		model->id_texture = App->texture->LoadTexture(f_path.c_str(), model->texture_width, model->texture_height );
 		model->texture_path = f_path.c_str();
 	}
+}
+
+void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
+{
+	// amount of indices / vertices / colors / normals / texture_coords / AABB
+	uint header[6] = { mesh->mesh_data->vertexs.num, mesh->mesh_data->indexs.num, mesh->mesh_data->normals_direction.num, mesh->mesh_data->normal_vertexs.num, mesh->mesh_data->normal_faces.num, mesh->mesh_data->uvs.num};//mesh.num_indices, mesh.num_vertices };
+	//TODO AABB??
+
+	// size----------------
+	// Set the size of the entire file size
+	uint all_size = sizeof(header) +
+		sizeof(float) * mesh->mesh_data->vertexs.buffer_size +
+		sizeof(uint)  * mesh->mesh_data->indexs.buffer_size +
+		sizeof(float) * mesh->mesh_data->normals_direction.buffer_size +
+		sizeof(float) * mesh->mesh_data->normal_vertexs.buffer_size +
+		sizeof(float) * mesh->mesh_data->normal_faces.buffer_size +
+		sizeof(float) * mesh->mesh_data->uvs.buffer_size;
+
+
+	char* data = new char[all_size]; // Allocate the entire file size.
+	char* cursor = data;
+
+
+	// Save the buffers----------
+	// First store header
+	uint size = sizeof(header); 
+	memcpy(cursor, header, size);
+
+	// Store vertexs
+	cursor += size;
+	size = sizeof(float) * mesh->mesh_data->vertexs.buffer_size;
+	memcpy(cursor, mesh->mesh_data->vertexs.buffer, size);
+
+	// Store indices
+	cursor += size; 
+	size = sizeof(uint) * mesh->mesh_data->indexs.buffer_size;
+	memcpy(cursor, mesh->mesh_data->indexs.buffer, size);	// Store normals_dir
+	cursor += size;
+	size = sizeof(float) * mesh->mesh_data->normals_direction.buffer_size;
+	memcpy(cursor, mesh->mesh_data->normals_direction.buffer, size);	// Store normal_vertexs
+	cursor += size;
+	size = sizeof(float) * mesh->mesh_data->normal_vertexs.buffer_size;
+
+	memcpy(cursor, mesh->mesh_data->normal_vertexs.buffer, size);	// Store normal_faces
+	cursor += size;
+	size = sizeof(float) * mesh->mesh_data->normal_faces.buffer_size;
+	memcpy(cursor, mesh->mesh_data->normal_faces.buffer, size);	// Store uvs
+	cursor += size;
+	size = sizeof(float) * mesh->mesh_data->uvs.buffer_size;
+	memcpy(cursor, mesh->mesh_data->uvs.buffer, size);	string path_to_save(LIBRARY_MESH_FOLDER + string(name_to_file) + string(".mesh"));	App->file_system->Save(path_to_save.c_str(), data, all_size);
 }

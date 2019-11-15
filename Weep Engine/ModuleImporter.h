@@ -45,6 +45,8 @@ public:
 	void LoadVertices(ComponentMesh * model, aiMesh * mesh);
 	void LoadIndexs(ComponentMesh * model, aiMesh * mesh);
 
+	void CreateOwnFile(ComponentMesh* mesh, string name_to_file);
+
 	char* GetPath() const;
 	void LoadPath(char* path);
 

@@ -16,6 +16,7 @@ class ModuleImporter;
 class DebugScene;
 class GameObjectManager;
 class ModuleTexture;
+class ModuleFileSystem;
 
 
 class Application
@@ -72,6 +73,7 @@ public:
 	GameObjectManager* game_object_manager = nullptr;
 	ModuleImporter* importer = nullptr;
 	ModuleTexture*	texture = nullptr;
+	ModuleFileSystem* file_system = nullptr;
 
 	Profiler*		   profiler = nullptr;
 		
