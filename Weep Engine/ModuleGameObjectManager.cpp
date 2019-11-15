@@ -342,7 +342,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	{
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("obj"))
 		{
-			object->SetAsNewChildren(*(GameObject**)payload->Data);
+			object->SetAsNewChildren(*(GameObject**)payload->Data); //this has to be in the queue events, and add as new children out of the iteration.
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -350,7 +350,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Hierarchy"))) { //Window
 		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("obj")) 
 		{
-			root->SetAsNewChildren(*(GameObject**)payload->Data);
+			root->SetAsNewChildren(*(GameObject**)payload->Data) ; //this has to be in the queue events, and add as new children out of the iteration.
 		}
 		ImGui::EndDragDropTarget();
 	}
