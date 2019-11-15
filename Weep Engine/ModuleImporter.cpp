@@ -5,11 +5,13 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ModuleTexture.h"
-
+#include "MathGeoLib/include/MathGeoLib.h"
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
 #include "Assimp/include/cfileio.h"
+#include "Assimp/include/version.h"
+
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
@@ -64,7 +66,7 @@ bool ModuleImporter::LoadFBX(const char* path)
 {
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
 
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -84,56 +86,162 @@ bool ModuleImporter::LoadFBX(const char* path)
 
 void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 {
-	for (uint i = 0; i < scene->mNumMeshes; ++i)
+
+	std::list<Node<aiNode>> go_to_create;
+	std::list<Node<aiNode>> go_created;
+	std::string n = "group_"; n += App->GetFileNameWithoutExtension(GetPath()); n += "_"; n += std::to_string(App->game_object_manager->GetAllGameObjectNumber());
+	GameObject* root_go = new GameObject(n, nullptr);
+
+	aiVector3D translation;
+	aiVector3D scaling;
+	aiQuaternion rotation;
+	if (scene->mRootNode != nullptr)
 	{
+		scene->mRootNode->mTransformation.Decompose(scaling, rotation, translation);
+		float3 pos(translation.x, translation.y, translation.z);
+		float3 scale(scaling.x, scaling.y, scaling.z);
+		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
+	}
 
-		string name = App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(App->game_object_manager->objects.size());
+	root_go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+	root_go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+	
+	go_to_create.push_back(Node<aiNode>(scene->mRootNode, nullptr, root_go));
 
-		GameObject* object = new GameObject();
-		object->SetName(name.c_str());
-		ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-		aiMesh* mesh = scene->mMeshes[i];
+	while (!go_to_create.empty())
+	{
+		//Take the first element in list go_to_create and add to the front of the list to_delete.
+		go_created.push_front(*go_to_create.begin());
 
-		if (model != nullptr)
+		//Take the first element every time because the push is for the front, and the new element will be in te begin of the list.
+		Node<aiNode>* current = &(*go_created.begin());
+
+		//We are evaluating the first node in the list go_to_create, once is evaluated we don't want to reevaluate... so pop it!
+		go_to_create.pop_front();
+
+		for (uint i = 0; i < current->current_node->mNumChildren; ++i)
 		{
-			LoadVertices(model, mesh);
+			//add all the childrens of the current node to the list go_to_create, and set the parent as the current node.
+			go_to_create.push_back(Node<aiNode>(current->current_node->mChildren[i], current));
+		}
 
-			if (mesh->HasFaces())
+		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
+		{
+			//load current
+
+			// ignore aiNodes with no game object, all transformation, rotations...
+			Node<aiNode>* parent = current->parent;
+			while (parent->current_go == nullptr)
 			{
-				LoadIndexs(model, mesh);
+				parent = parent->parent;
 			}
 
-			if (mesh->HasNormals())
+			//aiNode* node = scene->mRootNode->mChildren[i];
+
+
+			//create gameObject.
+			string name = current->current_node->mName.C_Str();//App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(parent->current_go->childrens.size() + 1/*plus 1 to start in 1 nad not in 0*/);
+			GameObject* object = new GameObject(name.c_str(), parent->current_go);
+
+			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
+			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
+
+			// Set mesh pos, rot and scale
+			aiVector3D translation;
+			aiVector3D scaling;
+			aiQuaternion rotation;
+
+			aiNode* node = scene->mRootNode->mChildren[i];
+			if (node != nullptr)
 			{
-				LoadNormals(model, mesh);
+				node->mTransformation.Decompose(scaling, rotation, translation);
+				float3 pos(translation.x, translation.y, translation.z);
+				float3 scale(scaling.x, scaling.y, scaling.z);
+				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 			}
 
-			model->num_uvs_channels = mesh->GetNumUVChannels();
+			object->transform->SetPosition(float3(translation.x, translation.y, translation.z));
+			object->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 
-			LoadUVs(model, mesh);
-
-			model->SetBuffersWithData();
-
-			if (model->num_uvs_channels > 0 && scene->HasMaterials())
+			if (model != nullptr)
 			{
+				LoadVertices(model, mesh);
 
-				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+				if (mesh->HasFaces())
+				{
+					LoadIndexs(model, mesh);
+				}
+
+				if (mesh->HasNormals())
+				{
+					LoadNormals(model, mesh);
+				}
+
 				model->num_uvs_channels = mesh->GetNumUVChannels();
 
-				
-				LoadMaterials(scene, mesh, text);
+				LoadUVs(model, mesh);
 
-				text->ActivateThisTexture();
+				model->SetBuffersWithData();
+
+				if (model->num_uvs_channels > 0 && scene->HasMaterials())
+				{
+
+					ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+					model->num_uvs_channels = mesh->GetNumUVChannels();
+
+
+					LoadMaterials(scene, mesh, text);
+
+					text->ActivateThisTexture();
+				}
+
+				
+			}
+			else
+			{
+				LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
 			}
 			
-			App->game_object_manager->AddObject(object);
-		}
-		else
-		{
-			LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
-		}
+			AABB aabb;
 
+			aabb.SetNegativeInfinity();
+
+			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
+
+			model->mesh_data->aabb = aabb;
+
+			//// Generate global OBB
+			//OBB obb = aabb;
+			//obb.Transform(object->transform->GetGlobalTransform());
+			//// Generate global AABB
+			//aabb.SetNegativeInfinity();
+			//aabb.Enclose(obb);
+
+			//App->game_object_manager->AddObject(object);
+		}
+		
 	}
+
+	//if only load one mesh, add this to he hierarchy.
+	if (root_go->childrens.size() == 1)
+	{
+		root_go->childrens[0]->parent = App->game_object_manager->root;
+		App->game_object_manager->root->childrens.push_back(root_go->childrens[0]);
+		
+
+		//once we loaded the mesh to the hierarchy, delete the Game Object "group" because we will not use it in this case.
+		root_go->childrens.erase(root_go->childrens.cbegin()); // don't delete the children, only the group. The function deletes the childrens too. For this reason erase the game object from the children list.
+		App->game_object_manager->Destroy(root_go);
+	}
+	else //if we load more than one mesh, add the group with the meshes loaded as childrens.
+	{
+		root_go->parent = App->game_object_manager->root;
+		App->game_object_manager->root->childrens.push_back(root_go);
+	}
+
+	go_created.clear();
+	go_to_create.clear();
+
 }
 
 // ----------------------------Vertexs----------------------------

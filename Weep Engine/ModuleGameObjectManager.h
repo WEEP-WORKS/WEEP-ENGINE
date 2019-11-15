@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 
+
 class GameObject;
 class ComponentMesh;
 
@@ -15,13 +16,13 @@ public:
 	GameObjectManager(bool start_enabled = true);
 	virtual ~GameObjectManager() {};
 
+	bool Awake() override;
+	bool PreUpdate() override;
 	bool Update() override;
+	bool PostUpdate() override;
 	bool CleanUp() override;
 
-	//GameObject* CreateSphere(const int &);
-	void AddObject(GameObject*);
-
-	GameObject* CreateGeometryShape(int sides);
+	//GameObject* CreateGeometryShape(int sides);
 
 	void CreateCube();
 	void CreateSphere();
@@ -30,23 +31,57 @@ public:
 
 	void AddGameObjectToSelected(GameObject * go);
 
+	void ReleaseGameObject(GameObject* object);
+
+	void Destroy(GameObject * go);
+
 	void ClearSelection();
 
 	void Hierarchy();
-	// vector<GameObject*> GetSelectedGameObjects() const;
+	// vector<GameObject*> GetSelectedGameObjects() const
+
+	int DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
+
+	int DoForAllChildrensVertical(std::function<void(GameObjectManager*, GameObject*)>);
+
+	void DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
+
+	uint GetAllGameObjectNumber();
+
+
+
+
+
 
 public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
+	bool						create_go_empty = false;
+
+	GameObject* root;
 
 	//should be private
-	std::list<GameObject*>		objects; //Vector or list?
+	//std::list<GameObject*>		objects; //Vector or list?
 
 	vector<GameObject*>			selected;
+
+	list<GameObject*>			printed_hierarchy;
+
+	list<GameObject*> to_delete;
+
+
+
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
+
+	void AddGameObjectsSelectedToDestroy();
+
+	void AddGameObjectToDestroy(GameObject* go);
+
+	void DrawBBox(GameObject * object);
+
 
 
 

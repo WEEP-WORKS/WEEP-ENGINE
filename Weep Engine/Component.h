@@ -3,6 +3,7 @@
 #include "glew/glew.h"
 #include "Globals.h"
 #include "imgui.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 enum class ComponentType
@@ -10,7 +11,8 @@ enum class ComponentType
 	NONE = -1,
 	TRANSFORM,
 	MESH,
-	TEXTURE
+	TEXTURE,
+	CAMERA
 };
 
 
@@ -59,6 +61,9 @@ struct MeshData
 	BuffersData<float> normal_faces;
 
 	BuffersData<float> uvs;
+
+	AABB aabb;
+
 };
 
 class Component
@@ -69,11 +74,15 @@ public:
 
 public:
 	virtual void Update() {};
+	virtual void PostUpdate() {};
+
 	virtual void CleanUp() {};
 	virtual void InspectorDraw() {};
 
 	const bool Component::IsActive() const { return is_active; };
 	void Component::SetActive(bool to_active) { is_active = to_active; };
+
+	virtual void OnGetBoundingBox(AABB &bbox) {};
 
 private:
 	bool			is_active = true;

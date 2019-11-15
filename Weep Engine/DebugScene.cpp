@@ -27,6 +27,8 @@
 #include "ModuleGameObjectManager.h"
 #include "Component.h";
 #include "GameObject.h";
+#include "ComponentCamera.h"
+#include "ModuleCamera3D.h"
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
@@ -69,6 +71,12 @@ bool DebugScene::Awake()
 
 	range_demo1.x = 1;
 	range_demo1.y = 6;
+
+	GameObject* go = new GameObject("Camera", App->game_object_manager->root);
+	go->SetName("CAMERA");
+	go->AddComponent(ComponentType::CAMERA);
+	ComponentCamera* c = (ComponentCamera*)go->GetCam();
+	c->GetCamera()->SetFarPlaneDistance(100.0f);
 
 	return ret;
 }
@@ -129,8 +137,8 @@ bool DebugScene::PreUpdate()
 bool DebugScene::Update()
 {
 	bool ret = true;
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		resettest(ret);
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		App->game_object_manager->root->SetGoSelectedAsChildrenFromThis();
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
@@ -290,8 +298,10 @@ void DebugScene::MenuBar(bool &ret)
 
 		if (ImGui::BeginMenu("Game Object"))
 		{
+			ImGui::MenuItem("Game Object Empty", NULL, &App->game_object_manager->create_go_empty);
 			if (ImGui::BeginMenu("Create Primitive"))
 			{
+
 				ImGui::MenuItem("Cube", NULL, &App->game_object_manager->create_cube);
 				ImGui::MenuItem("Sphere", NULL, &App->game_object_manager->create_sphere);
 				ImGui::EndMenu();
@@ -345,8 +355,13 @@ void DebugScene::Plane()
 		glVertex3f(-100.f, 0.f, -i);
 		glVertex3f(100.f, 0.f, -i);
 	}
+	glLineWidth(1.0f); // why it doesnt work?
+	glEnd();
 
-	glLineWidth(3.0f); // why it doesnt work?
+	glLineWidth(5.0f); // why it doesnt work?
+
+	glBegin(GL_LINES);
+
 	glColor3f(1, 0, 0);
 	glVertex3f(0.f, 0.f, 0.f);
 	glVertex3f(5.f, 0.f, 0.f);
@@ -358,6 +373,9 @@ void DebugScene::Plane()
 	glColor3f(0, 0, 1);
 	glVertex3f(0.f, 0.f, 0.f);
 	glVertex3f(0.f, 0.f, 5.f);
+
+	glColor3f(255.f, 255.f, 255.f);
+	glLineWidth(1.0f);
 
 	glEnd();
 }
