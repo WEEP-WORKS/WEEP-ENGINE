@@ -2,7 +2,6 @@
 #include "App.h"
 #include "Globals.h"
 #include "GameObject.h"
-#include "imgui.h"
 #include "ModuleInput.h"
 #include "ComponentMesh.h"
 #include "ModuleTexture.h"
@@ -10,7 +9,7 @@
 #include "ModuleCamera3D.h"
 #include "DebugScene.h"
 #include "par_shapes.h"
-
+#include "imgui_internal.h"
 //#include <functional>
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
@@ -267,12 +266,7 @@ void GameObjectManager::Hierarchy()
 		{
 
 			//create primitives should be here
-			for (std::vector<GameObject*>::iterator iter = root->childrens.begin(); iter != root->childrens.end(); ++iter)
-			{
-				bool ret = PrintGoList(*iter);
-				if (!ret)
-					break;
-			}
+			DoForFirstChildrens(&GameObjectManager::PrintGoList);
 			
 		//	DoForAllChildrensVertical(&GameObjectManager::PrintGoList);
 
@@ -304,11 +298,10 @@ void GameObjectManager::Hierarchy()
 }
 
 
-bool GameObjectManager::PrintGoList(GameObject * object)
+void GameObjectManager::PrintGoList(GameObject * object)
 {
-	bool ret = true;
 	if (root == object || object == nullptr)
-		return true;
+		return;
 		
 
 	if (object->IsActive() == false)
@@ -341,19 +334,26 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 
 	if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
 	{
-		ImGui::SetDragDropPayload("DND_DEMO_CELL", &object, sizeof(int));        // Set payload to carry the index of our item (could be anything)
+		ImGui::SetDragDropPayload("obj", &object, sizeof(int));        // Set payload to carry the index of our item (could be anything)
 
 		ImGui::EndDragDropSource();
 	}
 	if (ImGui::BeginDragDropTarget())
 	{
-		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_CELL"))
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("obj"))
 		{
 			object->SetAsNewChildren(*(GameObject**)payload->Data);
 		}
 		ImGui::EndDragDropTarget();
 	}
 
+	if (ImGui::BeginDragDropTargetCustom(ImGui::GetCurrentWindow()->Rect(), ImGui::GetID("Hierarchy"))) { //Window
+		if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("obj")) 
+		{
+			root->SetAsNewChildren(*(GameObject**)payload->Data);
+		}
+		ImGui::EndDragDropTarget();
+	}
 	// Input
 	if (ImGui::IsItemClicked(0))
 	{
@@ -379,7 +379,7 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 
 		if (ImGui::BeginPopupContextItem("HerarchyPopup"))
 		{
-			if (!ImGui::IsPopupOpen(0))
+			if (!ImGui::IsPopupOpen((ImGuiID)0))
 			{
 				if (ImGui::Button("Delete"))
 				{
@@ -399,21 +399,13 @@ bool GameObjectManager::PrintGoList(GameObject * object)
 	{
 		for (std::vector<GameObject*>::iterator iter = object->childrens.begin(); iter != object->childrens.end(); ++iter)
 		{
-			ret = PrintGoList(*iter);
-			if (!ret)
-				break;
+			PrintGoList(*iter);
 		}
 		ImGui::TreePop();
 	}
 
 	if (object->IsActive() == false)
 		ImGui::PopStyleColor();
-	
-
-	return ret;
-
-	
-
 }
 
 void GameObjectManager::DrawBBox(GameObject * object)
@@ -504,6 +496,33 @@ int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, 
 	}
 
 	return number_childrens;
+}
+
+void GameObjectManager::DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)
+{
+	std::list<GameObject*> all_childrens;
+	if (start != nullptr)
+		all_childrens.push_back(start);
+	else
+		all_childrens.push_back(root);
+
+
+	GameObject* current = (*all_childrens.begin());
+	for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+	{
+		all_childrens.push_back(*iter);
+	}
+
+	while (!all_childrens.empty())
+	{
+		current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		if (current != nullptr)
+		{
+			funct(this, current);
+		}
+	}
+
 }
 
 int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectManager*, GameObject*)> funct)

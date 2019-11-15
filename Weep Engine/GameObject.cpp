@@ -308,6 +308,9 @@ bool GameObject::SetAsNewChildren(GameObject* new_children)
 
 bool GameObject::IsParentOfMyParents( GameObject* possible_parent)
 {
+	if (parent == nullptr)
+		return false;
+
 	GameObject* current_go = parent;
 	while (current_go->parent != nullptr)
 	{

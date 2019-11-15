@@ -44,6 +44,8 @@ public:
 
 	int DoForAllChildrensVertical(std::function<void(GameObjectManager*, GameObject*)>);
 
+	void DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
+
 	uint GetAllGameObjectNumber();
 
 
@@ -72,7 +74,7 @@ public:
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?
-	bool PrintGoList(GameObject * object);
+	void PrintGoList(GameObject * object);
 
 	void AddGameObjectsSelectedToDestroy();
 
