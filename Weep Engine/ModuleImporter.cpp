@@ -197,7 +197,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				}
 
 				CreateOwnFile(model, name);
-				ReadOwnFile(string(name + ".mesh"));
+				LoadOwnFile(string(name + ".mesh"));
 				
 			}
 			else
@@ -465,7 +465,7 @@ void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
 
 }
 
-void ModuleImporter::ReadOwnFile(string name_file)
+void ModuleImporter::LoadOwnFile(string name_file)
 {
 	//relative_path wiht extension of the own format.
 

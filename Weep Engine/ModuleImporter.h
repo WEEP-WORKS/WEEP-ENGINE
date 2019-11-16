@@ -46,7 +46,7 @@ public:
 	void LoadIndexs(ComponentMesh * model, aiMesh * mesh);
 
 	void CreateOwnFile(ComponentMesh* mesh, string name_to_file);
-	void ReadOwnFile(string name_file);
+	void LoadOwnFile(string name_file);
 
 	char* GetPath() const;
 	void LoadPath(char* path);
