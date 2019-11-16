@@ -197,6 +197,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				}
 
 				CreateOwnFile(model, name);
+				ReadOwnFile(string(name + ".mesh"));
 				
 			}
 			else
@@ -375,19 +376,49 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 
 void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
 {
+
+	uint size_vertexs = sizeof(float) * mesh->mesh_data->vertexs.buffer_size;
+	uint size_indexs = sizeof(uint)  * mesh->mesh_data->indexs.buffer_size;
+	uint size_normals_dir = sizeof(float) * mesh->mesh_data->normals_direction.buffer_size;
+	uint size_normal_vertexs = sizeof(float) * mesh->mesh_data->normal_vertexs.buffer_size;
+	uint size_normal_faces = sizeof(float) * mesh->mesh_data->normal_faces.buffer_size;
+	uint size_uvs = sizeof(float) * mesh->mesh_data->uvs.buffer_size;
+
+
+
+
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
-	uint header[6] = { mesh->mesh_data->vertexs.num, mesh->mesh_data->indexs.num, mesh->mesh_data->normals_direction.num, mesh->mesh_data->normal_vertexs.num, mesh->mesh_data->normal_faces.num, mesh->mesh_data->uvs.num};//mesh.num_indices, mesh.num_vertices };
+	uint header[12] = { 
+		mesh->mesh_data->vertexs.num,
+		size_vertexs,
+
+		mesh->mesh_data->indexs.num,
+		size_indexs,
+
+		mesh->mesh_data->normals_direction.num,
+		size_normals_dir,
+
+		mesh->mesh_data->normal_vertexs.num,
+		size_normal_vertexs,
+
+		mesh->mesh_data->normal_faces.num,
+		size_normal_faces, 
+
+		mesh->mesh_data->uvs.num,
+		size_uvs 
+	};
+
 	//TODO AABB??
 
 	// size----------------
 	// Set the size of the entire file size
 	uint all_size = sizeof(header) +
-		sizeof(float) * mesh->mesh_data->vertexs.buffer_size +
-		sizeof(uint)  * mesh->mesh_data->indexs.buffer_size +
-		sizeof(float) * mesh->mesh_data->normals_direction.buffer_size +
-		sizeof(float) * mesh->mesh_data->normal_vertexs.buffer_size +
-		sizeof(float) * mesh->mesh_data->normal_faces.buffer_size +
-		sizeof(float) * mesh->mesh_data->uvs.buffer_size;
+		size_vertexs +
+		size_indexs +
+		size_normals_dir +
+		size_normal_vertexs +
+		size_normal_faces +
+		size_uvs;
 
 
 	char* data = new char[all_size]; // Allocate the entire file size.
@@ -401,24 +432,131 @@ void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
 
 	// Store vertexs
 	cursor += size;
-	size = sizeof(float) * mesh->mesh_data->vertexs.buffer_size;
+	size = size_vertexs;
 	memcpy(cursor, mesh->mesh_data->vertexs.buffer, size);
 
 	// Store indices
 	cursor += size; 
-	size = sizeof(uint) * mesh->mesh_data->indexs.buffer_size;
-	memcpy(cursor, mesh->mesh_data->indexs.buffer, size);	// Store normals_dir
-	cursor += size;
-	size = sizeof(float) * mesh->mesh_data->normals_direction.buffer_size;
-	memcpy(cursor, mesh->mesh_data->normals_direction.buffer, size);	// Store normal_vertexs
-	cursor += size;
-	size = sizeof(float) * mesh->mesh_data->normal_vertexs.buffer_size;
+	size = size_indexs;
+	memcpy(cursor, mesh->mesh_data->indexs.buffer, size);
 
-	memcpy(cursor, mesh->mesh_data->normal_vertexs.buffer, size);	// Store normal_faces
+	// Store normals_dir
 	cursor += size;
-	size = sizeof(float) * mesh->mesh_data->normal_faces.buffer_size;
-	memcpy(cursor, mesh->mesh_data->normal_faces.buffer, size);	// Store uvs
+	size = size_normals_dir;
+	memcpy(cursor, mesh->mesh_data->normals_direction.buffer, size);
+
+	// Store normal_vertexs
 	cursor += size;
-	size = sizeof(float) * mesh->mesh_data->uvs.buffer_size;
-	memcpy(cursor, mesh->mesh_data->uvs.buffer, size);	string path_to_save(LIBRARY_MESH_FOLDER + string(name_to_file) + string(".mesh"));	App->file_system->Save(path_to_save.c_str(), data, all_size);
+	size = size_normal_vertexs;
+
+	memcpy(cursor, mesh->mesh_data->normal_vertexs.buffer, size);
+	// Store normal_faces
+	cursor += size;
+	size = size_normal_faces;
+	memcpy(cursor, mesh->mesh_data->normal_faces.buffer, size);
+
+	// Store uvs
+	cursor += size;
+	size = size_uvs;
+	memcpy(cursor, mesh->mesh_data->uvs.buffer, size);
+
+	string path_to_save(LIBRARY_MESH_FOLDER + string(name_to_file) + string(".mesh"));
+	App->file_system->Save(path_to_save.c_str(), data, all_size);
+
+}
+
+void ModuleImporter::ReadOwnFile(string name_file)
+{
+	//relative_path wiht extension of the own format.
+
+	string full_path(LIBRARY_MESH_FOLDER + name_file);
+	string name;
+	App->file_system->SplitFilePath(name_file.c_str(), nullptr, &name);
+	GameObject* new_go = new GameObject(name, App->game_object_manager->root);
+	ComponentMesh* mesh = (ComponentMesh*)new_go->AddComponent(ComponentType::MESH);
+
+	char* data;
+
+	App->file_system->Load(full_path.c_str(), &data);
+
+	char* cursor = data;
+
+
+
+
+
+	//Load Header----------
+	uint ranges[12];
+	uint bytes = sizeof(ranges);
+	memcpy(ranges, cursor, bytes);
+
+	mesh->mesh_data->vertexs.num = ranges[0];
+	mesh->mesh_data->vertexs.buffer_size = ranges[1];
+	if (mesh->mesh_data->vertexs.num > 0)
+		mesh->mesh_data->vertexs.has_data = true;
+
+	mesh->mesh_data->indexs.num = ranges[2];
+	mesh->mesh_data->indexs.buffer_size = ranges[3];
+	if (mesh->mesh_data->indexs.num > 0)
+		mesh->mesh_data->indexs.has_data = true;
+
+	mesh->mesh_data->normals_direction.num = ranges[4];
+	mesh->mesh_data->normals_direction.buffer_size = ranges[5];
+	if (mesh->mesh_data->normals_direction.num > 0)
+		mesh->mesh_data->normals_direction.has_data = true;
+
+	mesh->mesh_data->normal_vertexs.num = ranges[6];
+	mesh->mesh_data->normal_vertexs.buffer_size = ranges[7];
+	if (mesh->mesh_data->normal_vertexs.num > 0)
+		mesh->mesh_data->normal_vertexs.has_data = true;
+
+	mesh->mesh_data->normal_faces.num = ranges[8];
+	mesh->mesh_data->normal_faces.buffer_size = ranges[9];
+	if (mesh->mesh_data->normal_faces.num > 0)
+		mesh->mesh_data->normal_faces.has_data = true;
+
+	mesh->mesh_data->uvs.num = ranges[10];
+	mesh->mesh_data->uvs.buffer_size = ranges[11];
+	if (mesh->mesh_data->uvs.num > 0)
+		mesh->mesh_data->uvs.has_data = true;
+
+
+	//Load Buffers----------
+	// Load vertexs
+	cursor += bytes;
+	bytes = mesh->mesh_data->vertexs.buffer_size;
+	mesh->mesh_data->vertexs.buffer = new float[mesh->mesh_data->vertexs.buffer_size];
+	memcpy(mesh->mesh_data->vertexs.buffer, cursor, bytes);
+
+	// Load indexs
+	cursor += bytes;
+	bytes = mesh->mesh_data->indexs.buffer_size;
+	mesh->mesh_data->indexs.buffer = new uint[mesh->mesh_data->indexs.buffer_size];
+	memcpy(mesh->mesh_data->indexs.buffer, cursor, bytes);
+
+	// Load normal_dir
+	cursor += bytes;
+	bytes = mesh->mesh_data->normals_direction.buffer_size;
+	mesh->mesh_data->normals_direction.buffer = new float[mesh->mesh_data->normals_direction.buffer_size];
+	memcpy(mesh->mesh_data->normals_direction.buffer, cursor, bytes);
+
+	// Load normal_vertexs
+	cursor += bytes;
+	bytes = mesh->mesh_data->normal_vertexs.buffer_size;
+	mesh->mesh_data->normal_vertexs.buffer = new float[mesh->mesh_data->normal_vertexs.buffer_size];
+	memcpy(mesh->mesh_data->normal_vertexs.buffer, cursor, bytes);
+
+	// Load normal_faces
+	cursor += bytes;
+	bytes = mesh->mesh_data->normal_faces.buffer_size;
+	mesh->mesh_data->normal_faces.buffer = new float[mesh->mesh_data->normal_faces.buffer_size];
+	memcpy(mesh->mesh_data->normal_faces.buffer, cursor, bytes);
+
+	// Load uvs
+	cursor += bytes;
+	bytes = mesh->mesh_data->uvs.buffer_size;
+	mesh->mesh_data->uvs.buffer = new float[mesh->mesh_data->uvs.buffer_size];
+	memcpy(mesh->mesh_data->uvs.buffer, cursor, bytes);
+
+	mesh->SetBuffersWithData();
 }
