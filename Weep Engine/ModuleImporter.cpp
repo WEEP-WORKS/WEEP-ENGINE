@@ -560,3 +560,4 @@ void ModuleImporter::LoadOwnFile(string name_file)
 
 	mesh->SetBuffersWithData();
 }
+
