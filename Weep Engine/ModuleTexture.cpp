@@ -3,6 +3,7 @@
 #include "ModuleGameObjectManager.h"
 #include "GameObject.h"
 #include "ComponentTexture.h"
+#include "ModuleFileSystem.h"
 
 #include "DevIL/il.h"
 #include "DevIL/ilu.h"
@@ -101,6 +102,9 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 		if (ret > 0)
 		{
 		
+
+
+		
 			width = ilGetInteger(IL_IMAGE_WIDTH);
 			height = ilGetInteger(IL_IMAGE_HEIGHT);
 
@@ -112,6 +116,21 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 			new_texture->id = ret;
 			new_texture->path = path;
 			textures_paths.push_back(new_texture);
+
+			string name_file;
+			
+			ILuint size;
+			ILubyte *data;
+			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
+			size = ilSaveL(IL_DDS, NULL, 0); // Get the size of the data buffer
+			string file(LIBRARY_TEXTURES_FOLDER + App->GetFileNameWithoutExtension(path) + ".dds");
+
+			if (size > 0) {
+				data = new ILubyte[size]; // allocate data buffer
+				if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+					App->file_system->Save(file.c_str(), data, size);
+				RELEASE_ARRAY(data);
+			}
 
 			ilDeleteImages(1, &ret);
 		}

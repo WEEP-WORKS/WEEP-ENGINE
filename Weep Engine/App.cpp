@@ -7,6 +7,7 @@
 #include "ModuleGameObjectManager.h"
 #include "ModuleImporter.h"
 #include "ModuleTexture.h"
+#include "ModuleFileSystem.h"
 
 #include <list>
 #include <fstream>
@@ -25,6 +26,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	game_object_manager = new GameObjectManager();
 	importer = new ModuleImporter();
 	texture = new ModuleTexture();
+	file_system = new ModuleFileSystem();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -34,11 +36,11 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(file_system);
 	AddModule(importer);
 	AddModule(texture);
 	AddModule(game_object_manager);
 	AddModule(debug_scene);
-
 
 
 	// Renderer last
