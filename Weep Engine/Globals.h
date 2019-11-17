@@ -52,17 +52,7 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
 
-#define ASSETS_FOLDER "/Assets/"
-#define SETTINGS_FOLDER "/Settings/"
-#define LIBRARY_FOLDER "/Library/"
-#define LIBRARY_AUDIO_FOLDER "/Library/Audio/"
-#define LIBRARY_TEXTURES_FOLDER "/Library/Textures/"
-#define LIBRARY_MESH_FOLDER "/Library/Meshes/"
-#define LIBRARY_ANIMATION_FOLDER "/Library/Animations/"
-#define LIBRARY_SCENE_FOLDER "/Library/Scenes/"
-#define LIBRARY_MODEL_FOLDER "/Library/Models/"
-#define LIBRARY_MATERIAL_FOLDER "/Library/Materials/"
-#define LIBRARY_STATE_MACHINE_FOLDER "/Library/StateMachines/"
+
 typedef unsigned int uint;
 
 enum update_status
