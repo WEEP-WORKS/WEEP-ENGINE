@@ -3,7 +3,8 @@
 
 #include "Module.h"
 #include "Globals.h"
-
+#include "ImGuizmo.h"
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class GameObject;
 class ComponentMesh;
@@ -21,6 +22,8 @@ public:
 	bool Update() override;
 	bool PostUpdate() override;
 	bool CleanUp() override;
+
+	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 
 	//GameObject* CreateGeometryShape(int sides);
 
@@ -47,11 +50,6 @@ public:
 	void DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
 
 	uint GetAllGameObjectNumber();
-
-
-
-
-
 
 public:
 	bool						create_cube		= false;
@@ -82,7 +80,8 @@ private:
 
 	void MousePick();
 
-
+	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
+	float3 last_scale = float3::zero;
 };
 
 #endif // !__MODULEGAMEOBJECTMANAGER_H__

@@ -28,6 +28,7 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
+	void Tools();
 	bool CleanUp();
 
 	void Configuration();

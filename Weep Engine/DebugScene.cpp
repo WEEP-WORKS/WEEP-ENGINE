@@ -156,6 +156,8 @@ bool DebugScene::Update()
 
 	Panels();
 
+	Tools();
+
 	//-------------------------------------------------------------------------
 	//----------------------------INSPECTOR------------------------------------
 	//-------------------------------------------------------------------------
@@ -212,6 +214,35 @@ bool DebugScene::Update()
 	}
 
 	return ret;
+}
+
+void DebugScene::Tools()
+{
+	ImGui::SetNextWindowPos(ImVec2(-5, 20));
+	ImGui::SetNextWindowSize(ImVec2(App->window->GetWindowSizeVec().x + 10, 27));
+	bool open = true;
+	ImGui::Begin("tool_Bar", &open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+		| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+	ImGui::SetCursorPos(ImVec2(20, 3));
+	if (ImGui::Button("Move"))
+	{
+		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE);
+	}
+
+	ImGui::SetCursorPos(ImVec2(64, 3));
+	if (ImGui::Button("Rotate"))
+	{
+		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::ROTATE);
+	}
+
+	ImGui::SetCursorPos(ImVec2(120, 3));
+	if (ImGui::Button("Scale"))
+	{
+		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
+	}
+
+	ImGui::End();
 }
 
 void DebugScene::resettest(bool &ret)

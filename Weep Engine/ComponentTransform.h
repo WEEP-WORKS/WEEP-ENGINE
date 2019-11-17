@@ -18,6 +18,10 @@ public:
 	void SetGlobalTransform(const float4x4& global);
 	float4x4 GetLocalTransform() const;
 
+	const void Translate(const float3 & pos);
+	const void Rotate(const float3 & rotate);
+	const void Scale(const float3 & scale);
+
 	const void SetPosition(const float3& pos);
 	const void SetRotation(const float3& rotation);
 	const void SetRotationQuat(const Quat& quater);

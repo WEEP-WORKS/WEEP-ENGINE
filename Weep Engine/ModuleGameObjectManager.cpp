@@ -67,6 +67,62 @@ bool GameObjectManager::Update()
 		AddGameObjectsSelectedToDestroy();
 	}
 
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		float4x4 transform = (*it)->transform->GetGlobalTransform().Transposed();
+
+		float transformation[16];
+		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
+			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
+			current_gizmo_operation,
+			ImGuizmo::MODE::WORLD,
+			transform.ptr(), transformation);
+
+		if (ImGuizmo::IsUsing())
+		{
+			float addition[3];
+			float rotation[3];
+			float scale[3];
+			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
+			float3 add(addition[0], addition[1], addition[2]);
+			float3 rot(rotation[0], rotation[1], rotation[2]);
+			float3 sc(scale[0], scale[1], scale[2]);
+
+			LOG("%f, %f, %f", sc.x, sc.y, sc.z);
+
+			switch (current_gizmo_operation)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+			{
+				if (add.IsFinite()) {
+					if ((*it)->parent != nullptr) {
+						add = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(add);
+					}
+					(*it)->transform->Translate(add);
+				}
+			}
+			break;
+			case ImGuizmo::OPERATION::ROTATE:
+			{
+				if (rot.IsFinite()) {
+					if ((*it)->parent != nullptr) {
+						rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
+					}
+					(*it)->transform->Rotate(rot);
+				}
+			}
+			break;
+			case ImGuizmo::OPERATION::SCALE:
+			{
+				if (sc.IsFinite()) {
+					(*it)->transform->SetScale(sc);
+				}
+			}
+			break;
+			}
+		}
+	}
+
 	return true;
 }
 
@@ -89,6 +145,11 @@ bool GameObjectManager::CleanUp()
 	root->DoForAllChildrens(&GameObject::CleanUp);
 	DoForAllChildrens(&GameObjectManager::ReleaseGameObject);
 	return true;
+}
+
+void GameObjectManager::SetGuizmoOperation(ImGuizmo::OPERATION op)
+{
+	current_gizmo_operation = op;
 }
 
 void GameObjectManager::ReleaseGameObject(GameObject* object)

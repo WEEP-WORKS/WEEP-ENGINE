@@ -102,3 +102,25 @@ float4x4 ComponentTransform::GetLocalTransform() const
 {
 	return local_transform;
 }
+
+const void ComponentTransform::Translate(const float3 & pos)
+{
+	if (pos.x != 0 || pos.y != 0 || pos.z != 0)
+		local_position += pos;
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::Rotate(const float3 & rotate)
+{
+	SetRotation(GetRotationEuler() + rotate);
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::Scale(const float3 & scale)
+{
+	local_scale += scale;
+
+	RecalculateLocalTransform();
+}
