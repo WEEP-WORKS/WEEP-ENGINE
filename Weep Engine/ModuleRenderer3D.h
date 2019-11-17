@@ -21,7 +21,9 @@ public:
 	~ModuleRenderer3D();
 
 	bool Awake();
+	bool Start();
 	bool PreUpdate();
+	bool Update();
 	bool PostUpdate();
 	bool CleanUp();
 	void OnConfiguration();

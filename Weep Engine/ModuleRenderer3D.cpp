@@ -32,8 +32,6 @@ bool ModuleRenderer3D::Awake()
 {
 	bool ret = true;
 
-	ImGuizmo::Enable(true);
-
 	if(ret == true)
 	{
 		LOG("Vendor: %s", glGetString(GL_VENDOR));
@@ -111,7 +109,10 @@ bool ModuleRenderer3D::Awake()
 
 
 	// Projection matrix for
+	/*float2 position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+	float2 size = float2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);*/
 	OnResize(App->window->GetWidth(), App->window->GetHeight());
+	ImGuizmo::SetRect(0,0, App->window->GetWidth(), App->window->GetHeight());
 
 	//To get the refresh of the display
 	int display_count = 0, display_index = 0, mode_index = 0;
@@ -129,6 +130,12 @@ bool ModuleRenderer3D::Awake()
 	SetAmbientLight(true, light);
 
 	return ret;
+}
+
+bool ModuleRenderer3D::Start()
+{
+	ImGuizmo::Enable(true);
+	return true;
 }
 
 bool ModuleRenderer3D::GetVsync() const
@@ -159,27 +166,39 @@ bool ModuleRenderer3D::PreUpdate()
 		lights[i].Render();
 
 	// Start the Dear ImGui frame
+
+
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+
 	ImGuizmo::BeginFrame();
 
+
 	return ret;
+}
+
+bool ModuleRenderer3D::Update()
+{
+	//ImGuizmo::SetDrawlist();
+	/*float2 position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+	float2 size = float2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);*/
+
+	//OnResize(size.x, size.y);
+
+	//ImGuizmo::SetRect(position.x, position.y, size.x, size.y);
+	return true;
 }
 
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
-	ImGuizmo::SetDrawlist();
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
 
 	// Rendering ImGui
 	ImGui::Render();
-	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
 	//ImGuiIO& io = ImGui::GetIO();
-	ImGuizmo::SetRect(0, 0, App->window->io.DisplaySize.x, App->window->io.DisplaySize.y);
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-
-
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_GL_SwapWindow(App->window->window);
