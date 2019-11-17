@@ -11,6 +11,8 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
+#include "ImGuizmo.h"
+
 
 #pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -30,6 +32,7 @@ bool ModuleRenderer3D::Awake()
 {
 	bool ret = true;
 
+	ImGuizmo::Enable(true);
 
 	if(ret == true)
 	{
@@ -122,6 +125,9 @@ bool ModuleRenderer3D::Awake()
 		refresh_rate = mode.refresh_rate;
 	}
 
+	float light[4] = { 255, 255, 255, 255 };
+	SetAmbientLight(true, light);
+
 	return ret;
 }
 
@@ -156,6 +162,7 @@ bool ModuleRenderer3D::PreUpdate()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
 
 	return ret;
 }
@@ -163,9 +170,13 @@ bool ModuleRenderer3D::PreUpdate()
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
+	ImGuizmo::SetDrawlist();
+
 	// Rendering ImGui
 	ImGui::Render();
 	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
+	//ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(0, 0, App->window->io.DisplaySize.x, App->window->io.DisplaySize.y);
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 
 
@@ -198,7 +209,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix());
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -383,3 +394,32 @@ void ModuleRenderer3D::SetVsync(bool set)
 	SDL_GL_SetSwapInterval(vsync);
 }
 
+void ModuleRenderer3D::SetAmbientLight(const bool & enabled, const float color[4]) const
+{
+	glLightfv(GL_LIGHT0, GL_AMBIENT, color);
+
+	if (enabled)
+		glEnable(GL_LIGHT0);
+	else
+		glDisable(GL_LIGHT0);
+}
+
+void ModuleRenderer3D::SetDiffuseLight(const bool & enabled, const float color[4]) const
+{
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, color);
+
+	if (enabled)
+		glEnable(GL_LIGHT1);
+	else
+		glDisable(GL_LIGHT1);
+}
+
+void ModuleRenderer3D::SetSpecularLight(const bool & enabled, const float color[4]) const
+{
+	glLightfv(GL_LIGHT2, GL_SPECULAR, color);
+
+	if (enabled)
+		glEnable(GL_LIGHT2);
+	else
+		glDisable(GL_LIGHT2);
+}

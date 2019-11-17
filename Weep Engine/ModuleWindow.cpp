@@ -268,6 +268,18 @@ void ModuleWindow::SetWindowSize(int _width, int _height)
 	}
 }
 
+void ModuleWindow::GetWindowSize(int & width, int & height)
+{
+	SDL_GetWindowSize(window, &width, &height);
+}
+
+const vec2 ModuleWindow::GetWindowSizeVec()
+{
+	int w, h;
+	GetWindowSize(w, h);
+	return vec2((int)w, (int)h);
+}
+
 void ModuleWindow::SetBrightness(float set)
 {
 	if (set > 1)
@@ -358,7 +370,7 @@ void ModuleWindow::SetVersion(const char * set)
 	SetTitle((App->window->GetTitle() + version + " ").c_str());
 }
 
-const float4 ModuleWindow::GetWindowRect() const
+const Rect ModuleWindow::GetWindowRect() const
 {
-	return float4(0, 0, width, height);
+	return math::Rect(0, 0, width, height);
 }

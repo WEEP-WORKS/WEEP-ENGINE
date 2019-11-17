@@ -28,8 +28,8 @@ public:
 	const float GetHorizontalFOV() const;
 	const float4x4 GetViewMatrix() const;
 	const float4x4 GetProjectionMatrix() const;
-	const float * GetOpenGLViewMatrix() const;
-	const float * GetOpenGLProjectionMatrix() const;
+	const float4x4 GetOpenGLViewMatrix() const;
+	const float4x4 GetOpenGLProjectionMatrix() const;
 
 	void MoveFront(const float& speed);
 	void MoveBack(const float& speed);
@@ -69,15 +69,17 @@ public:
 	bool Update();
 	bool CleanUp();
 
-	Camera3D* CreateCamera();
-	void DestroyCamera(Camera3D* cam);
-	void DestroyAllCameras();
-	vector<Camera3D*> GetCameras();
 	Camera3D* GetEditorCamera() const;
 	void SetCurrentCamera(Camera3D* set);
 	Camera3D* GetCurrentCamera() const;
 
-	const float * GetViewMatrix() const;
+	void SetCurrentCameraToEditorCamera();
+	const float* GetViewMatrix() const;
+
+	Camera3D* CreateCamera();
+	void DestroyCamera(Camera3D* cam);
+	void DestroyAllCameras();
+	vector<Camera3D*> GetCameras();
 
 private:
 

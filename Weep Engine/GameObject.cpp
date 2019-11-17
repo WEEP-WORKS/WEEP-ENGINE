@@ -351,9 +351,9 @@ void GameObject::CalcBBox()
 		local_bbox.Transform(transform->GetGlobalTransform());
 }
 
-bool PointInRect(float2 point_xy, float4 rect_xywh)
+bool PointInRect(float2 point_xy, Rect rect_xywh)
 {
-	if (point_xy.x > rect_xywh.x && point_xy.x < rect_xywh.x + rect_xywh.w && point_xy.y > rect_xywh.y && point_xy.y < rect_xywh.y + rect_xywh.z)
+	if (point_xy.x >= rect_xywh.left && point_xy.x <= rect_xywh.right && point_xy.y > rect_xywh.top && point_xy.y < rect_xywh.bottom)
 		return true;
 
 	return false;
@@ -364,7 +364,7 @@ void GameObject::TestRay()
 	// Check if intersects with bbox
 	if (local_bbox.IsFinite())
 	{
-		float4 rect = App->window->GetWindowRect();
+		Rect rect = App->window->GetWindowRect();
 		float2 mouse_pos = App->input->GetMouse();
 
 		if (PointInRect(mouse_pos, rect))
@@ -372,8 +372,8 @@ void GameObject::TestRay()
 			// The point (1, 1) corresponds to the top-right corner of the near plane
 			// (-1, -1) is bottom-left
 
-			float first_normalized_x = (mouse_pos.x - rect.x) / rect.w;
-			float first_normalized_y = (mouse_pos.y - rect.y) / rect.z;
+			float first_normalized_x = (mouse_pos.x - rect.left) / (rect.right - rect.left);
+			float first_normalized_y = (mouse_pos.y - rect.top) / (rect.bottom - rect.top);
 
 			float normalized_x = (first_normalized_x * 2) - 1;
 			float normalized_y = 1 - (first_normalized_y * 2);

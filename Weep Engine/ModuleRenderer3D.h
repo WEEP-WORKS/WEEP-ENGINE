@@ -69,4 +69,10 @@ private:
 
 	void SetVsync(bool set);
 
+	void SetAmbientLight(const bool & enabled, const float color[4]) const;
+
+	void SetDiffuseLight(const bool & enabled, const float color[4]) const;
+
+	void SetSpecularLight(const bool & enabled, const float color[4]) const;
+
 };
