@@ -262,12 +262,14 @@ void DebugScene::Panels()
 	if (to_save)
 	{
 		App->WantToSave();
+		to_save = false;
 	}
 
 	// Load
 	if (to_load)
 	{
 		App->WantToLoad();
+		to_load = false;
 	}
 }
 

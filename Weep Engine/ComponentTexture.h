@@ -14,6 +14,8 @@ public:
 	void InspectorDraw();
 	void SetCheckersToGOSelected();
 	void Update() override;
+//	void Save(Json::Value&) override;
+
 
 public:
 

@@ -562,3 +562,7 @@ uint GameObjectManager::GetAllGameObjectNumber()
 }
 
 
+void GameObjectManager::Save(Json::Value& scene)
+{
+	root->DoForAllChildrens(&GameObject::Save, scene["GameObjects"] = Json::arrayValue);
+}

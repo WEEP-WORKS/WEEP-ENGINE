@@ -102,3 +102,15 @@ float4x4 ComponentTransform::GetLocalTransform() const
 {
 	return local_transform;
 }
+
+void ComponentTransform::Save(Json::Value& scene)
+{
+	Json::Value component;
+	component["Position"] = Json::arrayValue;
+
+	component["Position"].append(GetPosition().x);
+	component["Position"].append(GetPosition().y);
+	component["Position"].append(GetPosition().z);
+
+	scene.append(component);
+}

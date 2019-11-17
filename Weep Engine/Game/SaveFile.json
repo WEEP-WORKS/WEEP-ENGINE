@@ -1,4 +1,52 @@
 {
+	"GameObjects" : 
+	[
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					]
+				}
+			],
+			"id" : 0,
+			"name" : "root"
+		},
+		{
+			"Components" : [],
+			"id" : 0,
+			"name" : "CAMERA"
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					]
+				}
+			],
+			"id" : 0,
+			"name" : "group_BakerHouse_1"
+		},
+		{
+			"Components" : [],
+			"id" : 0,
+			"name" : "Chimney"
+		},
+		{
+			"Components" : [],
+			"id" : 0,
+			"name" : "Baker_house"
+		}
+	],
 	"Renderer" : 
 	{
 		"VSYNC" : true

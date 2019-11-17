@@ -12,6 +12,8 @@ public:
 
 	void Update();
 
+	void Save(Json::Value&) override;
+
 	void InspectorDraw();
 
 	float4x4 GetGlobalTransform() const;
@@ -25,6 +27,7 @@ public:
 	const float3 GetPosition() const;
 	const float3 GetRotationEuler() const;
 	const float3 GetScale() const;
+
 
 private:
 	void RecalculateLocalTransform();

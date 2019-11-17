@@ -252,6 +252,32 @@ int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 	return number_childrens;
 }
 
+int GameObject::DoForAllChildrens(std::function<void(GameObject*, Json::Value&)> funct, Json::Value& scene)
+{
+	int number_childrens = -1; // -1 to not count this game object and only his childrens.
+	std::list<GameObject*> all_childrens;
+
+	all_childrens.push_back(this);
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		if (current != nullptr)
+		{
+			for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+			{
+				all_childrens.push_back(*iter);
+			}
+
+			funct(current, scene);
+			++number_childrens;
+		}
+	}
+
+	return number_childrens;
+}
+
 int GameObject::DoForAllSelected(std::function<bool(GameObject* /*from*/, GameObject*/*target*/ )> funct)
 {
 	int number_of_selected = -1; // -1 to not count this game object and only his childrens.
@@ -348,3 +374,27 @@ void GameObject::CalcBBox()
 	if (local_bbox.IsFinite())
 		local_bbox.Transform(transform->GetGlobalTransform());
 }
+
+void GameObject::Save(Json::Value& scene)
+{
+	/*string s =scene[0]["name"].asString();
+	LOG("%s", s.c_str());*/
+
+	Json::Value go;
+
+	for (vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		(*citer)->Save(go["Components"] = Json::arrayValue);
+	}
+
+	go["name"] = name;
+	go["id"] = id;
+
+
+
+	scene.append(go);
+	
+
+
+}
+

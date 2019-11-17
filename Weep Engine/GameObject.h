@@ -7,6 +7,8 @@
 #include "ComponentTransform.h"
 #include "MathGeoLib/include\MathGeoLib.h"
 
+#include "jsoncpp/json/json.h"
+
 class Component;
 class ComponentTexture;
 class ComponentMesh;
@@ -26,7 +28,10 @@ public:
 	void PostUpdate();
 
 	void CleanUp();
-	//Don't have cleanUp for each game objects and their components. TODO
+
+	void Save(Json::Value&);
+
+	//void Load(Json::Value&);
 
 	Component* AddComponent(ComponentType);
 	void AddToComponentList(Component * &ret);
@@ -56,6 +61,8 @@ public:
 	ComponentCamera * GetCam() const;
 
 	int DoForAllChildrens(std::function<void(GameObject*)>);
+
+	int DoForAllChildrens(std::function<void(GameObject*, Json::Value&)>, Json::Value&);
 
 	int DoForAllSelected(std::function<bool(GameObject*, GameObject*)>);
 

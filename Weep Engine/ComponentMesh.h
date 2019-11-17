@@ -55,6 +55,9 @@ public:
 
 	void InspectorDraw();
 
+	//void Save(Json::Value&) override;
+
+
 	ComponentTexture* GetTexture() const;
 
 private:
