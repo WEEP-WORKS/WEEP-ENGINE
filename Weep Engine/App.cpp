@@ -7,6 +7,7 @@
 #include "ModuleGameObjectManager.h"
 #include "ModuleImporter.h"
 #include "ModuleTexture.h"
+#include "JsonHelper.h"
 
 #include <list>
 #include <fstream>
@@ -19,6 +20,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
 
 	random = new math::LCG();
+	json_helper = new JsonHelper();
 
 	window = new ModuleWindow();
 	input = new ModuleInput();

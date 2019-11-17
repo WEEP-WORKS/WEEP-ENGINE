@@ -17,7 +17,7 @@ class ModuleImporter;
 class DebugScene;
 class GameObjectManager;
 class ModuleTexture;
-
+class JsonHelper;
 
 class Application
 {
@@ -77,6 +77,8 @@ public:
 	Profiler*		   profiler = nullptr;
 
 	LCG*	random = nullptr;
+
+	JsonHelper* json_helper = nullptr;
 		
 	std::list<Module*>      modules;
 

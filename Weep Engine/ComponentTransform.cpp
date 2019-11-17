@@ -1,5 +1,7 @@
 #include "ComponentTransform.h"
 #include "imgui.h"
+#include "App.h"
+#include "JsonHelper.h"
 
 ComponentTransform::ComponentTransform()
 {
@@ -106,11 +108,10 @@ float4x4 ComponentTransform::GetLocalTransform() const
 void ComponentTransform::Save(Json::Value& scene)
 {
 	Json::Value component;
-	component["Position"] = Json::arrayValue;
 
-	component["Position"].append(GetPosition().x);
-	component["Position"].append(GetPosition().y);
-	component["Position"].append(GetPosition().z);
+	App->json_helper->Fill(component["Position"] = Json::arrayValue, GetPosition());
+	App->json_helper->Fill(component["Rotation"] = Json::arrayValue, GetRotationEuler());
+	App->json_helper->Fill(component["Scale"] = Json::arrayValue, GetScale());
 
 	scene.append(component);
 }
