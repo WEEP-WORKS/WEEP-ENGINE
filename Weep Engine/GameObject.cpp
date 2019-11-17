@@ -410,7 +410,7 @@ void GameObject::TestRay()
 							if (distance < distance1)
 							{
 								distance1 = distance;
-								closest = this;
+								App->game_object_manager->closest = this;
 							}
 						}
 					}

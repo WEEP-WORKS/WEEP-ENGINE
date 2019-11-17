@@ -67,6 +67,8 @@ public:
 
 	list<GameObject*> to_delete;
 
+	GameObject* closest = nullptr;
+
 
 private:
 	//std::list<GameObject*> objects; //Vector or list?

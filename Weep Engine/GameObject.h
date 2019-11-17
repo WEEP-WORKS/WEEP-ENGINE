@@ -93,7 +93,6 @@ public:
 	AABB local_bbox;
 
 	bool isInsideFrustum = false;
-	GameObject* closest = nullptr;
 
 private:
 	int						id				= 0;

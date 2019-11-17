@@ -624,11 +624,10 @@ void GameObjectManager::MousePick()
 	//picking, closest, distance
 	root->DoForAllChildrens(&GameObject::TestRay);
 
-	GameObject* closest1 = nullptr;
-
-	if (closest1 != nullptr)
+	if (closest != nullptr)
 	{
 		ClearSelection();
-		AddGameObjectToSelected(closest1);
+		AddGameObjectToSelected(closest);
+		closest = nullptr;
 	}	
 }
