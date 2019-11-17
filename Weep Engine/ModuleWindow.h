@@ -36,6 +36,7 @@ public:
 	const char* GetAppOrganization();
 
 	void SetVersion(const char * set);
+	const float4 GetWindowRect() const;
 	string GetVersion() const;
 
 public:

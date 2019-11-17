@@ -70,8 +70,6 @@ public:
 	list<GameObject*> to_delete;
 
 
-
-
 private:
 	//std::list<GameObject*> objects; //Vector or list?
 	void PrintGoList(GameObject * object);
@@ -82,7 +80,7 @@ private:
 
 	void DrawBBox(GameObject * object);
 
-
+	void MousePick();
 
 
 };

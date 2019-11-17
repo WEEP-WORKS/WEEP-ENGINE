@@ -357,3 +357,8 @@ void ModuleWindow::SetVersion(const char * set)
 
 	SetTitle((App->window->GetTitle() + version + " ").c_str());
 }
+
+const float4 ModuleWindow::GetWindowRect() const
+{
+	return float4(0, 0, width, height);
+}

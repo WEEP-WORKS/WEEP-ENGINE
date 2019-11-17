@@ -10,6 +10,7 @@
 #include "DebugScene.h"
 #include "par_shapes.h"
 #include "imgui_internal.h"
+#include "ModuleWindow.h"
 //#include <functional>
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
@@ -46,21 +47,12 @@ bool GameObjectManager::PreUpdate()
 
 bool GameObjectManager::Update() 
 {
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		MousePick();
+	}
+
 	root->DoForAllChildrens(&GameObject::Update);
-
-	//vector<Camera3D*> cameras = App->camera->GetCameras();
-	//vector<GameObject*> to_draw;
-
-	//// Get elements to draw from all cameras
-	//for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
-	//{
-	//	if ((*it)->GetFrustumCulling())
-	//		
-	//}
-
-	//// Draw
-	//for (vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
-	//	(*it)->DoForAllChildrens(&GameObject::PostUpdate);
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
@@ -397,8 +389,11 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 	if (opened)
 	{
-		if(!object->childrens.empty())
+		if (!object->childrens.empty())
+		{
 			DoForFirstChildrens(&GameObjectManager::PrintGoList, object);
+			DrawBBox(object);
+		}
 
 		ImGui::TreePop();
 	}
@@ -562,3 +557,17 @@ uint GameObjectManager::GetAllGameObjectNumber()
 }
 
 
+
+void GameObjectManager::MousePick()
+{
+	//picking, closest, distance
+	root->DoForAllChildrens(&GameObject::TestRay);
+
+	GameObject* closest1 = nullptr;
+
+	if (closest1 != nullptr)
+	{
+		ClearSelection();
+		AddGameObjectToSelected(closest1);
+	}	
+}

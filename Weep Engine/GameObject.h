@@ -74,6 +74,8 @@ public:
 	void CalcGlobalTransform();
 	void CalcBBox();
 
+	void TestRay();//const LineSegment & segment, GameObject *& closest, float & dist
+
 	bool IsParentOfMyParents(GameObject* possible_parent);
 
 public:
@@ -91,6 +93,7 @@ public:
 	AABB local_bbox;
 
 	bool isInsideFrustum = false;
+	GameObject* closest = nullptr;
 
 private:
 	int						id				= 0;
