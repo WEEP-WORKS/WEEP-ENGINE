@@ -13,12 +13,14 @@
 					]
 				}
 			],
-			"id" : 0,
+			"id" : 539156771,
+			"id_parent" : "nullptr",
 			"name" : "root"
 		},
 		{
 			"Components" : [],
-			"id" : 0,
+			"id" : 766887878,
+			"id_parent" : 539156771,
 			"name" : "CAMERA"
 		},
 		{
@@ -33,17 +35,20 @@
 					]
 				}
 			],
-			"id" : 0,
+			"id" : 762522524,
+			"id_parent" : 539156771,
 			"name" : "group_BakerHouse_1"
 		},
 		{
 			"Components" : [],
-			"id" : 0,
+			"id" : 1784889564,
+			"id_parent" : 762522524,
 			"name" : "Chimney"
 		},
 		{
 			"Components" : [],
-			"id" : 0,
+			"id" : 1655101589,
+			"id_parent" : 762522524,
 			"name" : "Baker_house"
 		}
 	],

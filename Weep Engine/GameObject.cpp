@@ -16,6 +16,8 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 		parent->childrens.push_back(this);
 	}
 	transform = (ComponentTransform*)AddComponent(ComponentType::TRANSFORM);
+
+	id = App->random->Int();
 }
 
 void GameObject::PreUpdate()
@@ -389,6 +391,10 @@ void GameObject::Save(Json::Value& scene)
 
 	go["name"] = name;
 	go["id"] = id;
+	if (parent != nullptr)
+		go["id_parent"] = parent->id;
+	else
+		go["id_parent"] = "nullptr";
 
 
 

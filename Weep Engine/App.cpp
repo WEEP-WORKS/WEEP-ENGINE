@@ -1,4 +1,4 @@
-#include "App.h"
+	#include "App.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
@@ -17,6 +17,9 @@
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
+
+	random = new math::LCG();
+
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	renderer3D = new ModuleRenderer3D();
