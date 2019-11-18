@@ -570,9 +570,15 @@ void GameObjectManager::Save(Json::Value& scene)
 
 void GameObjectManager::Load(Json::Value& scene)
 {
-	if(root != nullptr)
+	if (root != nullptr)
+	{
 		CleanUp();
 
-	root = new GameObject("root", nullptr);
+		//root = new GameObject("root", nullptr);
+		for (uint i = 0; i < scene["GameObjects"].size(); ++i)
+		{
+			GameObject* go = new GameObject(scene["GameObjects"][i]);
 
+		}
+	}
 }

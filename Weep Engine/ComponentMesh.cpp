@@ -285,8 +285,15 @@ void ComponentMesh::Save(Json::Value& scene)
 {
 	Json::Value comonent_mesh;
 
+	comonent_mesh["type"] = (int)type;
+
 	App->importer->CreateOwnFile(this, object->GetName());
 	comonent_mesh["Model name"] = string(object->GetName() + string(".mesh"));
 	//LoadOwnFile(string(name + ".mesh"));
 	scene.append(comonent_mesh);
+}
+
+void ComponentMesh::Load(Json::Value& component)
+{
+
 }

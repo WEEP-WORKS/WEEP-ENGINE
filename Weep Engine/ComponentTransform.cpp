@@ -107,11 +107,18 @@ float4x4 ComponentTransform::GetLocalTransform() const
 
 void ComponentTransform::Save(Json::Value& scene)
 {
-	Json::Value component;
+	Json::Value component_transform;
 
-	App->json_helper->Fill(component["Position"] = Json::arrayValue, GetPosition());
-	App->json_helper->Fill(component["Rotation"] = Json::arrayValue, GetRotationEuler());
-	App->json_helper->Fill(component["Scale"] = Json::arrayValue, GetScale());
+	component_transform["type"] = (int)type;
 
-	scene.append(component);
+	App->json_helper->Fill(component_transform["Position"] = Json::arrayValue, GetPosition());
+	App->json_helper->Fill(component_transform["Rotation"] = Json::arrayValue, GetRotationEuler());
+	App->json_helper->Fill(component_transform["Scale"] = Json::arrayValue, GetScale());
+
+	scene.append(component_transform);
+}
+
+void ComponentTransform::Load(Json::Value& component)
+{
+
 }

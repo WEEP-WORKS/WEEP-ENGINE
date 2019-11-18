@@ -38,7 +38,6 @@ private:
 public:
 	ComponentMesh();
 
-
 	void PostUpdate();
 
 	void CleanUp() override;
@@ -56,6 +55,7 @@ public:
 	void InspectorDraw();
 
 	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
 
 
 	ComponentTexture* GetTexture() const;

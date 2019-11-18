@@ -13,6 +13,7 @@ public:
 	void Update();
 
 	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
 
 	void InspectorDraw();
 

@@ -20,6 +20,33 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	id = App->random->Int();
 }
 
+GameObject::GameObject(Json::Value& Json_go)
+{
+	name = Json_go["name"].asString();
+	id = Json_go["id"].asInt();
+	if (Json_go["id_parent"] != "nullptr")
+	{
+		/*Get GO* by id and assign to the parent and this as children*/
+		LOG("no root");
+	}
+	else
+	{
+		App->game_object_manager->root = this;
+	}
+	//int number_components = Json_go["number_components"].asInt();
+	for (uint i = 0; i < Json_go["Components"].size(); ++i)
+	{
+		AddComponent((ComponentType)Json_go["Components"][i]["type"].asInt());
+	}
+
+	uint current_component = 0u;
+	for (std::vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		(*citer)->Load(Json_go["Components"][current_component++]);
+	}
+
+}
+
 void GameObject::PreUpdate()
 {
 	if (IsActive())
@@ -91,31 +118,31 @@ Component* GameObject::AddComponent(ComponentType type)
 	case ComponentType::TRANSFORM:
 		ret = new ComponentTransform();
 		ret->type = type;
-		AddToComponentList(ret);
 		LOG("Component Transform added correctly.");
 		break;
 	case ComponentType::MESH:
 		ret = new ComponentMesh();
 		ret->type = type;
-		AddToComponentList(ret);
 		LOG("Component Mesh added correctly.")
 		break;
 	case ComponentType::TEXTURE:
 		ret = new ComponentTexture();
 		ret->type = type;
-		AddToComponentList(ret);
 		LOG("Component Texture added correcly.");
 		break;
 	case ComponentType::CAMERA:
 		ret = new ComponentCamera();
 		ret->type = type;
-		AddToComponentList(ret);
+		
 		LOG("Component Camera added correcly.");
 		break;
 	default:
 		LOG("Component not found in the function. Not accepted.");
 		break;
 	}
+
+	if(ret != nullptr)
+		AddToComponentList(ret);
 
 	return ret;
 }
@@ -383,6 +410,9 @@ void GameObject::Save(Json::Value& scene)
 	LOG("%s", s.c_str());*/
 
 	Json::Value go;
+
+	go["number_components"] = components.size();
+
 	go["Components"] = Json::arrayValue;
 	for (vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
 	{
@@ -395,6 +425,8 @@ void GameObject::Save(Json::Value& scene)
 		go["id_parent"] = parent->id;
 	else
 		go["id_parent"] = "nullptr";
+
+
 
 
 

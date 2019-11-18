@@ -151,11 +151,18 @@ void ComponentCamera::Save(Json::Value& scene)
 {
 	Json::Value component_camera;
 
+	component_camera["type"] = (int)type;
+
 	component_camera["FOV"] = camera->GetVerticalFOV();
 	component_camera["Near Plane"] = camera->GetNearPlaneDistance();
 	component_camera["Far Plane"] = camera->GetFarPlaneDistance();
 	component_camera["Frustum Culling"] = camera->GetFrustumCulling();
 
 	scene.append(component_camera);
+
+}
+
+void ComponentCamera::Load(Json::Value& component)
+{
 
 }

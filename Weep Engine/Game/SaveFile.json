@@ -22,12 +22,14 @@
 						1.0,
 						1.0,
 						1.0
-					]
+					],
+					"type" : 0
 				}
 			],
-			"id" : 1607977808,
+			"id" : 442572834,
 			"id_parent" : "nullptr",
-			"name" : "root"
+			"name" : "root",
+			"number_components" : 1
 		},
 		{
 			"Components" : 
@@ -50,18 +52,21 @@
 						1.0,
 						1.0,
 						1.0
-					]
+					],
+					"type" : 0
 				},
 				{
 					"FOV" : 120.00000762939453,
 					"Far Plane" : 100.0,
 					"Frustum Culling" : true,
-					"Near Plane" : 0.10000000149011612
+					"Near Plane" : 0.10000000149011612,
+					"type" : 3
 				}
 			],
-			"id" : 700452658,
-			"id_parent" : 1607977808,
-			"name" : "CAMERA"
+			"id" : 267908758,
+			"id_parent" : 442572834,
+			"name" : "CAMERA",
+			"number_components" : 2
 		},
 		{
 			"Components" : 
@@ -84,12 +89,14 @@
 						1.0,
 						1.0,
 						1.0
-					]
+					],
+					"type" : 0
 				}
 			],
-			"id" : 1155846542,
-			"id_parent" : 1607977808,
-			"name" : "group_BakerHouse_1"
+			"id" : 1180166523,
+			"id_parent" : 442572834,
+			"name" : "group_BakerHouse_1",
+			"number_components" : 1
 		},
 		{
 			"Components" : 
@@ -112,19 +119,23 @@
 						1.0,
 						1.0,
 						1.0
-					]
+					],
+					"type" : 0
 				},
 				{
-					"Model name" : "Chimney.mesh"
+					"Model name" : "Chimney.mesh",
+					"type" : 1
 				},
 				{
 					"Texture Active" : true,
-					"texture_path" : "Models/Textures/Baker_house.png"
+					"texture_path" : "Models/Textures/Baker_house.png",
+					"type" : 2
 				}
 			],
-			"id" : 684880198,
-			"id_parent" : 1155846542,
-			"name" : "Chimney"
+			"id" : 1649163563,
+			"id_parent" : 1180166523,
+			"name" : "Chimney",
+			"number_components" : 3
 		},
 		{
 			"Components" : 
@@ -147,19 +158,23 @@
 						1.0,
 						1.0,
 						1.0
-					]
+					],
+					"type" : 0
 				},
 				{
-					"Model name" : "Baker_house.mesh"
+					"Model name" : "Baker_house.mesh",
+					"type" : 1
 				},
 				{
 					"Texture Active" : true,
-					"texture_path" : "Models/Textures/Baker_house.png"
+					"texture_path" : "Models/Textures/Baker_house.png",
+					"type" : 2
 				}
 			],
-			"id" : 1464850617,
-			"id_parent" : 1155846542,
-			"name" : "Baker_house"
+			"id" : 1203232768,
+			"id_parent" : 1180166523,
+			"name" : "Baker_house",
+			"number_components" : 3
 		}
 	],
 	"Renderer" : 
