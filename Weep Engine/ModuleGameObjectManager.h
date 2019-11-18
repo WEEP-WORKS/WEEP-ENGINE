@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "Globals.h"
-
+#include<typeinfo>
 
 class GameObject;
 class ComponentMesh;
@@ -21,6 +21,8 @@ public:
 	bool Update() override;
 	bool PostUpdate() override;
 	bool CleanUp() override;
+	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
 
 	//GameObject* CreateGeometryShape(int sides);
 
@@ -47,6 +49,8 @@ public:
 	void DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
 
 	uint GetAllGameObjectNumber();
+
+	GameObject* GetGOById(const uint& id) const;
 
 
 

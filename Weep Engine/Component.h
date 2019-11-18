@@ -4,6 +4,8 @@
 #include "Globals.h"
 #include "imgui.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "jsoncpp/json/json.h"
+
 
 class GameObject;
 enum class ComponentType
@@ -78,6 +80,9 @@ public:
 
 	virtual void CleanUp() {};
 	virtual void InspectorDraw() {};
+
+	virtual void Save(Json::Value&) {};
+	virtual void Load(Json::Value&) {};
 
 	const bool Component::IsActive() const { return is_active; };
 	void Component::SetActive(bool to_active) { is_active = to_active; };

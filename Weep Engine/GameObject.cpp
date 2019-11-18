@@ -15,7 +15,36 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	{
 		parent->childrens.push_back(this);
 	}
-	transform = (ComponentTransform*)AddComponent(ComponentType::TRANSFORM);
+	AddComponent(ComponentType::TRANSFORM);
+
+	id = App->random->Int();
+}
+
+GameObject::GameObject(Json::Value& Json_go)
+{
+	name = Json_go["name"].asString();
+	id = Json_go["id"].asInt();
+	if (Json_go["id_parent"] != "nullptr")
+	{
+		parent = App->game_object_manager->GetGOById(Json_go["id_parent"].asInt());
+		parent->childrens.push_back(this);
+	}
+	else
+	{
+		App->game_object_manager->root = this;
+	}
+	//int number_components = Json_go["number_components"].asInt();
+	for (uint i = 0; i < Json_go["Components"].size(); ++i)
+	{
+		AddComponent((ComponentType)Json_go["Components"][i]["type"].asInt());
+	}
+
+	uint current_component = 0u;
+	for (std::vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		(*citer)->Load(Json_go["Components"][current_component++]);
+	}
+
 }
 
 void GameObject::PreUpdate()
@@ -89,31 +118,31 @@ Component* GameObject::AddComponent(ComponentType type)
 	case ComponentType::TRANSFORM:
 		ret = new ComponentTransform();
 		ret->type = type;
-		AddToComponentList(ret);
 		LOG("Component Transform added correctly.");
 		break;
 	case ComponentType::MESH:
 		ret = new ComponentMesh();
 		ret->type = type;
-		AddToComponentList(ret);
 		LOG("Component Mesh added correctly.")
 		break;
 	case ComponentType::TEXTURE:
 		ret = new ComponentTexture();
 		ret->type = type;
-		AddToComponentList(ret);
 		LOG("Component Texture added correcly.");
 		break;
 	case ComponentType::CAMERA:
 		ret = new ComponentCamera();
 		ret->type = type;
-		AddToComponentList(ret);
+		
 		LOG("Component Camera added correcly.");
 		break;
 	default:
 		LOG("Component not found in the function. Not accepted.");
 		break;
 	}
+
+	if(ret != nullptr)
+		AddToComponentList(ret);
 
 	return ret;
 }
@@ -252,6 +281,61 @@ int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 	return number_childrens;
 }
 
+int GameObject::DoForAllChildrens(std::function<void(GameObject*, Json::Value&)> funct, Json::Value& scene)
+{
+	int number_childrens = -1; // -1 to not count this game object and only his childrens.
+	std::list<GameObject*> all_childrens;
+
+	all_childrens.push_back(this);
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		if (current != nullptr)
+		{
+			for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+			{
+				all_childrens.push_back(*iter);
+			}
+
+			funct(current, scene);
+			++number_childrens;
+		}
+	}
+
+	return number_childrens;
+}
+
+GameObject* GameObject::DoForAllChildrens(std::function<const bool(const GameObject*, const uint& id)> funct,const uint& id)
+{
+
+	std::list<GameObject*> all_childrens;
+
+	all_childrens.push_back(this);
+
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		if (current != nullptr)
+		{
+			for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+			{
+				all_childrens.push_back(*iter);
+			}
+
+			if (funct(current, id))
+				return current;
+		}
+	}
+
+	LOG("The Game Object with id: %i has not found", id);
+	return nullptr;
+}
+
+
 int GameObject::DoForAllSelected(std::function<bool(GameObject* /*from*/, GameObject*/*target*/ )> funct)
 {
 	int number_of_selected = -1; // -1 to not count this game object and only his childrens.
@@ -332,8 +416,8 @@ void GameObject::CalcGlobalTransform()
 	float4x4 global;
 	if (parent != nullptr)
 	{
-		global = parent->transform->GetGlobalTransform() * transform->GetLocalTransform();
-		transform->SetGlobalTransform(global);
+		global = parent->ConstGetTransform()->GetGlobalTransform() * ConstGetTransform()->GetLocalTransform();
+		GetTransform()->SetGlobalTransform(global);
 	}
 }
 
@@ -346,5 +430,66 @@ void GameObject::CalcBBox()
 		(*it)->OnGetBoundingBox(local_bbox);
 
 	if (local_bbox.IsFinite())
-		local_bbox.Transform(transform->GetGlobalTransform());
+		local_bbox.Transform(ConstGetTransform()->GetGlobalTransform());
+}
+
+void GameObject::Save(Json::Value& scene)
+{
+	/*string s =scene[0]["name"].asString();
+	LOG("%s", s.c_str());*/
+
+	Json::Value go;
+
+	go["number_components"] = components.size();
+
+	go["Components"] = Json::arrayValue;
+	for (vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		(*citer)->Save(go["Components"]);
+	}
+
+	go["name"] = name;
+	go["id"] = id;
+	if (parent != nullptr)
+		go["id_parent"] = parent->id;
+	else
+		go["id_parent"] = "nullptr";
+
+
+
+
+
+	scene.append(go);
+	
+
+
+}
+
+const bool GameObject::IsThisGOId(const uint& id) const
+{
+	return (this->id == id);
+}
+
+ComponentTransform* GameObject::GetTransform() const
+{
+	for (vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		if ((*citer)->type == ComponentType::TRANSFORM)
+			return(ComponentTransform*)(*citer);
+	}
+
+	LOG("Component transform not found!");
+	return nullptr;
+}
+
+const ComponentTransform* GameObject::ConstGetTransform() const
+{
+	for (vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		if ((*citer)->type == ComponentType::TRANSFORM)
+			return(ComponentTransform*)(*citer);
+	}
+
+	LOG("Component transform not found!");
+	return nullptr;
 }

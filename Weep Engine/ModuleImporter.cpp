@@ -104,8 +104,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 	}
 
-	root_go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-	root_go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+	root_go->GetTransform()->SetPosition(float3(translation.x, translation.y, translation.z));
+	root_go->GetTransform()->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 	
 	go_to_create.push_back(Node<aiNode>(scene->mRootNode, nullptr, root_go));
 
@@ -161,8 +161,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 			}
 
-			object->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-			object->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+			object->GetTransform()->SetPosition(float3(translation.x, translation.y, translation.z));
+			object->GetTransform()->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 
 			if (model != nullptr)
 			{
@@ -197,7 +197,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				}
 
 				CreateOwnFile(model, name);
-				LoadOwnFile(string(name + ".mesh"));
+				//LoadOwnFile(string(name + ".mesh"));
 				
 			}
 			else
@@ -465,23 +465,17 @@ void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
 
 }
 
-void ModuleImporter::LoadOwnFile(string name_file)
+void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 {
 	//relative_path wiht extension of the own format.
 
 	string full_path(LIBRARY_MESH_FOLDER + name_file);
-	string name;
-	App->file_system->SplitFilePath(name_file.c_str(), nullptr, &name);
-	GameObject* new_go = new GameObject(name, App->game_object_manager->root);
-	ComponentMesh* mesh = (ComponentMesh*)new_go->AddComponent(ComponentType::MESH);
 
 	char* data;
 
 	App->file_system->Load(full_path.c_str(), &data);
 
 	char* cursor = data;
-
-
 
 
 

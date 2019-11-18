@@ -13,9 +13,9 @@ ComponentCamera::ComponentCamera()
 
 void ComponentCamera::Update()
 {
-	camera->SetPosition(object->transform->GetPosition());
-	camera->SetZDir(object->transform->GetGlobalTransform().WorldZ());
-	camera->SetYDir(object->transform->GetGlobalTransform().WorldY());
+	camera->SetPosition(object->ConstGetTransform()->GetPosition());
+	camera->SetZDir(object->ConstGetTransform()->GetGlobalTransform().WorldZ());
+	camera->SetYDir(object->ConstGetTransform()->GetGlobalTransform().WorldY());
 
 	if (camera->GetFrustumCulling())
 	{
@@ -145,4 +145,28 @@ void ComponentCamera::InspectorDraw()
 			camera->SetFrustumCulling(frustum_culling);
 		}
 	}
+}
+
+void ComponentCamera::Save(Json::Value& scene)
+{
+	Json::Value component_camera;
+
+	component_camera["type"] = (int)type;
+
+	component_camera["FOV"] = camera->GetVerticalFOV();
+	component_camera["Near Plane"] = camera->GetNearPlaneDistance();
+	component_camera["Far Plane"] = camera->GetFarPlaneDistance();
+	component_camera["Frustum Culling"] = camera->GetFrustumCulling();
+
+	scene.append(component_camera);
+
+}
+
+void ComponentCamera::Load(Json::Value& component)
+{
+	camera->SetFOV(component["FOV"].asFloat());
+	camera->SetFrustumCulling(component["Frustum Culling"].asBool());
+	camera->SetNearPlaneDistance(component["Near Plane"].asFloat());
+	camera->SetFarPlaneDistance(component["Far Plane"].asFloat());
+
 }

@@ -86,3 +86,25 @@ void ComponentTexture::InspectorDraw()
 	}
 
 }
+
+void ComponentTexture::Save(Json::Value& scene)
+{
+	Json::Value component_texture;
+
+	component_texture["type"] = (int)type;
+
+	component_texture["Texture Path"] = texture_path;
+	component_texture["Texture Active"] = texture_active;
+
+	scene.append(component_texture);
+}
+
+
+void ComponentTexture::Load(Json::Value& component)
+{
+	if (component["Texture Active"].asBool())
+		ActivateThisTexture();
+
+	id_texture = App->texture->LoadTexture(component["Texture Path"].asCString(), texture_width, texture_height);
+	texture_path = component["Texture Path"].asString();
+}

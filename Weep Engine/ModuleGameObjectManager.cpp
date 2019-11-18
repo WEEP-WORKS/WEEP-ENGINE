@@ -15,6 +15,7 @@
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("GameObjectManager");
+	root = nullptr;
 
 }
 
@@ -75,6 +76,8 @@ bool GameObjectManager::Update()
 		AddGameObjectsSelectedToDestroy();
 	}
 
+
+
 	return true;
 }
 
@@ -93,7 +96,7 @@ bool GameObjectManager::CleanUp()
 		(*item)->CleanUp();
 		RELEASE(*item);
 	}*/
-
+	ClearSelection();
 	root->DoForAllChildrens(&GameObject::CleanUp);
 	DoForAllChildrens(&GameObjectManager::ReleaseGameObject);
 	return true;
@@ -415,7 +418,7 @@ void GameObjectManager::DrawBBox(GameObject * object)
 	mesh_aabb.GetCornerPoints(corners);
 
 	glPushMatrix();
-	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
+	glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
 	GLint previous[2];
 	glGetIntegerv(GL_POLYGON_MODE, previous);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -497,6 +500,7 @@ int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, 
 	return number_childrens;
 }
 
+
 void GameObjectManager::DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)
 {
 	std::list<GameObject*> all_childrens;
@@ -562,3 +566,28 @@ uint GameObjectManager::GetAllGameObjectNumber()
 }
 
 
+void GameObjectManager::Save(Json::Value& scene)
+{
+	root->DoForAllChildrens(&GameObject::Save, scene["GameObjects"] = Json::arrayValue);
+}
+
+void GameObjectManager::Load(Json::Value& scene)
+{
+	if (root != nullptr)
+	{
+		CleanUp();
+
+		//root = new GameObject("root", nullptr);
+		for (uint i = 0; i < scene["GameObjects"].size(); ++i)
+		{
+			GameObject* go = new GameObject(scene["GameObjects"][i]);
+
+		}
+	}
+	LOG("Load succesful");
+}
+
+GameObject* GameObjectManager::GetGOById( const uint& id) const
+{
+	return root->DoForAllChildrens(&GameObject::IsThisGOId, id);
+}

@@ -1,4 +1,4 @@
-#include "App.h"
+	#include "App.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
@@ -7,7 +7,9 @@
 #include "ModuleGameObjectManager.h"
 #include "ModuleImporter.h"
 #include "ModuleTexture.h"
+#include "JsonHelper.h"
 #include "ModuleFileSystem.h"
+
 
 #include <list>
 #include <fstream>
@@ -18,6 +20,10 @@
 
 Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 {
+
+	random = new math::LCG();
+	json_helper = new JsonHelper();
+
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	renderer3D = new ModuleRenderer3D();

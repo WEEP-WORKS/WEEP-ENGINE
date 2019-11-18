@@ -8,12 +8,16 @@ class ComponentTexture : public Component
 {
 public:
 	ComponentTexture() {};
+
 	void ActivateThisTexture();
 	bool IsTextureActive() const;
 	void DesactivateTexture();
 	void InspectorDraw();
 	void SetCheckersToGOSelected();
 	void Update() override;
+	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
+
 
 public:
 

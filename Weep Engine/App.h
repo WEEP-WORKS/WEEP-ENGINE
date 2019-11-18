@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "MathGeoLib/include/MathBuildConfig.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/Algorithm/Random/LCG.h"
 
 class Profiler;
 
@@ -16,7 +17,11 @@ class ModuleImporter;
 class DebugScene;
 class GameObjectManager;
 class ModuleTexture;
+
+class JsonHelper;
+
 class ModuleFileSystem;
+
 
 
 class Application
@@ -76,6 +81,10 @@ public:
 	ModuleFileSystem* file_system = nullptr;
 
 	Profiler*		   profiler = nullptr;
+
+	LCG*	random = nullptr;
+
+	JsonHelper* json_helper = nullptr;
 		
 	std::list<Module*>      modules;
 

@@ -106,6 +106,7 @@
     <ClInclude Include="jsoncpp\json\version.h" />
     <ClInclude Include="jsoncpp\json\writer.h" />
     <ClInclude Include="jsoncpp\json_tool.h" />
+    <ClInclude Include="JsonHelper.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h" />
     <ClInclude Include="MathGeoLib\include\Geometry\AABB.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="jsoncpp\json_reader.cpp" />
     <ClCompile Include="jsoncpp\json_value.cpp" />
     <ClCompile Include="jsoncpp\json_writer.cpp" />
+    <ClCompile Include="JsonHelper.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />

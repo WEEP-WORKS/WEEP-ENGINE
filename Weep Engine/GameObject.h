@@ -7,6 +7,8 @@
 #include "ComponentTransform.h"
 #include "MathGeoLib/include\MathGeoLib.h"
 
+#include "jsoncpp/json/json.h"
+
 class Component;
 class ComponentTexture;
 class ComponentMesh;
@@ -19,6 +21,8 @@ class GameObject
 public:
 	GameObject(std::string name, GameObject* parent);
 
+	GameObject(Json::Value& Json_go);
+
 	void PreUpdate();
 
 	void Update(); //this is not from the module class. This function will be called from objectManager and will call Components update or something... I don't know yet.
@@ -26,7 +30,10 @@ public:
 	void PostUpdate();
 
 	void CleanUp();
-	//Don't have cleanUp for each game objects and their components. TODO
+
+	void Save(Json::Value&);
+
+	//void Load(Json::Value&);
 
 	Component* AddComponent(ComponentType);
 	void AddToComponentList(Component * &ret);
@@ -55,7 +62,14 @@ public:
 
 	ComponentCamera * GetCam() const;
 
+	ComponentTransform* GetTransform() const;
+	const ComponentTransform* ConstGetTransform() const;
+
 	int DoForAllChildrens(std::function<void(GameObject*)>);
+
+	GameObject* DoForAllChildrens(std::function<const bool(const GameObject*, const uint& id)>, const uint& id);
+
+	int DoForAllChildrens(std::function<void(GameObject*, Json::Value&)>, Json::Value&);
 
 	int DoForAllSelected(std::function<bool(GameObject*, GameObject*)>);
 
@@ -76,6 +90,8 @@ public:
 
 	bool IsParentOfMyParents(GameObject* possible_parent);
 
+	const bool IsThisGOId(const uint& id) const ;
+
 public:
 	bool					parametric		= false;
 	bool hierarchy_opnened = false;
@@ -85,8 +101,6 @@ public:
 
 	//should be private
 	std::vector<Component*> components;
-
-	ComponentTransform* transform = nullptr;
 
 	AABB local_bbox;
 

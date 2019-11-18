@@ -18,6 +18,10 @@ public:
 
 	void InspectorDraw();
 
+	void Save(Json::Value&) override;
+	void Load(Json::Value&) override;
+
+
 private:
 	Camera3D* camera = nullptr;
 };

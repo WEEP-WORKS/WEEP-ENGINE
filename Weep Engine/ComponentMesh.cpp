@@ -4,7 +4,8 @@
 #include <vector>
 #include "GameObject.h"
 #include "imgui.h"
-
+#include "App.h"
+#include "ModuleImporter.h"
 ComponentMesh::ComponentMesh()
 {
 	mesh_data = new MeshData();
@@ -79,7 +80,7 @@ void ComponentMesh::Render()
 {
 	// Push matrix
 	glPushMatrix();
-	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
+	glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
 
 	glColor3f(color.r, color.g, color.b);
 
@@ -278,4 +279,21 @@ void ComponentMesh::InspectorDraw()
 		ImGui::Checkbox("VERTEX NORMALS", &activate_vertex_normals);
 	}
 
+}
+
+void ComponentMesh::Save(Json::Value& scene)
+{
+	Json::Value comonent_mesh;
+
+	comonent_mesh["type"] = (int)type;
+
+	App->importer->CreateOwnFile(this, object->GetName());
+	comonent_mesh["Model name"] = string(object->GetName() + string(".mesh"));
+	//LoadOwnFile(string(name + ".mesh"));
+	scene.append(comonent_mesh);
+}
+
+void ComponentMesh::Load(Json::Value& component)
+{
+	App->importer->LoadOwnFile(component["Model name"].asString(), this);
 }
