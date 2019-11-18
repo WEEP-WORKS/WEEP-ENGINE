@@ -465,23 +465,17 @@ void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
 
 }
 
-void ModuleImporter::LoadOwnFile(string name_file)
+void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 {
 	//relative_path wiht extension of the own format.
 
 	string full_path(LIBRARY_MESH_FOLDER + name_file);
-	string name;
-	App->file_system->SplitFilePath(name_file.c_str(), nullptr, &name);
-	GameObject* new_go = new GameObject(name, App->game_object_manager->root);
-	ComponentMesh* mesh = (ComponentMesh*)new_go->AddComponent(ComponentType::MESH);
 
 	char* data;
 
 	App->file_system->Load(full_path.c_str(), &data);
 
 	char* cursor = data;
-
-
 
 
 

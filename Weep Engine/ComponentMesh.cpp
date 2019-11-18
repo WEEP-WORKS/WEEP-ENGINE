@@ -295,5 +295,5 @@ void ComponentMesh::Save(Json::Value& scene)
 
 void ComponentMesh::Load(Json::Value& component)
 {
-
+	App->importer->LoadOwnFile(component["Model name"].asString(), this);
 }
