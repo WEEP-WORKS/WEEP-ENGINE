@@ -225,7 +225,7 @@ string ModuleWindow::GetTitleWithVersion() const
 }
 
 
-void ModuleWindow::Save(Json::Value& root)
+void ModuleWindow::Save(Json::Value& root) const
 {
 	root[GetName()]["Title"]						= title;
 	root[GetName()]["Organization"]					= organization;
@@ -240,7 +240,7 @@ void ModuleWindow::Save(Json::Value& root)
 	root[GetName()]["flags"]["Fullscreen_desktop"]	= full_dekstop;
 }
 
-void ModuleWindow::Load(Json::Value& root)
+void ModuleWindow::Load(const Json::Value& root)
 {
 	title											= root[GetName()]["Title"].asString();
 	organization									= root[GetName()]["Organization"].asString();

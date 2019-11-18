@@ -20,22 +20,17 @@ class GameObject
 {
 public:
 	GameObject(std::string name, GameObject* parent);
-
-	GameObject(Json::Value& Json_go);
+	GameObject() {};
 
 	void PreUpdate();
-
 	void Update(); //this is not from the module class. This function will be called from objectManager and will call Components update or something... I don't know yet.
-
 	void PostUpdate();
-
 	void CleanUp();
 
-	void Save(Json::Value&);
+	void Save(Json::Value&) const ;
+	void Load(const Json::Value&);
 
-	//void Load(Json::Value&);
-
-	Component* AddComponent(ComponentType);
+	Component* AddComponent(const ComponentType&);
 	void AddToComponentList(Component * &ret);
 
 	void SetSelected(const bool & set);
@@ -46,7 +41,7 @@ public:
 
 	const bool GetSelected() const;
 
-	bool IsActive() const;
+	const bool IsActive() const;
 
 	void SetActive(const bool &to_active);
 
@@ -75,20 +70,20 @@ public:
 
 	void SelectThis();
 
-	void CalculateNumberOfChildrens() {}
+	void CalculateNumberOfChildrens()const {}
 
-	bool IsMyBrother(GameObject* object) const;
+	const bool IsMyBrother(const GameObject* object) const;
 
-	bool HasChildrens() const;
+	const bool HasChildrens() const;
 
-	bool SetAsNewChildren(GameObject* new_children);
+	const bool SetAsNewChildren(GameObject* new_children);
 
 	void SetGoSelectedAsChildrenFromThis();
 
 	void CalcGlobalTransform();
 	void CalcBBox();
 
-	bool IsParentOfMyParents(GameObject* possible_parent);
+	const bool IsParentOfMyParents(const GameObject* possible_parent) const;
 
 	const bool IsThisGOId(const uint& id) const ;
 

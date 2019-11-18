@@ -221,12 +221,12 @@ void ModuleRenderer3D::DrawGrid(int HALF_GRID_SIZE)
 
 }
 
-void ModuleRenderer3D::Save(Json::Value& root)
+void ModuleRenderer3D::Save(Json::Value& root) const
 {
 	root[GetName()]["VSYNC"] = vsync;
 }
 
-void ModuleRenderer3D::Load(Json::Value& root)
+void ModuleRenderer3D::Load(const Json::Value& root)
 {
 	vsync = root[GetName()]["VSYNC"].asBool();
 }

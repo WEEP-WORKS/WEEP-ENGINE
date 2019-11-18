@@ -20,33 +20,6 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	id = App->random->Int();
 }
 
-GameObject::GameObject(Json::Value& Json_go)
-{
-	name = Json_go["name"].asString();
-	id = Json_go["id"].asInt();
-	if (Json_go["id_parent"] != "nullptr")
-	{
-		parent = App->game_object_manager->GetGOById(Json_go["id_parent"].asInt());
-		parent->childrens.push_back(this);
-	}
-	else
-	{
-		App->game_object_manager->root = this;
-	}
-	//int number_components = Json_go["number_components"].asInt();
-	for (uint i = 0; i < Json_go["Components"].size(); ++i)
-	{
-		AddComponent((ComponentType)Json_go["Components"][i]["type"].asInt());
-	}
-
-	uint current_component = 0u;
-	for (std::vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
-	{
-		(*citer)->Load(Json_go["Components"][current_component++]);
-	}
-
-}
-
 void GameObject::PreUpdate()
 {
 	if (IsActive())
@@ -97,7 +70,7 @@ void GameObject::CleanUp()
 	//RELEASE(this);
 }
 
-Component* GameObject::AddComponent(ComponentType type)
+Component* GameObject::AddComponent(const ComponentType& type)
 {
 	Component* ret = nullptr;
 
@@ -173,7 +146,7 @@ const bool GameObject::GetSelected() const
 	return selected;
 }
 
-bool GameObject::IsActive() const
+const bool GameObject::IsActive() const
 {
 	return active;
 }
@@ -357,7 +330,7 @@ void GameObject::SelectThis()
 
 
 
-bool GameObject::IsMyBrother(GameObject* object) const
+const bool GameObject::IsMyBrother(const GameObject* object) const
 {
 
 	for (std::vector<GameObject*>::const_iterator iter = parent->childrens.cbegin(); iter != parent->childrens.cend(); ++iter)
@@ -371,13 +344,13 @@ bool GameObject::IsMyBrother(GameObject* object) const
 	return false;
 }
 
-bool GameObject::HasChildrens() const
+const bool GameObject::HasChildrens() const
 {
 	return childrens.empty();
 }
 
 
-bool GameObject::SetAsNewChildren(GameObject* new_children)
+const bool GameObject::SetAsNewChildren(GameObject* new_children)
 {
 	if (std::find(childrens.begin(), childrens.end(), new_children) == childrens.end() && !IsParentOfMyParents(new_children)) //if it isn't a children of this GameObject and is not a parent o parents of this game object.
 	{
@@ -390,7 +363,7 @@ bool GameObject::SetAsNewChildren(GameObject* new_children)
 		return false;
 }
 
-bool GameObject::IsParentOfMyParents( GameObject* possible_parent)
+const bool GameObject::IsParentOfMyParents(const GameObject* possible_parent) const
 {
 	if (parent == nullptr)
 		return false;
@@ -433,7 +406,7 @@ void GameObject::CalcBBox()
 		local_bbox.Transform(ConstGetTransform()->GetGlobalTransform());
 }
 
-void GameObject::Save(Json::Value& scene)
+void GameObject::Save(Json::Value& scene) const
 {
 	/*string s =scene[0]["name"].asString();
 	LOG("%s", s.c_str());*/
@@ -455,14 +428,33 @@ void GameObject::Save(Json::Value& scene)
 	else
 		go["id_parent"] = "nullptr";
 
-
-
-
-
 	scene.append(go);
-	
+}
 
+void GameObject::Load(const Json::Value& Json_go)
+{
+	name = Json_go["name"].asString();
+	id = Json_go["id"].asInt();
+	if (Json_go["id_parent"] != "nullptr")
+	{
+		parent = App->game_object_manager->GetGOById(Json_go["id_parent"].asInt());
+		parent->childrens.push_back(this);
+	}
+	else
+	{
+		App->game_object_manager->root = this;
+	}
+	//int number_components = Json_go["number_components"].asInt();
+	for (uint i = 0; i < Json_go["Components"].size(); ++i)
+	{
+		AddComponent((ComponentType)Json_go["Components"][i]["type"].asInt());
+	}
 
+	uint current_component = 0u;
+	for (std::vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
+	{
+		(*citer)->Load(Json_go["Components"][current_component++]);
+	}
 }
 
 const bool GameObject::IsThisGOId(const uint& id) const

@@ -281,7 +281,7 @@ void ComponentMesh::InspectorDraw()
 
 }
 
-void ComponentMesh::Save(Json::Value& scene)
+void ComponentMesh::Save(Json::Value& scene) const
 {
 	Json::Value comonent_mesh;
 
@@ -293,7 +293,7 @@ void ComponentMesh::Save(Json::Value& scene)
 	scene.append(comonent_mesh);
 }
 
-void ComponentMesh::Load(Json::Value& component)
+void ComponentMesh::Load(const Json::Value& component)
 {
 	App->importer->LoadOwnFile(component["Model name"].asString(), this);
 }

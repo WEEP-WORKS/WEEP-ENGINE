@@ -87,7 +87,7 @@ void ComponentTexture::InspectorDraw()
 
 }
 
-void ComponentTexture::Save(Json::Value& scene)
+void ComponentTexture::Save(Json::Value& scene) const
 {
 	Json::Value component_texture;
 
@@ -100,7 +100,7 @@ void ComponentTexture::Save(Json::Value& scene)
 }
 
 
-void ComponentTexture::Load(Json::Value& component)
+void ComponentTexture::Load(const Json::Value& component)
 {
 	if (component["Texture Active"].asBool())
 		ActivateThisTexture();

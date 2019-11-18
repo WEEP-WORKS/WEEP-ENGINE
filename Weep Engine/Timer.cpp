@@ -45,7 +45,7 @@ float Timer::ReadSec() const
 
 void Timer::SubstractTimeFromStart(float sec)
 {
-	started_at -= (sec * 1000);
+	started_at -= (int)(sec * 1000);
 }
 
 void Timer::Stop()

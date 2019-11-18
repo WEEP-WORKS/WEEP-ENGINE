@@ -50,7 +50,7 @@ void ModuleImporter::LoadPath(char* path)
 	this->path = path;
 }
 
-char* ModuleImporter::GetPath() const
+const char* ModuleImporter::GetPath() const
 {
 	return path;
 }
@@ -374,7 +374,7 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 	}
 }
 
-void ModuleImporter::CreateOwnFile(ComponentMesh* mesh, string name_to_file)
+void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_to_file)
 {
 
 	uint size_vertexs = sizeof(float) * mesh->mesh_data->vertexs.buffer_size;

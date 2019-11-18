@@ -12,10 +12,10 @@ struct hardware_info {
 	const char* gpu_vendor = 0;
 	const char* gpu_device = 0;
 
-	int vram_mb_available = 0.f;
-	int vram_mb_dedicated = 0.0f;
-	int vram_mb_current = 0.0f;
-	int vram_mb_evicted = 0.0f;
+	int vram_mb_available = 0;
+	int vram_mb_dedicated = 0;
+	int vram_mb_current = 0;
+	int vram_mb_evicted = 0;
 };
 
 class DebugScene : public Module

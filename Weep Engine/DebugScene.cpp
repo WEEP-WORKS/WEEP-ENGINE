@@ -25,8 +25,8 @@
 #include "mmgr\mmgr.h" //must be after random !!!!!!
 
 #include "ModuleGameObjectManager.h"
-#include "Component.h";
-#include "GameObject.h";
+#include "Component.h"
+#include "GameObject.h"
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 

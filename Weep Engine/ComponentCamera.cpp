@@ -147,7 +147,7 @@ void ComponentCamera::InspectorDraw()
 	}
 }
 
-void ComponentCamera::Save(Json::Value& scene)
+void ComponentCamera::Save(Json::Value& scene) const
 {
 	Json::Value component_camera;
 
@@ -162,7 +162,7 @@ void ComponentCamera::Save(Json::Value& scene)
 
 }
 
-void ComponentCamera::Load(Json::Value& component)
+void ComponentCamera::Load(const Json::Value& component)
 {
 	camera->SetFOV(component["FOV"].asFloat());
 	camera->SetFrustumCulling(component["Frustum Culling"].asBool());

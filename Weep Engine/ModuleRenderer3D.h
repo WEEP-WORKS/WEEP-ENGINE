@@ -26,8 +26,8 @@ public:
 	bool CleanUp();
 	void OnConfiguration();
 
-	void Save(Json::Value&) override;
-	void Load(Json::Value&) override;
+	void Save(Json::Value&) const override;
+	void Load(const Json::Value&) override;
 
 	void OnResize(int width, int height);
 	void DrawGrid(int HALF_GRID_SIZE);

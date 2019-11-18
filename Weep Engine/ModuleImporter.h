@@ -3,10 +3,10 @@
 
 #include "Module.h"
 #include "Globals.h"
-class aiMesh;
+struct aiMesh;
 class ComponentMesh;
 class ComponentTexture;
-class aiScene;
+struct aiScene;
 class GameObject;
 
 template<class my_node>
@@ -45,10 +45,10 @@ public:
 	void LoadVertices(ComponentMesh * model, aiMesh * mesh);
 	void LoadIndexs(ComponentMesh * model, aiMesh * mesh);
 
-	void CreateOwnFile(ComponentMesh* mesh, string name_to_file);
+	void CreateOwnFile(const ComponentMesh* mesh, const string name_to_file);
 	void LoadOwnFile(string name_file, ComponentMesh* mesh);
 
-	char* GetPath() const;
+	const char* GetPath() const;
 	void LoadPath(char* path);
 
 private:

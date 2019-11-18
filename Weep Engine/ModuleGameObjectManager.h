@@ -21,17 +21,17 @@ public:
 	bool Update() override;
 	bool PostUpdate() override;
 	bool CleanUp() override;
-	void Save(Json::Value&) override;
-	void Load(Json::Value&) override;
+	void Save(Json::Value&) const override;
+	void Load(const Json::Value&) override;
 
 	//GameObject* CreateGeometryShape(int sides);
 
 	void CreateCube();
 	void CreateSphere();
 
-	void LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh);
+	void LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh) const;
 
-	void AddGameObjectToSelected(GameObject * go);
+	void AddGameObjectToSelected(GameObject * go) const;
 
 	void ReleaseGameObject(GameObject* object);
 
@@ -48,7 +48,7 @@ public:
 
 	void DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)>, GameObject* start = nullptr);
 
-	uint GetAllGameObjectNumber();
+	const uint GetAllGameObjectNumber() const;
 
 	GameObject* GetGOById(const uint& id) const;
 
@@ -84,7 +84,7 @@ private:
 
 	void AddGameObjectToDestroy(GameObject* go);
 
-	void DrawBBox(GameObject * object);
+	void DrawBBox(const GameObject * object) const;
 
 
 

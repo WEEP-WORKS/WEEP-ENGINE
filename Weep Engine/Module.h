@@ -54,9 +54,9 @@ public:
 		return true; 
 	}
 
-	virtual void Save(Json::Value&) {}
+	virtual void Save(Json::Value&) const {}
 
-	virtual void Load(Json::Value&) {}
+	virtual void Load(const Json::Value&) {}
 
 	virtual void OnConfiguration()
 	{
@@ -65,7 +65,7 @@ public:
 
 
 	void SetName(const char* set_name) { name = set_name; }
-	string GetName() { return name; }
+	const string GetName() const { return name; }
 	bool GetEnabled() const { return enabled; };
 	void SetEnabled(bool set) { enabled = set; };
 

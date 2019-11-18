@@ -172,7 +172,7 @@ void GameObjectManager::CreateSphere()
 	AddGameObjectToSelected(ret);
 }
 
-void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh)
+void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh) const
 {
 	cmesh->mesh_data->vertexs.has_data = true;
 	cmesh->mesh_data->vertexs.num = mesh->npoints;
@@ -219,9 +219,9 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 		
 }
 
-void GameObjectManager::AddGameObjectToSelected(GameObject * go)
+void GameObjectManager::AddGameObjectToSelected(GameObject * go) const
 {
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	for (vector<GameObject*>::const_iterator it = selected.cbegin(); it != selected.cend(); ++it)
 	{
 		if ((*it) == go)
 			return;
@@ -301,7 +301,7 @@ void GameObjectManager::Hierarchy()
 }
 
 
-void GameObjectManager::PrintGoList(GameObject * object)
+void GameObjectManager::PrintGoList(GameObject * object) 
 {
 	if (root == object || object == nullptr)
 		return;
@@ -410,7 +410,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		ImGui::PopStyleColor();
 }
 
-void GameObjectManager::DrawBBox(GameObject * object)
+void GameObjectManager::DrawBBox(const GameObject * object)const 
 {
 	AABB mesh_aabb = object->local_bbox;	
 
@@ -469,13 +469,54 @@ void GameObjectManager::DrawBBox(GameObject * object)
 	glPopMatrix();
 }
 
+const uint GameObjectManager::GetAllGameObjectNumber() const
+{
+	return (uint)root->DoForAllChildrens(&GameObject::CalculateNumberOfChildrens);
+}
 
+
+void GameObjectManager::Save(Json::Value& scene)const
+{
+	root->DoForAllChildrens(&GameObject::Save, scene["GameObjects"] = Json::arrayValue);
+}
+
+void GameObjectManager::Load(const Json::Value& scene)
+{
+	if (root != nullptr)
+	{
+		CleanUp();
+
+		//root = new GameObject("root", nullptr);
+		for (uint i = 0; i < scene["GameObjects"].size(); ++i)
+		{
+			GameObject* go = new GameObject();
+			go->Load(scene["GameObjects"][i]);
+
+		}
+	}
+	LOG("Load succesful");
+}
+
+GameObject* GameObjectManager::GetGOById( const uint& id) const
+{
+	return root->DoForAllChildrens(&GameObject::IsThisGOId, id);
+}
+
+
+
+
+
+
+
+
+
+// -------------------------DoForAllChildrens versions--------------------------
 
 int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)
 {
 	int number_childrens = -1; //-1 to not count the root GameObject.
 	std::list<GameObject*> all_childrens;
-	if(start != nullptr)
+	if (start != nullptr)
 		all_childrens.push_back(start);
 	else
 		all_childrens.push_back(root);
@@ -557,37 +598,4 @@ int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectMa
 	}
 
 	return number_childrens;
-}
-
-
-uint GameObjectManager::GetAllGameObjectNumber()
-{
-	return (uint)root->DoForAllChildrens(&GameObject::CalculateNumberOfChildrens);
-}
-
-
-void GameObjectManager::Save(Json::Value& scene)
-{
-	root->DoForAllChildrens(&GameObject::Save, scene["GameObjects"] = Json::arrayValue);
-}
-
-void GameObjectManager::Load(Json::Value& scene)
-{
-	if (root != nullptr)
-	{
-		CleanUp();
-
-		//root = new GameObject("root", nullptr);
-		for (uint i = 0; i < scene["GameObjects"].size(); ++i)
-		{
-			GameObject* go = new GameObject(scene["GameObjects"][i]);
-
-		}
-	}
-	LOG("Load succesful");
-}
-
-GameObject* GameObjectManager::GetGOById( const uint& id) const
-{
-	return root->DoForAllChildrens(&GameObject::IsThisGOId, id);
 }
