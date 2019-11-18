@@ -86,3 +86,13 @@ void ComponentTexture::InspectorDraw()
 	}
 
 }
+
+void ComponentTexture::Save(Json::Value& scene)
+{
+	Json::Value component_texture;
+
+	component_texture["texture_path"] = texture_path;
+	component_texture["Texture Active"] = texture_active;
+
+	scene.append(component_texture);
+}

@@ -10,17 +10,57 @@
 						0.0,
 						0.0,
 						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
 					]
 				}
 			],
-			"id" : 931057675,
+			"id" : 1607977808,
 			"id_parent" : "nullptr",
 			"name" : "root"
 		},
 		{
-			"Components" : [],
-			"id" : 1519990127,
-			"id_parent" : 931057675,
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				{
+					"FOV" : 120.00000762939453,
+					"Far Plane" : 100.0,
+					"Frustum Culling" : true,
+					"Near Plane" : 0.10000000149011612
+				}
+			],
+			"id" : 700452658,
+			"id_parent" : 1607977808,
 			"name" : "CAMERA"
 		},
 		{
@@ -29,26 +69,96 @@
 				{
 					"Position" : 
 					[
-						4.4000000953674316,
+						0.0,
 						0.0,
 						0.0
+					],
+					"Rotation" : 
+					[
+						-0.0,
+						0.0,
+						-180.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
 					]
 				}
 			],
-			"id" : 1680958648,
-			"id_parent" : 931057675,
+			"id" : 1155846542,
+			"id_parent" : 1607977808,
 			"name" : "group_BakerHouse_1"
 		},
 		{
-			"Components" : [],
-			"id" : 753205496,
-			"id_parent" : 1680958648,
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						-180.0,
+						-89.980216979980469,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				{
+					"Model name" : "Chimney.mesh"
+				},
+				{
+					"Texture Active" : true,
+					"texture_path" : "Models/Textures/Baker_house.png"
+				}
+			],
+			"id" : 684880198,
+			"id_parent" : 1155846542,
 			"name" : "Chimney"
 		},
 		{
-			"Components" : [],
-			"id" : 1664144570,
-			"id_parent" : 1680958648,
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						-180.0,
+						-89.980216979980469,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					]
+				},
+				{
+					"Model name" : "Baker_house.mesh"
+				},
+				{
+					"Texture Active" : true,
+					"texture_path" : "Models/Textures/Baker_house.png"
+				}
+			],
+			"id" : 1464850617,
+			"id_parent" : 1155846542,
 			"name" : "Baker_house"
 		}
 	],

@@ -383,10 +383,10 @@ void GameObject::Save(Json::Value& scene)
 	LOG("%s", s.c_str());*/
 
 	Json::Value go;
-
+	go["Components"] = Json::arrayValue;
 	for (vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
 	{
-		(*citer)->Save(go["Components"] = Json::arrayValue);
+		(*citer)->Save(go["Components"]);
 	}
 
 	go["name"] = name;

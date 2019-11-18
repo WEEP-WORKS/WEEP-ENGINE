@@ -22,7 +22,7 @@ public:
 	bool PostUpdate() override;
 	bool CleanUp() override;
 	void Save(Json::Value&) override;
-	//void Load(Json::Value&) override;
+	void Load(Json::Value&) override;
 
 	//GameObject* CreateGeometryShape(int sides);
 

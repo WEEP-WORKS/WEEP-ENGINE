@@ -55,7 +55,7 @@ public:
 
 	void InspectorDraw();
 
-	//void Save(Json::Value&) override;
+	void Save(Json::Value&) override;
 
 
 	ComponentTexture* GetTexture() const;

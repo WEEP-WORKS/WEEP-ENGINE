@@ -4,7 +4,8 @@
 #include <vector>
 #include "GameObject.h"
 #include "imgui.h"
-
+#include "App.h"
+#include "ModuleImporter.h"
 ComponentMesh::ComponentMesh()
 {
 	mesh_data = new MeshData();
@@ -278,4 +279,14 @@ void ComponentMesh::InspectorDraw()
 		ImGui::Checkbox("VERTEX NORMALS", &activate_vertex_normals);
 	}
 
+}
+
+void ComponentMesh::Save(Json::Value& scene)
+{
+	Json::Value comonent_mesh;
+
+	App->importer->CreateOwnFile(this, object->GetName());
+	comonent_mesh["Model name"] = string(object->GetName() + string(".mesh"));
+	//LoadOwnFile(string(name + ".mesh"));
+	scene.append(comonent_mesh);
 }

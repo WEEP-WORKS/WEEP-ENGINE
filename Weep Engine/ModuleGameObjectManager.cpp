@@ -15,6 +15,7 @@
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("GameObjectManager");
+	root = nullptr;
 
 }
 
@@ -565,4 +566,13 @@ uint GameObjectManager::GetAllGameObjectNumber()
 void GameObjectManager::Save(Json::Value& scene)
 {
 	root->DoForAllChildrens(&GameObject::Save, scene["GameObjects"] = Json::arrayValue);
+}
+
+void GameObjectManager::Load(Json::Value& scene)
+{
+	if(root != nullptr)
+		CleanUp();
+
+	root = new GameObject("root", nullptr);
+
 }

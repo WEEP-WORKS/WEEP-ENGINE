@@ -197,7 +197,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				}
 
 				CreateOwnFile(model, name);
-				LoadOwnFile(string(name + ".mesh"));
+				//LoadOwnFile(string(name + ".mesh"));
 				
 			}
 			else
