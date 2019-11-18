@@ -164,5 +164,9 @@ void ComponentCamera::Save(Json::Value& scene)
 
 void ComponentCamera::Load(Json::Value& component)
 {
+	camera->SetFOV(component["FOV"].asFloat());
+	camera->SetFrustumCulling(component["Frustum Culling"].asBool());
+	camera->SetNearPlaneDistance(component["Near Plane"].asFloat());
+	camera->SetFarPlaneDistance(component["Far Plane"].asFloat());
 
 }

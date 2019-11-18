@@ -41,12 +41,13 @@ bool GameObjectManager::PreUpdate()
 	root->DoForAllChildrens(&GameObject::PreUpdate);
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
 	root->DoForAllChildrens(&GameObject::CalcBBox);
-
+	LOG("PreUpdate done");
 	return true;
 }
 
 bool GameObjectManager::Update() 
 {
+	LOG("Updating GOs");
 	root->DoForAllChildrens(&GameObject::Update);
 
 	//vector<Camera3D*> cameras = App->camera->GetCameras();
@@ -76,12 +77,16 @@ bool GameObjectManager::Update()
 		AddGameObjectsSelectedToDestroy();
 	}
 
+	LOG("Update done");
+
+
 	return true;
 }
 
 bool GameObjectManager::PostUpdate()
 {
 	root->DoForAllChildrens(&GameObject::PostUpdate);
+	LOG("PostUpdate done");
 
 	return true;
 }
@@ -94,7 +99,7 @@ bool GameObjectManager::CleanUp()
 		(*item)->CleanUp();
 		RELEASE(*item);
 	}*/
-
+	ClearSelection();
 	root->DoForAllChildrens(&GameObject::CleanUp);
 	DoForAllChildrens(&GameObjectManager::ReleaseGameObject);
 	return true;
@@ -582,6 +587,7 @@ void GameObjectManager::Load(Json::Value& scene)
 
 		}
 	}
+	LOG("Load succesful");
 }
 
 GameObject* GameObjectManager::GetGOById( const uint& id) const
