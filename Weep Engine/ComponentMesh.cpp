@@ -80,7 +80,7 @@ void ComponentMesh::Render()
 {
 	// Push matrix
 	glPushMatrix();
-	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
+	glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
 
 	glColor3f(color.r, color.g, color.b);
 

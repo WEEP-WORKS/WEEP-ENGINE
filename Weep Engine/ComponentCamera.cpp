@@ -13,9 +13,9 @@ ComponentCamera::ComponentCamera()
 
 void ComponentCamera::Update()
 {
-	camera->SetPosition(object->transform->GetPosition());
-	camera->SetZDir(object->transform->GetGlobalTransform().WorldZ());
-	camera->SetYDir(object->transform->GetGlobalTransform().WorldY());
+	camera->SetPosition(object->ConstGetTransform()->GetPosition());
+	camera->SetZDir(object->ConstGetTransform()->GetGlobalTransform().WorldZ());
+	camera->SetYDir(object->ConstGetTransform()->GetGlobalTransform().WorldY());
 
 	if (camera->GetFrustumCulling())
 	{

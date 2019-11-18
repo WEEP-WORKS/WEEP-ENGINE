@@ -10,7 +10,8 @@ class JsonHelper
 public:
 	JsonHelper() {};
 
-	void Fill(Json::Value&, float3);
+	void Fill(Json::Value&, const float3&) const;
+	void Fill(float3&, const Json::Value&) const;
 };
 
 #endif // !__JSONHELPER_H__

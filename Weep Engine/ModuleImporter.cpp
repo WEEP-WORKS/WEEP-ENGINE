@@ -104,8 +104,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 	}
 
-	root_go->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-	root_go->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+	root_go->GetTransform()->SetPosition(float3(translation.x, translation.y, translation.z));
+	root_go->GetTransform()->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 	
 	go_to_create.push_back(Node<aiNode>(scene->mRootNode, nullptr, root_go));
 
@@ -161,8 +161,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 			}
 
-			object->transform->SetPosition(float3(translation.x, translation.y, translation.z));
-			object->transform->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
+			object->GetTransform()->SetPosition(float3(translation.x, translation.y, translation.z));
+			object->GetTransform()->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 
 			if (model != nullptr)
 			{

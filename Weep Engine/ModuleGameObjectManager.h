@@ -50,6 +50,8 @@ public:
 
 	uint GetAllGameObjectNumber();
 
+	GameObject* GetGOById(const uint& id) const;
+
 
 
 

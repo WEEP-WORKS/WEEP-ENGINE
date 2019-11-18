@@ -416,7 +416,7 @@ void GameObjectManager::DrawBBox(GameObject * object)
 	mesh_aabb.GetCornerPoints(corners);
 
 	glPushMatrix();
-	glMultMatrixf(object->transform->GetGlobalTransform().Transposed().ptr());
+	glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
 	GLint previous[2];
 	glGetIntegerv(GL_POLYGON_MODE, previous);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -497,6 +497,7 @@ int GameObjectManager::DoForAllChildrens(std::function<void(GameObjectManager*, 
 
 	return number_childrens;
 }
+
 
 void GameObjectManager::DoForFirstChildrens(std::function<void(GameObjectManager*, GameObject*)> funct, GameObject* start)
 {
@@ -581,4 +582,9 @@ void GameObjectManager::Load(Json::Value& scene)
 
 		}
 	}
+}
+
+GameObject* GameObjectManager::GetGOById( const uint& id) const
+{
+	return root->DoForAllChildrens(&GameObject::IsThisGOId, id);
 }

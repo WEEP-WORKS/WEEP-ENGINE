@@ -2,6 +2,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "JsonHelper.h"
+#include "GameObject.h"
 
 ComponentTransform::ComponentTransform()
 {
@@ -102,6 +103,7 @@ void ComponentTransform::SetGlobalTransform(const float4x4& global)
 
 float4x4 ComponentTransform::GetLocalTransform() const
 {
+	string s = object->GetName();
 	return local_transform;
 }
 
@@ -120,5 +122,9 @@ void ComponentTransform::Save(Json::Value& scene)
 
 void ComponentTransform::Load(Json::Value& component)
 {
-
+	App->json_helper->Fill(local_position, component["Position"]);
+	App->json_helper->Fill(local_rotation_euler, component["Rotation"]);
+	local_rotation_quat = Quat::FromEulerXYZ(local_rotation_euler.x*DEGTORAD, local_rotation_euler.y*DEGTORAD, local_rotation_euler.z*DEGTORAD);
+	App->json_helper->Fill(local_scale, component["Scale"]);
+	RecalculateLocalTransform();
 }

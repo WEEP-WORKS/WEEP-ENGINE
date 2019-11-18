@@ -62,7 +62,12 @@ public:
 
 	ComponentCamera * GetCam() const;
 
+	ComponentTransform* GetTransform() const;
+	const ComponentTransform* ConstGetTransform() const;
+
 	int DoForAllChildrens(std::function<void(GameObject*)>);
+
+	GameObject* DoForAllChildrens(std::function<const bool(const GameObject*, const uint& id)>, const uint& id);
 
 	int DoForAllChildrens(std::function<void(GameObject*, Json::Value&)>, Json::Value&);
 
@@ -85,6 +90,8 @@ public:
 
 	bool IsParentOfMyParents(GameObject* possible_parent);
 
+	const bool IsThisGOId(const uint& id) const ;
+
 public:
 	bool					parametric		= false;
 	bool hierarchy_opnened = false;
@@ -94,8 +101,6 @@ public:
 
 	//should be private
 	std::vector<Component*> components;
-
-	ComponentTransform* transform = nullptr;
 
 	AABB local_bbox;
 
