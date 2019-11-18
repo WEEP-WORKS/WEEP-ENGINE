@@ -102,5 +102,8 @@ void ComponentTexture::Save(Json::Value& scene)
 
 void ComponentTexture::Load(Json::Value& component)
 {
+	if (component["Texture Active"].asBool())
+		ActivateThisTexture();
 
+	id_texture = App->texture->LoadTexture(component["texture_path"].asCString(), texture_width, texture_height);
 }
