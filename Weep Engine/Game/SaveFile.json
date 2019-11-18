@@ -26,7 +26,7 @@
 					"type" : 0
 				}
 			],
-			"id" : 1878502204,
+			"id" : 718738903,
 			"id_parent" : "nullptr",
 			"name" : "root",
 			"number_components" : 1
@@ -39,7 +39,7 @@
 					[
 						0.0,
 						0.0,
-						-18.5
+						0.0
 					],
 					"Rotation" : 
 					[
@@ -63,8 +63,8 @@
 					"type" : 3
 				}
 			],
-			"id" : 1447842384,
-			"id_parent" : 1878502204,
+			"id" : 804707016,
+			"id_parent" : 718738903,
 			"name" : "CAMERA",
 			"number_components" : 2
 		},
@@ -93,8 +93,8 @@
 					"type" : 0
 				}
 			],
-			"id" : 1647193578,
-			"id_parent" : 1878502204,
+			"id" : 953778000,
+			"id_parent" : 718738903,
 			"name" : "group_BakerHouse_1",
 			"number_components" : 1
 		},
@@ -132,8 +132,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1489860491,
-			"id_parent" : 1647193578,
+			"id" : 636289113,
+			"id_parent" : 953778000,
 			"name" : "Chimney",
 			"number_components" : 3
 		},
@@ -171,8 +171,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 2117093811,
-			"id_parent" : 1647193578,
+			"id" : 791665857,
+			"id_parent" : 953778000,
 			"name" : "Baker_house",
 			"number_components" : 3
 		}

@@ -41,13 +41,12 @@ bool GameObjectManager::PreUpdate()
 	root->DoForAllChildrens(&GameObject::PreUpdate);
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
 	root->DoForAllChildrens(&GameObject::CalcBBox);
-	LOG("PreUpdate done");
+
 	return true;
 }
 
 bool GameObjectManager::Update() 
 {
-	LOG("Updating GOs");
 	root->DoForAllChildrens(&GameObject::Update);
 
 	//vector<Camera3D*> cameras = App->camera->GetCameras();
@@ -77,7 +76,6 @@ bool GameObjectManager::Update()
 		AddGameObjectsSelectedToDestroy();
 	}
 
-	LOG("Update done");
 
 
 	return true;
@@ -86,7 +84,6 @@ bool GameObjectManager::Update()
 bool GameObjectManager::PostUpdate()
 {
 	root->DoForAllChildrens(&GameObject::PostUpdate);
-	LOG("PostUpdate done");
 
 	return true;
 }
