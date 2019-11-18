@@ -83,7 +83,7 @@ private:
 	void MousePick();
 
 	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
-	float3 last_scale = float3::zero;
+	float3 last_moved_transformation = float3::zero;
 };
 
 #endif // !__MODULEGAMEOBJECTMANAGER_H__

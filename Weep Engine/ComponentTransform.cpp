@@ -120,7 +120,7 @@ const void ComponentTransform::Rotate(const float3 & rotate)
 
 const void ComponentTransform::Scale(const float3 & scale)
 {
-	local_scale += scale;
+	SetScale(GetScale() + scale);
 
 	RecalculateLocalTransform();
 }

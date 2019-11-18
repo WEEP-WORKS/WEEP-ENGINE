@@ -131,6 +131,20 @@ bool DebugScene::PreUpdate()
 		App->debug_scene->show_app_configuration = false;
 	}
 
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+			App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+			App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::ROTATE);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+			App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
+		}
+	}
+
+
 	return ret;
 }
 

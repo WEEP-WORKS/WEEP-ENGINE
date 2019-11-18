@@ -115,7 +115,11 @@ bool GameObjectManager::Update()
 			case ImGuizmo::OPERATION::SCALE:
 			{
 				if (sc.IsFinite()) {
+					float3 save_trans = sc;
+					sc = sc + last_moved_transformation;
 					(*it)->transform->SetScale(sc);
+
+					last_moved_transformation = save_trans;
 				}
 			}
 			break;
