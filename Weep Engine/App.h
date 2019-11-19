@@ -17,6 +17,7 @@ class ModuleImporter;
 class DebugScene;
 class GameObjectManager;
 class ModuleTexture;
+class ModuleQuadtree;
 
 class JsonHelper;
 
@@ -79,6 +80,7 @@ public:
 	ModuleImporter* importer = nullptr;
 	ModuleTexture*	texture = nullptr;
 	ModuleFileSystem* file_system = nullptr;
+	ModuleQuadtree* quadtree = nullptr;
 
 	Profiler*		   profiler = nullptr;
 

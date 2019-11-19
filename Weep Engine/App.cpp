@@ -9,7 +9,7 @@
 #include "ModuleTexture.h"
 #include "JsonHelper.h"
 #include "ModuleFileSystem.h"
-
+#include "ModuleQuadtree.h"
 
 #include <list>
 #include <fstream>
@@ -33,6 +33,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	importer = new ModuleImporter();
 	texture = new ModuleTexture();
 	file_system = new ModuleFileSystem();
+	quadtree = new ModuleQuadtree();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -43,6 +44,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(camera);
 	AddModule(input);
 	AddModule(file_system);
+	AddModule(quadtree);
 	AddModule(importer);
 	AddModule(texture);
 	AddModule(game_object_manager);

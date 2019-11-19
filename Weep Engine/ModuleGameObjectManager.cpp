@@ -49,20 +49,6 @@ bool GameObjectManager::Update()
 {
 	root->DoForAllChildrens(&GameObject::Update);
 
-	//vector<Camera3D*> cameras = App->camera->GetCameras();
-	//vector<GameObject*> to_draw;
-
-	//// Get elements to draw from all cameras
-	//for (vector<Camera3D*>::iterator it = cameras.begin(); it != cameras.end(); ++it)
-	//{
-	//	if ((*it)->GetFrustumCulling())
-	//		
-	//}
-
-	//// Draw
-	//for (vector<GameObject*>::iterator it = to_draw.begin(); it != to_draw.end(); ++it)
-	//	(*it)->DoForAllChildrens(&GameObject::PostUpdate);
-
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if((*it)->GetMesh())
@@ -75,8 +61,6 @@ bool GameObjectManager::Update()
 	{
 		AddGameObjectsSelectedToDestroy();
 	}
-
-
 
 	return true;
 }
@@ -91,11 +75,6 @@ bool GameObjectManager::PostUpdate()
 
 bool GameObjectManager::CleanUp()
 {
-	/*for (list<GameObject*>::iterator item = objects.begin(); item != objects.end(); ++item)
-	{
-		(*item)->CleanUp();
-		RELEASE(*item);
-	}*/
 	ClearSelection();
 	root->DoForAllChildrens(&GameObject::CleanUp);
 	DoForAllChildrens(&GameObjectManager::ReleaseGameObject);
