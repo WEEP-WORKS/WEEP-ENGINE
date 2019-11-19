@@ -2,7 +2,7 @@
 #define __MODULEQUADTREE_H__
 
 #include "Module.h"
-#include "MathGeoLib/include/Geometry/AABB.h"
+#include"QuadtreeNode.h"
 
 
 class ModuleQuadtree : public Module
@@ -12,10 +12,15 @@ public:
 
 	bool Update() override;
 
+	
+
 	void Draw();
 
+	QuadTreeNode* root_quadtree;
+
 private:
-	AABB* root_quadtree;
+
+	
 };
 
 #endif // !__MODULEQUADTREE_H__

@@ -29,7 +29,7 @@
 #include "GameObject.h"
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
-
+#include "ModuleQuadtree.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -138,7 +138,7 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		App->game_object_manager->root->SetGoSelectedAsChildrenFromThis();
+		App->quadtree->root_quadtree->Divide();
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
