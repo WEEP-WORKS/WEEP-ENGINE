@@ -74,7 +74,7 @@ bool GameObjectManager::Update()
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
-		float4x4 transform = (*it)->ConstGetTransform()->GetGlobalTransform().Transposed();
+		float4x4 transform = (*it)->transform->GetGlobalTransform().Transposed();
 
 		float transformation[16];
 		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
@@ -101,9 +101,9 @@ bool GameObjectManager::Update()
 			{
 				if (add.IsFinite()) {
 					if ((*it)->parent != nullptr) {
-						add = (*it)->parent->ConstGetTransform()->GetGlobalTransform().Inverted().TransformPos(add);
+						add = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(add);
 					}
-					(*it)->GetTransform()->Translate(add);
+					(*it)->transform->Translate(add);
 				}
 			}
 			break;
@@ -111,9 +111,9 @@ bool GameObjectManager::Update()
 			{
 				if (rot.IsFinite()) {
 					if ((*it)->parent != nullptr) {
-						rot = (*it)->parent->ConstGetTransform()->GetGlobalTransform().Inverted().TransformPos(rot);
+						rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
 					}
-					(*it)->GetTransform()->Rotate(rot);
+					(*it)->transform->Rotate(rot);
 				}
 			}
 			break;
@@ -122,7 +122,7 @@ bool GameObjectManager::Update()
 				if (sc.IsFinite()) {
 					float3 save_trans = sc;
 					sc = sc + last_moved_transformation;
-					(*it)->GetTransform()->SetScale(sc);
+					(*it)->transform->SetScale(sc);
 
 					last_moved_transformation = save_trans;
 				}
@@ -656,6 +656,11 @@ int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectMa
 	}
 
 	return number_childrens;
+}
+
+uint GameObjectManager::GetAllGameObjectNumber()
+{
+	return (uint)root->DoForAllChildrens(&GameObject::CalculateNumberOfChildrens);
 }
 
 void GameObjectManager::MousePick()
