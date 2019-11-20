@@ -6,6 +6,9 @@
 #include "ComponentTransform.h"
 #include "App.h"
 #include "ModuleGameObjectManager.h"
+#include "ModuleCamera3D.h"
+#include "ModuleInput.h"
+#include "ModuleWindow.h"
 #include <list>
 
 GameObject::GameObject(std::string name, GameObject* parent) : name(name), parent(parent)
@@ -396,7 +399,6 @@ void GameObject::CalcGlobalTransform()
 
 void GameObject::CalcBBox()
 {
-
 	local_bbox.SetNegativeInfinity();
 
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
@@ -484,4 +486,73 @@ const ComponentTransform* GameObject::ConstGetTransform() const
 
 	LOG("Component transform not found!");
 	return nullptr;
+}
+
+bool PointInRect(float2 point_xy, Rect rect_xywh)
+{
+	if (point_xy.x >= rect_xywh.left && point_xy.x <= rect_xywh.right && point_xy.y > rect_xywh.top && point_xy.y < rect_xywh.bottom)
+		return true;
+
+	return false;
+}
+
+void GameObject::TestRay()
+{
+	// Check if intersects with bbox
+	if (local_bbox.IsFinite())
+	{
+		Rect rect = App->window->GetWindowRect();
+		float2 mouse_pos = App->input->GetMouse();
+
+		if (PointInRect(mouse_pos, rect))
+		{
+			// The point (1, 1) corresponds to the top-right corner of the near plane
+			// (-1, -1) is bottom-left
+
+			float first_normalized_x = (mouse_pos.x - rect.left) / (rect.right - rect.left);
+			float first_normalized_y = (mouse_pos.y - rect.top) / (rect.bottom - rect.top);
+
+			float normalized_x = (first_normalized_x * 2) - 1;
+			float normalized_y = 1 - (first_normalized_y * 2);
+
+			LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
+
+			float distance1 = 99999999999;
+
+			if (picking.Intersects(local_bbox))
+			{
+				// Get mesh
+				ComponentMesh* cmesh = GetMesh();
+
+				if (cmesh != nullptr)
+				{
+					// Transform segment to match mesh transform
+					LineSegment segment_local_space(picking);
+					segment_local_space.Transform(transform->GetGlobalTransform().Inverted());
+
+					// Check every triangle
+					Triangle tri;
+					uint* indices = cmesh->mesh_data->indexs.buffer;
+					float* vertices = cmesh->mesh_data->vertexs.buffer;
+					for (int i = 0; i < cmesh->mesh_data->indexs.num;)
+					{
+						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+
+						float distance;
+						float3 hit_point;
+						if (segment_local_space.Intersects(tri, &distance, &hit_point))
+						{
+							if (distance < distance1)
+							{
+								distance1 = distance;
+								App->game_object_manager->closest = this;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

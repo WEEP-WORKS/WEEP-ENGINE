@@ -21,7 +21,9 @@ public:
 	~ModuleRenderer3D();
 
 	bool Awake();
+	bool Start();
 	bool PreUpdate();
+	bool Update();
 	bool PostUpdate();
 	bool CleanUp();
 	void OnConfiguration();
@@ -68,5 +70,11 @@ private:
 private:
 
 	void SetVsync(bool set);
+
+	void SetAmbientLight(const bool & enabled, const float color[4]) const;
+
+	void SetDiffuseLight(const bool & enabled, const float color[4]) const;
+
+	void SetSpecularLight(const bool & enabled, const float color[4]) const;
 
 };

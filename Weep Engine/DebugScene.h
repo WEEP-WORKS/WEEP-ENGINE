@@ -6,7 +6,7 @@
 #include "glew/glew.h"
 
 #define MAX_SNAKE 2
-#define LIB_NUM 10
+#define LIB_NUM 11
 
 struct hardware_info {
 	const char* gpu_vendor = 0;
@@ -28,6 +28,7 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update();
+	void Tools();
 	bool CleanUp();
 
 	void Configuration();

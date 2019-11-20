@@ -223,3 +223,8 @@ bool ModuleInput::GetWindowEvent(EventWindow ev)
 {
 	return windowEvents[ev];
 }
+
+float2 ModuleInput::GetMouse()
+{
+	return float2(mouse_x, mouse_y);
+}
