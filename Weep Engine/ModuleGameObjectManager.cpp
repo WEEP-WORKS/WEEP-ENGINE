@@ -404,8 +404,6 @@ void GameObjectManager::DrawBBox(const GameObject * object)const
 		glGetIntegerv(GL_POLYGON_MODE, previous);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		glColor3f(255.f, 45.f, 26.f);
-
 		glLineWidth(4.0);
 
 		glBegin(GL_QUADS);

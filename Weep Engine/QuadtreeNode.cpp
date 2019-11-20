@@ -17,12 +17,11 @@ void QuadTreeNode::Draw()
 	glGetIntegerv(GL_POLYGON_MODE, previous);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glColor3f(255.f, 45.f, 26.f);
 
 	glLineWidth(4.0);
 
 	glBegin(GL_QUADS);
-
+	glColor3f(1.f, 0.f, 1.f);
 	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy, sz);
 	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy, sz);
 	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx,  sy, sz);
