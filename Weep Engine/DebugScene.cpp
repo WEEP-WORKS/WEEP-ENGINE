@@ -29,6 +29,7 @@
 #include "GameObject.h";
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
+#include "SceneManager.h"
 
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
@@ -254,6 +255,41 @@ void DebugScene::Tools()
 	if (ImGui::Button("Scale"))
 	{
 		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
+	}
+
+	if (App->scene_manager->GetState() == SCENE_STATE::EDIT)
+	{
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		if (ImGui::Button("Play"))
+		{
+			App->scene_manager->Play();
+		}
+
+		ImGui::SetCursorPos(ImVec2(850, 6));
+		ImGui::Text("Current: EDITING");
+	}
+	else if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
+	{
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		if (ImGui::Button("STOP"))
+		{
+			App->scene_manager->Edit();
+		}
+
+		ImGui::SetCursorPos(ImVec2(847, 3));
+		if (ImGui::Button("Pause"))
+		{
+			App->scene_manager->Pause();
+		}
+
+		ImGui::SetCursorPos(ImVec2(900, 3));
+		if (ImGui::Button("Step"))
+		{
+			App->scene_manager->Step();
+		}
+
+		ImGui::SetCursorPos(ImVec2(950, 6));
+		ImGui::Text("Current: PLAYING");
 	}
 
 	ImGui::End();

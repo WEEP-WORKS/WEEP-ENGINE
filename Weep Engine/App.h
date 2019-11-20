@@ -15,6 +15,7 @@ class ModuleCamera3D;
 class ModuleImporter;
 class DebugScene;
 class GameObjectManager;
+class SceneManager;
 class ModuleTexture;
 
 
@@ -70,9 +71,9 @@ public:
 	ModuleCamera3D*    camera = nullptr;
 	DebugScene*        debug_scene = nullptr;
 	GameObjectManager* game_object_manager = nullptr;
-	ModuleImporter* importer = nullptr;
-	ModuleTexture*	texture = nullptr;
-
+	ModuleImporter*	   importer = nullptr;
+	ModuleTexture*	   texture = nullptr;
+	SceneManager*	   scene_manager = nullptr;
 	Profiler*		   profiler = nullptr;
 		
 	std::list<Module*>      modules;
