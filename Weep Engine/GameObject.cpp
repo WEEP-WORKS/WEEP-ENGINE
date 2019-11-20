@@ -18,6 +18,7 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	{
 		parent->childrens.push_back(this);
 	}
+	
 	AddComponent(ComponentType::TRANSFORM);
 
 	id = App->random->Int();
@@ -528,7 +529,7 @@ void GameObject::TestRay()
 				{
 					// Transform segment to match mesh transform
 					LineSegment segment_local_space(picking);
-					segment_local_space.Transform(transform->GetGlobalTransform().Inverted());
+					segment_local_space.Transform(ConstGetTransform()->GetGlobalTransform().Inverted());
 
 					// Check every triangle
 					Triangle tri;
