@@ -40,7 +40,7 @@ bool GameObjectManager::PreUpdate()
 
 	root->DoForAllChildrens(&GameObject::PreUpdate);
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
-	root->DoForAllChildrens(&GameObject::CalcBBox);
+	//root->DoForAllChildrens(&GameObject::CalcBBox);
 
 	return true;
 }
@@ -49,12 +49,12 @@ bool GameObjectManager::Update()
 {
 	root->DoForAllChildrens(&GameObject::Update);
 
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if((*it)->GetMesh())
 			DrawBBox(*it);
-	}
-
+	}*/
+	DoForAllChildrens(&GameObjectManager::DrawBBox);
 	Hierarchy();
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
@@ -391,61 +391,62 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 void GameObjectManager::DrawBBox(const GameObject * object)const 
 {
-	AABB mesh_aabb = object->local_bbox;	
+	if (!object->local_bbox.IsDegenerate())
+	{
+		AABB mesh_aabb = object->local_bbox;
 
-	static float3 corners[8];
-	mesh_aabb.GetCornerPoints(corners);
+		static float3 corners[8];
+		mesh_aabb.GetCornerPoints(corners);
 
-	glPushMatrix();
-	glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
-	GLint previous[2];
-	glGetIntegerv(GL_POLYGON_MODE, previous);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPushMatrix();
+		glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
+		GLint previous[2];
+		glGetIntegerv(GL_POLYGON_MODE, previous);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glColor3f(255.f, 45.f, 26.f);
+		glLineWidth(4.0);
 
-	glLineWidth(4.0);
+		glBegin(GL_QUADS);
 
-	glBegin(GL_QUADS);
+		glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy, sz);
+		glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy, sz);
+		glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx,  sy, sz);
+		glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy, sz);
 
-	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy, sz);
-	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy, sz);
-	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx,  sy, sz);
-	glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy, sz);
+		glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
+		glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+		glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
+		glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx,  sy, -sz);
 
-	glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
-	glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
-	glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
-	glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx,  sy, -sz);
+		glVertex3fv((GLfloat*)&corners[5]); //glVertex3f(sx, -sy,  sz);
+		glVertex3fv((GLfloat*)&corners[4]); //glVertex3f(sx, -sy, -sz);
+		glVertex3fv((GLfloat*)&corners[6]); //glVertex3f(sx,  sy, -sz);
+		glVertex3fv((GLfloat*)&corners[7]); //glVertex3f(sx,  sy,  sz);
 
-	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f(sx, -sy,  sz);
-	glVertex3fv((GLfloat*)&corners[4]); //glVertex3f(sx, -sy, -sz);
-	glVertex3fv((GLfloat*)&corners[6]); //glVertex3f(sx,  sy, -sz);
-	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f(sx,  sy,  sz);
+		glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+		glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
+		glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy,  sz);
+		glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
 
-	glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
-	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
-	glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx,  sy,  sz);
-	glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx,  sy, -sz);
+		glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx, sy,  sz);
+		glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx, sy,  sz);
+		glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx, sy, -sz);
+		glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx, sy, -sz);
 
-	glVertex3fv((GLfloat*)&corners[3]); //glVertex3f(-sx, sy,  sz);
-	glVertex3fv((GLfloat*)&corners[7]); //glVertex3f( sx, sy,  sz);
-	glVertex3fv((GLfloat*)&corners[6]); //glVertex3f( sx, sy, -sz);
-	glVertex3fv((GLfloat*)&corners[2]); //glVertex3f(-sx, sy, -sz);
+		glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
+		glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
+		glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy,  sz);
+		glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
 
-	glVertex3fv((GLfloat*)&corners[0]); //glVertex3f(-sx, -sy, -sz);
-	glVertex3fv((GLfloat*)&corners[4]); //glVertex3f( sx, -sy, -sz);
-	glVertex3fv((GLfloat*)&corners[5]); //glVertex3f( sx, -sy,  sz);
-	glVertex3fv((GLfloat*)&corners[1]); //glVertex3f(-sx, -sy,  sz);
+		glEnd();
 
-	glEnd();
+		glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
 
-	glPolygonMode(GL_FRONT_AND_BACK, previous[0]);
+		glLineWidth(1.0f);
 
-	glLineWidth(1.0f);
-
-	glColor3f(255, 255, 255);
-	glPopMatrix();
+		glColor3f(255, 255, 255);
+		glPopMatrix();
+	}
 }
 
 const uint GameObjectManager::GetAllGameObjectNumber() const

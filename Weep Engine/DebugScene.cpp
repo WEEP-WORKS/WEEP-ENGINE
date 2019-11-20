@@ -29,7 +29,7 @@
 #include "GameObject.h"
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
-
+#include "ModuleQuadtree.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -138,7 +138,15 @@ bool DebugScene::Update()
 {
 	bool ret = true;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		App->game_object_manager->root->SetGoSelectedAsChildrenFromThis();
+		App->quadtree->root_quadtree->Divide();
+
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
+	{
+		GameObject* new_go = new GameObject("AABB Test", App->game_object_manager->root);
+		new_go->local_bbox.minPoint = App->camera->GetEditorCamera()->GetPosition();
+		new_go->local_bbox.maxPoint = new_go->local_bbox.minPoint + float3(1.f, 1.f, 1.f);
+		App->quadtree->Insert(new_go);
+	}
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
