@@ -617,7 +617,7 @@ bool Polyhedron::ClipLineSegmentToConvexPolyhedron(const float3 &ptA, const floa
 {
 	assume(IsConvex());
 
-	// Intersect line segment against each plane.
+	// OnCollision line segment against each plane.
 	for(int i = 0; i < NumFaces(); ++i)
 	{
 		/* Denoting the dot product of vectors a and b with <a,b>, we have:

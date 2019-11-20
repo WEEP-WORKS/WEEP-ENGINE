@@ -3,29 +3,47 @@
 
 #include "MathGeoLib/include/Geometry/AABB.h"
 #include <vector>
+#include "Globals.h"
 class GameObject;
 
-class QuadTreeNode
+class QuadtreeNode
 {
+
 public:
-	QuadTreeNode(const float3& min_point_AABB, const float3& max_point_AABB);
+	enum class CollisionType
+	{
+		INTERSERCT_BORDER,
+		FULLY_CONTAINED,
+		NONE_COLLISION
+	};
+
+
+	QuadtreeNode(const float3& min_point_AABB, const float3& max_point_AABB, QuadtreeNode* parent = nullptr);
 
 	void Draw();
+
+	void Clear();
 
 
 	void Divide();
 	const bool IsSubdivided() const;
 
-	bool Intersect(AABB&);
+	CollisionType OnCollision(AABB&);
 
 	AABB box;
 
-	std::vector<QuadTreeNode*> subdivisions;
+	CollisionType InsertGOInThis(GameObject* go);
+
+	QuadtreeNode* parent = nullptr;
+
+	const std::vector<GameObject*>* GetEntities() const;
+
+	std::vector<QuadtreeNode*> subdivisions;
 
 	std::vector<GameObject*> entities;
 
 private:
-	QuadTreeNode* CreateDivision(const float3& min_point_AABB, const float3& max_point_AABB);
+	QuadtreeNode* CreateDivision(const float3& min_point_AABB, const float3& max_point_AABB, QuadtreeNode* parent = nullptr);
 
 
 

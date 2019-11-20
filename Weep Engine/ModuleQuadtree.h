@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include"QuadtreeNode.h"
+#include <functional>
 class GameObject;
 
 class ModuleQuadtree : public Module
@@ -13,13 +14,28 @@ public:
 
 	bool Update() override;
 
+	bool CleanUp() override;
+
 	void Insert(GameObject* go);
 
-	void RecalculateQuadtree();
+	void RecalculateAllQuadtree();
 
 	void Draw();
 
-	QuadTreeNode* root_quadtree;
+	void Clear();
+
+	void DeleteQuadTreeNode(QuadtreeNode* to_delete);
+
+	const uint GetMaxEntities() const;
+
+	void DoForAllQuadtreeNodes(std::function<QuadtreeNode::CollisionType(QuadtreeNode*, GameObject*)> funct, GameObject* go);
+	void DoForAllQuadtreeNodes(std::function<void(QuadtreeNode*)> funct);
+
+
+
+	std::vector<GameObject*> GetAllGameObjects();
+
+	QuadtreeNode* root_quadtree;
 
 private:
 
