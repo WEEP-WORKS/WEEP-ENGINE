@@ -10,7 +10,6 @@
 #include "DebugScene.h"
 #include "par_shapes.h"
 #include "imgui_internal.h"
-#include "ModuleWindow.h"
 //#include <functional>
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
@@ -51,85 +50,16 @@ bool GameObjectManager::Update()
 	root->DoForAllChildrens(&GameObject::Update);
 
 	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		MousePick();
-	}
-
-	root->DoForAllChildrens(&GameObject::Update);
-
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if((*it)->GetMesh())
 			DrawBBox(*it);
 	}*/
-	
 	DoForAllChildrens(&GameObjectManager::DrawBBox);
 	Hierarchy();
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
 		AddGameObjectsSelectedToDestroy();
-	}
-
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-	{
-		float4x4 transform = (*it)->transform->GetGlobalTransform().Transposed();
-
-		float transformation[16];
-		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
-			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
-			current_gizmo_operation,
-			ImGuizmo::MODE::WORLD,
-			transform.ptr(), transformation);
-
-		if (ImGuizmo::IsUsing())
-		{
-			float addition[3];
-			float rotation[3];
-			float scale[3];
-			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
-			float3 add(addition[0], addition[1], addition[2]);
-			float3 rot(rotation[0], rotation[1], rotation[2]);
-			float3 sc(scale[0], scale[1], scale[2]);
-
-			LOG("%f, %f, %f", sc.x, sc.y, sc.z);
-
-			switch (current_gizmo_operation)
-			{
-			case ImGuizmo::OPERATION::TRANSLATE:
-			{
-				if (add.IsFinite()) {
-					if ((*it)->parent != nullptr) {
-						add = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(add);
-					}
-					(*it)->transform->Translate(add);
-				}
-			}
-			break;
-			case ImGuizmo::OPERATION::ROTATE:
-			{
-				if (rot.IsFinite()) {
-					if ((*it)->parent != nullptr) {
-						rot = (*it)->parent->transform->GetGlobalTransform().Inverted().TransformPos(rot);
-					}
-					(*it)->transform->Rotate(rot);
-				}
-			}
-			break;
-			case ImGuizmo::OPERATION::SCALE:
-			{
-				if (sc.IsFinite()) {
-					float3 save_trans = sc;
-					sc = sc + last_moved_transformation;
-					(*it)->transform->SetScale(sc);
-
-					last_moved_transformation = save_trans;
-				}
-			}
-			break;
-			}
-		}
 	}
 
 	return true;
@@ -149,11 +79,6 @@ bool GameObjectManager::CleanUp()
 	root->DoForAllChildrens(&GameObject::CleanUp);
 	DoForAllChildrens(&GameObjectManager::ReleaseGameObject);
 	return true;
-}
-
-void GameObjectManager::SetGuizmoOperation(ImGuizmo::OPERATION op)
-{
-	current_gizmo_operation = op;
 }
 
 void GameObjectManager::ReleaseGameObject(GameObject* object)
@@ -454,11 +379,8 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 	if (opened)
 	{
-		if (!object->childrens.empty())
-		{
+		if(!object->childrens.empty())
 			DoForFirstChildrens(&GameObjectManager::PrintGoList, object);
-			DrawBBox(object);
-		}
 
 		ImGui::TreePop();
 	}
@@ -656,22 +578,4 @@ int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectMa
 	}
 
 	return number_childrens;
-}
-
-uint GameObjectManager::GetAllGameObjectNumber()
-{
-	return (uint)root->DoForAllChildrens(&GameObject::CalculateNumberOfChildrens);
-}
-
-void GameObjectManager::MousePick()
-{
-	//picking, closest, distance
-	root->DoForAllChildrens(&GameObject::TestRay);
-
-	if (closest != nullptr)
-	{
-		ClearSelection();
-		AddGameObjectToSelected(closest);
-		closest = nullptr;
-	}	
 }

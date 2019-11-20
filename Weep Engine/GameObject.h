@@ -84,9 +84,8 @@ public:
 	void CalcBBox();
 
 	const bool IsParentOfMyParents(const GameObject* possible_parent) const;
-	const bool IsThisGOId(const uint& id) const ;
-	void TestRay();//const LineSegment & segment, GameObject *& closest, float & dist
 
+	const bool IsThisGOId(const uint& id) const ;
 
 public:
 	bool					parametric		= false;

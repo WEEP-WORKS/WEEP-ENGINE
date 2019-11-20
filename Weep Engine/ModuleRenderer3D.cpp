@@ -11,8 +11,6 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
-#include "ImGuizmo.h"
-
 
 #pragma comment (lib, "glew/glew32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -31,6 +29,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::Awake()
 {
 	bool ret = true;
+
 
 	if(ret == true)
 	{
@@ -109,10 +108,7 @@ bool ModuleRenderer3D::Awake()
 
 
 	// Projection matrix for
-	/*float2 position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-	float2 size = float2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);*/
 	OnResize(App->window->GetWidth(), App->window->GetHeight());
-	ImGuizmo::SetRect(0,0, App->window->GetWidth(), App->window->GetHeight());
 
 	//To get the refresh of the display
 	int display_count = 0, display_index = 0, mode_index = 0;
@@ -126,16 +122,7 @@ bool ModuleRenderer3D::Awake()
 		refresh_rate = mode.refresh_rate;
 	}
 
-	float light[4] = { 255, 255, 255, 255 };
-	SetAmbientLight(true, light);
-
 	return ret;
-}
-
-bool ModuleRenderer3D::Start()
-{
-	ImGuizmo::Enable(true);
-	return true;
 }
 
 bool ModuleRenderer3D::GetVsync() const
@@ -166,39 +153,22 @@ bool ModuleRenderer3D::PreUpdate()
 		lights[i].Render();
 
 	// Start the Dear ImGui frame
-
-
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
-	ImGuizmo::BeginFrame();
-
-
 	return ret;
-}
-
-bool ModuleRenderer3D::Update()
-{
-	//ImGuizmo::SetDrawlist();
-	/*float2 position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-	float2 size = float2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);*/
-
-	//OnResize(size.x, size.y);
-
-	//ImGuizmo::SetRect(position.x, position.y, size.x, size.y);
-	return true;
 }
 
 // PostUpdate present buffer to screen
 bool ModuleRenderer3D::PostUpdate()
 {
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
-
 	// Rendering ImGui
 	ImGui::Render();
-	//ImGuiIO& io = ImGui::GetIO();
+	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+
+
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	SDL_GL_SwapWindow(App->window->window);
@@ -228,7 +198,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -413,32 +383,3 @@ void ModuleRenderer3D::SetVsync(bool set)
 	SDL_GL_SetSwapInterval(vsync);
 }
 
-void ModuleRenderer3D::SetAmbientLight(const bool & enabled, const float color[4]) const
-{
-	glLightfv(GL_LIGHT0, GL_AMBIENT, color);
-
-	if (enabled)
-		glEnable(GL_LIGHT0);
-	else
-		glDisable(GL_LIGHT0);
-}
-
-void ModuleRenderer3D::SetDiffuseLight(const bool & enabled, const float color[4]) const
-{
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, color);
-
-	if (enabled)
-		glEnable(GL_LIGHT1);
-	else
-		glDisable(GL_LIGHT1);
-}
-
-void ModuleRenderer3D::SetSpecularLight(const bool & enabled, const float color[4]) const
-{
-	glLightfv(GL_LIGHT2, GL_SPECULAR, color);
-
-	if (enabled)
-		glEnable(GL_LIGHT2);
-	else
-		glDisable(GL_LIGHT2);
-}

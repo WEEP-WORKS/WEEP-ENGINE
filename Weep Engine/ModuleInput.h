@@ -46,8 +46,6 @@ public:
 
 	bool GetWindowEvent(EventWindow ev);
 
-	float2 GetMouse();
-
 	void BufferInput(int key, KEY_STATE state, bool mouse);
 
 	int GetMouseX() const
