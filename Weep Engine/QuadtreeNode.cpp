@@ -62,6 +62,10 @@ void QuadTreeNode::Draw()
 	glColor3f(255, 255, 255);
 }
 
+bool QuadTreeNode::Intersect(AABB& aabb)
+{
+	return box.Intersects(aabb);
+}
 
 void QuadTreeNode::Divide()
 {

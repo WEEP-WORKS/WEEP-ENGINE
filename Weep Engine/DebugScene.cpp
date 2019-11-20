@@ -140,6 +140,14 @@ bool DebugScene::Update()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		App->quadtree->root_quadtree->Divide();
 
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
+	{
+		GameObject* new_go = new GameObject("AABB Test", App->game_object_manager->root);
+		new_go->local_bbox.minPoint = App->camera->GetEditorCamera()->GetPosition();
+		new_go->local_bbox.maxPoint = new_go->local_bbox.minPoint + float3(10.f, 10.f, 10.f);
+		App->quadtree->Insert(new_go);
+	}
+
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
 	//-------------------------------------------------------------------------
