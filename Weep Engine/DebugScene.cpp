@@ -30,6 +30,7 @@
 #include "ComponentCamera.h"
 #include "ModuleCamera3D.h"
 #include "ModuleQuadtree.h"
+#include "SceneManager.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -131,6 +132,20 @@ bool DebugScene::PreUpdate()
 		App->debug_scene->show_app_configuration = false;
 	}
 
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) != KEY_REPEAT)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+			App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+			App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::ROTATE);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+			App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
+		}
+	}
+
+
 	return ret;
 }
 
@@ -163,6 +178,8 @@ bool DebugScene::Update()
 	MenuBar(ret);
 
 	Panels();
+
+	Tools();
 
 	//-------------------------------------------------------------------------
 	//----------------------------INSPECTOR------------------------------------
@@ -220,6 +237,70 @@ bool DebugScene::Update()
 	}
 
 	return ret;
+}
+
+void DebugScene::Tools()
+{
+	ImGui::SetNextWindowPos(ImVec2(-5, 20));
+	ImGui::SetNextWindowSize(ImVec2(App->window->GetWindowSizeVec().x + 10, 27));
+	bool open = true;
+	ImGui::Begin("tool_Bar", &open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+		| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+	ImGui::SetCursorPos(ImVec2(20, 3));
+	if (ImGui::Button("Move"))
+	{
+		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::TRANSLATE);
+	}
+
+	ImGui::SetCursorPos(ImVec2(64, 3));
+	if (ImGui::Button("Rotate"))
+	{
+		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::ROTATE);
+	}
+
+	ImGui::SetCursorPos(ImVec2(120, 3));
+	if (ImGui::Button("Scale"))
+	{
+		App->game_object_manager->SetGuizmoOperation(ImGuizmo::OPERATION::SCALE);
+	}
+
+	if (App->scene_manager->GetState() == SCENE_STATE::EDIT)
+	{
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		if (ImGui::Button("Play"))
+		{
+			App->scene_manager->Play();
+		}
+
+		ImGui::SetCursorPos(ImVec2(850, 6));
+		ImGui::Text("Current: EDITING");
+	}
+	else if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
+	{
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		if (ImGui::Button("STOP"))
+		{
+			App->scene_manager->Edit();
+		}
+
+		ImGui::SetCursorPos(ImVec2(847, 3));
+		if (ImGui::Button("Pause"))
+		{
+			App->scene_manager->Pause();
+		}
+
+		ImGui::SetCursorPos(ImVec2(900, 3));
+		if (ImGui::Button("Step"))
+		{
+			App->scene_manager->Step();
+		}
+
+		ImGui::SetCursorPos(ImVec2(950, 6));
+		ImGui::Text("Current: PLAYING");
+	}
+
+	ImGui::End();
 }
 
 void DebugScene::resettest(bool &ret)
@@ -631,9 +712,9 @@ void DebugScene::AppAbout()
 		ImGui::Text("Name"); ImGui::NextColumn();
 		ImGui::Text("Version"); ImGui::NextColumn();
 		ImGui::Separator();
-		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker", "Asset Importer Library", "Image Library"};
-		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr", "Assimp", "DevIL"};
-		const char* version[LIB_NUM] = { "v2.0", "v.3.1.0", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---", "v3.1.1", "v1.8.0"};
+		const char* use[LIB_NUM] = { "Graphics", "Graphics", "Math", "Random Number Generator", "UI", "File System", "OpenGL Supporter" , "Memory Tracker", "Asset Importer Library", "Image Library", "3D Guizmo"};
+		const char* name[LIB_NUM] = { "SDL", "OpenGL", "MathGeoLib", "PCG", "ImGui", "JSonCpp", "Glew" , "mmgr", "Assimp", "DevIL", "ImGuizmo"};
+		const char* version[LIB_NUM] = { "v2.0", "v.3.1.0", "v1.5", "v.0.98" ,"v1.72b", "v1.9.1", "v2.1.0", "---", "v3.1.1", "v1.8.0", "---"};
 		static int selected = -1;
 		for (int i = 0; i < LIB_NUM; i++)
 		{
