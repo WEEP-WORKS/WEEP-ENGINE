@@ -40,7 +40,7 @@ bool GameObjectManager::PreUpdate()
 
 	root->DoForAllChildrens(&GameObject::PreUpdate);
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
-	//root->DoForAllChildrens(&GameObject::CalcBBox);
+	root->DoForAllChildrens(&GameObject::CalcBBox);
 
 	return true;
 }
@@ -49,12 +49,11 @@ bool GameObjectManager::Update()
 {
 	root->DoForAllChildrens(&GameObject::Update);
 
-	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-	{
-		if((*it)->GetMesh())
-			DrawBBox(*it);
-	}*/
-	DoForAllChildrens(&GameObjectManager::DrawBBox);
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{	
+		DrawBBox(*it);
+	}
+	//DoForAllChildrens(&GameObjectManager::DrawBBox);
 	Hierarchy();
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
@@ -391,7 +390,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 void GameObjectManager::DrawBBox(const GameObject * object)const 
 {
-	if (!object->local_bbox.IsDegenerate())
+	if (object->local_bbox.IsFinite())
 	{
 		AABB mesh_aabb = object->local_bbox;
 
@@ -403,6 +402,8 @@ void GameObjectManager::DrawBBox(const GameObject * object)const
 		GLint previous[2];
 		glGetIntegerv(GL_POLYGON_MODE, previous);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		glColor3f(255.f, 45.f, 26.f);
 
 		glLineWidth(4.0);
 
@@ -447,6 +448,9 @@ void GameObjectManager::DrawBBox(const GameObject * object)const
 		glColor3f(255, 255, 255);
 		glPopMatrix();
 	}
+	else
+		LOG("Not finite");
+	
 }
 
 const uint GameObjectManager::GetAllGameObjectNumber() const

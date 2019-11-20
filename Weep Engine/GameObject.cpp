@@ -66,8 +66,6 @@ void GameObject::CleanUp()
 		
 	}
 	components.clear();
-
-	//RELEASE(this);
 }
 
 Component* GameObject::AddComponent(const ComponentType& type)
