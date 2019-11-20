@@ -69,8 +69,7 @@ bool QuadTreeNode::Intersect(AABB& aabb)
 
 void QuadTreeNode::Divide()
 {
-	if (!IsSubdivided())
-	{
+
 		//bottom layer
 		QuadTreeNode* division1 = CreateDivision(box.minPoint, box.CenterPoint());
 		QuadTreeNode* division2 = CreateDivision(box.PointInside(0.5f, 0.f, 0.f) , box.PointInside(1.f, 0.5f, 0.5f));
@@ -83,7 +82,7 @@ void QuadTreeNode::Divide()
 		QuadTreeNode* division7 = CreateDivision(box.PointInside(0.f, 0.5f, 0.5f), box.PointInside(0.5f, 1.f, 1.f));
 		QuadTreeNode* division8 = CreateDivision(box.CenterPoint(), box.maxPoint);
 
-	}
+	
 }
 
 const bool QuadTreeNode::IsSubdivided() const

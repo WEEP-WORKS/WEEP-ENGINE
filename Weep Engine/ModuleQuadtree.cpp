@@ -31,7 +31,10 @@ void ModuleQuadtree::Insert(GameObject* go)
 	}
 	if (root_quadtree->entities.size() >= max_entities)
 	{
-		root_quadtree->Divide();
+		if (!root_quadtree->IsSubdivided())
+		{
+			root_quadtree->Divide();
+		}
 	}
 }
 
