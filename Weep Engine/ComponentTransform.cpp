@@ -126,5 +126,26 @@ void ComponentTransform::Load(const Json::Value& component)
 	App->json_helper->Fill(local_rotation_euler, component["Rotation"]);
 	local_rotation_quat = Quat::FromEulerXYZ(local_rotation_euler.x*DEGTORAD, local_rotation_euler.y*DEGTORAD, local_rotation_euler.z*DEGTORAD);
 	App->json_helper->Fill(local_scale, component["Scale"]);
+}
+
+const void ComponentTransform::Translate(const float3 & pos)
+{
+	if (pos.x != 0 || pos.y != 0 || pos.z != 0)
+		local_position += pos;
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::Rotate(const float3 & rotate)
+{
+	SetRotation(GetRotationEuler() + rotate);
+
+	RecalculateLocalTransform();
+}
+
+const void ComponentTransform::Scale(const float3 & scale)
+{
+	SetScale(GetScale() + scale);
+
 	RecalculateLocalTransform();
 }
