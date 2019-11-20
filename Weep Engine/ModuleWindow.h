@@ -4,7 +4,6 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 #include "imgui.h"
-#include "glmath.h"
 class Application;
 
 class ModuleWindow : public Module
@@ -37,11 +36,8 @@ public:
 	const char* GetAppOrganization();
 
 	void SetVersion(const char * set);
-	const Rect GetWindowRect() const;
 	string GetVersion() const;
 
-	void GetWindowSize(int & width, int & height);
-	const vec2 GetWindowSizeVec();
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;

@@ -16,7 +16,6 @@ class ModuleCamera3D;
 class ModuleImporter;
 class DebugScene;
 class GameObjectManager;
-class SceneManager;
 class ModuleTexture;
 class ModuleQuadtree;
 
@@ -82,7 +81,6 @@ public:
 	ModuleTexture*	texture = nullptr;
 	ModuleFileSystem* file_system = nullptr;
 	ModuleQuadtree* quadtree = nullptr;
-	SceneManager*	   scene_manager = nullptr;
 
 	Profiler*		   profiler = nullptr;
 

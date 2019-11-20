@@ -106,16 +106,10 @@ Camera3D * ModuleCamera3D::GetCurrentCamera() const
 	return current_camera;
 }
 
-void ModuleCamera3D::SetCurrentCameraToEditorCamera()
-{
-	current_camera = editor_camera;
-}
-
 const float * ModuleCamera3D::GetViewMatrix() const
 {
-	return current_camera->GetOpenGLViewMatrix().ptr();
+	return current_camera->GetViewMatrix().Transposed().ptr();
 }
-
 
 // -----------------------------------------------------------------
 bool ModuleCamera3D::Update()
@@ -286,15 +280,16 @@ const float4x4 Camera3D::GetProjectionMatrix() const
 	return frustum.ProjectionMatrix();
 }
 
-const float4x4 Camera3D::GetOpenGLViewMatrix() const
+const float * Camera3D::GetOpenGLViewMatrix() const
 {
-	float4x4 view = frustum.ViewMatrix();
-	return view.Transposed();
+	static float4x4 view = frustum.ViewMatrix();
+	view.Transpose();
+	return view.ptr();
 }
 
-const float4x4 Camera3D::GetOpenGLProjectionMatrix() const
+const float * Camera3D::GetOpenGLProjectionMatrix() const
 {
-	return frustum.ProjectionMatrix().Transposed();
+	return frustum.ProjectionMatrix().Transposed().ptr();
 }
 
 

@@ -5,10 +5,6 @@
 #include "Globals.h"
 #include<typeinfo>
 
-#include "ImGuizmo.h"
-#include "MathGeoLib/include/MathGeoLib.h"
-
-
 class GameObject;
 class ComponentMesh;
 
@@ -27,8 +23,6 @@ public:
 	bool CleanUp() override;
 	void Save(Json::Value&) const override;
 	void Load(const Json::Value&) override;
-
-	void SetGuizmoOperation(ImGuizmo::OPERATION op);
 
 	//GameObject* CreateGeometryShape(int sides);
 
@@ -58,6 +52,11 @@ public:
 
 	GameObject* GetGOById(const uint& id) const;
 
+
+
+
+
+
 public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
@@ -74,7 +73,7 @@ public:
 
 	list<GameObject*> to_delete;
 
-	GameObject* closest = nullptr;
+
 
 
 private:
@@ -87,10 +86,9 @@ private:
 
 	void DrawBBox(const GameObject * object) const;
 
-	void MousePick();
 
-	ImGuizmo::OPERATION current_gizmo_operation = ImGuizmo::OPERATION::TRANSLATE;
-	float3 last_moved_transformation = float3::zero;
+
+
 };
 
 #endif // !__MODULEGAMEOBJECTMANAGER_H__
