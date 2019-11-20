@@ -383,6 +383,12 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Sources\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuizmo.h">
+      <Filter>Sources\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Sources\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -588,6 +594,12 @@
     </ClCompile>
     <ClCompile Include="QuadtreeNode.cpp">
       <Filter>Sources\Tools</Filter>
+    <ClCompile Include="ImGuizmo.cpp">
+      <Filter>Sources\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Sources\Scenes</Filter>
+    </ClCompile>
     <ClCompile Include="ImGuizmo.cpp">
       <Filter>Sources\ImGui</Filter>
     </ClCompile>
