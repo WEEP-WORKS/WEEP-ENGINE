@@ -224,7 +224,7 @@ ComponentCamera* GameObject::GetCam() const
 	{
 		if ((*iter)->type == ComponentType::CAMERA)
 		{
-			return (ComponentCamera*)(*iter);
+			return (ComponentCamera*)(*iter); //TODO: only get one? wrong
 		}
 	}
 
@@ -400,11 +400,11 @@ void GameObject::CalcGlobalTransform()
 
 void GameObject::CalcBBox()
 {
-	local_bbox.SetNegativeInfinity();
-
+	//local_bbox.SetNegativeInfinity();
+/*
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 		(*it)->OnGetBoundingBox(local_bbox);
-
+*/
 	if (local_bbox.IsFinite())
 		local_bbox.Transform(ConstGetTransform()->GetGlobalTransform());
 }

@@ -67,14 +67,6 @@ void ComponentMesh::CleanUp()
 	RELEASE(mesh_data);
 }
 
-void ComponentMesh::OnGetBoundingBox(AABB& box)
-{
-	box.Enclose(GetBbox());
-}
-
-AABB ComponentMesh::GetBbox() {
-	return mesh_data->aabb;
-}
 
 void ComponentMesh::Render()
 {
