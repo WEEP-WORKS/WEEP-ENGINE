@@ -10,7 +10,6 @@ ModuleQuadtree::ModuleQuadtree()
 bool ModuleQuadtree::Update()
 {
 	Draw();
-
 	return true;
 }
 
