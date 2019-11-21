@@ -5,14 +5,21 @@
 #include "Globals.h"
 #include"QuadtreeNode.h"
 #include <functional>
+#include <vector>
+#include "MathGeoLib/include/Geometry/Frustum.h"
+
+
 class GameObject;
+
 
 class ModuleQuadtree : public Module
 {
 public:
 	ModuleQuadtree();
 
-	bool Update() override;
+	bool PreUpdate() override;
+
+	bool PostUpdate() override;
 
 	bool CleanUp() override;
 
@@ -26,7 +33,17 @@ public:
 
 	void DeleteQuadTreeNode(QuadtreeNode* to_delete);
 
+	void DeleteGOFromQuadtree(GameObject*);
+
+	bool IsRootReset() const;
+
+	void ResetRoot();
+
 	const uint GetMaxEntities() const;
+
+	std::vector<GameObject*> GetAllGameObjectsinsideFrustrum(Frustum& frustrum);
+
+	QuadtreeNode* GetQuadtreeNodeWithThisGO(GameObject*);
 
 	void DoForAllQuadtreeNodes(std::function<QuadtreeNode::CollisionType(QuadtreeNode*, GameObject*)> funct, GameObject* go);
 	void DoForAllQuadtreeNodes(std::function<void(QuadtreeNode*)> funct);
@@ -36,6 +53,10 @@ public:
 	std::vector<GameObject*> GetAllGameObjects();
 
 	QuadtreeNode* root_quadtree;
+
+	bool to_recalculate = false;
+
+	bool quadtree_dynamic = false;
 
 private:
 

@@ -11,6 +11,7 @@
 #include "par_shapes.h"
 #include "imgui_internal.h"
 #include "ModuleWindow.h"
+#include "ModuleQuadtree.h"
 //#include <functional>
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
@@ -175,6 +176,7 @@ void GameObjectManager::Destroy(GameObject * go)
 
 	go->CleanUp();
 	ReleaseGameObject(go);
+	App->quadtree->DeleteGOFromQuadtree(go);
 
 }
 

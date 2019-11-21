@@ -76,6 +76,11 @@ void QuadtreeNode::Clear()
 
 }
 
+void QuadtreeNode::DeleteGOFromEntities(GameObject* go)
+{
+	entities.erase(std::find(entities.begin(), entities.end(), go));
+}
+
 QuadtreeNode::CollisionType QuadtreeNode::OnCollision(AABB& aabb)
 {
 	QuadtreeNode::CollisionType ret = QuadtreeNode::CollisionType::NONE_COLLISION;
@@ -189,4 +194,12 @@ QuadtreeNode::CollisionType QuadtreeNode::InsertGOInThis(GameObject* go)
 		break;
 	}
 	return col_type;
+}
+
+bool QuadtreeNode::IsThisInsideFrustrum(Frustum& frustrum)
+{
+	if(frustrum.Intersects(box))
+		return true;
+
+	return false;
 }

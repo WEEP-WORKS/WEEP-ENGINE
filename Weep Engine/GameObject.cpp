@@ -9,9 +9,10 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
+#include "ModuleQuadtree.h"
 #include <list>
 
-GameObject::GameObject(std::string name, GameObject* parent) : name(name), parent(parent)
+GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
 	LOG("New Game Object created!");
 	if (parent != nullptr)
@@ -22,6 +23,13 @@ GameObject::GameObject(std::string name, GameObject* parent) : name(name), paren
 	AddComponent(ComponentType::TRANSFORM);
 
 	id = App->random->Int();
+
+	local_bbox.SetNegativeInfinity();
+}
+
+GameObject::GameObject(bool is_static) : is_static(is_static) 
+{
+	local_bbox.SetNegativeInfinity();
 }
 
 void GameObject::PreUpdate()
@@ -231,6 +239,11 @@ ComponentCamera* GameObject::GetCam() const
 	return nullptr;
 }
 
+const bool GameObject::IsStatic() const
+{
+	return is_static;
+}
+
 
 int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 {
@@ -428,6 +441,25 @@ void GameObject::CalcBBox()
 		GetMesh()->OnGetBoundingBox(local_bbox);
 		local_bbox.TransformAsAABB(ConstGetTransform()->GetGlobalTransform());
 	}
+}
+
+bool GameObject::AddAABB(AABB& new_AABB)
+{
+	bool ret = false;
+	if (local_bbox.IsDegenerate())
+	{
+		local_bbox = new_AABB;
+		if (is_static)
+			App->quadtree->Insert(this);
+
+		ret = true;
+	}
+	else
+	{
+		LOG("This game object has a AABB. Can't add another!");
+	}
+
+	return ret;
 }
 
 void GameObject::Save(Json::Value& scene) const

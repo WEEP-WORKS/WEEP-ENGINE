@@ -5,6 +5,7 @@
 #include "ModuleRenderer3D.h"
 #include "ComponentMesh.h"
 #include "ModuleGameObjectManager.h"
+#include "ModuleQuadtree.h"
 
 ComponentCamera::ComponentCamera()
 {
@@ -19,33 +20,20 @@ void ComponentCamera::Update()
 
 	if (camera->GetFrustumCulling())
 	{
-		std::list<GameObject*> all_childrens;
+		int all_gameObjects = App->game_object_manager->GetAllGameObjectNumber();
+		std::vector<GameObject*> game_objects_inside_frustrum = App->quadtree->GetAllGameObjectsinsideFrustrum(camera->GetFrustum());
 
-		all_childrens.push_back(App->game_object_manager->root);
-
-		while (!all_childrens.empty())
-		{
-			GameObject* current = (*all_childrens.begin());
-			all_childrens.pop_front();
-			if (current != nullptr)
+			for(std::vector<GameObject*>::iterator iter = game_objects_inside_frustrum.begin(); iter != game_objects_inside_frustrum.end(); ++iter)
 			{
-				for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+				if ((*iter)->GetMesh())
 				{
-					all_childrens.push_back(*iter);
-				}
-
-				if (current->GetMesh())
-				{
-					if (camera->CheckInsideFrustum(current->local_bbox))
+					if (camera->CheckInsideFrustum((*iter)->local_bbox))
 					{
-						if(current != nullptr)
-							current->isInsideFrustum = true;
+						if((*iter) != nullptr)
+							(*iter)->isInsideFrustum = true;
 					}
 				}
 			}
-		}
-
-		
 	}
 
 	//float3 corners[8];

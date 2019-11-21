@@ -213,6 +213,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			model->mesh_data->aabb = aabb;
 
+			object->AddAABB(aabb);
+				
 			//// Generate global OBB
 			//OBB obb = aabb;
 			//obb.Transform(object->transform->GetGlobalTransform());

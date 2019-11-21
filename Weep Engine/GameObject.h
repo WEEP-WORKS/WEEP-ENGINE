@@ -19,8 +19,8 @@ enum class ComponentType;
 class GameObject
 {
 public:
-	GameObject(std::string name, GameObject* parent);
-	GameObject() {};
+	GameObject(std::string name, GameObject* parent, bool is_static = true);
+	GameObject(bool is_static = true);
 
 	void PreUpdate();
 	void Update(); //this is not from the module class. This function will be called from objectManager and will call Components update or something... I don't know yet.
@@ -60,6 +60,8 @@ public:
 	ComponentTransform* GetTransform() const;
 	const ComponentTransform* ConstGetTransform() const;
 
+	const bool IsStatic()const;
+
 	int DoForAllChildrens(std::function<void(GameObject*)>);
 
 	void DoForAllChildrens(std::function<void(GameObject*, float&, GameObject*&)>, float&, GameObject*&);
@@ -85,6 +87,8 @@ public:
 	void CalcGlobalTransform();
 	void CalcBBox();
 
+	bool AddAABB(AABB&);
+
 	const bool IsParentOfMyParents(const GameObject* possible_parent) const;
 	const bool IsThisGOId(const uint& id) const ;
 	void TestRay(float& distance, GameObject*& closest);//const LineSegment & segment, GameObject *& closest, float & dist
@@ -109,6 +113,7 @@ private:
 	bool					selected		= false;
 	std::string				name			= "";
 	bool					active			= true;
+	bool					is_static		= true;
 
 };
 

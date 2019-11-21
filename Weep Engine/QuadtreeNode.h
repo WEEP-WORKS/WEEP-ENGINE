@@ -24,6 +24,7 @@ public:
 
 	void Clear();
 
+	void DeleteGOFromEntities(GameObject*);
 
 	void Divide();
 	const bool IsSubdivided() const;
@@ -33,6 +34,8 @@ public:
 	AABB box;
 
 	CollisionType InsertGOInThis(GameObject* go);
+
+	bool IsThisInsideFrustrum(Frustum& frustrum);
 
 	QuadtreeNode* parent = nullptr;
 
