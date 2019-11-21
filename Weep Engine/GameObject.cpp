@@ -258,6 +258,27 @@ int GameObject::DoForAllChildrens(std::function<void(GameObject*)> funct)
 	return number_childrens;
 }
 
+void GameObject::DoForAllChildrens(std::function<void(GameObject*, float&, GameObject*&)> funct, float& distance, GameObject*& closest)
+{
+	std::list<GameObject*> all_childrens;
+	all_childrens.push_back(this);
+
+	while (!all_childrens.empty())
+	{
+		GameObject* current = (*all_childrens.begin());
+		all_childrens.pop_front();
+		if (current != nullptr)
+		{
+			for (std::vector<GameObject*>::const_iterator iter = current->childrens.cbegin(); iter != current->childrens.cend(); ++iter)
+			{
+				all_childrens.push_back(*iter);
+			}
+			funct(current, distance, closest);
+		}
+	}
+
+}
+
 int GameObject::DoForAllChildrens(std::function<void(GameObject*, Json::Value&)> funct, Json::Value& scene)
 {
 	int number_childrens = -1; // -1 to not count this game object and only his childrens.
@@ -400,13 +421,13 @@ void GameObject::CalcGlobalTransform()
 
 void GameObject::CalcBBox()
 {
-	local_bbox.SetNegativeInfinity();
+	if (GetMesh())
+	{
+		local_bbox.SetNegativeInfinity();
 
-	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
-		(*it)->OnGetBoundingBox(local_bbox);
-
-
+		GetMesh()->OnGetBoundingBox(local_bbox);
 		local_bbox.TransformAsAABB(ConstGetTransform()->GetGlobalTransform());
+	}
 }
 
 void GameObject::Save(Json::Value& scene) const
@@ -497,7 +518,7 @@ bool PointInRect(float2 point_xy, Rect rect_xywh)
 	return false;
 }
 
-void GameObject::TestRay()
+void GameObject::TestRay(float& distance, GameObject*& closest)
 {
 	// Check if intersects with bbox
 	if (local_bbox.IsFinite())
@@ -514,11 +535,9 @@ void GameObject::TestRay()
 			float first_normalized_y = (mouse_pos.y - rect.top) / (rect.bottom - rect.top);
 
 			float normalized_x = (first_normalized_x * 2) - 1;
-			float normalized_y = 1 - (first_normalized_y * 2);
+			float normalized_y = -((first_normalized_y * 2) - 1);
 
-			LineSegment picking = App->camera->GetCurrentCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
-
-			float distance1 = 99999999999;
+			LineSegment picking = App->camera->GetEditorCamera()->GetFrustum().UnProjectLineSegment(normalized_x, normalized_y);
 
 			if (picking.Intersects(local_bbox))
 			{
@@ -541,14 +560,14 @@ void GameObject::TestRay()
 						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
 						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
 
-						float distance;
+						float current_distance;
 						float3 hit_point;
-						if (segment_local_space.Intersects(tri, &distance, &hit_point))
+						if (segment_local_space.Intersects(tri, &current_distance, &hit_point))
 						{
-							if (distance < distance1)
+							if (current_distance < distance)
 							{
-								distance1 = distance;
-								App->game_object_manager->closest = this;
+								distance = current_distance;
+								closest = this;
 							}
 						}
 					}

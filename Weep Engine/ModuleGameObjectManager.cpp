@@ -50,11 +50,10 @@ bool GameObjectManager::Update()
 {
 	root->DoForAllChildrens(&GameObject::Update);
 
-	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		MousePick();
-	}*/
+	}
 	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if((*it)->GetMesh())
@@ -657,8 +656,10 @@ int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectMa
 
 void GameObjectManager::MousePick()
 {
+	float distance = 999999.f;
+	GameObject* closest = nullptr;
 	//picking, closest, distance
-	root->DoForAllChildrens(&GameObject::TestRay);
+	root->DoForAllChildrens(&GameObject::TestRay, distance, closest);
 
 	if (closest != nullptr)
 	{
