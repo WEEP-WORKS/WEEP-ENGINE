@@ -42,6 +42,10 @@ public:
 
 	void CleanUp() override;
 
+	void OnGetBoundingBox(AABB & box);
+
+	AABB GetBbox();
+
 	void SetBuffersWithData();
 
 	void CalculateNormals();

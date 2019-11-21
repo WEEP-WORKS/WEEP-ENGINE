@@ -36,7 +36,7 @@ void ComponentCamera::Update()
 
 				if (current->GetMesh())
 				{
-					if (camera->CheckInsideFrustum(current->local_bbox))
+					if (camera->CheckInsideFrustum(current->GetMesh()->GetBbox()))
 					{
 						if(current != nullptr)
 							current->isInsideFrustum = true;

@@ -64,6 +64,8 @@ struct MeshData
 
 	BuffersData<float> uvs;
 
+	AABB aabb;
+
 };
 
 class Component
@@ -84,6 +86,8 @@ public:
 
 	const bool Component::IsActive() const { return is_active; };
 	void Component::SetActive(bool to_active) { is_active = to_active; };
+
+	virtual void OnGetBoundingBox(AABB &bbox) {};
 
 private:
 	bool			is_active = true;

@@ -207,9 +207,11 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			
 			AABB aabb;
 
-			object->local_bbox.SetNegativeInfinity();
+			aabb.SetNegativeInfinity();
 
-			object->local_bbox.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
+			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
+
+			model->mesh_data->aabb = aabb;
 
 			//// Generate global OBB
 			//OBB obb = aabb;

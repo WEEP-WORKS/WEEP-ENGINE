@@ -41,7 +41,7 @@ bool GameObjectManager::PreUpdate()
 
 	root->DoForAllChildrens(&GameObject::PreUpdate);
 	root->DoForAllChildrens(&GameObject::CalcGlobalTransform);
-	root->DoForAllChildrens(&GameObject::CalcBBox);
+	//root->DoForAllChildrens(&GameObject::CalcBBox);
 
 	return true;
 }
@@ -54,14 +54,17 @@ bool GameObjectManager::Update()
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		MousePick();
-	}*/
+	}
+
+	root->DoForAllChildrens(&GameObject::Update);
 
 	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
-		DrawBBox(*it);
-	}
+		if((*it)->GetMesh())
+			DrawBBox(*it);
+	}*/
 	
-	//DoForAllChildrens(&GameObjectManager::DrawBBox);
+	DoForAllChildrens(&GameObjectManager::DrawBBox);
 	Hierarchy();
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
@@ -466,7 +469,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 void GameObjectManager::DrawBBox(const GameObject * object)const 
 {
-	if (object->local_bbox.IsFinite())
+	if (!object->local_bbox.IsDegenerate())
 	{
 		AABB mesh_aabb = object->local_bbox;
 
