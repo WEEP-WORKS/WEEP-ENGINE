@@ -405,8 +405,8 @@ void GameObject::CalcBBox()
 	for (vector<Component*>::iterator it = components.begin(); it != components.end(); it++)
 		(*it)->OnGetBoundingBox(local_bbox);
 
-	if (local_bbox.IsFinite())
-		local_bbox.Transform(ConstGetTransform()->GetGlobalTransform());
+
+		local_bbox.TransformAsAABB(ConstGetTransform()->GetGlobalTransform());
 }
 
 void GameObject::Save(Json::Value& scene) const
