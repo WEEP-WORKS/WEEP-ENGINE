@@ -180,13 +180,8 @@ bool ModuleRenderer3D::PreUpdate()
 
 bool ModuleRenderer3D::Update()
 {
-	//ImGuizmo::SetDrawlist();
-	/*float2 position = float2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-	float2 size = float2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);*/
-
-	//OnResize(size.x, size.y);
-
-	//ImGuizmo::SetRect(position.x, position.y, size.x, size.y);
+	//OnResize(App->window->GetWidth(), App->window->GetHeight());
+	//ImGuizmo::SetRect(0, 0, App->window->GetWidth(), App->window->GetHeight());
 	return true;
 }
 
@@ -224,6 +219,8 @@ bool ModuleRenderer3D::CleanUp()
 void ModuleRenderer3D::OnResize(int width, int height)
 {
 	App->camera->GetCurrentCamera()->SetAspectRatio((float)width / (float)height);
+
+	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
