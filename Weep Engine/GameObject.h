@@ -62,6 +62,8 @@ public:
 
 	int DoForAllChildrens(std::function<void(GameObject*)>);
 
+	void DoForAllChildrens(std::function<void(GameObject*, float&, GameObject*&)>, float&, GameObject*&);
+
 	GameObject* DoForAllChildrens(std::function<const bool(const GameObject*, const uint& id)>, const uint& id);
 
 	int DoForAllChildrens(std::function<void(GameObject*, Json::Value&)>, Json::Value&);
@@ -85,7 +87,7 @@ public:
 
 	const bool IsParentOfMyParents(const GameObject* possible_parent) const;
 	const bool IsThisGOId(const uint& id) const ;
-	void TestRay();//const LineSegment & segment, GameObject *& closest, float & dist
+	void TestRay(float& distance, GameObject*& closest);//const LineSegment & segment, GameObject *& closest, float & dist
 
 
 public:

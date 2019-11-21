@@ -50,18 +50,17 @@ bool GameObjectManager::Update()
 {
 	root->DoForAllChildrens(&GameObject::Update);
 
-	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		MousePick();
-	}*/
-
-	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-	{
-		DrawBBox(*it);
 	}
+	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		if((*it)->GetMesh())
+			DrawBBox(*it);
+	}*/
 	
-	//DoForAllChildrens(&GameObjectManager::DrawBBox);
+	DoForAllChildrens(&GameObjectManager::DrawBBox);
 	Hierarchy();
 
 	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
@@ -466,15 +465,15 @@ void GameObjectManager::PrintGoList(GameObject * object)
 
 void GameObjectManager::DrawBBox(const GameObject * object)const 
 {
-	if (object->local_bbox.IsFinite())
+	if (!object->local_bbox.IsDegenerate())
 	{
 		AABB mesh_aabb = object->local_bbox;
 
 		static float3 corners[8];
 		mesh_aabb.GetCornerPoints(corners);
 
-		glPushMatrix();
-		glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
+		//glPushMatrix();
+		//glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());
 		GLint previous[2];
 		glGetIntegerv(GL_POLYGON_MODE, previous);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -520,7 +519,7 @@ void GameObjectManager::DrawBBox(const GameObject * object)const
 		glLineWidth(1.0f);
 
 		glColor3f(255, 255, 255);
-		glPopMatrix();
+	//	glPopMatrix();
 	}
 }
 
@@ -657,8 +656,10 @@ int GameObjectManager::DoForAllChildrensVertical(std::function<void(GameObjectMa
 
 void GameObjectManager::MousePick()
 {
+	float distance = 999999.f;
+	GameObject* closest = nullptr;
 	//picking, closest, distance
-	root->DoForAllChildrens(&GameObject::TestRay);
+	root->DoForAllChildrens(&GameObject::TestRay, distance, closest);
 
 	if (closest != nullptr)
 	{
