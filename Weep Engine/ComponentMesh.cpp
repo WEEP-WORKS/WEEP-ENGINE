@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "ModuleImporter.h"
+#include "ResourceTexture.h"
 ComponentMesh::ComponentMesh()
 {
 	mesh_data = new MeshData();
@@ -134,8 +135,8 @@ void ComponentMesh::RenderModel()
 		glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
 
 
-		//bind texture
-		glBindTexture(GL_TEXTURE_2D, texture->id_texture);
+		//bind TEXTURE
+		glBindTexture(GL_TEXTURE_2D, texture->GetResource(texture->GetResourceID())->id_texture);
 	}
 
 	//indexs final
@@ -289,7 +290,7 @@ void ComponentMesh::Save(Json::Value& scene) const
 
 	App->importer->CreateOwnFile(this, object->GetName());
 	comonent_mesh["Model name"] = string(object->GetName() + string(".mesh"));
-	//LoadOwnFile(string(name + ".mesh"));
+	//LoadOwnFile(string(name + ".MESH"));
 	scene.append(comonent_mesh);
 }
 

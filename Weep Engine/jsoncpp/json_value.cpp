@@ -113,8 +113,8 @@ static inline bool InRange(double d, T min, U max) {
 
 /** Duplicates the specified string value.
  * @param value Pointer to the string to duplicate. Must be zero-terminated if
- *              length is "unknown".
- * @param length Length of the value. if equals to unknown, then it will be
+ *              length is "UNKNOWN".
+ * @param length Length of the value. if equals to UNKNOWN, then it will be
  *               computed using strlen(value).
  * @return Pointer on the duplicate instance of string.
  */

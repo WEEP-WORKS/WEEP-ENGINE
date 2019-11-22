@@ -31,7 +31,7 @@
 #include "../Math/SSEMath.h"
 
 // If defined, we preprocess our TriangleMesh data structure to contain (v0, v1-v0, v2-v0)
-// instead of (v0, v1, v2) triplets for faster ray-triangle mesh intersection.
+// instead of (v0, v1, v2) triplets for faster ray-triangle MESH intersection.
 #define SOA_HAS_EDGES
 
 MATH_BEGIN_NAMESPACE

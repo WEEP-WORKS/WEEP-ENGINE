@@ -1000,7 +1000,7 @@ void	operator delete(void *reportedAddress)
 	if (reportedAddress) m_deallocator(sourceFile, sourceLine, sourceFunc, m_alloc_delete, reportedAddress);
 	else if (alwaysLogAll) log("[-] ----- %8s of NULL                      by %s", allocationTypes[m_alloc_delete], ownerString(sourceFile, sourceLine, sourceFunc));
 
-	// Resetting the globals insures that if at some later time, somebody calls our memory manager from an unknown
+	// Resetting the globals insures that if at some later time, somebody calls our memory manager from an UNKNOWN
 	// source (i.e. they didn't include our H file) then we won't think it was the last allocation.
 
 	resetGlobals();
@@ -1024,7 +1024,7 @@ void	operator delete[](void *reportedAddress)
 	else if (alwaysLogAll)
 		log("[-] ----- %8s of NULL                      by %s", allocationTypes[m_alloc_delete_array], ownerString(sourceFile, sourceLine, sourceFunc));
 
-	// Resetting the globals insures that if at some later time, somebody calls our memory manager from an unknown
+	// Resetting the globals insures that if at some later time, somebody calls our memory manager from an UNKNOWN
 	// source (i.e. they didn't include our H file) then we won't think it was the last allocation.
 
 	resetGlobals();
@@ -1185,7 +1185,7 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 
 		if (alwaysLogAll) log("[+] ---->             addr 0x%08X", reinterpret_cast<unsigned int>(au->reportedAddress));
 
-		// Resetting the globals insures that if at some later time, somebody calls our memory manager from an unknown
+		// Resetting the globals insures that if at some later time, somebody calls our memory manager from an UNKNOWN
 		// source (i.e. they didn't include our H file) then we won't think it was the last allocation.
 
 		resetGlobals();
@@ -1384,7 +1384,7 @@ void	*m_reallocator(const char *sourceFile, const unsigned int sourceLine, const
 
 		if (alwaysLogAll) log("[~] ---->             addr 0x%08X", reinterpret_cast<unsigned int>(au->reportedAddress));
 
-		// Resetting the globals insures that if at some later time, somebody calls our memory manager from an unknown
+		// Resetting the globals insures that if at some later time, somebody calls our memory manager from an UNKNOWN
 		// source (i.e. they didn't include our H file) then we won't think it was the last allocation.
 
 		resetGlobals();
@@ -1498,7 +1498,7 @@ void	m_deallocator(const char *sourceFile, const unsigned int sourceLine, const 
 			reservoir = au;
 		}
 
-		// Resetting the globals insures that if at some later time, somebody calls our memory manager from an unknown
+		// Resetting the globals insures that if at some later time, somebody calls our memory manager from an UNKNOWN
 		// source (i.e. they didn't include our H file) then we won't think it was the last allocation.
 
 		resetGlobals();

@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include <string>
+class ResourceTexture;
 
 class ComponentTexture : public Component
 {
@@ -18,19 +19,23 @@ public:
 	void Save(Json::Value&) const override;
 	void Load(const Json::Value&) override;
 
+	const ResourceTexture* GetResource(UID id) const;
+	ResourceTexture* GetResource(UID id) ;
+
+	const UID GetResourceID() const;
+	void SetResourceID(UID);
+
 
 public:
 
-	bool			has_texture				= false;
-	GLuint			id_texture				= 0;
-	std::string		texture_path			= "";
-	int				texture_width			= 0;
-	int				texture_height			= 0;
+	bool			has_texture				= false; //erase
 
 private:
 
 	bool			texture_active			= false;
 	bool			activate_checkers		= false;
+
+	UID resource_id = 0u;
 
 };
 

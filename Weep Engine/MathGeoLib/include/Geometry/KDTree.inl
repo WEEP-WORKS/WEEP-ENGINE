@@ -358,7 +358,7 @@ inline void KdTree<T>::RayQuery(const Ray &r, Func &nodeProcessFunc)
 	StackPtr entryPoint = 0;
 	stack[entryPoint].t = tNear;
 
-	// Check if the ray has internal or external origin relative to the scene root node.
+	// Check if the ray has internal or external origin relative to the SCENE root node.
 	stack[entryPoint].pos = r.pos + Max(tNear, 0.f) * r.dir;
 
 	StackPtr exitPoint = 1; // ==entryPoint+1;

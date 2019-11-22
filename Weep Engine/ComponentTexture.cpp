@@ -5,7 +5,8 @@
 #include "ModuleTexture.h"
 #include "ModuleGameObjectManager.h"
 #include "ComponentMesh.h"
-
+#include "ResourceManagment.h"
+#include "ResourceTexture.h"
 void ComponentTexture::ActivateThisTexture()
 {
 	
@@ -75,12 +76,12 @@ void ComponentTexture::InspectorDraw()
 	ImGui::SameLine();
 
 	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen)) {
-
-		ImGui::Text("Texture Path: %s ", texture_path.c_str());
+		const ResourceTexture* text_info = GetResource(resource_id);
+		ImGui::Text("Texture Path: %s ", text_info->texture_path.c_str());
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");
-		ImGui::Text("Width: %i px", texture_width);
-		ImGui::Text("Height: %i px", texture_height);
+		ImGui::Text("Width: %i px", text_info->texture_width);
+		ImGui::Text("Height: %i px", text_info->texture_height);
 		ImGui::Checkbox("Activate Checkers", &activate_checkers);
 
 	}
@@ -93,7 +94,8 @@ void ComponentTexture::Save(Json::Value& scene) const
 
 	component_texture["type"] = (int)type;
 
-	component_texture["Texture Path"] = texture_path;
+
+	component_texture["Texture Path"] = GetResource(resource_id)->texture_path;
 	component_texture["Texture Active"] = texture_active;
 
 	scene.append(component_texture);
@@ -105,6 +107,26 @@ void ComponentTexture::Load(const Json::Value& component)
 	if (component["Texture Active"].asBool())
 		ActivateThisTexture();
 
-	id_texture = App->texture->LoadTexture(component["Texture Path"].asCString(), texture_width, texture_height);
-	texture_path = component["Texture Path"].asString();
+	App->texture->LoadTexture(component["Texture Path"].asCString(), this);
+
+}
+
+const ResourceTexture* ComponentTexture::GetResource(UID id) const
+{
+	return (ResourceTexture*)App->resource_managment->GetByID(id);
+}
+
+ResourceTexture* ComponentTexture::GetResource(UID id) 
+{
+	return (ResourceTexture*)App->resource_managment->GetByID(id);
+}
+
+const UID ComponentTexture::GetResourceID() const
+{
+	return resource_id;
+}
+
+void ComponentTexture::SetResourceID(UID id)
+{
+	resource_id = id;
 }

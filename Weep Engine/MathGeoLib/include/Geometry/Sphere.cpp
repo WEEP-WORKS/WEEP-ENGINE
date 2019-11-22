@@ -460,7 +460,7 @@ int Sphere::IntersectLine(const float3 &linePos, const float3 &lineDir, const fl
 	    || (linePos - sphereCenter) + t * lineDir ||^2 == sphereRadius^2. */
 
 	// This equation represents the set of points which lie both on the line and the sphere. There is only one
-	// unknown variable, t, for which we solve to get the actual points of intersection.
+	// UNKNOWN variable, t, for which we solve to get the actual points of intersection.
 
 	// Compute variables from the above equation:
 	const float3 a = linePos - sphereCenter;

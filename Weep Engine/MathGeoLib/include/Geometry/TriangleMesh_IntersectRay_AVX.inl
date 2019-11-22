@@ -14,7 +14,7 @@
 
 /** @file TriangleMesh_IntersectRay_AVX.inl
 	@author Jukka Jylänki
-	@brief AVX implementation of ray-mesh intersection routines. */
+	@brief AVX implementation of ray-MESH intersection routines. */
 
 #include "../Math/SSEMath.h"
 

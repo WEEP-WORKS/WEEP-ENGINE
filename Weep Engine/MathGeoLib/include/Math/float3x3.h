@@ -158,7 +158,7 @@ public:
 			or your modeling software is using, and it is best to pick one convention for all your objects, and be
 			consistent. This input parameter must be a normalized vector. This vector must be perpendicular to the
 			vector localForward, i.e. localForward.Dot(localUp) == 0.
-		@param worldUp Specifies the global up direction of the scene in world space. Simply rotating one vector to
+		@param worldUp Specifies the global up direction of the SCENE in world space. Simply rotating one vector to
 			coincide with another (localForward->targetDirection) would cause the up direction of the resulting
 			orientation to drift (e.g. the model could be looking at its target its head slanted sideways). To keep
 			the up direction straight, this function orients the localUp direction of the model to point towards the

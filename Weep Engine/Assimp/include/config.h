@@ -212,13 +212,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // ---------------------------------------------------------------------------
 /** @brief Configures the #aiProcess_PreTransformVertices step to
- *  keep the scene hierarchy. Meshes are moved to worldspace, but
+ *  keep the SCENE hierarchy. Meshes are moved to worldspace, but
  *  no optimization is performed (read: meshes with equal materials are not
  *  joined. The total number of meshes won't change).
  *
- * This option could be of use for you if the scene hierarchy contains
+ * This option could be of use for you if the SCENE hierarchy contains
  * important additional information which you intend to parse.
- * For rendering, you can still render all meshes in the scene without
+ * For rendering, you can still render all meshes in the SCENE without
  * any transformations.
  * Property type: bool. Default value: false.
  */
@@ -228,7 +228,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // ---------------------------------------------------------------------------
 /** @brief Configures the #aiProcess_PreTransformVertices step to normalize
  *  all vertex components into the [-1,1] range. That is, a bounding box
- *  for the whole scene is computed, the maximum component is taken and all
+ *  for the whole SCENE is computed, the maximum component is taken and all
  *  meshes are scaled appropriately (uniformly of course!).
  *  This might be useful if you don't know the spatial dimension of the input
  *  data*/
@@ -237,7 +237,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // ---------------------------------------------------------------------------
 /** @brief Configures the #aiProcess_PreTransformVertices step to use
- *  a users defined matrix as the scene root node transformation before
+ *  a users defined matrix as the SCENE root node transformation before
  *  transforming vertices.
  *  Property type: bool. Default value: false.
  */
@@ -246,7 +246,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // ---------------------------------------------------------------------------
 /** @brief Configures the #aiProcess_PreTransformVertices step to use
- *  a users defined matrix as the scene root node transformation before
+ *  a users defined matrix as the SCENE root node transformation before
  *  transforming vertices. This property correspond to the 'a1' component
  *  of the transformation matrix.
  *  Property type: aiMatrix4x4.
@@ -411,7 +411,7 @@ enum aiComponent
      * Use aiComponent_COLORn(N) to specify the N'th set */
     aiComponent_COLORS = 0x8,
 
-    /** ALL texture UV sets
+    /** ALL TEXTURE UV sets
      * aiComponent_TEXCOORDn(N) to specify the N'th set  */
     aiComponent_TEXCOORDS = 0x10,
 
@@ -500,7 +500,7 @@ enum aiComponent
 
 // ---------------------------------------------------------------------------
 /** @brief Input parameter to the #aiProcess_FindInvalidData step:
- *  Set to true to ignore texture coordinates. This may be useful if you have
+ *  Set to true to ignore TEXTURE coordinates. This may be useful if you have
  *  to assign different kind of textures like one for the summer or one for the winter.
  */
 #define AI_CONFIG_PP_FID_IGNORE_TEXTURECOORDS        \
@@ -650,7 +650,7 @@ enum aiComponent
     "IMPORT_FBX_OPTIMIZE_EMPTY_ANIMATION_CURVES"
 
 // ---------------------------------------------------------------------------
-/** @brief Set whether the fbx importer will use the legacy embedded texture naming.
+/** @brief Set whether the fbx importer will use the legacy embedded TEXTURE naming.
  *
  * The default value is false (0)
  * Property type: bool
@@ -733,7 +733,7 @@ enum aiComponent
 
 // ---------------------------------------------------------------------------
 /** @brief Configures the terragen import plugin to compute uv's for
- *  terrains, if not given. Furthermore a default texture is assigned.
+ *  terrains, if not given. Furthermore a default TEXTURE is assigned.
  *
  * UV coordinates for terrains are so simple to compute that you'll usually
  * want to compute them on your own, if you need them. This option is intended
@@ -870,9 +870,9 @@ enum aiComponent
     "IMPORT_OGRE_MATERIAL_FILE"
 
 // ---------------------------------------------------------------------------
-/** @brief Ogre Importer detect the texture usage from its filename.
+/** @brief Ogre Importer detect the TEXTURE usage from its filename.
  *
- * Ogre material texture units do not define texture type, the textures usage
+ * Ogre material TEXTURE units do not define TEXTURE type, the textures usage
  * depends on the used shader or Ogre's fixed pipeline. If this config property
  * is true Assimp will try to detect the type from the textures filename postfix:
  * _n, _nrm, _nrml, _normal, _normals and _normalmap for normal map, _s, _spec,
@@ -880,7 +880,7 @@ enum aiComponent
  * and _occlusion for light map, _disp and _displacement for displacement map.
  * The matching is case insensitive. Post fix is taken between the last
  * underscore and the last period.
- * Default behavior is to detect type from lower cased texture unit name by
+ * Default behavior is to detect type from lower cased TEXTURE unit name by
  * matching against: normalmap, specularmap, lightmap and displacementmap.
  * For both cases if no match is found aiTextureType_DIFFUSE is used.
  * <br>

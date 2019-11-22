@@ -71,9 +71,9 @@
 #define ILUT_D3D_ALPHA_KEY_COLOUR 0x0707
 #define ILUT_FORCE_INTEGER_FORMAT 0x0636
 
-//This new state does automatic texture target detection
+//This new state does automatic TEXTURE target detection
 //if enabled. Currently, only cubemap detection is supported.
-//if the current image is no cubemap, the 2d texture is chosen.
+//if the current image is no cubemap, the 2d TEXTURE is chosen.
 #define ILUT_GL_AUTODETECT_TEXTURE_TARGET 0x0807
 
 

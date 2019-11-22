@@ -11,6 +11,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleQuadtree.h"
 #include "SceneManager.h"
+#include "ResourceManagment.h"
 
 #include <list>
 #include <fstream>
@@ -36,6 +37,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	file_system = new ModuleFileSystem();
 	quadtree = new ModuleQuadtree();
 	scene_manager = new SceneManager();
+	resource_managment = new ResourceManagment();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -49,6 +51,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(quadtree);
 	AddModule(importer);
 	AddModule(texture);
+	AddModule(resource_managment);
 	AddModule(game_object_manager);
 	AddModule(scene_manager);
 	AddModule(debug_scene);
