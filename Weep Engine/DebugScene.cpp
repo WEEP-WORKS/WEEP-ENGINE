@@ -110,6 +110,8 @@ bool DebugScene::Start()
 		//ret = App->importer->LoadFBX("Models/FBX/warrior.fbx");
 	}
 
+	App->profiler->SetGameTimeScale(1.0f);
+
 	return true;
 }
 
@@ -177,6 +179,15 @@ bool DebugScene::Update()
 		App->window->SetAppName(name_input_buffer);
 		App->window->SetVersion(version_input_buffer);
 	}
+
+	float game_dt = App->profiler->GetGameDT();
+	if (App->scene_manager->GetPause())
+		game_dt = 0;
+
+	if (App->scene_manager->GetState() == PLAY)
+		App->profiler->AddGameTime(game_dt);
+
+	//WE COULD CALL DOFORALLCHILDREN UPDATE WITH DT
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------

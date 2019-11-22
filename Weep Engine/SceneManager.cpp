@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "App.h"
+#include "Profiler.h"
 
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
 {
@@ -59,6 +60,8 @@ void SceneManager::Edit()
 		step = false;
 
 		LoadTmpScene();
+
+		App->profiler->SetGameTime(0.0f);
 
 	}
 }
