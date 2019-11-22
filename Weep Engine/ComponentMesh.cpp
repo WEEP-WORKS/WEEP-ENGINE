@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "App.h"
 #include "ModuleImporter.h"
+#include "ResourceTexture.h"
 ComponentMesh::ComponentMesh()
 {
 	mesh_data = new MeshData();
@@ -135,7 +136,7 @@ void ComponentMesh::RenderModel()
 
 
 		//bind texture
-		glBindTexture(GL_TEXTURE_2D, texture->id_texture);
+		glBindTexture(GL_TEXTURE_2D, texture->GetResource(texture->GetResourceID())->id_texture);
 	}
 
 	//indexs final
