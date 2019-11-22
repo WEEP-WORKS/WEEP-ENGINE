@@ -289,38 +289,49 @@ void DebugScene::Tools()
 
 	if (App->scene_manager->GetState() == SCENE_STATE::EDIT)
 	{
-		ImGui::SetCursorPos(ImVec2(800, 3));
+		ImGui::SetCursorPos(ImVec2(400, 3));
 		if (ImGui::Button("Play"))
 		{
 			App->scene_manager->Play();
 		}
 
-		ImGui::SetCursorPos(ImVec2(850, 6));
+		ImGui::SetCursorPos(ImVec2(450, 6));
 		ImGui::Text("Current: EDITING");
 	}
 	else if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
 	{
-		ImGui::SetCursorPos(ImVec2(800, 3));
+		ImGui::SetCursorPos(ImVec2(400, 3));
 		if (ImGui::Button("STOP"))
 		{
 			App->scene_manager->Edit();
 		}
 
-		ImGui::SetCursorPos(ImVec2(847, 3));
+		ImGui::SetCursorPos(ImVec2(450, 3));
 		if (ImGui::Button("Pause"))
 		{
 			App->scene_manager->Pause();
 		}
 
-		ImGui::SetCursorPos(ImVec2(900, 3));
+		ImGui::SetCursorPos(ImVec2(500, 3));
 		if (ImGui::Button("Step"))
 		{
 			App->scene_manager->Step();
 		}
 
-		ImGui::SetCursorPos(ImVec2(950, 6));
+		ImGui::SetCursorPos(ImVec2(550, 6));
 		ImGui::Text("Current: PLAYING");
+
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		float scale = App->profiler->GetGameTimeScale();
+		ImGui::PushItemWidth(50);
+		if (ImGui::DragFloat("Time Scale", &scale, 0.005f, 0.00, 2.00f, "%.2f"))
+		{
+			App->profiler->SetGameTimeScale(scale);
+		}
+		ImGui::SetCursorPos(ImVec2(730, 6));
+		ImGui::Text("%f", App->profiler->GetGameTime());
 	}
+
 
 	ImGui::End();
 }

@@ -1,7 +1,9 @@
 #include "Profiler.h"
 #include "Globals.h"
+#include "App.h"
 #include "mmgr\nommgr.h"
 #include "mmgr\mmgr.h"
+
 
 Profiler::Profiler()
 {
@@ -171,4 +173,35 @@ std::vector<float> Profiler::GetMillisecondsVector()
 std::vector<float> Profiler::GetMemoryVector()
 {
 	return memory;
+}
+
+// TIME MANAGEMENT
+float Profiler::GetGameTime() const
+{
+	return game_time;
+}
+
+float Profiler::GetGameTimeScale() const
+{
+	return game_time_scale;
+}
+
+float Profiler::GetGameDT()
+{
+	return game_dt = App->GetDT() * game_time_scale;
+}
+
+void Profiler::SetGameTime(float gamedt)
+{
+	game_time = gamedt;
+}
+
+void Profiler::SetGameTimeScale(float gameDTScale)
+{
+	game_time_scale = gameDTScale;
+}
+
+void Profiler::AddGameTime(float gamedt)
+{
+	game_time += gamedt;
 }

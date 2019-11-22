@@ -43,6 +43,13 @@ public:
 	std::vector<float> GetMillisecondsVector();
 	std::vector<float> GetMemoryVector();
 
+	float GetGameTime() const;
+	float GetGameTimeScale() const;
+	float GetGameDT();
+	void SetGameTime(float gamedt);
+	void SetGameTimeScale(float gameDTScale);
+	void AddGameTime(float gamedt);
+
 public:
 	int	  capped_ms = -1;
 
@@ -70,7 +77,9 @@ private:
 	Profile* current_profile = nullptr;
 	std::vector<Profile*> profiles;
 
-
+	float game_time = 0;
+	float game_time_scale = 0;
+	float game_dt = 0;
 };
 
 #endif //__PROFILER_H__
