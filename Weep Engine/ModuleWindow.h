@@ -42,6 +42,13 @@ public:
 
 	void GetWindowSize(int & width, int & height);
 	const vec2 GetWindowSizeVec();
+
+	void SetWindowSize(int width, int height);
+	void SetBrightness(float set);
+	void SetFullscreen(bool set);
+	void SetResizable(bool set);
+	void SetBorderless(bool set);
+	void SetFullDekstop(bool set);
 public:
 	//The window we'll be rendering to
 	SDL_Window* window;
@@ -67,15 +74,6 @@ private:
 	bool    resizable = false;
 	bool    borderless = false;
 	bool    full_dekstop = false;
-
-private:
-
-	void SetWindowSize(int width, int height);
-	void SetBrightness(float set);
-	void SetFullscreen(bool set);
-	void SetResizable(bool set);
-	void SetBorderless(bool set);
-	void SetFullDekstop(bool set);
 
 };
 

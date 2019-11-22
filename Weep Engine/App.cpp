@@ -138,7 +138,14 @@ bool Application::Update()
 
 		profiler->StartProfile((*it)->name);
 
-		ret = (*it)->Update(); 
+		if (scene_manager->GetPause() == false)
+			ret = (*it)->Update();
+		else
+		{
+			debug_scene->Update();
+			game_object_manager->Update();
+			window->Update();
+		}
 
 		profiler->FinishProfile();
 
@@ -158,6 +165,8 @@ bool Application::Update()
 	FinishUpdate();
 
 	profiler->UpdateFinish();
+
+
 
 	return ret;
 }

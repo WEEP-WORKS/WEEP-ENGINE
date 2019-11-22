@@ -90,6 +90,7 @@ void SceneManager::Step()
 	if (state == PLAY)
 	{
 		step = true;
+		pause = false;
 	}
 }
 

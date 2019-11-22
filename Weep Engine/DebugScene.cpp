@@ -125,6 +125,7 @@ bool DebugScene::PreUpdate()
 	bool ret = true;
 
 
+
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
 		App->debug_scene->show_app_configuration = true;
 	}
@@ -145,7 +146,6 @@ bool DebugScene::PreUpdate()
 		}
 	}
 
-
 	return ret;
 }
 
@@ -164,6 +164,20 @@ bool DebugScene::Update()
 		new_go->AddAABB(aabb);
 	}
 
+	if (App->scene_manager->GetState() == PLAY)
+	{
+		bool full = true;
+		LoadStyle("blue_yellow");
+		App->window->SetAppName("Weep Game");
+		App->window->SetVersion("");
+	}
+	else
+	{
+		LoadStyle("green_purple");
+		App->window->SetAppName(name_input_buffer);
+		App->window->SetVersion(version_input_buffer);
+	}
+
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
 	//-------------------------------------------------------------------------
@@ -176,7 +190,8 @@ bool DebugScene::Update()
 	//--------------------------MAIN MENU BAR----------------------------------
 	//-------------------------------------------------------------------------
 
-	MenuBar(ret);
+	if (App->scene_manager->GetPause() == false)
+		MenuBar(ret);
 
 	Panels();
 
@@ -186,10 +201,16 @@ bool DebugScene::Update()
 	//----------------------------INSPECTOR------------------------------------
 	//-------------------------------------------------------------------------
 
-	if (App->debug_scene->show_inspector)
+	if (App->debug_scene->show_inspector && App->scene_manager->GetPause() == false)
 	{
 		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowPos(ImVec2(970, 22), ImGuiCond_::ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(970, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
+
+		if (App->scene_manager->GetState() == PLAY)
+			ImGui::SetNextWindowCollapsed(true);
+		else
+			ImGui::SetNextWindowCollapsed(false);
+
 		if (ImGui::Begin("Inspector",NULL, ImGuiWindowFlags_NoSavedSettings))
 		{
 			vector<GameObject*> selected = App->game_object_manager->selected;
