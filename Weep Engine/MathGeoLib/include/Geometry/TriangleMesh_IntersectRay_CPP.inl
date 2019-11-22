@@ -14,7 +14,7 @@
 
 /** @file TriangleMesh_IntersectRay_CPP.inl
 	@author Jukka Jylänki
-	@brief Non-SIMD implementation of ray-MESH intersection routines. */
+	@brief Non-SIMD implementation of ray-mesh intersection routines. */
 MATH_BEGIN_NAMESPACE
 
 float TriangleMesh::IntersectRay_CPP(const Ray &ray) const

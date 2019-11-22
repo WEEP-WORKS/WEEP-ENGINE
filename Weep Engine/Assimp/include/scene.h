@@ -41,8 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/** @file SCENE.h
- *  @brief Defines the data structures in which the imported SCENE is returned.
+/** @file scene.h
+ *  @brief Defines the data structures in which the imported scene is returned.
  */
 #pragma once
 #ifndef AI_SCENE_H_INC
@@ -74,7 +74,7 @@ extern "C" {
  * Each node has name, a parent node (except for the root node),
  * a transformation relative to its parent and possibly several child nodes.
  * Simple file formats don't support hierarchical structures - for these formats
- * the imported SCENE does consist of only a single root node without children.
+ * the imported scene does consist of only a single root node without children.
  */
 // -------------------------------------------------------------------------------
 struct ASSIMP_API aiNode
@@ -142,7 +142,7 @@ struct ASSIMP_API aiNode
 
     /** Searches for a node with a specific name, beginning at this
      *  nodes. Normally you will call this method on the root node
-     *  of the SCENE.
+     *  of the scene.
      *
      *  @param name Name to search for
      *  @return NULL or a valid Node if the search was successful.
@@ -176,7 +176,7 @@ struct ASSIMP_API aiNode
 
 // -------------------------------------------------------------------------------
 /**
- * Specifies that the SCENE data structure that was imported is not complete.
+ * Specifies that the scene data structure that was imported is not complete.
  * This flag bypasses some internal validations and allows the import
  * of animation skeletons, material libraries or camera animation paths
  * using Assimp. Most applications won't support such data.
@@ -185,7 +185,7 @@ struct ASSIMP_API aiNode
 
 /**
  * This flag is set by the validation postprocess-step (aiPostProcess_ValidateDS)
- * if the validation is successful. In a validated SCENE you can be sure that
+ * if the validation is successful. In a validated scene you can be sure that
  * any cross references in the data structure (e.g. vertex indices) are valid.
  */
 #define AI_SCENE_FLAGS_VALIDATED    0x2
@@ -193,7 +193,7 @@ struct ASSIMP_API aiNode
 /**
  * This flag is set by the validation postprocess-step (aiPostProcess_ValidateDS)
  * if the validation is successful but some issues have been found.
- * This can for example mean that a TEXTURE that does not exist is referenced
+ * This can for example mean that a texture that does not exist is referenced
  * by a material or that the bone weights for a vertex don't sum to 1.0 ... .
  * In most cases you should still be able to use the import. This flag could
  * be useful for applications which don't capture Assimp's log output.
@@ -223,7 +223,7 @@ struct ASSIMP_API aiNode
 #define AI_SCENE_FLAGS_TERRAIN 0x10
 
  /**
- * Specifies that the SCENE data can be shared between structures. For example:
+ * Specifies that the scene data can be shared between structures. For example:
  * one vertex in few faces. \ref AI_SCENE_FLAGS_NON_VERBOSE_FORMAT can not be
  * used for this because \ref AI_SCENE_FLAGS_NON_VERBOSE_FORMAT has internal
  * meaning about postprocessing steps.
@@ -236,7 +236,7 @@ struct ASSIMP_API aiNode
  *  Everything that was imported from the given file can be accessed from here.
  *  Objects of this class are generally maintained and owned by Assimp, not
  *  by the caller. You shouldn't want to instance it, nor should you ever try to
- *  delete a given SCENE on your own.
+ *  delete a given scene on your own.
  */
 // -------------------------------------------------------------------------------
 struct aiScene
@@ -257,7 +257,7 @@ struct aiScene
     */
     C_STRUCT aiNode* mRootNode;
 
-    /** The number of meshes in the SCENE. */
+    /** The number of meshes in the scene. */
     unsigned int mNumMeshes;
 
     /** The array of meshes.
@@ -269,7 +269,7 @@ struct aiScene
     */
     C_STRUCT aiMesh** mMeshes;
 
-    /** The number of materials in the SCENE. */
+    /** The number of materials in the scene. */
     unsigned int mNumMaterials;
 
     /** The array of materials.
@@ -281,7 +281,7 @@ struct aiScene
     */
     C_STRUCT aiMaterial** mMaterials;
 
-    /** The number of animations in the SCENE. */
+    /** The number of animations in the scene. */
     unsigned int mNumAnimations;
 
     /** The array of animations.
@@ -302,7 +302,7 @@ struct aiScene
     */
     C_STRUCT aiTexture** mTextures;
 
-    /** The number of light sources in the SCENE. Light sources
+    /** The number of light sources in the scene. Light sources
     * are fully optional, in most cases this attribute will be 0
         */
     unsigned int mNumLights;
@@ -314,7 +314,7 @@ struct aiScene
     */
     C_STRUCT aiLight** mLights;
 
-    /** The number of cameras in the SCENE. Cameras
+    /** The number of cameras in the scene. Cameras
     * are fully optional, in most cases this attribute will be 0
         */
     unsigned int mNumCameras;
@@ -324,14 +324,14 @@ struct aiScene
     * All cameras imported from the given file are listed here.
     * The array is mNumCameras in size. The first camera in the
     * array (if existing) is the default camera view into
-    * the SCENE.
+    * the scene.
     */
     C_STRUCT aiCamera** mCameras;
 
     /**
-     *  @brief  The global metadata assigned to the SCENE itself.
+     *  @brief  The global metadata assigned to the scene itself.
      *
-     *  This data contains global metadata which belongs to the SCENE like 
+     *  This data contains global metadata which belongs to the scene like 
      *  unit-conversions, versions, vendors or other model-specific data. This 
      *  can be used to store format-specific metadata as well.
      */
@@ -346,34 +346,34 @@ struct aiScene
     //! Destructor
     ASSIMP_API ~aiScene();
 
-    //! Check whether the SCENE contains meshes
-    //! Unless no special SCENE flags are set this will always be true.
+    //! Check whether the scene contains meshes
+    //! Unless no special scene flags are set this will always be true.
     inline bool HasMeshes() const { 
         return mMeshes != NULL && mNumMeshes > 0; 
     }
 
-    //! Check whether the SCENE contains materials
-    //! Unless no special SCENE flags are set this will always be true.
+    //! Check whether the scene contains materials
+    //! Unless no special scene flags are set this will always be true.
     inline bool HasMaterials() const { 
         return mMaterials != NULL && mNumMaterials > 0; 
     }
 
-    //! Check whether the SCENE contains lights
+    //! Check whether the scene contains lights
     inline bool HasLights() const { 
         return mLights != NULL && mNumLights > 0; 
     }
 
-    //! Check whether the SCENE contains textures
+    //! Check whether the scene contains textures
     inline bool HasTextures() const {
         return mTextures != NULL && mNumTextures > 0; 
     }
 
-    //! Check whether the SCENE contains cameras
+    //! Check whether the scene contains cameras
     inline bool HasCameras() const {
         return mCameras != NULL && mNumCameras > 0; 
     }
 
-    //! Check whether the SCENE contains animations
+    //! Check whether the scene contains animations
     inline bool HasAnimations() const { 
         return mAnimations != NULL && mNumAnimations > 0; 
     }
@@ -388,9 +388,9 @@ struct aiScene
         return shortFilename;
     }
 
-    //! Returns an embedded TEXTURE
+    //! Returns an embedded texture
     const aiTexture* GetEmbeddedTexture(const char* filename) const {
-        // lookup using TEXTURE ID (if referenced like: "*1", "*2", etc.)
+        // lookup using texture ID (if referenced like: "*1", "*2", etc.)
         if ('*' == *filename) {
             int index = std::atoi(filename + 1);
             if (0 > index || mNumTextures <= static_cast<unsigned>(index))

@@ -13,7 +13,10 @@ public:
 
 	struct TextureInfo
 	{
-		uint resource_id = 0;
+		uint id = 0;
+		string path;
+		uint width;
+		uint height;
 	};
 
 	ModuleTexture(bool start_enabled = true);
@@ -23,7 +26,7 @@ public:
 	bool CleanUp() override;
 	void OnLoadFile(const char* file_path, const char* file_name, const char* file_extension);
 
-	void LoadTexture(const char* path, ComponentTexture*); // path without directory.
+	uint LoadTexture(const char* path, int& width, int& height); // path without directory.
 
 	ComponentTexture* GetCheckersTexture() const;
 

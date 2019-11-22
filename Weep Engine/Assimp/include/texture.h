@@ -41,8 +41,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ---------------------------------------------------------------------------
 */
 
-/** @file TEXTURE.h
- *  @brief Defines TEXTURE helper structures for the library
+/** @file texture.h
+ *  @brief Defines texture helper structures for the library
  *
  * Used for file formats which embed their textures into the model file.
  * Supported are both normal textures, which are stored as uncompressed
@@ -72,7 +72,7 @@ extern "C" {
 /** @def AI_MAKE_EMBEDDED_TEXNAME
  *  Used to build the reserved path name used by the material system to
  *  reference textures that are embedded into their corresponding
- *  model files. The parameter specifies the index of the TEXTURE
+ *  model files. The parameter specifies the index of the texture
  *  (zero-based, in the aiScene::mTextures array)
  */
 #if (!defined AI_MAKE_EMBEDDED_TEXNAME)
@@ -120,7 +120,7 @@ struct aiTexel
 #define HINTMAXTEXTURELEN 9
 
 // --------------------------------------------------------------------------------
-/** Helper structure to describe an embedded TEXTURE
+/** Helper structure to describe an embedded texture
  *
  * Normally textures are contained in external files but some file formats embed
  * them directly in the model file. There are two types of embedded textures:
@@ -130,21 +130,21 @@ struct aiTexel
  * get access to the actual color data.
  *
  * Embedded textures are referenced from materials using strings like "*0", "*1", etc.
- * as the TEXTURE paths (a single asterisk character followed by the
- * zero-based index of the TEXTURE in the aiScene::mTextures array).
+ * as the texture paths (a single asterisk character followed by the
+ * zero-based index of the texture in the aiScene::mTextures array).
  */
 struct aiTexture {
-    /** Width of the TEXTURE, in pixels
+    /** Width of the texture, in pixels
      *
-     * If mHeight is zero the TEXTURE is compressed in a format
+     * If mHeight is zero the texture is compressed in a format
      * like JPEG. In this case mWidth specifies the size of the
      * memory area pcData is pointing to, in bytes.
      */
     unsigned int mWidth;
 
-    /** Height of the TEXTURE, in pixels
+    /** Height of the texture, in pixels
      *
-     * If this value is zero, pcData points to an compressed TEXTURE
+     * If this value is zero, pcData points to an compressed texture
      * in any format (e.g. JPEG).
      */
     unsigned int mHeight;
@@ -161,7 +161,7 @@ struct aiTexture {
      * 3. Image contain RGB and 5 bit for R and B channels and 6 bit for G channel, achFormatHint == "rgba5650";
      * 4. One color image with B channel and 1 bit for it, achFormatHint == "rgba0010";
      * If mHeight == 0 then achFormatHint is set set to '\\0\\0\\0\\0' if the loader has no additional
-     * information about the TEXTURE file format used OR the
+     * information about the texture file format used OR the
      * file extension of the format without a trailing dot. If there
      * are multiple file extensions for a format, the shortest
      * extension is chosen (JPEG maps to 'jpg', not to 'jpeg').
@@ -170,20 +170,20 @@ struct aiTexture {
      */
     char achFormatHint[ HINTMAXTEXTURELEN ];// 8 for string + 1 for terminator.
 
-    /** Data of the TEXTURE.
+    /** Data of the texture.
      *
      * Points to an array of mWidth * mHeight aiTexel's.
-     * The format of the TEXTURE data is always ARGB8888 to
+     * The format of the texture data is always ARGB8888 to
      * make the implementation for user of the library as easy
      * as possible. If mHeight = 0 this is a pointer to a memory
-     * buffer of size mWidth containing the compressed TEXTURE
+     * buffer of size mWidth containing the compressed texture
      * data. Good luck, have fun!
      */
     C_STRUCT aiTexel* pcData;
 
     /** Texture original filename
     *
-    * Used to get the TEXTURE reference
+    * Used to get the texture reference
     */
     C_STRUCT aiString mFilename;
 

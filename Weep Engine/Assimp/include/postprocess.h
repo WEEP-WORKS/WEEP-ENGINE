@@ -205,7 +205,7 @@ enum aiPostProcessSteps
     /** <hr>Removes the node graph and pre-transforms all vertices with
     * the local transformation matrices of their nodes.
     *
-    * The output SCENE still contains nodes, however there is only a
+    * The output scene still contains nodes, however there is only a
     * root node with children, each one referencing only one data,
     * and each data referencing one material. For rendering, you can
     * simply render all meshes in order - you don't need to pay
@@ -217,7 +217,7 @@ enum aiPostProcessSteps
     * they will be brought together, but the first meshes's part of
     * the normal list is zeroed. However, these artifacts are rare.
     * @note The <tt>#AI_CONFIG_PP_PTV_NORMALIZE</tt> configuration property
-    * can be set to normalize the SCENE's spatial dimension to the -1...1
+    * can be set to normalize the scene's spatial dimension to the -1...1
     * range.
     */
     aiProcess_PreTransformVertices = 0x100,
@@ -239,7 +239,7 @@ enum aiPostProcessSteps
     aiProcess_LimitBoneWeights = 0x200,
 
     // -------------------------------------------------------------------------
-    /** <hr>Validates the imported SCENE data structure.
+    /** <hr>Validates the imported scene data structure.
      * This makes sure that all indices are valid, all animations and
      * bones are linked correctly, all material references are correct .. etc.
      *
@@ -358,7 +358,7 @@ enum aiPostProcessSteps
      *   <li>Set the <tt>#AI_CONFIG_PP_SBP_REMOVE</tt> importer property to
      *       @code aiPrimitiveType_POINTS | aiPrimitiveType_LINES
      *       @endcode to cause SortByPType to reject point
-     *       and line meshes from the SCENE.
+     *       and line meshes from the scene.
      *   </li>
      * </ul>
      *
@@ -390,7 +390,7 @@ enum aiPostProcessSteps
 
     // -------------------------------------------------------------------------
     /** <hr>This step converts non-UV mappings (such as spherical or
-     *  cylindrical mapping) to proper TEXTURE coordinate channels.
+     *  cylindrical mapping) to proper texture coordinate channels.
      *
      * Most applications will support UV mapping only, so you will
      * probably want to specify this step in every case. Note that Assimp is not
@@ -406,10 +406,10 @@ enum aiPostProcessSteps
     aiProcess_GenUVCoords = 0x40000,
 
     // -------------------------------------------------------------------------
-    /** <hr>This step applies per-TEXTURE UV transformations and bakes
+    /** <hr>This step applies per-texture UV transformations and bakes
      *  them into stand-alone vtexture coordinate channels.
      *
-     * UV transformations are specified per-TEXTURE - see the
+     * UV transformations are specified per-texture - see the
      * <tt>#AI_MATKEY_UVTRANSFORM</tt> material key for more information.
      * This step processes all textures with
      * transformed input UV coordinates and generates a new (pre-transformed) UV channel
@@ -417,7 +417,7 @@ enum aiPostProcessSteps
      * transformations, so you will probably want to specify this step.
      *
      * @note UV transformations are usually implemented in real-time apps by
-     * transforming TEXTURE coordinates at vertex shader stage with a 3x3
+     * transforming texture coordinates at vertex shader stage with a 3x3
      * (homogenous) transformation matrix.
     */
     aiProcess_TransformUVCoords = 0x80000,
@@ -450,7 +450,7 @@ enum aiPostProcessSteps
 
 
     // -------------------------------------------------------------------------
-    /** <hr>A post-processing step to optimize the SCENE hierarchy.
+    /** <hr>A post-processing step to optimize the scene hierarchy.
      *
      *  Nodes without animations, bones, lights or cameras assigned are
      *  collapsed and joined.
@@ -529,7 +529,7 @@ enum aiPostProcessSteps
      *
      *  Use <tt>#AI_CONFIG_PP_DB_THRESHOLD</tt> to control this.
      *  Use <tt>#AI_CONFIG_PP_DB_ALL_OR_NONE</tt> if you want bones removed if and
-     *  only if all bones within the SCENE qualify for removal.
+     *  only if all bones within the scene qualify for removal.
     */
     aiProcess_Debone  = 0x4000000,
 
@@ -549,7 +549,7 @@ enum aiPostProcessSteps
     /** <hr>A postprocessing step to embed of textures.
      *
      *  This will remove external data dependencies for textures.
-     *  If a TEXTURE's file does not exist at the specified path
+     *  If a texture's file does not exist at the specified path
      *  (due, for instance, to an absolute path generated on another system),
      *  it will check if a file with the same name exists at the root folder
      *  of the imported model. And if so, it uses that.

@@ -92,7 +92,7 @@ struct aiImporterDesc
     /** Full name of the importer (i.e. Blender3D importer)*/
     const char* mName;
 
-    /** Original author (left blank if UNKNOWN or whole assimp team) */
+    /** Original author (left blank if unknown or whole assimp team) */
     const char* mAuthor;
 
     /** Current maintainer, left blank if the author maintains */

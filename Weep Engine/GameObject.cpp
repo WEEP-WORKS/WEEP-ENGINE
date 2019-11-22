@@ -48,7 +48,7 @@ void GameObject::Update()
 		{
 			if ((*iter)->IsActive())
 			{
-				(*iter)->Update();//RenderMesh and TEXTURE in Update or PostUpdate??
+				(*iter)->Update();//RenderMesh and texture in Update or PostUpdate??
 			}
 		}
 	}
@@ -464,7 +464,7 @@ bool GameObject::AddAABB(AABB& new_AABB)
 
 void GameObject::Save(Json::Value& scene) const
 {
-	/*string s =SCENE[0]["name"].asString();
+	/*string s =scene[0]["name"].asString();
 	LOG("%s", s.c_str());*/
 
 	Json::Value go;
@@ -573,12 +573,12 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 
 			if (picking.Intersects(local_bbox))
 			{
-				// Get MESH
+				// Get mesh
 				ComponentMesh* cmesh = GetMesh();
 
 				if (cmesh != nullptr)
 				{
-					// Transform segment to match MESH transform
+					// Transform segment to match mesh transform
 					LineSegment segment_local_space(picking);
 					segment_local_space.Transform(ConstGetTransform()->GetGlobalTransform().Inverted());
 

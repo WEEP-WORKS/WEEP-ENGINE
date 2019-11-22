@@ -176,7 +176,7 @@ ASSIMP_API const C_STRUCT aiScene* aiImportFileExWithProperties(
  * @param pFlags Optional post processing steps to be executed after
  *   a successful import. Provide a bitwise combination of the
  *   #aiPostProcessSteps flags. If you wish to inspect the imported
- *   SCENE first in order to fine-tune your post-processing setup,
+ *   scene first in order to fine-tune your post-processing setup,
  *   consider to use #aiApplyPostProcessing().
  * @param pHint An additional hint to the library. If this is a non empty string,
  *   the library looks for a loader to support the file extension specified by pHint
@@ -208,7 +208,7 @@ ASSIMP_API const C_STRUCT aiScene* aiImportFileFromMemory(
  * @param pFlags Optional post processing steps to be executed after
  *   a successful import. Provide a bitwise combination of the
  *   #aiPostProcessSteps flags. If you wish to inspect the imported
- *   SCENE first in order to fine-tune your post-processing setup,
+ *   scene first in order to fine-tune your post-processing setup,
  *   consider to use #aiApplyPostProcessing().
  * @param pHint An additional hint to the library. If this is a non empty string,
  *   the library looks for a loader to support the file extension specified by pHint
@@ -236,19 +236,19 @@ ASSIMP_API const C_STRUCT aiScene* aiImportFileFromMemoryWithProperties(
     const C_STRUCT aiPropertyStore* pProps);
 
 // --------------------------------------------------------------------------------
-/** Apply post-processing to an already-imported SCENE.
+/** Apply post-processing to an already-imported scene.
  *
  * This is strictly equivalent to calling #aiImportFile()/#aiImportFileEx with the
  * same flags. However, you can use this separate function to inspect the imported
- * SCENE first to fine-tune your post-processing setup.
+ * scene first to fine-tune your post-processing setup.
  * @param pScene Scene to work on.
  * @param pFlags Provide a bitwise combination of the #aiPostProcessSteps flags.
  * @return A pointer to the post-processed data. Post processing is done in-place,
  *   meaning this is still the same #aiScene which you passed for pScene. However,
- *   _if_ post-processing failed, the SCENE could now be NULL. That's quite a rare
+ *   _if_ post-processing failed, the scene could now be NULL. That's quite a rare
  *   case, post processing steps are not really designed to 'fail'. To be exact,
  *   the #aiProcess_ValidateDataStructure flag is currently the only post processing step
- *   which can actually cause the SCENE to be reset to NULL.
+ *   which can actually cause the scene to be reset to NULL.
  */
 ASSIMP_API const C_STRUCT aiScene* aiApplyPostProcessing(
     const C_STRUCT aiScene* pScene,

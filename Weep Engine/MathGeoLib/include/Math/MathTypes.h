@@ -54,7 +54,7 @@ typedef boost::int16_t s16; ///< 2 bytes: -32768 - 32767.
 typedef boost::int32_t s32; ///< 4 bytes signed: max 2,147,483,647 ~ 2000 million or 2e9.
 typedef boost::int64_t s64; ///< 8 bytes signed. 9,223,372,036,854,775,807 ~ 9e18.
 
-#else // No boost or UNKNOWN if we have C99. Have to guess the following are correct.
+#else // No boost or unknown if we have C99. Have to guess the following are correct.
 
 #include <limits.h>
 

@@ -17,7 +17,7 @@ public:
 	
 
 	//Normals:------
-	uint				num_faces					= 0u;		// Number of faces of the MESH.
+	uint				num_faces					= 0u;		// Number of faces of the mesh.
 	float				normal_lenght				= 0.5f;		// Lenght of all normals.
 
 	//UVs

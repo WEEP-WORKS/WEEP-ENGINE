@@ -251,7 +251,7 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 
 	if (cmesh->object->parametric)
 	{
-		//par_shapes_unweld(MESH, true);
+		//par_shapes_unweld(mesh, true);
 		par_shapes_compute_normals(mesh);
 	}
 

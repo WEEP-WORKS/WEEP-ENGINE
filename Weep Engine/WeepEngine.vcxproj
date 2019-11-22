@@ -176,7 +176,6 @@
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
-    <ClInclude Include="ResourceManagment.h" />
     <ClInclude Include="ModuleTexture.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="par_shapes.h" />
@@ -184,9 +183,6 @@
     <ClInclude Include="PerfTimer.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="QuadtreeNode.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="ResourceMesh.h" />
-    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
@@ -254,15 +250,11 @@
     <ClCompile Include="ModuleInput.cpp" />
     <ClCompile Include="ModuleQuadtree.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
-    <ClCompile Include="ResourceManagment.cpp" />
     <ClCompile Include="ModuleTexture.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="PerfTimer.cpp" />
     <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="QuadtreeNode.cpp" />
-    <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="ResourceMesh.cpp" />
-    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>

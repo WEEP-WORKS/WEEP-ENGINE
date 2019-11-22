@@ -97,7 +97,7 @@ extern "C" {
 #endif // !! AI_MAX_NUMBER_OF_COLOR_SETS
 
 /** @def AI_MAX_NUMBER_OF_TEXTURECOORDS
- *  Supported number of TEXTURE coord sets (UV(W) channels) per data */
+ *  Supported number of texture coord sets (UV(W) channels) per data */
 
 #ifndef AI_MAX_NUMBER_OF_TEXTURECOORDS
 #   define AI_MAX_NUMBER_OF_TEXTURECOORDS 0x8
@@ -115,7 +115,7 @@ extern "C" {
  * *different* primitive types mixed up (e.g. lines and triangles) in several
  * 'clean' submeshes. Furthermore there is a configuration option (
  * #AI_CONFIG_PP_SBP_REMOVE) to force #aiProcess_SortByPType to remove
- * specific kinds of primitives from the imported SCENE, completely and forever.
+ * specific kinds of primitives from the imported scene, completely and forever.
  * In many cases you'll probably want to set this setting to
  * @code
  * aiPrimitiveType_LINE|aiPrimitiveType_POINT
@@ -518,7 +518,7 @@ struct aiAnimMesh
     }
 
     /** Check whether the anim data overrides a particular
-     * set of TEXTURE coordinates on his host data.
+     * set of texture coordinates on his host data.
      *  @param pIndex 0<index<AI_MAX_NUMBER_OF_TEXTURECOORDS */
     bool HasTextureCoords( unsigned int pIndex) const   {
         return pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS ? false : mTextureCoords[pIndex] != nullptr;
@@ -556,7 +556,7 @@ enum aiMorphingMethod
 * referencing the vertices. In addition there might be a series of bones, each
 * of them addressing a number of vertices with a certain weight. Vertex data
 * is presented in channels with each channel containing a single per-vertex
-* information such as a set of TEXTURE coords or a normal vector.
+* information such as a set of texture coords or a normal vector.
 * If a data pointer is non-null, the corresponding data stream is present.
 * From C++-programs you can also use the comfort functions Has*() to
 * test for the presence of various data streams.
@@ -619,7 +619,7 @@ struct aiMesh
 
     /** Vertex tangents.
     * The tangent of a vertex points in the direction of the positive
-    * X TEXTURE axis. The array contains normalized vectors, NULL if
+    * X texture axis. The array contains normalized vectors, NULL if
     * not present. The array is mNumVertices in size. A data consisting
     * of points and lines only may not have normal vectors. Meshes with
     * mixed primitive types (i.e. lines and triangles) may have
@@ -633,7 +633,7 @@ struct aiMesh
 
     /** Vertex bitangents.
     * The bitangent of a vertex points in the direction of the positive
-    * Y TEXTURE axis. The array contains normalized vectors, NULL if not
+    * Y texture axis. The array contains normalized vectors, NULL if not
     * present. The array is mNumVertices in size.
     * @note If the data contains tangents, it automatically also contains
     * bitangents.
@@ -647,7 +647,7 @@ struct aiMesh
     */
     C_STRUCT aiColor4D* mColors[AI_MAX_NUMBER_OF_COLOR_SETS];
 
-    /** Vertex TEXTURE coords, also known as UV channels.
+    /** Vertex texture coords, also known as UV channels.
     * A data may contain 0 to AI_MAX_NUMBER_OF_TEXTURECOORDS per
     * vertex. NULL if not present. The array is mNumVertices in size.
     */
@@ -684,7 +684,7 @@ struct aiMesh
     /** The material used by this data.
      * A data uses only a single material. If an imported model uses
      * multiple materials, the import splits up the data. Use this value
-     * as index into the SCENE's material list.
+     * as index into the scene's material list.
      */
     unsigned int mMaterialIndex;
 
@@ -785,11 +785,11 @@ struct aiMesh
     }
 
     //! Check whether the data contains positions. Provided no special
-    //! SCENE flags are set, this will always be true
+    //! scene flags are set, this will always be true
     bool HasPositions() const
         { return mVertices != nullptr && mNumVertices > 0; }
 
-    //! Check whether the data contains faces. If no special SCENE flags
+    //! Check whether the data contains faces. If no special scene flags
     //! are set this should always return true
     bool HasFaces() const
         { return mFaces != nullptr && mNumFaces > 0; }
@@ -815,8 +815,8 @@ struct aiMesh
         }
     }
 
-    //! Check whether the data contains a TEXTURE coordinate set
-    //! \param pIndex Index of the TEXTURE coordinates set
+    //! Check whether the data contains a texture coordinate set
+    //! \param pIndex Index of the texture coordinates set
     bool HasTextureCoords( unsigned int pIndex) const {
         if (pIndex >= AI_MAX_NUMBER_OF_TEXTURECOORDS) {
             return false;

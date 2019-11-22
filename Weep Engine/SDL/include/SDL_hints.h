@@ -1073,7 +1073,7 @@ extern "C" {
  *  Up to SDL 2.0.9, the render API would draw immediately when requested. Now
  *  it batches up draw requests and sends them all to the GPU only when forced
  *  to (during SDL_RenderPresent, when changing render targets, by updating a
- *  TEXTURE that the batch needs, etc). This is significantly more efficient,
+ *  texture that the batch needs, etc). This is significantly more efficient,
  *  but it can cause problems for apps that expect to render on top of the
  *  render API's output. As such, SDL will disable batching if a specific
  *  render backend is requested (since this might indicate that the app is

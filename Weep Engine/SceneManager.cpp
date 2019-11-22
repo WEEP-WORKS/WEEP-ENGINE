@@ -26,13 +26,13 @@ bool SceneManager::CleanUp()
 
 void SceneManager::SaveTmpScene()
 {
-	//SaveScene("tmp_scene.SCENE");
+	//SaveScene("tmp_scene.scene");
 }
 
 void SceneManager::LoadTmpScene()
 {	
 	//void DestroyScene();
-	//LoadScene("tmp_scene.SCENE");
+	//LoadScene("tmp_scene.scene");
 }
 
 SCENE_STATE SceneManager::GetState()

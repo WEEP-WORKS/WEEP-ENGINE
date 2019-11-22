@@ -34,7 +34,6 @@
 
 typedef unsigned int uint;
 typedef unsigned char uchar;
-typedef unsigned long long UID;
 
 template <class VALUE_TYPE> void SWAP(VALUE_TYPE& a, VALUE_TYPE& b)
 {

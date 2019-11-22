@@ -58,7 +58,7 @@ extern "C" {
 #define AI_DEFAULT_MATERIAL_NAME          "DefaultMaterial"
 
 // ---------------------------------------------------------------------------
-/** @brief Defines how the Nth TEXTURE of a specific type is combined with
+/** @brief Defines how the Nth texture of a specific type is combined with
  *  the result of all previous layers.
  *
  *  Example (left: key, right: value): <br>
@@ -109,7 +109,7 @@ enum aiTextureOp
  */
 enum aiTextureMapMode
 {
-    /** A TEXTURE coordinate u|v is translated to u%1|v%1
+    /** A texture coordinate u|v is translated to u%1|v%1
      */
     aiTextureMapMode_Wrap = 0x0,
 
@@ -118,12 +118,12 @@ enum aiTextureMapMode
      */
     aiTextureMapMode_Clamp = 0x1,
 
-    /** If the TEXTURE coordinates for a pixel are outside [0...1]
-     *  the TEXTURE is not applied to that pixel
+    /** If the texture coordinates for a pixel are outside [0...1]
+     *  the texture is not applied to that pixel
      */
     aiTextureMapMode_Decal = 0x3,
 
-    /** A TEXTURE coordinate u|v becomes u%1|v%1 if (u-(u%1))%2 is zero and
+    /** A texture coordinate u|v becomes u%1|v%1 if (u-(u%1))%2 is zero and
      *  1-(u%1)|1-(v%1) otherwise
      */
     aiTextureMapMode_Mirror = 0x2,
@@ -134,7 +134,7 @@ enum aiTextureMapMode
 };
 
 // ---------------------------------------------------------------------------
-/** @brief Defines how the mapping coords for a TEXTURE are generated.
+/** @brief Defines how the mapping coords for a texture are generated.
  *
  *  Real-time applications typically require full UV coordinates, so the use of
  *  the aiProcess_GenUVCoords step is highly recommended. It generates proper
@@ -147,7 +147,7 @@ enum aiTextureMapping
     /** The mapping coordinates are taken from an UV channel.
      *
      *  The #AI_MATKEY_UVWSRC key specifies from which UV channel
-     *  the TEXTURE coordinates are to be taken from (remember,
+     *  the texture coordinates are to be taken from (remember,
      *  meshes can have more than one UV channel).
     */
     aiTextureMapping_UV = 0x0,
@@ -174,14 +174,14 @@ enum aiTextureMapping
 };
 
 // ---------------------------------------------------------------------------
-/** @brief Defines the purpose of a TEXTURE
+/** @brief Defines the purpose of a texture
  *
  *  This is a very difficult topic. Different 3D packages support different
- *  kinds of textures. For very common TEXTURE types, such as bumpmaps, the
+ *  kinds of textures. For very common texture types, such as bumpmaps, the
  *  rendering results depend on implementation details in the rendering
- *  pipelines of these applications. Assimp loads all TEXTURE references from
- *  the model file and tries to determine which of the predefined TEXTURE
- *  types below is the best choice to match the original use of the TEXTURE
+ *  pipelines of these applications. Assimp loads all texture references from
+ *  the model file and tries to determine which of the predefined texture
+ *  types below is the best choice to match the original use of the texture
  *  as closely as possible.<br>
  *
  *  In content pipelines you'll usually define how textures have to be handled,
@@ -192,7 +192,7 @@ enum aiTextureType
 {
     /** Dummy value.
      *
-     *  No TEXTURE, but the value to be used as 'TEXTURE semantic'
+     *  No texture, but the value to be used as 'texture semantic'
      *  (#aiMaterialProperty::mSemantic) for all material properties
      *  *not* related to textures.
      */
@@ -204,34 +204,34 @@ enum aiTextureType
      * These must never be removed, as most engines support them.
      */
 
-    /** The TEXTURE is combined with the result of the diffuse
+    /** The texture is combined with the result of the diffuse
      *  lighting equation.
      */
     aiTextureType_DIFFUSE = 1,
 
-    /** The TEXTURE is combined with the result of the specular
+    /** The texture is combined with the result of the specular
      *  lighting equation.
      */
     aiTextureType_SPECULAR = 2,
 
-    /** The TEXTURE is combined with the result of the ambient
+    /** The texture is combined with the result of the ambient
      *  lighting equation.
      */
     aiTextureType_AMBIENT = 3,
 
-    /** The TEXTURE is added to the result of the lighting
+    /** The texture is added to the result of the lighting
      *  calculation. It isn't influenced by incoming light.
      */
     aiTextureType_EMISSIVE = 4,
 
-    /** The TEXTURE is a height map.
+    /** The texture is a height map.
      *
      *  By convention, higher gray-scale values stand for
      *  higher elevations from the base height.
      */
     aiTextureType_HEIGHT = 5,
 
-    /** The TEXTURE is a (tangent space) normal-map.
+    /** The texture is a (tangent space) normal-map.
      *
      *  Again, there are several conventions for tangent-space
      *  normal maps. Assimp does (intentionally) not
@@ -239,39 +239,39 @@ enum aiTextureType
      */
     aiTextureType_NORMALS = 6,
 
-    /** The TEXTURE defines the glossiness of the material.
+    /** The texture defines the glossiness of the material.
      *
      *  The glossiness is in fact the exponent of the specular
      *  (phong) lighting equation. Usually there is a conversion
      *  function defined to map the linear color values in the
-     *  TEXTURE to a suitable exponent. Have fun.
+     *  texture to a suitable exponent. Have fun.
     */
     aiTextureType_SHININESS = 7,
 
-    /** The TEXTURE defines per-pixel opacity.
+    /** The texture defines per-pixel opacity.
      *
      *  Usually 'white' means opaque and 'black' means
      *  'transparency'. Or quite the opposite. Have fun.
     */
     aiTextureType_OPACITY = 8,
 
-    /** Displacement TEXTURE
+    /** Displacement texture
      *
      *  The exact purpose and format is application-dependent.
      *  Higher color values stand for higher vertex displacements.
     */
     aiTextureType_DISPLACEMENT = 9,
 
-    /** Lightmap TEXTURE (aka Ambient Occlusion)
+    /** Lightmap texture (aka Ambient Occlusion)
      *
      *  Both 'Lightmaps' and dedicated 'ambient occlusion maps' are
-     *  covered by this material property. The TEXTURE contains a
+     *  covered by this material property. The texture contains a
      *  scaling value for the final color value of a pixel. Its
      *  intensity is not affected by incoming light.
     */
     aiTextureType_LIGHTMAP = 10,
 
-    /** Reflection TEXTURE
+    /** Reflection texture
      *
      * Contains the color of a perfect mirror reflection.
      * Rarely used, almost never for real-time applications.
@@ -292,10 +292,10 @@ enum aiTextureType
     aiTextureType_DIFFUSE_ROUGHNESS = 16,
     aiTextureType_AMBIENT_OCCLUSION = 17,
 
-    /** Unknown TEXTURE
+    /** Unknown texture
      *
-     *  A TEXTURE reference that does not match any of the definitions
-     *  above is considered to be 'UNKNOWN'. It is still imported,
+     *  A texture reference that does not match any of the definitions
+     *  above is considered to be 'unknown'. It is still imported,
      *  but is excluded from any further post-processing.
     */
     aiTextureType_UNKNOWN = 18,
@@ -381,35 +381,35 @@ enum aiShadingMode
 
 
 // ---------------------------------------------------------------------------
-/** @brief Defines some mixed flags for a particular TEXTURE.
+/** @brief Defines some mixed flags for a particular texture.
  *
  *  Usually you'll instruct your cg artists how textures have to look like ...
  *  and how they will be processed in your application. However, if you use
  *  Assimp for completely generic loading purposes you might also need to
- *  process these flags in order to display as many 'UNKNOWN' 3D models as
+ *  process these flags in order to display as many 'unknown' 3D models as
  *  possible correctly.
  *
  *  This corresponds to the #AI_MATKEY_TEXFLAGS property.
 */
 enum aiTextureFlags
 {
-    /** The TEXTURE's color values have to be inverted (component-wise 1-n)
+    /** The texture's color values have to be inverted (component-wise 1-n)
      */
     aiTextureFlags_Invert = 0x1,
 
     /** Explicit request to the application to process the alpha channel
-     *  of the TEXTURE.
+     *  of the texture.
      *
      *  Mutually exclusive with #aiTextureFlags_IgnoreAlpha. These
      *  flags are set if the library can say for sure that the alpha
      *  channel is used/is not used. If the model format does not
      *  define this, it is left to the application to decide whether
-     *  the TEXTURE alpha channel - if any - is evaluated or not.
+     *  the texture alpha channel - if any - is evaluated or not.
      */
     aiTextureFlags_UseAlpha = 0x2,
 
     /** Explicit request to the application to ignore the alpha channel
-     *  of the TEXTURE.
+     *  of the texture.
      *
      *  Mutually exclusive with #aiTextureFlags_UseAlpha.
      */
@@ -594,13 +594,13 @@ struct aiMaterialProperty
     C_STRUCT aiString mKey;
 
     /** Textures: Specifies their exact usage semantic.
-     * For non-TEXTURE properties, this member is always 0
+     * For non-texture properties, this member is always 0
      * (or, better-said, #aiTextureType_NONE).
      */
     unsigned int mSemantic;
 
-    /** Textures: Specifies the index of the TEXTURE.
-     *  For non-TEXTURE properties, this member is always 0.
+    /** Textures: Specifies the index of the texture.
+     *  For non-texture properties, this member is always 0.
      */
     unsigned int mIndex;
 
@@ -705,9 +705,9 @@ public:
      *  from the material
      *
      * @param pKey Key to search for. One of the AI_MATKEY_XXX constants.
-    * @param type Specifies the type of the TEXTURE to be retrieved (
+    * @param type Specifies the type of the texture to be retrieved (
     *    e.g. diffuse, specular, height map ...)
-    * @param idx Index of the TEXTURE to be retrieved.
+    * @param idx Index of the texture to be retrieved.
      * @param pOut reference to receive the output value
      */
     template <typename Type>
@@ -734,38 +734,38 @@ public:
         unsigned int idx, aiUVTransform& pOut) const;
 
     // -------------------------------------------------------------------
-    /** Get the number of textures for a particular TEXTURE type.
+    /** Get the number of textures for a particular texture type.
      *  @param type Texture type to check for
      *  @return Number of textures for this type.
-     *  @note A TEXTURE can be easily queried using #GetTexture() */
+     *  @note A texture can be easily queried using #GetTexture() */
     unsigned int GetTextureCount(aiTextureType type) const;
 
     // -------------------------------------------------------------------
     /** Helper function to get all parameters pertaining to a
-     *  particular TEXTURE slot from a material.
+     *  particular texture slot from a material.
      *
      *  This function is provided just for convenience, you could also
      *  read the single material properties manually.
-     *  @param type Specifies the type of the TEXTURE to be retrieved (
+     *  @param type Specifies the type of the texture to be retrieved (
      *    e.g. diffuse, specular, height map ...)
-     *  @param index Index of the TEXTURE to be retrieved. The function fails
-     *    if there is no TEXTURE of that type with this index.
+     *  @param index Index of the texture to be retrieved. The function fails
+     *    if there is no texture of that type with this index.
      *    #GetTextureCount() can be used to determine the number of textures
-     *    per TEXTURE type.
-     *  @param path Receives the path to the TEXTURE.
-     *    If the TEXTURE is embedded, receives a '*' followed by the id of
-     *    the TEXTURE (for the textures stored in the corresponding SCENE) which
+     *    per texture type.
+     *  @param path Receives the path to the texture.
+     *    If the texture is embedded, receives a '*' followed by the id of
+     *    the texture (for the textures stored in the corresponding scene) which
      *    can be converted to an int using a function like atoi.
      *    NULL is a valid value.
-     *  @param mapping The TEXTURE mapping.
+     *  @param mapping The texture mapping.
      *    NULL is allowed as value.
-     *  @param uvindex Receives the UV index of the TEXTURE.
+     *  @param uvindex Receives the UV index of the texture.
      *    NULL is a valid value.
-     *  @param blend Receives the blend factor for the TEXTURE
+     *  @param blend Receives the blend factor for the texture
      *    NULL is a valid value.
-     *  @param op Receives the TEXTURE operation to be performed between
-     *    this TEXTURE and the previous TEXTURE. NULL is allowed as value.
-     *  @param mapmode Receives the mapping modes to be used for the TEXTURE.
+     *  @param op Receives the texture operation to be performed between
+     *    this texture and the previous texture. NULL is allowed as value.
+     *  @param mapmode Receives the mapping modes to be used for the texture.
      *    The parameter may be NULL but if it is a valid pointer it MUST
      *    point to an array of 3 aiTextureMapMode's (one for each
      *    axis: UVW order (=XYZ)).
@@ -942,7 +942,7 @@ extern "C" {
 #define AI_MATKEY_SHADER_COMPUTE "?sh.cs",0,0
 
 // ---------------------------------------------------------------------------
-// Pure key names for all TEXTURE-related properties
+// Pure key names for all texture-related properties
 //! @cond MATS_DOC_FULL
 #define _AI_MATKEY_TEXTURE_BASE         "$tex.file"
 #define _AI_MATKEY_UVWSRC_BASE          "$tex.uvwsrc"
@@ -1359,9 +1359,9 @@ extern "C" {
  *
  * @param pMat Pointer to the input material. May not be NULL
  * @param pKey Key to search for. One of the AI_MATKEY_XXX constants.
- * @param type Specifies the type of the TEXTURE to be retrieved (
+ * @param type Specifies the type of the texture to be retrieved (
  *    e.g. diffuse, specular, height map ...)
- * @param index Index of the TEXTURE to be retrieved.
+ * @param index Index of the texture to be retrieved.
  * @param pPropOut Pointer to receive a pointer to a valid aiMaterialProperty
  *        structure or NULL if the key has not been found. */
 // ---------------------------------------------------------------------------
@@ -1377,7 +1377,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialProperty(
  *  from the material
  *
  * Pass one of the AI_MATKEY_XXX constants for the last three parameters (the
- * example reads the #AI_MATKEY_UVTRANSFORM property of the first diffuse TEXTURE)
+ * example reads the #AI_MATKEY_UVTRANSFORM property of the first diffuse texture)
  * @code
  * aiUVTransform trafo;
  * unsigned int max = sizeof(aiUVTransform);
@@ -1413,7 +1413,7 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialFloatArray(
 /** @brief Retrieve a single float property with a specific key from the material.
 *
 * Pass one of the AI_MATKEY_XXX constants for the last three parameters (the
-* example reads the #AI_MATKEY_SHININESS_STRENGTH property of the first diffuse TEXTURE)
+* example reads the #AI_MATKEY_SHININESS_STRENGTH property of the first diffuse texture)
 * @code
 * float specStrength = 1.f; // default value, remains unmodified if we fail.
 * aiGetMaterialFloat(d_mat, AI_MATKEY_SHININESS_STRENGTH,
@@ -1519,50 +1519,50 @@ ASSIMP_API C_ENUM aiReturn aiGetMaterialString(const C_STRUCT aiMaterial* pMat,
     C_STRUCT aiString* pOut);
 
 // ---------------------------------------------------------------------------
-/** Get the number of textures for a particular TEXTURE type.
+/** Get the number of textures for a particular texture type.
  *  @param[in] pMat Pointer to the input material. May not be NULL
  *  @param type Texture type to check for
  *  @return Number of textures for this type.
- *  @note A TEXTURE can be easily queried using #aiGetMaterialTexture() */
+ *  @note A texture can be easily queried using #aiGetMaterialTexture() */
 // ---------------------------------------------------------------------------
 ASSIMP_API unsigned int aiGetMaterialTextureCount(const C_STRUCT aiMaterial* pMat,
     C_ENUM aiTextureType type);
 
 // ---------------------------------------------------------------------------
 /** @brief Helper function to get all values pertaining to a particular
- *  TEXTURE slot from a material structure.
+ *  texture slot from a material structure.
  *
  *  This function is provided just for convenience. You could also read the
- *  TEXTURE by parsing all of its properties manually. This function bundles
+ *  texture by parsing all of its properties manually. This function bundles
  *  all of them in a huge function monster.
  *
  *  @param[in] d_mat Pointer to the input material. May not be NULL
- *  @param[in] type Specifies the TEXTURE stack to read from (e.g. diffuse,
+ *  @param[in] type Specifies the texture stack to read from (e.g. diffuse,
  *     specular, height map ...).
- *  @param[in] index Index of the TEXTURE. The function fails if the
- *     requested index is not available for this TEXTURE type.
+ *  @param[in] index Index of the texture. The function fails if the
+ *     requested index is not available for this texture type.
  *     #aiGetMaterialTextureCount() can be used to determine the number of
- *     textures in a particular TEXTURE stack.
+ *     textures in a particular texture stack.
  *  @param[out] path Receives the output path
- *     If the TEXTURE is embedded, receives a '*' followed by the id of
- *     the TEXTURE (for the textures stored in the corresponding SCENE) which
+ *     If the texture is embedded, receives a '*' followed by the id of
+ *     the texture (for the textures stored in the corresponding scene) which
  *     can be converted to an int using a function like atoi.
  *     This parameter must be non-null.
- *  @param mapping The TEXTURE mapping mode to be used.
+ *  @param mapping The texture mapping mode to be used.
  *      Pass NULL if you're not interested in this information.
  *  @param[out] uvindex For UV-mapped textures: receives the index of the UV
  *      source channel. Unmodified otherwise.
  *      Pass NULL if you're not interested in this information.
- *  @param[out] blend Receives the blend factor for the TEXTURE
+ *  @param[out] blend Receives the blend factor for the texture
  *      Pass NULL if you're not interested in this information.
- *  @param[out] op Receives the TEXTURE blend operation to be perform between
- *      this TEXTURE and the previous TEXTURE.
+ *  @param[out] op Receives the texture blend operation to be perform between
+ *      this texture and the previous texture.
  *      Pass NULL if you're not interested in this information.
- *  @param[out] mapmode Receives the mapping modes to be used for the TEXTURE.
+ *  @param[out] mapmode Receives the mapping modes to be used for the texture.
  *      Pass NULL if you're not interested in this information. Otherwise,
  *      pass a pointer to an array of two aiTextureMapMode's (one for each
  *      axis, UV order).
- *  @param[out] flags Receives the the TEXTURE flags.
+ *  @param[out] flags Receives the the texture flags.
  *  @return AI_SUCCESS on success, otherwise something else. Have fun.*/
 // ---------------------------------------------------------------------------
 #ifdef __cplusplus

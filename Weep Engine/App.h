@@ -19,7 +19,6 @@ class GameObjectManager;
 class SceneManager;
 class ModuleTexture;
 class ModuleQuadtree;
-class ResourceManagment;
 
 class JsonHelper;
 
@@ -84,7 +83,6 @@ public:
 	ModuleFileSystem* file_system = nullptr;
 	ModuleQuadtree* quadtree = nullptr;
 	SceneManager*	   scene_manager = nullptr;
-	ResourceManagment* resource_managment = nullptr;
 
 	Profiler*		   profiler = nullptr;
 

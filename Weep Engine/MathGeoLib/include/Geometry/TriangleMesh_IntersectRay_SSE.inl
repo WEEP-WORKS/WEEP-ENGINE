@@ -14,7 +14,7 @@
 
 /** @file TriangleMesh_IntersectRay_SSE.inl
 	@author Jukka Jylänki
-	@brief SSE implementation of ray-MESH intersection routines. */
+	@brief SSE implementation of ray-mesh intersection routines. */
 MATH_BEGIN_NAMESPACE
 
 #if defined(MATH_GEN_SSE2) && !defined(MATH_GEN_TRIANGLEINDEX)

@@ -52,7 +52,7 @@ extern "C" {
 typedef struct SDL_RWops
 {
     /**
-     *  Return the size of the file in this rwops, or -1 if UNKNOWN
+     *  Return the size of the file in this rwops, or -1 if unknown
      */
     Sint64 (SDLCALL * size) (struct SDL_RWops * context);
 
@@ -176,7 +176,7 @@ extern DECLSPEC void SDLCALL SDL_FreeRW(SDL_RWops * area);
 #define RW_SEEK_END 2       /**< Seek relative to the end of data */
 
 /**
- *  Return the size of the file in this rwops, or -1 if UNKNOWN
+ *  Return the size of the file in this rwops, or -1 if unknown
  */
 extern DECLSPEC Sint64 SDLCALL SDL_RWsize(SDL_RWops *context);
 

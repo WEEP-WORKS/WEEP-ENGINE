@@ -21,15 +21,15 @@
 
 MATH_BEGIN_NAMESPACE
 
-/// Represents an unindiced triangle MESH.
-/** This class stores a triangle MESH as flat array, optimized for ray intersections. */
+/// Represents an unindiced triangle mesh.
+/** This class stores a triangle mesh as flat array, optimized for ray intersections. */
 class TriangleMesh
 {
 public:
 	TriangleMesh();
 	~TriangleMesh();
 
-	/// Specifies the vertex data of this triangle MESH. Replaces any old
+	/// Specifies the vertex data of this triangle mesh. Replaces any old
 	/// specified geometry.
 	void Set(const float *triangleMesh, int numTriangles);
 	void Set(const float3 *triangleMesh, int numTriangles) { Set(reinterpret_cast<const float *>(triangleMesh), numTriangles); }

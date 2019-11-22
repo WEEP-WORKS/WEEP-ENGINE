@@ -137,7 +137,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				parent = parent->parent;
 			}
 
-			//aiNode* node = SCENE->mRootNode->mChildren[i];
+			//aiNode* node = scene->mRootNode->mChildren[i];
 
 
 			//create gameObject.
@@ -147,7 +147,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
 
-			// Set MESH pos, rot and scale
+			// Set mesh pos, rot and scale
 			aiVector3D translation;
 			aiVector3D scaling;
 			aiQuaternion rotation;
@@ -197,7 +197,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				}
 
 				CreateOwnFile(model, name);
-				//LoadOwnFile(string(name + ".MESH"));
+				//LoadOwnFile(string(name + ".mesh"));
 				
 			}
 			else
@@ -227,18 +227,18 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		
 	}
 
-	//if only load one MESH, add this to he hierarchy.
+	//if only load one mesh, add this to he hierarchy.
 	if (root_go->childrens.size() == 1)
 	{
 		root_go->childrens[0]->parent = App->game_object_manager->root;
 		App->game_object_manager->root->childrens.push_back(root_go->childrens[0]);
 		
 
-		//once we loaded the MESH to the hierarchy, delete the Game Object "group" because we will not use it in this case.
+		//once we loaded the mesh to the hierarchy, delete the Game Object "group" because we will not use it in this case.
 		root_go->childrens.erase(root_go->childrens.cbegin()); // don't delete the children, only the group. The function deletes the childrens too. For this reason erase the game object from the children list.
 		App->game_object_manager->Destroy(root_go);
 	}
-	else //if we load more than one MESH, add the group with the meshes loaded as childrens.
+	else //if we load more than one mesh, add the group with the meshes loaded as childrens.
 	{
 		root_go->parent = App->game_object_manager->root;
 		App->game_object_manager->root->childrens.push_back(root_go);
@@ -260,7 +260,7 @@ void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
 	model->mesh_data->vertexs.buffer_size = model->mesh_data->vertexs.num * 3;
 	model->mesh_data->vertexs.buffer = new float[model->mesh_data->vertexs.buffer_size]; // create array of Vertices with the correct size
 
-	memcpy(model->mesh_data->vertexs.buffer, mesh->mVertices, sizeof(float) * model->mesh_data->vertexs.buffer_size); // copy the vertices of the MESH to the arrey of vertices
+	memcpy(model->mesh_data->vertexs.buffer, mesh->mVertices, sizeof(float) * model->mesh_data->vertexs.buffer_size); // copy the vertices of the mesh to the arrey of vertices
 
 	LOG("New mesh with %i vertices.", model->mesh_data->vertexs.num);
 }
@@ -290,7 +290,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 			// take the first 3 slots, 
 			//then the next 3 slots, 
 			//then the same ...                                               3 indices * their var type, only copy 1 face (3 indices) every time
-			memcpy(&model->mesh_data->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the MESH to the array of indices.
+			memcpy(&model->mesh_data->indexs.buffer[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint)); // Copy the Indices of the mesh to the array of indices.
 		}
 	}
 
@@ -327,19 +327,19 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 
 	model->mesh_data->uvs.num = mesh->mNumVertices; //every vertex have one vector (only 2 dimensions will considerate) of uvs.
 
-	model->mesh_data->uvs.buffer_size = model->num_uvs_channels * model->mesh_data->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the MESH
+	model->mesh_data->uvs.buffer_size = model->num_uvs_channels * model->mesh_data->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
 	model->mesh_data->uvs.buffer = new float[model->mesh_data->uvs.buffer_size];
 
 	model->channel_buffer_size = model->mesh_data->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
 	for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
 	{
-		if (mesh->HasTextureCoords(channel)) // if this channel have TEXTURE coords...
+		if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
 		{
 
 			if (mesh->mNumUVComponents[channel] == 2) //the channel have vectors of 2 components
 			{
 				for (uint j = 0; j < model->mesh_data->uvs.num; ++j)
-				{								//start index of the current channel.  start index of the current channel of the MESH.  Only copy the values in 1 channel size.
+				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
 					memcpy(&model->mesh_data->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
 
 				}
@@ -371,7 +371,8 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		std::string name = App->GetFileName(path.C_Str());
 		std::string dir = "Models/Textures/";
 		std::string f_path = dir + name;
-		App->texture->LoadTexture(f_path.c_str(), model);
+		model->id_texture = App->texture->LoadTexture(f_path.c_str(), model->texture_width, model->texture_height );
+		model->texture_path = f_path.c_str();
 	}
 }
 

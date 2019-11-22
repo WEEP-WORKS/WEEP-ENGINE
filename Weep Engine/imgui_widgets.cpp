@@ -64,7 +64,7 @@ Index of this file:
 #pragma clang diagnostic ignored "-Wdouble-promotion"       // warning: implicit conversion from 'float' to 'double' when passing argument to function  // using printf() is a misery with this as C++ va_arg ellipsis changes float to double.
 #endif
 #elif defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wpragmas"                  // warning: UNKNOWN option after '#pragma GCC diagnostic' kind
+#pragma GCC diagnostic ignored "-Wpragmas"                  // warning: unknown option after '#pragma GCC diagnostic' kind
 #pragma GCC diagnostic ignored "-Wformat-nonliteral"        // warning: format not a string literal, format string not checked
 #pragma GCC diagnostic ignored "-Wclass-memaccess"          // [__GNUC__ >= 8] warning: 'memset/memcpy' clearing/writing an object of type 'xxxx' with no trivial copy-assignment; use assignment or value-initialization instead
 #endif
@@ -944,7 +944,7 @@ bool ImGui::ImageButton(ImTextureID user_texture_id, const ImVec2& size, const I
     ImGuiContext& g = *GImGui;
     const ImGuiStyle& style = g.Style;
 
-    // Default to using TEXTURE ID as ID. User can still push string/integer prefixes.
+    // Default to using texture ID as ID. User can still push string/integer prefixes.
     // We could hash the size/uv to create a unique ID but that would prevent the user from animating UV.
     PushID((void*)(intptr_t)user_texture_id);
     const ImGuiID id = window->GetID("#image");
@@ -6937,7 +6937,7 @@ bool    ImGui::TabItemEx(ImGuiTabBar* tab_bar, const char* label, bool* p_open, 
     ImVec2 pos = window->DC.CursorPos;
     ImRect bb(pos, pos + size);
 
-    // We don't have CPU clipping primitives to clip the CloseButton (until it becomes a TEXTURE), so need to add an extra draw call (temporary in the case of vertical animation)
+    // We don't have CPU clipping primitives to clip the CloseButton (until it becomes a texture), so need to add an extra draw call (temporary in the case of vertical animation)
     bool want_clip_rect = (bb.Min.x < tab_bar->BarRect.Min.x) || (bb.Max.x > tab_bar->BarRect.Max.x);
     if (want_clip_rect)
         PushClipRect(ImVec2(ImMax(bb.Min.x, tab_bar->BarRect.Min.x), bb.Min.y - 1), ImVec2(tab_bar->BarRect.Max.x, bb.Max.y), true);
