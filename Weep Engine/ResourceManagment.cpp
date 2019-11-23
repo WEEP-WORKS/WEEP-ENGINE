@@ -48,3 +48,15 @@ const Resource* ResourceManagment::GetByID(UID id) const
 	return nullptr;
 
 }
+
+const std::vector<ResourceMesh*> ResourceManagment::GetAllMeshes() const
+{
+	std::vector<ResourceMesh*> meshes;
+	for (std::map<UID, Resource*>::const_iterator iter = resources.cbegin(); iter != resources.cend(); ++iter)
+	{
+		if ((*iter).second->GetType() == Resource::Type::MESH)
+			meshes.push_back((ResourceMesh*)(*iter).second);
+	}
+
+	return meshes;
+}

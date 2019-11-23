@@ -65,6 +65,12 @@ void GameObject::PostUpdate()
 			if ((*iter)->IsActive())
 			{
 				(*iter)->PostUpdate();//Render
+				GameObject* ob = parent;
+				if (ob != nullptr)
+				{
+					string s = ob->name;
+					uint i = 0u;
+				}
 			}
 		}
 	}

@@ -6,6 +6,7 @@
 //typedef unsigned long long UID;
 #include "Globals.h"
 #include "Resource.h"
+#include "ResourceMesh.h"
 //class Resource { public:	enum class Type; };
 
 
@@ -16,8 +17,11 @@ public:
 	//UID Find(const char* file_in_assets) const;
 	//UID ImportFile(const char* new_file_in_assets, bool force = false);
 	UID GenerateNewUID();
+
 	const Resource* GetByID(UID uid) const;
 	Resource* GetByID(UID uid);
+	const std::vector<ResourceMesh*> GetAllMeshes() const;
+
 	UID CreateNewResource(Resource::Type type);
 private:
 	std::map<UID, Resource*> resources;

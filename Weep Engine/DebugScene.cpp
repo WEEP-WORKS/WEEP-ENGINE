@@ -103,6 +103,10 @@ bool DebugScene::Start()
 	if (ret == true)
 	{
 		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+
+
 	}
 
 	if (ret == true)

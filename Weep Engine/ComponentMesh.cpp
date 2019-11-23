@@ -25,7 +25,7 @@ void ComponentMesh::PostUpdate()
 
 void ComponentMesh::CleanUp()
 {
-	//RELEASE(mesh_data);//no TODO
+	//RELEASE(mesh_data);//no TODO with references 
 }
 
 void ComponentMesh::OnGetBoundingBox(AABB& box)
@@ -72,6 +72,7 @@ void ComponentMesh::RenderModel()
 {
 
 	ResourceMesh* resource = GetResource();
+	GameObject* ob = object->parent;
 
 	glBindBuffer(GL_ARRAY_BUFFER, resource->mesh_data->vertexs.id_buffer);
 	glVertexPointer(3, GL_FLOAT, 0, NULL); //every vertex have 3 coordinates.
@@ -86,6 +87,7 @@ void ComponentMesh::RenderModel()
 		glNormalPointer(GL_FLOAT, 0, NULL);
 	}
 
+
 	if (texture != nullptr)
 	{
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -95,7 +97,7 @@ void ComponentMesh::RenderModel()
 
 
 		//bind texture
-		glBindTexture(GL_TEXTURE_2D, texture->GetResource(texture->GetResourceID())->id_texture);
+	//	glBindTexture(GL_TEXTURE_2D, texture->GetResource(texture->GetResourceID())->id_texture);
 	}
 
 	//indexs final

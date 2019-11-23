@@ -91,6 +91,9 @@ public:
 	//uint bytes = 0;
 	//uint gpu_id = 0;
 	//Format format = unknown;
+	std::string name;
+	std::string imported_file;
+
 	uint				num_faces = 0u;		// Number of faces of the mesh.
 	uint				num_uvs_channels = 0u;
 

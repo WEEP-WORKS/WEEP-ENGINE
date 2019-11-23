@@ -12,9 +12,11 @@
 #include "Assimp/include/cfileio.h"
 #include "Assimp/include/version.h"
 #include "ModuleFileSystem.h"
+#include "ModuleQuadtree.h"
 
 #include "ResourceManagment.h"
 #include "ResourceMesh.h"
+
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
@@ -70,20 +72,52 @@ bool ModuleImporter::LoadFBX(const char* path)
 {
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+	const std::vector<ResourceMesh*> meshes = App->resource_managment->GetAllMeshes();
+	std::vector<ResourceMesh*> meshes_of_this_model_in_memory;
 
-	if (scene != nullptr && scene->HasMeshes())
+	for (std::vector<ResourceMesh*>::const_iterator citer = meshes.cbegin(); citer != meshes.cend(); ++citer)
 	{
-		LoadPath((char*)path);
-		LoadAllMeshes(scene);
+		if ((*citer)->imported_file == App->GetFileNameWithoutExtension(path))
+			meshes_of_this_model_in_memory.push_back(*citer);
+	}
+
+	if (!meshes_of_this_model_in_memory.empty())
+	{
+		GameObject* root_go = nullptr;
+
+		if (meshes_of_this_model_in_memory.size() > 1)
+			root_go = new GameObject(std::string(std::string("group_") + App->GetFileNameWithoutExtension(path)), App->game_object_manager->root);
+		else
+			root_go = App->game_object_manager->root;
+
+		for (std::vector<ResourceMesh*>::const_iterator citer = meshes_of_this_model_in_memory.cbegin(); citer != meshes_of_this_model_in_memory.cend(); ++citer)
+		{
+			GameObject* object = new GameObject((*citer)->name.c_str(), root_go);//HIERARCHY NOT IMPLEMENTED!
+			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
+			model->SetResourceID((*citer)->GetResourceID());
+			object->local_bbox = model->GetResource()->GetBbox();
+			App->quadtree->Insert(object);
+			LOG("Returning mesh in memory");
+		}
 	}
 	else
 	{
-		LOG("Error loading scene %s.", path);
-		ret = false;
-	}
 
-	aiReleaseImport(scene);
+		const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+
+		if (scene != nullptr && scene->HasMeshes())
+		{
+			LoadPath((char*)path);
+			LoadAllMeshes(scene);
+		}
+		else
+		{
+			LOG("Error loading scene %s.", path);
+			ret = false;
+		}
+
+		aiReleaseImport(scene);
+	}
 
 	return ret;
 }
@@ -150,7 +184,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
 			ResourceMesh* res_mesh = model->GetResource();
-
+			res_mesh->name = name;
+			res_mesh->imported_file = App->GetFileNameWithoutExtension(GetPath());
 
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
 
