@@ -19,7 +19,7 @@ ComponentMesh::ComponentMesh()
 
 void ComponentMesh::PostUpdate()
 {
-	if(object->isInsideFrustum)
+//	if(object->isInsideFrustum)
 		Render();
 }
 
