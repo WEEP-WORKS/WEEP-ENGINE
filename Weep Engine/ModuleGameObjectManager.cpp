@@ -186,9 +186,9 @@ void GameObjectManager::Destroy(GameObject * go)
 	if (go->parent != nullptr)
 		go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
 
+	App->quadtree->DeleteGOFromQuadtree(go);
 	go->CleanUp();
 	ReleaseGameObject(go);
-	App->quadtree->DeleteGOFromQuadtree(go);
 
 }
 

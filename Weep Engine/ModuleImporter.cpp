@@ -95,11 +95,13 @@ bool ModuleImporter::LoadFBX(const char* path)
 			GameObject* object = new GameObject((*citer)->name.c_str(), root_go);//HIERARCHY NOT IMPLEMENTED!
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
 			model->SetResourceID((*citer)->GetResourceID());
-
-			ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
-			text->has_texture = true;
-			text->SetResourceID((*citer)->texture_binded_id);
-			text->ActivateThisTexture();
+			if ((*citer)->texture_binded_id != 0)
+			{
+				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+				text->has_texture = true;
+				text->SetResourceID((*citer)->texture_binded_id);
+				text->ActivateThisTexture();
+			}
 
 			object->local_bbox = model->GetResource()->GetBbox();
 			App->quadtree->Insert(object);
@@ -243,7 +245,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 					res_mesh->texture_binded_id = text->GetResourceID();
 
-					text->ActivateThisTexture();
+					
 				}
 
 				CreateOwnFile(res_mesh, name);

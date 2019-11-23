@@ -47,7 +47,7 @@ bool ModuleTexture::CleanUp()
 
 void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
 {
-	if (strcmp("png", file_extension) == 0 || strcmp("dds", file_extension) == 0)
+	if (strcmp("png", file_extension) == 0 || strcmp("dds", file_extension) == 0 || strcmp("tga", file_extension) == 0)
 	{
 		for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
 		{
@@ -93,21 +93,25 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 		{
 			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path_name_with_extension.c_str());
 			component_texture->SetResourceID((*iter)->resource_id);
+			component_texture->ActivateThisTexture();
+
 			return;
 		}
 	}
 
-	if (component_texture->GetResource(component_texture->GetResourceID()) == nullptr)
-	{
-		component_texture->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::TEXTURE));
-	}
-	ResourceTexture* resource_texture = component_texture->GetResource(component_texture->GetResourceID());
+	
 
 
 	//Load Texture in the resource.
 	if (ilLoadImage(path))
 	{
 		LOG("Image Loaded correctly. The texture was %s", path);
+
+		if (component_texture->GetResource(component_texture->GetResourceID()) == nullptr)
+		{
+			component_texture->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::TEXTURE));
+		}
+		ResourceTexture* resource_texture = component_texture->GetResource(component_texture->GetResourceID());
 
 		uint id_text = ilutGLBindTexImage();
 		if (id_text > 0)
@@ -122,6 +126,7 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 			resource_texture->texture_height = height;
 			resource_texture->texture_path = path_name_with_extension;
 
+			component_texture->ActivateThisTexture();
 
 			TextureInfo* new_texture = new TextureInfo();
 			new_texture->resource_id = component_texture->GetResourceID();

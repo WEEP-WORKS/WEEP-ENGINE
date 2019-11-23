@@ -129,4 +129,5 @@ const UID ComponentTexture::GetResourceID() const
 void ComponentTexture::SetResourceID(UID id)
 {
 	resource_id = id;
+
 }
