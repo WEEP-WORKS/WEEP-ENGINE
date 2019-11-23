@@ -29,7 +29,7 @@ public:
 	~ModuleInput();
 
 	bool Awake();
-	bool PreUpdate();
+	bool PreUpdate(float dt);
 	bool CleanUp();
 
 	void OnConfiguration();

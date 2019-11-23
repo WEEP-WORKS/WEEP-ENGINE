@@ -66,7 +66,7 @@ public:
 
 	bool Awake();
 	bool Start();
-	bool Update();
+	bool Update(float dt);
 	bool CleanUp();
 
 	Camera3D* GetEditorCamera() const;

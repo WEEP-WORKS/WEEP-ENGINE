@@ -45,7 +45,7 @@ bool ModuleInput::Awake()
 }
 
 // Called every draw update
-bool ModuleInput::PreUpdate()
+bool ModuleInput::PreUpdate(float dt)
 {
 	bool ret = true;
 

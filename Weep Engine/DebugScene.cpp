@@ -122,10 +122,9 @@ bool DebugScene::CleanUp()
 	return ret;
 }
 
-bool DebugScene::PreUpdate() 
+bool DebugScene::PreUpdate(float dt) 
 {
 	bool ret = true;
-
 
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
@@ -151,7 +150,7 @@ bool DebugScene::PreUpdate()
 	return ret;
 }
 
-bool DebugScene::Update()
+bool DebugScene::Update(float dt)
 {
 	bool ret = true;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -170,7 +169,7 @@ bool DebugScene::Update()
 	{
 		bool full = true;
 		LoadStyle("blue_yellow");
-		App->window->SetAppName("Weep Game");
+		App->window->SetAppName("Weep Game (EXECUTING GAME MODE)");
 		App->window->SetVersion("");
 	}
 	else
@@ -179,13 +178,6 @@ bool DebugScene::Update()
 		App->window->SetAppName(name_input_buffer);
 		App->window->SetVersion(version_input_buffer);
 	}
-
-	float game_dt = App->profiler->GetGameDT();
-	if (App->scene_manager->GetPause())
-		game_dt = 0;
-
-	if (App->scene_manager->GetState() == PLAY)
-		App->profiler->AddGameTime(game_dt);
 
 	//WE COULD CALL DOFORALLCHILDREN UPDATE WITH DT
 
@@ -201,8 +193,8 @@ bool DebugScene::Update()
 	//--------------------------MAIN MENU BAR----------------------------------
 	//-------------------------------------------------------------------------
 
-	if (App->scene_manager->GetPause() == false)
-		MenuBar(ret);
+
+	MenuBar(ret);
 
 	Panels();
 
@@ -212,15 +204,18 @@ bool DebugScene::Update()
 	//----------------------------INSPECTOR------------------------------------
 	//-------------------------------------------------------------------------
 
-	if (App->debug_scene->show_inspector && App->scene_manager->GetPause() == false)
+
+	if (App->debug_scene->show_inspector)
 	{
+
 		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowPos(ImVec2(970, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
 
-		if (App->scene_manager->GetState() == PLAY)
-			ImGui::SetNextWindowCollapsed(true);
-		else
-			ImGui::SetNextWindowCollapsed(false);
+		//if (App->scene_manager->GetState() == PLAY)
+		//	App->debug_scene->show_inspector = false;
+		//else if (App->scene_manager->GetState() == EDIT)
+		//	App->debug_scene->show_inspector = true;
+
 
 		if (ImGui::Begin("Inspector",NULL, ImGuiWindowFlags_NoSavedSettings))
 		{
@@ -272,6 +267,27 @@ bool DebugScene::Update()
 	return ret;
 }
 
+bool DebugScene::PostUpdate(float dt)
+{
+	bool ret = true;
+
+	float game_dt = App->profiler->GetGameDT();
+	if (App->scene_manager->GetPause())
+		game_dt = 0;
+	if (App->scene_manager->GetStep() && !frame_passed)
+	{
+		App->scene_manager->pause = true;
+		frame_passed = true;
+	}
+
+	if (App->scene_manager->GetState() == PLAY)
+		App->profiler->AddGameTime(game_dt);
+	
+	//ret = App->game_object_manager->Update(game_dt);
+
+	return ret;
+}
+
 void DebugScene::Tools()
 {
 	ImGui::SetNextWindowPos(ImVec2(-5, 20));
@@ -311,12 +327,20 @@ void DebugScene::Tools()
 	}
 	else if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
 	{
+		static float b = 1.0f; //  test whatever color you need from imgui_demo.cpp e.g.
+		static int i = 3;
+
 		ImGui::SetCursorPos(ImVec2(400, 3));
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.87f, 0.78f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.87f, 0.60f));
 		if (ImGui::Button("STOP"))
 		{
 			App->scene_manager->Edit();
-		}
 
+			//ImGuiStyle* style = &ImGui::GetStyle();
+			//style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.54f, 0.00f, 1.00f);
+		}
+		ImGui::PopStyleColor(2);
 		ImGui::SetCursorPos(ImVec2(450, 3));
 		if (ImGui::Button("Pause"))
 		{
@@ -324,12 +348,13 @@ void DebugScene::Tools()
 		}
 
 		ImGui::SetCursorPos(ImVec2(500, 3));
-		if (ImGui::Button("Step"))
+		if (ImGui::Button("Step") && App->scene_manager->GetPause())
 		{
 			App->scene_manager->Step();
+			frame_passed = false;
 		}
 
-		ImGui::SetCursorPos(ImVec2(550, 6));
+		ImGui::SetCursorPos(ImVec2(570, 6));
 		ImGui::Text("Current: PLAYING");
 
 		ImGui::SetCursorPos(ImVec2(800, 3));

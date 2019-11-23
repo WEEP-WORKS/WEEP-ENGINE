@@ -26,8 +26,10 @@ public:
 
 	bool Awake();
 	bool Start();
-	bool PreUpdate();
-	bool Update();
+	bool PreUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
+
 	void Tools();
 	bool CleanUp();
 
@@ -39,7 +41,7 @@ public:
 
 public:
 	bool show_hierarchy = true;
-
+	bool frame_passed = false;
 private:
 
 	bool show_inspector = true;

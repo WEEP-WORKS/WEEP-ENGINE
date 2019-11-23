@@ -36,14 +36,15 @@ public:
 	void Pause();
 	void Step();
 
-	float GetGameDT();
-	float GetGameExecutionTime();
+	bool	   pause = false;
 
 private:
-	SCENE_STATE state = EDIT;
-	bool	   pause = false;
+	SCENE_STATE state;
+	//bool	   pause = false;
 	bool	   step = false;
 	string	   current_scene;
+
+	bool gamemode = false;
 };
 
 #endif

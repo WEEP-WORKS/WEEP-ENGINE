@@ -5,6 +5,12 @@
 SceneManager::SceneManager(bool start_enabled) : Module(start_enabled)
 {
 	SetName("Scene Manager");
+
+	//should it be here or in start or preupdate if it reads from json?
+	if (gamemode)
+		state = PLAY;
+	else
+		state = EDIT;
 }
 
 SceneManager::~SceneManager()
@@ -78,11 +84,17 @@ void SceneManager::Play()
 
 void SceneManager::Pause()
 {
-	pause = false;
+	//pause = false;
 
-	if (state == PLAY)
+	//if (step)return;
+
+	if (state == PLAY && GetPause() == false)
 	{
 		pause = true;
+	}
+	else if (GetPause() == true)
+	{
+		pause = false;
 	}
 }
 
@@ -93,23 +105,5 @@ void SceneManager::Step()
 	if (state == PLAY)
 	{
 		step = true;
-		pause = false;
 	}
-}
-
-float SceneManager::GetGameDT()
-{
-	float ret = 0.0f;
-
-	if (pause)
-		ret = 0.0f;
-	else
-		ret = App->GetDT();
-
-	return ret;
-}
-
-float SceneManager::GetGameExecutionTime()
-{
-	return 0.0f;
 }

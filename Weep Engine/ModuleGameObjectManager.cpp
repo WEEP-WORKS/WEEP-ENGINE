@@ -30,7 +30,7 @@ bool GameObjectManager::Awake()
 	return true;
 }
 
-bool GameObjectManager::PreUpdate()
+bool GameObjectManager::PreUpdate(float dt)
 {
 	if (!to_delete.empty())
 	{
@@ -49,7 +49,7 @@ bool GameObjectManager::PreUpdate()
 	return true;
 }
 
-bool GameObjectManager::Update() 
+bool GameObjectManager::Update(float dt) 
 {
 	root->DoForAllChildrens(&GameObject::Update);
 
@@ -63,86 +63,89 @@ bool GameObjectManager::Update()
 	DoForAllChildrens(&GameObjectManager::DrawBBox);
 
 
-	if (App->scene_manager->GetPause() == false)
+
+	Hierarchy();
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
-		Hierarchy();
+		MousePick();
+	}
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+	{
+		AddGameObjectsSelectedToDestroy();
+	}
+
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		float4x4 transform = (*it)->ConstGetTransform()->GetGlobalTransform().Transposed();
+
+		float transformation[16];
+		ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
+			App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
+			current_gizmo_operation,
+			ImGuizmo::MODE::WORLD,
+			transform.ptr(), transformation);
+
+		if (ImGuizmo::IsUsing())
 		{
-			MousePick();
-		}
+			float addition[3];
+			float rotation[3];
+			float scale[3];
+			ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
+			float3 add(addition[0], addition[1], addition[2]);
+			float3 rot(rotation[0], rotation[1], rotation[2]);
+			float3 sc(scale[0], scale[1], scale[2]);
 
-		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
-		{
-			AddGameObjectsSelectedToDestroy();
-		}
+			LOG("%f, %f, %f", sc.x, sc.y, sc.z);
 
-		for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
-		{
-			float4x4 transform = (*it)->ConstGetTransform()->GetGlobalTransform().Transposed();
-
-			float transformation[16];
-			ImGuizmo::Manipulate(App->camera->GetCurrentCamera()->GetOpenGLViewMatrix().ptr(),
-				App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr(),
-				current_gizmo_operation,
-				ImGuizmo::MODE::WORLD,
-				transform.ptr(), transformation);
-
-			if (ImGuizmo::IsUsing())
+			switch (current_gizmo_operation)
 			{
-				float addition[3];
-				float rotation[3];
-				float scale[3];
-				ImGuizmo::DecomposeMatrixToComponents(transformation, addition, rotation, scale);
-				float3 add(addition[0], addition[1], addition[2]);
-				float3 rot(rotation[0], rotation[1], rotation[2]);
-				float3 sc(scale[0], scale[1], scale[2]);
-
-				LOG("%f, %f, %f", sc.x, sc.y, sc.z);
-
-				switch (current_gizmo_operation)
-				{
-				case ImGuizmo::OPERATION::TRANSLATE:
-				{
-					if (add.IsFinite()) {
-						if ((*it)->parent != nullptr) {
-							add = (*it)->parent->ConstGetTransform()->GetGlobalTransform().Inverted().TransformPos(add);
-						}
-						(*it)->GetTransform()->Translate(add);
+			case ImGuizmo::OPERATION::TRANSLATE:
+			{
+				if (add.IsFinite()) {
+					if ((*it)->parent != nullptr) {
+						add = (*it)->parent->ConstGetTransform()->GetGlobalTransform().Inverted().TransformPos(add);
 					}
+					(*it)->GetTransform()->Translate(add);
 				}
-				break;
-				case ImGuizmo::OPERATION::ROTATE:
-				{
-					if (rot.IsFinite()) {
-						if ((*it)->parent != nullptr) {
-							rot = (*it)->parent->ConstGetTransform()->GetGlobalTransform().Inverted().TransformPos(rot);
-						}
-						(*it)->GetTransform()->Rotate(rot);
+			}
+			break;
+			case ImGuizmo::OPERATION::ROTATE:
+			{
+				if (rot.IsFinite()) {
+					if ((*it)->parent != nullptr) {
+						rot = (*it)->parent->ConstGetTransform()->GetGlobalTransform().Inverted().TransformPos(rot);
 					}
+					(*it)->GetTransform()->Rotate(rot);
 				}
-				break;
-				case ImGuizmo::OPERATION::SCALE:
-				{
-					if (sc.IsFinite()) {
-						float3 save_trans = sc;
-						sc = sc + last_moved_transformation;
-						(*it)->GetTransform()->SetScale(sc);
+			}
+			break;
+			case ImGuizmo::OPERATION::SCALE:
+			{
+				if (sc.IsFinite()) {
+					float3 save_trans = sc;
+					sc = sc + last_moved_transformation;
+					(*it)->GetTransform()->SetScale(sc);
 
-						last_moved_transformation = save_trans;
-					}
+					last_moved_transformation = save_trans;
 				}
-				break;
-				}
+			}
+			break;
 			}
 		}
 	}
 	
 
+		//if (App->scene_manager->GetState() == PLAY)
+		//	App->debug_scene->show_hierarchy = false;
+		//else if (App->scene_manager->GetState() == EDIT)
+		//	App->debug_scene->show_hierarchy = true;
+
 	return true;
 }
 
-bool GameObjectManager::PostUpdate()
+bool GameObjectManager::PostUpdate(float dt)
 {
 	root->DoForAllChildrens(&GameObject::PostUpdate);
 
@@ -327,11 +330,6 @@ void GameObjectManager::Hierarchy()
 	{
 		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowPos(ImVec2(0, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
-
-		if (App->scene_manager->GetState() == PLAY)
-			ImGui::SetNextWindowCollapsed(true);
-		else
-			ImGui::SetNextWindowCollapsed(false);
 
 
 		if (ImGui::Begin("Hierarchy",NULL, ImGuiWindowFlags_NoSavedSettings))

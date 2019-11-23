@@ -9,7 +9,7 @@ ModuleQuadtree::ModuleQuadtree()
 	root_quadtree = new QuadtreeNode(float3::zero, float3::zero);
 }
 
-bool ModuleQuadtree::PreUpdate()
+bool ModuleQuadtree::PreUpdate(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		to_recalculate = true;
@@ -31,7 +31,7 @@ bool ModuleQuadtree::PreUpdate()
 	return true;
 }
 
-bool ModuleQuadtree::PostUpdate()
+bool ModuleQuadtree::PostUpdate(float dt)
 {
 	Draw();
 	return true;

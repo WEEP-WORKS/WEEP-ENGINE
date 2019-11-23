@@ -34,17 +34,17 @@ public:
 		return true;
 	}
 
-	virtual bool PreUpdate()
+	virtual bool PreUpdate(float dt)
 	{
 		return true;
 	}
 
-	virtual bool Update()
+	virtual bool Update(float dt)
 	{
 		return true;
 	}
 
-	virtual bool PostUpdate()
+	virtual bool PostUpdate(float dt)
 	{
 		return true;
 	}

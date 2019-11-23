@@ -17,9 +17,9 @@ class ModuleQuadtree : public Module
 public:
 	ModuleQuadtree();
 
-	bool PreUpdate() override;
+	bool PreUpdate(float dt) override;
 
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 
 	bool CleanUp() override;
 
