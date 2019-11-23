@@ -235,6 +235,8 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 					LoadMaterials(scene, mesh, text);
 
+					res_mesh->texture_binded_id = text->GetResourceID();
+
 					text->ActivateThisTexture();
 				}
 

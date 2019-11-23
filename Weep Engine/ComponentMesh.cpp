@@ -87,8 +87,8 @@ void ComponentMesh::RenderModel()
 		glNormalPointer(GL_FLOAT, 0, NULL);
 	}
 
-
-	if (texture != nullptr)
+	
+	if (resource->texture_binded_id != 0)
 	{
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		//bind UVs
@@ -97,7 +97,7 @@ void ComponentMesh::RenderModel()
 
 
 		//bind texture
-	//	glBindTexture(GL_TEXTURE_2D, texture->GetResource(texture->GetResourceID())->id_texture);
+		glBindTexture(GL_TEXTURE_2D, texture->GetResource(resource->texture_binded_id)->id_texture);
 	}
 
 	//indexs final

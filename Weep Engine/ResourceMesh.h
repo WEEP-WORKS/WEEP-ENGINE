@@ -97,6 +97,8 @@ public:
 	uint				num_faces = 0u;		// Number of faces of the mesh.
 	uint				num_uvs_channels = 0u;
 
+	UID texture_binded_id = 0u;
+
 	MeshData*			mesh_data;
 
 private:
