@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 struct aiMesh;
+class ComponentMesh;
 class ResourceMesh;
 class ComponentTexture;
 struct aiScene;
@@ -46,7 +47,7 @@ public:
 	void LoadIndexs(ResourceMesh * model, aiMesh * mesh);
 
 	void CreateOwnFile(const ResourceMesh* mesh, const string name_to_file);
-	void LoadOwnFile(string name_file, ResourceMesh* mesh);
+	void LoadOwnFile(string name_file, ComponentMesh* mesh);
 
 	const char* GetPath() const;
 	void LoadPath(char* path);

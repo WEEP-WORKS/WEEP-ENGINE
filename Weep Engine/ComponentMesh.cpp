@@ -169,7 +169,9 @@ void ComponentMesh::Save(Json::Value& scene) const
 
 	comonent_mesh["type"] = (int)type;
 
-	App->importer->CreateOwnFile(GetResource(), object->GetName());
+	if(GetResource() != nullptr)
+		App->importer->CreateOwnFile(GetResource(), object->GetName());
+
 	comonent_mesh["Model name"] = string(object->GetName() + string(".mesh"));
 	//LoadOwnFile(string(name + ".mesh"));
 	scene.append(comonent_mesh);
@@ -177,7 +179,12 @@ void ComponentMesh::Save(Json::Value& scene) const
 
 void ComponentMesh::Load(const Json::Value& component)
 {
-	App->importer->LoadOwnFile(component["Model name"].asString(), GetResource());
+	App->importer->LoadOwnFile(component["Model name"].asString(), this);
+
+	AABB aabb;
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)GetResource()->mesh_data->vertexs.buffer, GetResource()->mesh_data->vertexs.num);
+	GetResource()->mesh_data->aabb = aabb;
 }
 
 ResourceMesh* ComponentMesh::GetResource()

@@ -565,6 +565,7 @@ void GameObjectManager::Load(const Json::Value& scene)
 	if (root != nullptr)
 	{
 		CleanUp();
+		App->quadtree->Clear();
 
 		//root = new GameObject("root", nullptr);
 		for (uint i = 0; i < scene["GameObjects"].size(); ++i)
@@ -573,6 +574,10 @@ void GameObjectManager::Load(const Json::Value& scene)
 			go->Load(scene["GameObjects"][i]);
 
 		}
+		//recalculate pos and transforms to Recalculate the quadtree correctly.
+		PreUpdate();
+		PostUpdate();
+		App->quadtree->to_recalculate = true;
 	}
 	LOG("Load succesful");
 }

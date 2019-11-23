@@ -411,3 +411,17 @@ string Application::ToLowerCase(std::string str)
 
 	return str;
 }
+
+std::string Application::GetStringByLength(const char* string, uint lenght_desire)
+{
+	std::string ret;
+
+	bool adding = false;
+	for (uint i = 0; i < lenght_desire; i++)
+	{
+		
+		ret += string[i];
+	}
+	return ret;
+
+}

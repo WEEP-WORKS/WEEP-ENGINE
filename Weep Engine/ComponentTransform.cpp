@@ -15,10 +15,6 @@ ComponentTransform::ComponentTransform()
 	global_transform.SetIdentity();
 }
 
-void ComponentTransform::Update()
-{
-	float4x4 a = local_transform * local_transform;
-}
 
 void ComponentTransform::InspectorDraw() {
 
@@ -128,6 +124,9 @@ void ComponentTransform::Load(const Json::Value& component)
 	App->json_helper->Fill(local_rotation_euler, component["Rotation"]);
 	local_rotation_quat = Quat::FromEulerXYZ(local_rotation_euler.x*DEGTORAD, local_rotation_euler.y*DEGTORAD, local_rotation_euler.z*DEGTORAD);
 	App->json_helper->Fill(local_scale, component["Scale"]);
+
+	RecalculateLocalTransform();
+
 }
 
 const void ComponentTransform::Translate(const float3 & pos)

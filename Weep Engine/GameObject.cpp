@@ -65,12 +65,6 @@ void GameObject::PostUpdate()
 			if ((*iter)->IsActive())
 			{
 				(*iter)->PostUpdate();//Render
-				GameObject* ob = parent;
-				if (ob != nullptr)
-				{
-					string s = ob->name;
-					uint i = 0u;
-				}
 			}
 		}
 	}
@@ -518,6 +512,12 @@ void GameObject::Load(const Json::Value& Json_go)
 	for (std::vector<Component*>::const_iterator citer = components.cbegin(); citer != components.cend(); ++citer)
 	{
 		(*citer)->Load(Json_go["Components"][current_component++]);
+	}
+	if (GetMesh() != nullptr)
+	{
+		CalcGlobalTransform();
+		CalcBBox();
+		App->quadtree->Insert(this);
 	}
 }
 

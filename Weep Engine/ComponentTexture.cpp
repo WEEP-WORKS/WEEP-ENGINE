@@ -94,8 +94,8 @@ void ComponentTexture::Save(Json::Value& scene) const
 
 	component_texture["type"] = (int)type;
 
-
-	component_texture["Texture Path"] = GetResource(resource_id)->texture_path;
+	if(GetResource(resource_id) != nullptr)
+		component_texture["Texture Path"] = GetResource(resource_id)->texture_path;
 	component_texture["Texture Active"] = texture_active;
 
 	scene.append(component_texture);
@@ -106,8 +106,13 @@ void ComponentTexture::Load(const Json::Value& component)
 {
 	if (component["Texture Active"].asBool())
 		ActivateThisTexture();
-
-	App->texture->LoadTexture(component["Texture Path"].asCString(), this);
+	if (!component["Texture Path"].isNull())
+	{
+		std::string final_path("Models/Textures/" + component["Texture Path"].asString());
+		App->texture->LoadTexture(final_path.c_str(), this);
+	}
+	else
+		LOG("NoTexture");
 
 }
 

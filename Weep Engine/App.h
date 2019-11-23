@@ -54,6 +54,7 @@ public:
 	std::string GetFileNameWithoutExtension(const char * file_path);
 	string GetFileExtension(const char * file_name);
 	string ToLowerCase(std::string str);
+	std::string GetStringByLength(const char* string, uint lenght_desire);
 
 	void OpenWeb(string web);
 	const char* GetBasePath();

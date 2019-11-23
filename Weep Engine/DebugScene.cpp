@@ -102,7 +102,7 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
+		ret = App->importer->LoadFBX("Models/FBX/Street environment_V01.fbx");
 
 
 	}
@@ -228,9 +228,9 @@ bool DebugScene::Update()
 				ImGui::PopID();
 				ImGui::SameLine();
 				// Text rename
-				char name[25];
-				sprintf_s(name, 25, selected[0]->GetName());
-				if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
+				char name[50];
+				sprintf_s(name, 50, selected[0]->GetName());
+				if (ImGui::InputText("", name, 50, ImGuiInputTextFlags_AutoSelectAll))
 					selected[0]->SetName(name);
 
 				ImGui::Separator();

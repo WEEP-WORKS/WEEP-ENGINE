@@ -56,6 +56,8 @@ public:
 	const char* GetWritePath() const;
 	const char* GetReadPaths() const;
 
+
+
 private:
 
 	void CreateAssimpIO();
