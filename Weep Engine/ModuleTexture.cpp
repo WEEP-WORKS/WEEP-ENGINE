@@ -61,6 +61,7 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 					LOG("there is a texture component with the same texture in this game object");
 					to_load = false;;
 				}
+			
 			}
 
 			if (to_load)
@@ -83,14 +84,14 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 	
 	f_path = path;
 
-
+	string path_name_with_extension = App->GetFileName(path);
 	// Exist this ResourceTexture?
 	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
 	{
 		ResourceTexture* r = (ResourceTexture*)App->resource_managment->GetByID((*iter)->resource_id);
-		if (path == r->texture_path)
+		if (path_name_with_extension == r->texture_path)
 		{
-			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path);
+			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path_name_with_extension.c_str());
 			component_texture->SetResourceID((*iter)->resource_id);
 			return;
 		}
@@ -119,7 +120,7 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 			resource_texture->id_texture = id_text;
 			resource_texture->texture_width = width;
 			resource_texture->texture_height = height;
-			resource_texture->texture_path = path;
+			resource_texture->texture_path = path_name_with_extension;
 
 
 			TextureInfo* new_texture = new TextureInfo();
