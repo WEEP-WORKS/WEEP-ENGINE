@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 struct aiMesh;
-class ComponentMesh;
+class ResourceMesh;
 class ComponentTexture;
 struct aiScene;
 class GameObject;
@@ -40,13 +40,13 @@ public:
 	bool LoadFBX(const char* path);
 	void LoadAllMeshes(const aiScene * scene);
 	void LoadMaterials(const aiScene * scene, aiMesh * mesh, ComponentTexture * model);
-	void LoadUVs(ComponentMesh * model, aiMesh * mesh);
-	void LoadNormals(ComponentMesh * model, aiMesh * mesh);
-	void LoadVertices(ComponentMesh * model, aiMesh * mesh);
-	void LoadIndexs(ComponentMesh * model, aiMesh * mesh);
+	void LoadUVs(ResourceMesh * model, aiMesh * mesh);
+	void LoadNormals(ResourceMesh * model, aiMesh * mesh);
+	void LoadVertices(ResourceMesh * model, aiMesh * mesh);
+	void LoadIndexs(ResourceMesh * model, aiMesh * mesh);
 
-	void CreateOwnFile(const ComponentMesh* mesh, const string name_to_file);
-	void LoadOwnFile(string name_file, ComponentMesh* mesh);
+	void CreateOwnFile(const ResourceMesh* mesh, const string name_to_file);
+	void LoadOwnFile(string name_file, ResourceMesh* mesh);
 
 	const char* GetPath() const;
 	void LoadPath(char* path);

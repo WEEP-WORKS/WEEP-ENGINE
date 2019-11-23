@@ -13,6 +13,9 @@
 #include "Assimp/include/version.h"
 #include "ModuleFileSystem.h"
 
+#include "ResourceManagment.h"
+#include "ResourceMesh.h"
+
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
@@ -145,6 +148,10 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
+			model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+			ResourceMesh* res_mesh = model->GetResource();
+
+
 			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
 
 			// Set mesh pos, rot and scale
@@ -166,29 +173,29 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			if (model != nullptr)
 			{
-				LoadVertices(model, mesh);
+				LoadVertices(res_mesh, mesh);
 
 				if (mesh->HasFaces())
 				{
-					LoadIndexs(model, mesh);
+					LoadIndexs(res_mesh, mesh);
 				}
 
 				if (mesh->HasNormals())
 				{
-					LoadNormals(model, mesh);
+					LoadNormals(res_mesh, mesh);
 				}
 
-				model->num_uvs_channels = mesh->GetNumUVChannels();
+				res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
 
-				LoadUVs(model, mesh);
+				LoadUVs(res_mesh, mesh);
 
-				model->SetBuffersWithData();
+				res_mesh->SetBuffersWithData();
 
-				if (model->num_uvs_channels > 0 && scene->HasMaterials())
+				if (res_mesh->num_uvs_channels > 0 && scene->HasMaterials())
 				{
 
 					ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
-					model->num_uvs_channels = mesh->GetNumUVChannels();
+					res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
 
 
 					LoadMaterials(scene, mesh, text);
@@ -196,7 +203,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 					text->ActivateThisTexture();
 				}
 
-				CreateOwnFile(model, name);
+				CreateOwnFile(res_mesh, name);
 				//LoadOwnFile(string(name + ".mesh"));
 				
 			}
@@ -211,7 +218,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
 
-			model->mesh_data->aabb = aabb;
+			res_mesh->mesh_data->aabb = aabb;
 
 			object->AddAABB(aabb);
 				
@@ -251,7 +258,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 // ----------------------------Vertexs----------------------------
 
-void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadVertices(ResourceMesh * model, aiMesh * mesh)
 {
 	model->mesh_data->vertexs.has_data = true;
 
@@ -267,7 +274,7 @@ void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
 
 // ----------------------------Indexs----------------------------
 
-void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadIndexs(ResourceMesh * model, aiMesh * mesh)
 {
 	model->mesh_data->indexs.has_data = true;
 
@@ -299,7 +306,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 
 // ----------------------------Normals----------------------------
 
-void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadNormals(ResourceMesh * model, aiMesh * mesh)
 {
 	//load normals direction of the vertex_normals.
 	model->mesh_data->normals_direction.has_data = true;
@@ -321,7 +328,7 @@ void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 
  //----------------------------UVs----------------------------
 
-void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadUVs(ResourceMesh * model, aiMesh * mesh)
 {
 	model->mesh_data->uvs.has_data = true;
 
@@ -330,7 +337,7 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 	model->mesh_data->uvs.buffer_size = model->num_uvs_channels * model->mesh_data->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
 	model->mesh_data->uvs.buffer = new float[model->mesh_data->uvs.buffer_size];
 
-	model->channel_buffer_size = model->mesh_data->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
+	uint channel_buffer_size = model->mesh_data->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
 	for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
 	{
 		if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
@@ -340,14 +347,14 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 			{
 				for (uint j = 0; j < model->mesh_data->uvs.num; ++j)
 				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-					memcpy(&model->mesh_data->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
+					memcpy(&model->mesh_data->uvs.buffer[(channel * channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
 
 				}
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{
 				LOG("This channel of the UVs don't have 2 components by vector.");
-				memset(&model->mesh_data->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
+				memset(&model->mesh_data->uvs.buffer[channel * channel_buffer_size], 0, sizeof(float) * channel_buffer_size);
 			}
 		}
 	}
@@ -375,7 +382,7 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 	}
 }
 
-void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_to_file)
+void ModuleImporter::CreateOwnFile(const ResourceMesh* mesh, const string name_to_file)
 {
 
 	uint size_vertexs = sizeof(float) * mesh->mesh_data->vertexs.buffer_size;
@@ -466,7 +473,7 @@ void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_
 
 }
 
-void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
+void ModuleImporter::LoadOwnFile(string name_file, ResourceMesh* mesh)
 {
 	//relative_path wiht extension of the own format.
 

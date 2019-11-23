@@ -12,6 +12,7 @@
 class ResourceManagment : public Module
 {
 public:
+	ResourceManagment();
 	//UID Find(const char* file_in_assets) const;
 	//UID ImportFile(const char* new_file_in_assets, bool force = false);
 	UID GenerateNewUID();

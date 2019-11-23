@@ -6,7 +6,7 @@
 #include "ModuleFileSystem.h"
 #include "ResourceTexture.h"
 #include "ResourceManagment.h"
-
+#include "glew/glew.h"
 #include "DevIL/il.h"
 #include "DevIL/ilu.h"
 #include "DevIL/ilut.h"//temporally all DevIL

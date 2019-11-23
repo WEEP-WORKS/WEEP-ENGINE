@@ -10,7 +10,7 @@
 
 
 class GameObject;
-class ComponentMesh;
+class ResourceMesh;
 
 typedef struct par_shapes_mesh_s par_shapes_mesh;
 
@@ -35,7 +35,7 @@ public:
 	void CreateCube();
 	void CreateSphere();
 
-	void LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh) const;
+	void LoadGeometryShapeInfo(ResourceMesh * cmesh, par_shapes_mesh * mesh) const;
 
 	void AddGameObjectToSelected(GameObject * go) const;
 

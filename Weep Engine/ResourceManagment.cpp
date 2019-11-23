@@ -5,6 +5,12 @@
 
 #include "Globals.h"
 
+
+
+ResourceManagment::ResourceManagment()
+{
+	SetName("Texture");
+}
 UID ResourceManagment::CreateNewResource(Resource::Type type)
 {
 	Resource* ret = nullptr;

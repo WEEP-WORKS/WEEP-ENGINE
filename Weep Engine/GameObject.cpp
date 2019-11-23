@@ -12,6 +12,8 @@
 #include "ModuleQuadtree.h"
 #include <list>
 
+#include "ResourceMesh.h"
+
 GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
 	LOG("New Game Object created!");
@@ -584,9 +586,9 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 
 					// Check every triangle
 					Triangle tri;
-					uint* indices = cmesh->mesh_data->indexs.buffer;
-					float* vertices = cmesh->mesh_data->vertexs.buffer;
-					for (int i = 0; i < cmesh->mesh_data->indexs.num;)
+					uint* indices = cmesh->GetResource()->mesh_data->indexs.buffer;
+					float* vertices = cmesh->GetResource()->mesh_data->vertexs.buffer;
+					for (int i = 0; i < cmesh->GetResource()->mesh_data->indexs.num;)
 					{
 						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
 						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
