@@ -149,7 +149,7 @@ int ModuleRenderer3D::GetRefreshRate() const
 }
 
 // PreUpdate: clear buffer
-bool ModuleRenderer3D::PreUpdate()
+bool ModuleRenderer3D::PreUpdate(float dt)
 {
 	bool ret = true;
 
@@ -178,7 +178,7 @@ bool ModuleRenderer3D::PreUpdate()
 	return ret;
 }
 
-bool ModuleRenderer3D::Update()
+bool ModuleRenderer3D::Update(float dt)
 {
 	//OnResize(App->window->GetWidth(), App->window->GetHeight());
 	//ImGuizmo::SetRect(0, 0, App->window->GetWidth(), App->window->GetHeight());
@@ -186,7 +186,7 @@ bool ModuleRenderer3D::Update()
 }
 
 // PostUpdate present buffer to screen
-bool ModuleRenderer3D::PostUpdate()
+bool ModuleRenderer3D::PostUpdate(float dt)
 {
 	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glViewport(0, 0, (int)App->window->io.DisplaySize.x, (int)App->window->io.DisplaySize.y);

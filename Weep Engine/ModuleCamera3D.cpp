@@ -118,7 +118,7 @@ const float * ModuleCamera3D::GetViewMatrix() const
 
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::Update()
+bool ModuleCamera3D::Update(float dt)
 {
 	bool ret = true;
 

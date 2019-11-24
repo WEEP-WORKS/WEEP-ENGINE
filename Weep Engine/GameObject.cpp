@@ -6,6 +6,7 @@
 #include "ComponentTransform.h"
 #include "App.h"
 #include "ModuleGameObjectManager.h"
+#include "DebugScene.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
@@ -566,7 +567,7 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 		Rect rect = App->window->GetWindowRect();
 		float2 mouse_pos = App->input->GetMouse();
 
-		if (PointInRect(mouse_pos, rect))
+		if (PointInRect(mouse_pos, rect) && !App->debug_scene->window_hvr && !App->game_object_manager->window_hvr && !App->debug_scene->about_hvr && !App->debug_scene->config_hvr && !App->debug_scene->menubar_hvr && !App->debug_scene->tools_hvr && !App->debug_scene->random_hvr && !App->debug_scene->mathgeo_hvr)
 		{
 			// The point (1, 1) corresponds to the top-right corner of the near plane
 			// (-1, -1) is bottom-left

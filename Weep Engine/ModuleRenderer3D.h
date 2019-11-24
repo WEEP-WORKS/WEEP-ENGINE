@@ -22,9 +22,9 @@ public:
 
 	bool Awake();
 	bool Start();
-	bool PreUpdate();
-	bool Update();
-	bool PostUpdate();
+	bool PreUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
 	bool CleanUp();
 	void OnConfiguration();
 

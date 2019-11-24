@@ -23,9 +23,8 @@ public:
 	void SaveTmpScene();
 	void LoadTmpScene();
 
-	//void SaveScene(const char* scene_name);
-	//void LoadScene(const char* scene_name);
-	//void DestroyScene();
+	void Save(Json::Value&) const override;
+	void Load(const Json::Value&) override;
 
 	SCENE_STATE GetState();
 	bool GetPause();
@@ -36,14 +35,15 @@ public:
 	void Pause();
 	void Step();
 
-	float GetGameDT();
-	float GetGameExecutionTime();
+	bool	   pause = false;
 
 private:
-	SCENE_STATE state = EDIT;
-	bool	   pause = false;
+	SCENE_STATE state;
+	//bool	   pause = false;
 	bool	   step = false;
 	string	   current_scene;
+
+	bool gamemode = false;
 };
 
 #endif

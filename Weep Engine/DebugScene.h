@@ -26,8 +26,10 @@ public:
 
 	bool Awake();
 	bool Start();
-	bool PreUpdate();
-	bool Update();
+	bool PreUpdate(float dt);
+	bool Update(float dt);
+	bool PostUpdate(float dt);
+
 	void Tools();
 	bool CleanUp();
 
@@ -39,6 +41,15 @@ public:
 
 public:
 	bool show_hierarchy = true;
+	bool frame_passed = false;
+
+	bool window_hvr = false;
+	bool about_hvr = false;
+	bool config_hvr = false;
+	bool menubar_hvr = false;
+	bool tools_hvr = false;
+	bool mathgeo_hvr = false;
+	bool random_hvr = false;
 
 private:
 

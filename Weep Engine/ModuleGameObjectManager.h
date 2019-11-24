@@ -21,9 +21,9 @@ public:
 	virtual ~GameObjectManager() {};
 
 	bool Awake() override;
-	bool PreUpdate() override;
-	bool Update() override;
-	bool PostUpdate() override;
+	bool PreUpdate(float dt) override;
+	bool Update(float dt) override;
+	bool PostUpdate(float dt) override;
 	bool CleanUp() override;
 	void Save(Json::Value&) const override;
 	void Load(const Json::Value&) override;
@@ -62,6 +62,7 @@ public:
 	bool						create_cube		= false;
 	bool						create_sphere	= false;
 	bool						create_go_empty = false;
+	bool						window_hvr = false;
 
 	GameObject* root;
 

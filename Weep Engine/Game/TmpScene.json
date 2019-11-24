@@ -1,0 +1,205 @@
+{
+	"GameObjects" : 
+	[
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				}
+			],
+			"id" : 870021055,
+			"id_parent" : "nullptr",
+			"name" : "root",
+			"number_components" : 1
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"FOV" : 120.00000762939453,
+					"Far Plane" : 100.0,
+					"Frustum Culling" : true,
+					"Near Plane" : 0.10000000149011612,
+					"type" : 3
+				}
+			],
+			"id" : 1959606520,
+			"id_parent" : 870021055,
+			"name" : "CAMERA",
+			"number_components" : 2
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						-0.0,
+						0.0,
+						-180.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				}
+			],
+			"id" : 129435010,
+			"id_parent" : 870021055,
+			"name" : "group_BakerHouse_1",
+			"number_components" : 1
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						-180.0,
+						-89.980216979980469,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"Model name" : "Chimney.mesh",
+					"type" : 1
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "Models/Textures/Baker_house.png",
+					"type" : 2
+				}
+			],
+			"id" : 553448398,
+			"id_parent" : 129435010,
+			"name" : "Chimney",
+			"number_components" : 3
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						-180.0,
+						-89.980216979980469,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"Model name" : "Baker_house.mesh",
+					"type" : 1
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "Models/Textures/Baker_house.png",
+					"type" : 2
+				}
+			],
+			"id" : 1479322684,
+			"id_parent" : 129435010,
+			"name" : "Baker_house",
+			"number_components" : 3
+		}
+	],
+	"Renderer" : 
+	{
+		"VSYNC" : true
+	},
+	"SceneManager" : 
+	{
+		"Gamemode" : false
+	},
+	"Window" : 
+	{
+		"Brightness" : 1.0,
+		"Height" : 1024,
+		"Organization" : "Weep Works",
+		"Size" : 1.0,
+		"Title" : "Weep Engine",
+		"Version" : "v.0.2",
+		"Width" : 1280,
+		"flags" : 
+		{
+			"Borderless" : false,
+			"Fullscreen" : false,
+			"Fullscreen_desktop" : false,
+			"Resizable" : true
+		}
+	}
+}

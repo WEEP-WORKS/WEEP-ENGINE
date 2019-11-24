@@ -113,6 +113,8 @@ bool DebugScene::Start()
 		//ret = App->importer->LoadFBX("Models/FBX/warrior.fbx");
 	}
 
+	App->profiler->SetGameTimeScale(1.0f);
+
 	return true;
 }
 
@@ -123,10 +125,9 @@ bool DebugScene::CleanUp()
 	return ret;
 }
 
-bool DebugScene::PreUpdate() 
+bool DebugScene::PreUpdate(float dt) 
 {
 	bool ret = true;
-
 
 
 	if (App->input->GetKey(SDL_SCANCODE_LSHIFT) && App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN && show_app_configuration == false) {
@@ -152,7 +153,7 @@ bool DebugScene::PreUpdate()
 	return ret;
 }
 
-bool DebugScene::Update()
+bool DebugScene::Update(float dt)
 {
 	bool ret = true;
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -171,7 +172,7 @@ bool DebugScene::Update()
 	{
 		bool full = true;
 		LoadStyle("blue_yellow");
-		App->window->SetAppName("Weep Game");
+		App->window->SetAppName("Weep Game (EXECUTING GAME MODE)");
 		App->window->SetVersion("");
 	}
 	else
@@ -180,6 +181,8 @@ bool DebugScene::Update()
 		App->window->SetAppName(name_input_buffer);
 		App->window->SetVersion(version_input_buffer);
 	}
+
+	//WE COULD CALL DOFORALLCHILDREN UPDATE WITH DT
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
@@ -193,8 +196,8 @@ bool DebugScene::Update()
 	//--------------------------MAIN MENU BAR----------------------------------
 	//-------------------------------------------------------------------------
 
-	if (App->scene_manager->GetPause() == false)
-		MenuBar(ret);
+
+	MenuBar(ret);
 
 	Panels();
 
@@ -204,18 +207,23 @@ bool DebugScene::Update()
 	//----------------------------INSPECTOR------------------------------------
 	//-------------------------------------------------------------------------
 
-	if (App->debug_scene->show_inspector && App->scene_manager->GetPause() == false)
+
+	if (App->debug_scene->show_inspector)
 	{
+
 		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowPos(ImVec2(970, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
 
-		if (App->scene_manager->GetState() == PLAY)
-			ImGui::SetNextWindowCollapsed(true);
-		else
-			ImGui::SetNextWindowCollapsed(false);
+		//if (App->scene_manager->GetState() == PLAY)
+		//	App->debug_scene->show_inspector = false;
+		//else if (App->scene_manager->GetState() == EDIT)
+		//	App->debug_scene->show_inspector = true;
+
 
 		if (ImGui::Begin("Inspector",NULL, ImGuiWindowFlags_NoSavedSettings))
 		{
+			window_hvr = ImGui::IsWindowHovered();
+
 			vector<GameObject*> selected = App->game_object_manager->selected;
 
 			ImGui::Separator();
@@ -277,6 +285,7 @@ bool DebugScene::Update()
 	return ret;
 }
 
+
 void DebugScene::PrintResourceList(const char * path)
 {
 	for (const auto & entry : std::experimental::filesystem::directory_iterator(path)) //https://www.bfilipek.com/2019/04/dir-iterate.html
@@ -286,6 +295,27 @@ void DebugScene::PrintResourceList(const char * path)
 			ImGui::TreePop();
 		}
 }
+bool DebugScene::PostUpdate(float dt)
+{
+	bool ret = true;
+
+	float game_dt = App->profiler->GetGameDT();
+	if (App->scene_manager->GetPause())
+		game_dt = 0;
+	if (App->scene_manager->GetStep() && !frame_passed)
+	{
+		App->scene_manager->pause = true;
+		frame_passed = true;
+	}
+
+	if (App->scene_manager->GetState() == PLAY)
+		App->profiler->AddGameTime(game_dt);
+	
+	//ret = App->game_object_manager->Update(game_dt);
+
+	return ret;
+
+}
 
 void DebugScene::Tools()
 {
@@ -294,6 +324,8 @@ void DebugScene::Tools()
 	bool open = true;
 	ImGui::Begin("tool_Bar", &open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
 		| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+	tools_hvr = ImGui::IsWindowHovered();
 
 	ImGui::SetCursorPos(ImVec2(20, 3));
 	if (ImGui::Button("Move"))
@@ -315,38 +347,58 @@ void DebugScene::Tools()
 
 	if (App->scene_manager->GetState() == SCENE_STATE::EDIT)
 	{
-		ImGui::SetCursorPos(ImVec2(800, 3));
+		ImGui::SetCursorPos(ImVec2(400, 3));
 		if (ImGui::Button("Play"))
 		{
 			App->scene_manager->Play();
 		}
 
-		ImGui::SetCursorPos(ImVec2(850, 6));
+		ImGui::SetCursorPos(ImVec2(450, 6));
 		ImGui::Text("Current: EDITING");
 	}
 	else if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
 	{
-		ImGui::SetCursorPos(ImVec2(800, 3));
+		static float b = 1.0f; //  test whatever color you need from imgui_demo.cpp e.g.
+		static int i = 3;
+
+		ImGui::SetCursorPos(ImVec2(400, 3));
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.0f, 0.87f, 0.78f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.0f, 0.87f, 0.60f));
 		if (ImGui::Button("STOP"))
 		{
 			App->scene_manager->Edit();
-		}
 
-		ImGui::SetCursorPos(ImVec2(847, 3));
+			//ImGuiStyle* style = &ImGui::GetStyle();
+			//style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.54f, 0.00f, 1.00f);
+		}
+		ImGui::PopStyleColor(2);
+		ImGui::SetCursorPos(ImVec2(450, 3));
 		if (ImGui::Button("Pause"))
 		{
 			App->scene_manager->Pause();
 		}
 
-		ImGui::SetCursorPos(ImVec2(900, 3));
-		if (ImGui::Button("Step"))
+		ImGui::SetCursorPos(ImVec2(500, 3));
+		if (ImGui::Button("Step") && App->scene_manager->GetPause())
 		{
 			App->scene_manager->Step();
+			frame_passed = false;
 		}
 
-		ImGui::SetCursorPos(ImVec2(950, 6));
+		ImGui::SetCursorPos(ImVec2(570, 6));
 		ImGui::Text("Current: PLAYING");
+
+		ImGui::SetCursorPos(ImVec2(800, 3));
+		float scale = App->profiler->GetGameTimeScale();
+		ImGui::PushItemWidth(50);
+		if (ImGui::DragFloat("Time Scale", &scale, 0.005f, 0.00, 2.00f, "%.2f"))
+		{
+			App->profiler->SetGameTimeScale(scale);
+		}
+		ImGui::SetCursorPos(ImVec2(730, 6));
+		ImGui::Text("%f", App->profiler->GetGameTime());
 	}
+
 
 	ImGui::End();
 }
@@ -414,6 +466,8 @@ void DebugScene::MenuBar(bool &ret)
 {
 	if (ImGui::BeginMainMenuBar())
 	{
+		menubar_hvr = ImGui::IsAnyItemHovered();
+
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Open in Explorer", ""))
@@ -525,6 +579,8 @@ void DebugScene::Configuration()
 	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Configuration", &show_app_configuration, ImGuiWindowFlags_NoSavedSettings))
 	{
+		bool config_hvr = ImGui::IsAnyWindowHovered();
+
 		if (ImGui::CollapsingHeader("App"))
 			AppInfo();
 
@@ -727,6 +783,7 @@ void DebugScene::UpdateVRAMInfo1()
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
+	about_hvr = ImGui::IsWindowHovered();
 	ImGui::Text(App->window->GetTitleWithVersion().c_str());
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
@@ -789,6 +846,7 @@ void DebugScene::AppAbout()
 void DebugScene::MathGeoTest()
 {
 	ImGui::Begin("Geometry Math test", &show_geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+	mathgeo_hvr = ImGui::IsWindowHovered();
 
 	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
 
@@ -920,7 +978,8 @@ void DebugScene::MathGeoTest()
 void DebugScene::RandomGenerator()
 {
 	ImGui::Begin("Random Number Generation", &show_random_generator, ImGuiWindowFlags_AlwaysAutoResize);
-	
+	random_hvr = ImGui::IsWindowHovered();
+
 	ImGui::InputFloat2("Min | Max FLOAT", range_demo.ptr(), 2);
 	ImGui::InputFloat2("Min | Max INT", range_demo1.ptr(), 2);
 	ImGui::InputInt("Number of generations", &quantity_demo);

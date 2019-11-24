@@ -1,4 +1,4 @@
-	#include "App.h"
+#include "App.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
@@ -129,7 +129,7 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
-		ret = (*it)->PreUpdate();
+		ret = (*it)->PreUpdate(GetDT());
 
 		if (!ret) return false;
 	}
@@ -141,14 +141,7 @@ bool Application::Update()
 
 		profiler->StartProfile((*it)->name);
 
-		if (scene_manager->GetPause() == false)
-			ret = (*it)->Update();
-		else
-		{
-			debug_scene->Update();
-			game_object_manager->Update();
-			window->Update();
-		}
+		ret = (*it)->Update(GetDT());
 
 		profiler->FinishProfile();
 
@@ -160,7 +153,7 @@ bool Application::Update()
 		if (!(*it)->GetEnabled())
 			continue;
 
-		ret = (*it)->PostUpdate(); 
+		ret = (*it)->PostUpdate(GetDT());
 
 		if (!ret) return false;
 	}
