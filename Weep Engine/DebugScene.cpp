@@ -159,7 +159,7 @@ bool DebugScene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		App->quadtree->root_quadtree->Divide();
 
-	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 	{
 		GameObject* new_go = new GameObject("AABB Test", App->game_object_manager->root);
 		AABB aabb;
