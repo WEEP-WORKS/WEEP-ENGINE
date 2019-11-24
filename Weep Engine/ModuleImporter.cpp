@@ -189,14 +189,12 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-			if (App->resource_managment->GetByNameMesh(name.c_str()) == 0)
-				model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
-			else
-				model->SetResourceID(App->resource_managment->GetByNameMesh(name.c_str())); //overwrite mesh resource!
+			if (App->resource_managment->GetByNameMesh(name.c_str()) != 0)
+				model->SetResourceID(App->resource_managment->GetByNameMesh(name.c_str())); //ove
 
-			ResourceMesh* res_mesh = model->GetResource();
-			res_mesh->name = name;
-			res_mesh->imported_file = App->GetFileNameWithoutExtension(GetPath());
+
+			ResourceMesh* res_mesh = nullptr;
+
 
 			// Set mesh pos, rot and scale
 			aiVector3D translation;
@@ -217,15 +215,21 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			
 				aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
-				/*if (App->file_system->Exists(std::string(LIBRARY_MESH_FOLDER + name + ".mesh").c_str()))
-				{*/
-					//LOG("Loading file with own format");
-					//LoadOwnFile(name + ".mesh", model);
+				if (App->resource_managment->GetByNameMesh(name.c_str()) == 0 && App->file_system->Exists(std::string(LIBRARY_MESH_FOLDER + name + ".mesh").c_str()))
+				{
+					LOG("Loading file with own format");
+					LoadOwnFile(name + ".mesh", model);
 
 
-		/*		}
+				}
 				else
-				{*/
+				{
+					if (model->GetResource() == nullptr)
+						model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+
+					res_mesh = model->GetResource();
+					res_mesh->imported_file = App->GetFileNameWithoutExtension(GetPath());
+					res_mesh->name = "";
 					if (model != nullptr)
 					{
 						LoadVertices(res_mesh, mesh);
@@ -254,10 +258,11 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 					{
 						LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
 					}
-				//}
+				}
 
 				if (scene->HasMaterials())
 				{
+					res_mesh = model->GetResource();
 
 					ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
 					res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
@@ -269,6 +274,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 
 				}
+				res_mesh->name = name;
 
 				//AABB
 				AABB aabb;
