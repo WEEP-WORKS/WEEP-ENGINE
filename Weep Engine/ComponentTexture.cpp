@@ -115,7 +115,7 @@ void ComponentTexture::Load(const Json::Value& component)
 		ActivateThisTexture();
 	if (!component["Texture Path"].isNull())
 	{
-		std::string final_path("Models/Textures/" + component["Texture Path"].asString());
+		std::string final_path("Assets/Textures/" + component["Texture Path"].asString());
 		App->texture->LoadTexture(final_path.c_str(), this);
 	}
 	else

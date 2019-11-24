@@ -108,11 +108,6 @@ bool DebugScene::Start()
 
 	}
 
-	if (ret == true)
-	{
-		//ret = App->importer->LoadFBX("Models/FBX/warrior.fbx");
-	}
-
 	App->profiler->SetGameTimeScale(1.0f);
 
 	return true;
@@ -156,8 +151,6 @@ bool DebugScene::PreUpdate(float dt)
 bool DebugScene::Update(float dt)
 {
 	bool ret = true;
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		App->quadtree->root_quadtree->Divide();
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -419,11 +412,6 @@ void DebugScene::Tools()
 	ImGui::End();
 }
 
-void DebugScene::resettest(bool &ret)
-{
-	App->game_object_manager->CleanUp();
-	ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
-}
 
 void DebugScene::Panels()
 {

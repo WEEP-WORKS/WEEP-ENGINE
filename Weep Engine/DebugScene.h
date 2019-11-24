@@ -93,7 +93,6 @@ private:
 private:
 	
 	void PrintResourceList(const char * path);
-	void resettest(bool &ret);
 	void Panels();
 	void MenuBar(bool &ret);
 	void Plane();
