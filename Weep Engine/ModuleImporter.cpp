@@ -447,29 +447,17 @@ void ModuleImporter::CreateOwnFile(const ResourceMesh* mesh, const string name_t
 	
 
 
-	const char* file_name = mesh->name.c_str();
+	const char* file_name = name_to_file.c_str();
 
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
-	uint header[13] = {
+	uint header[7] = {
 		strlen(file_name),
-
 		mesh->mesh_data->vertexs.num,
-		size_vertexs,
-
 		mesh->mesh_data->indexs.num,
-		size_indexs,
-
 		mesh->mesh_data->normals_direction.num,
-		size_normals_dir,
-
 		mesh->mesh_data->normal_vertexs.num,
-		size_normal_vertexs,
-
 		mesh->mesh_data->normal_faces.num,
-		size_normal_faces,
-
-		mesh->mesh_data->uvs.num,
-		size_uvs
+		mesh->mesh_data->uvs.num
 
 	};
 
@@ -563,7 +551,7 @@ void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 
 
 	//Load Header----------
-	uint ranges[13];
+	uint ranges[7];
 	uint bytes = sizeof(ranges);
 	memcpy(ranges, cursor, bytes);
 
@@ -597,28 +585,28 @@ void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 	if (res_mesh->mesh_data->vertexs.num > 0)
 		res_mesh->mesh_data->vertexs.has_data = true;
 
-	res_mesh->mesh_data->indexs.num = ranges[3];
-	res_mesh->mesh_data->indexs.buffer_size = ranges[3];
+	res_mesh->mesh_data->indexs.num = ranges[2];
+	res_mesh->mesh_data->indexs.buffer_size = ranges[2];
 	if (res_mesh->mesh_data->indexs.num > 0)
 		res_mesh->mesh_data->indexs.has_data = true;
 
-	res_mesh->mesh_data->normals_direction.num = ranges[5];
-	res_mesh->mesh_data->normals_direction.buffer_size = ranges[5]*3;
+	res_mesh->mesh_data->normals_direction.num = ranges[3];
+	res_mesh->mesh_data->normals_direction.buffer_size = ranges[3]*3;
 	if (res_mesh->mesh_data->normals_direction.num > 0)
 		res_mesh->mesh_data->normals_direction.has_data = true;
 
-	res_mesh->mesh_data->normal_vertexs.num = ranges[7];
-	res_mesh->mesh_data->normal_vertexs.buffer_size = ranges[7]*3;
+	res_mesh->mesh_data->normal_vertexs.num = ranges[4];
+	res_mesh->mesh_data->normal_vertexs.buffer_size = ranges[4]*3*2;
 	if (res_mesh->mesh_data->normal_vertexs.num > 0)
 		res_mesh->mesh_data->normal_vertexs.has_data = true;
 
-	res_mesh->mesh_data->normal_faces.num = ranges[9];
-	res_mesh->mesh_data->normal_faces.buffer_size = ranges[9]*3;
+	res_mesh->mesh_data->normal_faces.num = ranges[5];
+	res_mesh->mesh_data->normal_faces.buffer_size = ranges[5]*3*2;
 	if (res_mesh->mesh_data->normal_faces.num > 0)
 		res_mesh->mesh_data->normal_faces.has_data = true;
 
-	res_mesh->mesh_data->uvs.num = ranges[11];
-	res_mesh->mesh_data->uvs.buffer_size = ranges[11]*2;
+	res_mesh->mesh_data->uvs.num = ranges[6];
+	res_mesh->mesh_data->uvs.buffer_size = ranges[6]*2;
 	if (res_mesh->mesh_data->uvs.num > 0)
 		res_mesh->mesh_data->uvs.has_data = true;
 

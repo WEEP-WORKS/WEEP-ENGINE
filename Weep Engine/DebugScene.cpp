@@ -466,15 +466,29 @@ void DebugScene::Panels()
 	// Save
 	if (to_save)
 	{
-		App->WantToSave();
+		if (App->scene_manager->GetState() != PLAY)
+			App->WantToSave();
+
+		else
+			LOG("Can't save in play mode!!");
+
 		to_save = false;
+
+
 	}
 
 	// Load
 	if (to_load)
 	{
-		App->WantToLoad();
+		if (App->scene_manager->GetState() != PLAY)
+			App->WantToLoad();
+
+		else
+			LOG("Can't load in play mode!!");
+
 		to_load = false;
+
+
 	}
 }
 
