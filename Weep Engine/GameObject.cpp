@@ -197,7 +197,7 @@ ComponentTexture* GameObject::GetTextureActivated() const
 			return (*iter);
 		}
 	}
-	LOG("There is no texture activated.");
+	//LOG("There is no texture activated.");
 	return nullptr;
 }
 

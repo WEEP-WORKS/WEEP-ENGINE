@@ -25,6 +25,8 @@ public:
 
 	void LoadTexture(const char* path, ComponentTexture*); // path without directory.
 
+	void Load(const char * path, ComponentTexture * component_texture);
+
 	ComponentTexture* GetCheckersTexture() const;
 
 	std::string GetPathTexture();
@@ -34,9 +36,6 @@ public:
 	int Height;
 
 private:
-	std::string dir;
-	std::string f_path;
-
 	ComponentTexture* checkersTexture = 0u;
 	std::vector<TextureInfo*> textures_paths;
 

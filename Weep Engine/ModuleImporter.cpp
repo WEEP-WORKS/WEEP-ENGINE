@@ -174,6 +174,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
 		{
 			//load current
+			string name = current->current_node->mName.C_Str();
 
 			// ignore aiNodes with no game object, all transformation, rotations...
 			Node<aiNode>* parent = current->parent;
@@ -182,11 +183,9 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				parent = parent->parent;
 			}
 
-			//aiNode* node = scene->mRootNode->mChildren[i];
-
 
 			//create gameObject.
-			string name = current->current_node->mName.C_Str();//App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(parent->current_go->childrens.size() + 1/*plus 1 to start in 1 nad not in 0*/);
+			
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
@@ -195,14 +194,12 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			res_mesh->name = name;
 			res_mesh->imported_file = App->GetFileNameWithoutExtension(GetPath());
 
-			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
-
 			// Set mesh pos, rot and scale
 			aiVector3D translation;
 			aiVector3D scaling;
 			aiQuaternion rotation;
 
-		
+
 			if (current->current_node != nullptr)
 			{
 				current->current_node->mTransformation.Decompose(scaling, rotation, translation);
@@ -214,27 +211,48 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			object->GetTransform()->SetPosition(float3(translation.x, translation.y, translation.z));
 			object->GetTransform()->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 
-			if (model != nullptr)
-			{
-				LoadVertices(res_mesh, mesh);
-
-				if (mesh->HasFaces())
+			
+				aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
+				if (App->file_system->Exists(std::string(LIBRARY_MESH_FOLDER + name + ".mesh").c_str()))
 				{
-					LoadIndexs(res_mesh, mesh);
+					LOG("Loading file with own format");
+					LoadOwnFile(name + ".mesh", model);
+
+
+				}
+				else
+				{
+					if (model != nullptr)
+					{
+						LoadVertices(res_mesh, mesh);
+
+						if (mesh->HasFaces())
+						{
+							LoadIndexs(res_mesh, mesh);
+						}
+
+						if (mesh->HasNormals())
+						{
+							LoadNormals(res_mesh, mesh);
+						}
+
+						res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
+
+						LoadUVs(res_mesh, mesh);
+
+						res_mesh->SetBuffersWithData();
+
+						CreateOwnFile(res_mesh, name);
+						//LoadOwnFile(string(name + ".mesh"),);
+
+					}
+					else
+					{
+						LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
+					}
 				}
 
-				if (mesh->HasNormals())
-				{
-					LoadNormals(res_mesh, mesh);
-				}
-
-				res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
-
-				LoadUVs(res_mesh, mesh);
-
-				res_mesh->SetBuffersWithData();
-
-				if (res_mesh->num_uvs_channels > 0 && scene->HasMaterials())
+				if (scene->HasMaterials())
 				{
 
 					ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
@@ -245,36 +263,16 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 					res_mesh->texture_binded_id = text->GetResourceID();
 
-					
+
 				}
 
-				CreateOwnFile(res_mesh, name);
-				//LoadOwnFile(string(name + ".mesh"),);
-				
-			}
-			else
-			{
-				LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
-			}
-			
-			AABB aabb;
+				//AABB
+				AABB aabb;
+				aabb.SetNegativeInfinity();
+				aabb.Enclose((float3*)res_mesh->mesh_data->vertexs.buffer, res_mesh->mesh_data->vertexs.num);
+				res_mesh->mesh_data->aabb = aabb;
+				object->AddAABB(aabb);
 
-			aabb.SetNegativeInfinity();
-
-			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
-
-			res_mesh->mesh_data->aabb = aabb;
-
-			object->AddAABB(aabb);
-				
-			//// Generate global OBB
-			//OBB obb = aabb;
-			//obb.Transform(object->transform->GetGlobalTransform());
-			//// Generate global AABB
-			//aabb.SetNegativeInfinity();
-			//aabb.Enclose(obb);
-
-			//App->game_object_manager->AddObject(object);
 		}
 		
 	}
