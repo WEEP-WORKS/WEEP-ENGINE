@@ -3,7 +3,7 @@ An OPEN-GL Engine for educational porpouses. Created by two hetties that use urb
 
 ﻿# Version of the game
 
-WeepEngine v.0.2
+WeepEngine v.0.3
 
 ## Description
 
@@ -24,6 +24,32 @@ Github organization: https://github.com/WEEP-WORKS/
 
 - ESC (quit).
 
+- LSHIFT + P (Open Configuration).
+
+###Quadtree Debug controls:
+
+- F9 (Dummy GO with AABB).
+
+- F10 (recalculate Octree).
+
+- F11 (quadtree dynamic).
+
+- SPACE (Divide Quadtree).
+
+###GameObject controls:
+
+- W (Transform GO).
+
+- E (Rotate GO).
+
+- R (scale GO)
+
+- DELETE (destroy selected GO).
+
+- LCTRL in Hierarchy (multiselect GO).
+
+###Cam controls:
+
 - While right click, WASD (Movement free).
 
 - Mouse Wheel (Zoom in/out).
@@ -41,6 +67,21 @@ Github organization: https://github.com/WEEP-WORKS/
 2.- Unzip the file
 
 3.- Execute WeepEngine.exe
+
+## Innovations
+
+1.- GameObjects parent-child structure is iterative.
+
+2.- Octree is iterative
+
+3.- Import FBX is also iterative!
+
+## Who did what
+
+### Assignment 2
+Jorge Gemas -> GameObject Parent-Child structure, Own File Formats, Scene Serialization, Quadtree including all innovations, Hotfixing & Resource Management.
+
+Lluís Moreu -> Transform component, Load transformations from assimp, New Camera editor and Component, Mouse Picking and Gizmos, Time management including Gamemode & Anything including ImGui.
 
 ## MIT License
 
