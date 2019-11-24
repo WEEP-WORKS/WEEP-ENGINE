@@ -20,6 +20,7 @@ public:
 
 	const Resource* GetByID(UID uid) const;
 	Resource* GetByID(UID uid);
+	UID GetByNameMesh(const char* name) const;
 	const std::vector<ResourceMesh*> GetAllMeshes() const;
 
 	UID CreateNewResource(Resource::Type type);

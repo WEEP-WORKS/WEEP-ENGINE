@@ -82,7 +82,7 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 {
 
 	string path_name_without_extension = App->GetFileNameWithoutExtension(path);
-	// Exist this ResourceTexture?
+	// GetByNameMesh this ResourceTexture?
 	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
 	{
 		ResourceTexture* r = (ResourceTexture*)App->resource_managment->GetByID((*iter)->resource_id);

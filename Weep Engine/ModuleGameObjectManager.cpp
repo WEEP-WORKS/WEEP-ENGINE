@@ -572,8 +572,8 @@ void GameObjectManager::Load(const Json::Value& scene)
 
 		}
 		//recalculate pos and transforms to Recalculate the quadtree correctly.
-		PreUpdate();
-		PostUpdate();
+		PreUpdate(App->GetDT());
+		PostUpdate(App->GetDT());
 		App->quadtree->to_recalculate = true;
 	}
 	LOG("Load succesful");

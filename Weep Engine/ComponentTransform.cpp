@@ -77,8 +77,7 @@ const void ComponentTransform::SetScale(const float3 & scale)
 void ComponentTransform::RecalculateLocalTransform()
 {
 	local_transform = float4x4::FromTRS(local_position, local_rotation_quat, local_scale);
-	if(object->IsStatic() && App->quadtree->quadtree_dynamic)
-		App->quadtree->to_recalculate = true;
+
 }
 
 const void ComponentTransform::SetRotationQuat(const Quat & quat)

@@ -49,6 +49,18 @@ const Resource* ResourceManagment::GetByID(UID id) const
 
 }
 
+UID ResourceManagment::GetByNameMesh(const char* name) const
+{
+	const std::vector<ResourceMesh*> meshes = GetAllMeshes();
+	for (std::vector<ResourceMesh*>::const_iterator citer = meshes.cbegin(); citer != meshes.cend(); ++citer)
+	{
+		if ((*citer)->name == name)
+			return (*citer)->GetResourceID();	
+	}
+
+	return 0;
+}
+
 const std::vector<ResourceMesh*> ResourceManagment::GetAllMeshes() const
 {
 	std::vector<ResourceMesh*> meshes;

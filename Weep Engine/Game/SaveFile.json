@@ -26,7 +26,7 @@
 					"type" : 0
 				}
 			],
-			"id" : 542302782,
+			"id" : 864598840,
 			"id_parent" : "nullptr",
 			"name" : "root",
 			"number_components" : 1
@@ -63,8 +63,8 @@
 					"type" : 3
 				}
 			],
-			"id" : 751987715,
-			"id_parent" : 542302782,
+			"id" : 269214230,
+			"id_parent" : 864598840,
 			"name" : "CAMERA",
 			"number_components" : 2
 		},
@@ -93,39 +93,9 @@
 					"type" : 0
 				}
 			],
-			"id" : 632875802,
-			"id_parent" : 542302782,
+			"id" : 1874119461,
+			"id_parent" : 864598840,
 			"name" : "group_street environment_v01_1",
-			"number_components" : 1
-		},
-		{
-			"Components" : 
-			[
-				{
-					"Position" : 
-					[
-						0.0,
-						0.0,
-						37.900001525878906
-					],
-					"Rotation" : 
-					[
-						-0.0,
-						0.0,
-						-180.0
-					],
-					"Scale" : 
-					[
-						1.0,
-						1.0,
-						1.0
-					],
-					"type" : 0
-				}
-			],
-			"id" : 1835677465,
-			"id_parent" : 542302782,
-			"name" : "group_bakerhouse_35",
 			"number_components" : 1
 		},
 		{
@@ -158,12 +128,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building03_c.tga",
+					"Texture Path" : "building03_c",
 					"type" : 2
 				}
 			],
-			"id" : 1524225543,
-			"id_parent" : 632875802,
+			"id" : 1259569855,
+			"id_parent" : 1874119461,
 			"name" : "City_building_004",
 			"number_components" : 3
 		},
@@ -197,12 +167,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V02_C.png",
+					"Texture Path" : "building_v02_c",
 					"type" : 2
 				}
 			],
-			"id" : 202112698,
-			"id_parent" : 632875802,
+			"id" : 18149710,
+			"id_parent" : 1874119461,
 			"name" : "City_building_001",
 			"number_components" : 3
 		},
@@ -236,12 +206,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building_016_c.tga",
+					"Texture Path" : "building_016_c",
 					"type" : 2
 				}
 			],
-			"id" : 975292314,
-			"id_parent" : 632875802,
+			"id" : 880575474,
+			"id_parent" : 1874119461,
 			"name" : "City_building_007",
 			"number_components" : 3
 		},
@@ -275,12 +245,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building_025_c.tga",
+					"Texture Path" : "building_025_c",
 					"type" : 2
 				}
 			],
-			"id" : 1688242148,
-			"id_parent" : 632875802,
+			"id" : 181920798,
+			"id_parent" : 1874119461,
 			"name" : "City_building_008",
 			"number_components" : 3
 		},
@@ -292,7 +262,7 @@
 					[
 						-2.1597719192504883,
 						1.8538382053375244,
-						-0.20000000298023224
+						0.0
 					],
 					"Rotation" : 
 					[
@@ -311,12 +281,16 @@
 				{
 					"Model name" : "Line002.mesh",
 					"type" : 1
+				},
+				{
+					"Texture Active" : false,
+					"type" : 2
 				}
 			],
-			"id" : 1031618304,
-			"id_parent" : 632875802,
+			"id" : 1796811199,
+			"id_parent" : 1874119461,
 			"name" : "Line002",
-			"number_components" : 2
+			"number_components" : 3
 		},
 		{
 			"Components" : 
@@ -351,8 +325,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1854852516,
-			"id_parent" : 632875802,
+			"id" : 575080535,
+			"id_parent" : 1874119461,
 			"name" : "Plane001",
 			"number_components" : 3
 		},
@@ -364,7 +338,7 @@
 					[
 						25.154010772705078,
 						-39.153720855712891,
-						8.5538641769744572e-07
+						-0.30000001192092896
 					],
 					"Rotation" : 
 					[
@@ -386,12 +360,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 01_c.tga",
+					"Texture Path" : "building 01_c",
 					"type" : 2
 				}
 			],
-			"id" : 2052871385,
-			"id_parent" : 632875802,
+			"id" : 2144296214,
+			"id_parent" : 1874119461,
 			"name" : "City_building_010",
 			"number_components" : 3
 		},
@@ -425,12 +399,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 01_c.tga",
+					"Texture Path" : "building 01_c",
 					"type" : 2
 				}
 			],
-			"id" : 1479536294,
-			"id_parent" : 632875802,
+			"id" : 1426026395,
+			"id_parent" : 1874119461,
 			"name" : "City_building_010",
 			"number_components" : 3
 		},
@@ -464,12 +438,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building_016_c.tga",
+					"Texture Path" : "building_016_c",
 					"type" : 2
 				}
 			],
-			"id" : 595712572,
-			"id_parent" : 632875802,
+			"id" : 1067161838,
+			"id_parent" : 1874119461,
 			"name" : "City_building_011",
 			"number_components" : 3
 		},
@@ -503,12 +477,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 06_ c.tga",
+					"Texture Path" : "building 06_ c",
 					"type" : 2
 				}
 			],
-			"id" : 1900784348,
-			"id_parent" : 632875802,
+			"id" : 382588139,
+			"id_parent" : 1874119461,
 			"name" : "City_building_013",
 			"number_components" : 3
 		},
@@ -542,12 +516,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building03_c.tga",
+					"Texture Path" : "building03_c",
 					"type" : 2
 				}
 			],
-			"id" : 122313027,
-			"id_parent" : 632875802,
+			"id" : 929151578,
+			"id_parent" : 1874119461,
 			"name" : "City_building_014",
 			"number_components" : 3
 		},
@@ -581,12 +555,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 01_c.tga",
+					"Texture Path" : "building 01_c",
 					"type" : 2
 				}
 			],
-			"id" : 782592412,
-			"id_parent" : 632875802,
+			"id" : 1959597004,
+			"id_parent" : 1874119461,
 			"name" : "City_building_016",
 			"number_components" : 3
 		},
@@ -620,12 +594,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 01_c.tga",
+					"Texture Path" : "building 01_c",
 					"type" : 2
 				}
 			],
-			"id" : 1058707815,
-			"id_parent" : 632875802,
+			"id" : 1614405221,
+			"id_parent" : 1874119461,
 			"name" : "City_building_016",
 			"number_components" : 3
 		},
@@ -659,12 +633,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 01_c.tga",
+					"Texture Path" : "building 01_c",
 					"type" : 2
 				}
 			],
-			"id" : 215572134,
-			"id_parent" : 632875802,
+			"id" : 1506774555,
+			"id_parent" : 1874119461,
 			"name" : "City_building_017",
 			"number_components" : 3
 		},
@@ -698,12 +672,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 01_c.tga",
+					"Texture Path" : "building 01_c",
 					"type" : 2
 				}
 			],
-			"id" : 1731815978,
-			"id_parent" : 632875802,
+			"id" : 722621352,
+			"id_parent" : 1874119461,
 			"name" : "City_building_017",
 			"number_components" : 3
 		},
@@ -737,12 +711,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building05 _c.tga",
+					"Texture Path" : "building05 _c",
 					"type" : 2
 				}
 			],
-			"id" : 290843523,
-			"id_parent" : 632875802,
+			"id" : 521749323,
+			"id_parent" : 1874119461,
 			"name" : "City_building_022",
 			"number_components" : 3
 		},
@@ -776,12 +750,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building_016_c.tga",
+					"Texture Path" : "building_016_c",
 					"type" : 2
 				}
 			],
-			"id" : 193607220,
-			"id_parent" : 632875802,
+			"id" : 23727578,
+			"id_parent" : 1874119461,
 			"name" : "City_building_023",
 			"number_components" : 3
 		},
@@ -815,12 +789,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building_025_c.tga",
+					"Texture Path" : "building_025_c",
 					"type" : 2
 				}
 			],
-			"id" : 1520895048,
-			"id_parent" : 632875802,
+			"id" : 522783395,
+			"id_parent" : 1874119461,
 			"name" : "City_building_024",
 			"number_components" : 3
 		},
@@ -854,12 +828,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building05 _c.tga",
+					"Texture Path" : "building05 _c",
 					"type" : 2
 				}
 			],
-			"id" : 257954179,
-			"id_parent" : 632875802,
+			"id" : 1149893939,
+			"id_parent" : 1874119461,
 			"name" : "City_building_026",
 			"number_components" : 3
 		},
@@ -893,12 +867,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V01_C.png",
+					"Texture Path" : "building_v01_c",
 					"type" : 2
 				}
 			],
-			"id" : 1769639945,
-			"id_parent" : 632875802,
+			"id" : 723050606,
+			"id_parent" : 1874119461,
 			"name" : "City_building_028",
 			"number_components" : 3
 		},
@@ -929,12 +903,16 @@
 				{
 					"Model name" : "Object010.mesh",
 					"type" : 1
+				},
+				{
+					"Texture Active" : false,
+					"type" : 2
 				}
 			],
-			"id" : 818298808,
-			"id_parent" : 632875802,
+			"id" : 342070999,
+			"id_parent" : 1874119461,
 			"name" : "Object010",
-			"number_components" : 2
+			"number_components" : 3
 		},
 		{
 			"Components" : 
@@ -966,12 +944,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V01_C.png",
+					"Texture Path" : "building_v01_c",
 					"type" : 2
 				}
 			],
-			"id" : 187640505,
-			"id_parent" : 632875802,
+			"id" : 1878859796,
+			"id_parent" : 1874119461,
 			"name" : "City_building_030",
 			"number_components" : 3
 		},
@@ -1005,12 +983,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V01_C.png",
+					"Texture Path" : "building_v01_c",
 					"type" : 2
 				}
 			],
-			"id" : 576573904,
-			"id_parent" : 632875802,
+			"id" : 573951252,
+			"id_parent" : 1874119461,
 			"name" : "City_building_031",
 			"number_components" : 3
 		},
@@ -1044,12 +1022,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building03_c.tga",
+					"Texture Path" : "building03_c",
 					"type" : 2
 				}
 			],
-			"id" : 887440660,
-			"id_parent" : 632875802,
+			"id" : 831895763,
+			"id_parent" : 1874119461,
 			"name" : "City_building_032",
 			"number_components" : 3
 		},
@@ -1083,12 +1061,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 06_ c.tga",
+					"Texture Path" : "building 06_ c",
 					"type" : 2
 				}
 			],
-			"id" : 1401665670,
-			"id_parent" : 632875802,
+			"id" : 1928439880,
+			"id_parent" : 1874119461,
 			"name" : "City_building_033",
 			"number_components" : 3
 		},
@@ -1122,12 +1100,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building05 _c.tga",
+					"Texture Path" : "building05 _c",
 					"type" : 2
 				}
 			],
-			"id" : 1561207743,
-			"id_parent" : 632875802,
+			"id" : 1382758687,
+			"id_parent" : 1874119461,
 			"name" : "City_building_034",
 			"number_components" : 3
 		},
@@ -1161,12 +1139,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V01_C.png",
+					"Texture Path" : "building_v01_c",
 					"type" : 2
 				}
 			],
-			"id" : 106966145,
-			"id_parent" : 632875802,
+			"id" : 1645619911,
+			"id_parent" : 1874119461,
 			"name" : "City_building_035",
 			"number_components" : 3
 		},
@@ -1200,12 +1178,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building 06_ c.tga",
+					"Texture Path" : "building 06_ c",
 					"type" : 2
 				}
 			],
-			"id" : 1764176896,
-			"id_parent" : 632875802,
+			"id" : 1451256281,
+			"id_parent" : 1874119461,
 			"name" : "City_building_036",
 			"number_components" : 3
 		},
@@ -1239,12 +1217,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building05 _c.tga",
+					"Texture Path" : "building05 _c",
 					"type" : 2
 				}
 			],
-			"id" : 579969898,
-			"id_parent" : 632875802,
+			"id" : 955431798,
+			"id_parent" : 1874119461,
 			"name" : "City_building_037",
 			"number_components" : 3
 		},
@@ -1278,12 +1256,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "building05 _c.tga",
+					"Texture Path" : "building05 _c",
 					"type" : 2
 				}
 			],
-			"id" : 1096737764,
-			"id_parent" : 632875802,
+			"id" : 1958726380,
+			"id_parent" : 1874119461,
 			"name" : "City_building_038",
 			"number_components" : 3
 		},
@@ -1317,12 +1295,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V01_C.png",
+					"Texture Path" : "building_v01_c",
 					"type" : 2
 				}
 			],
-			"id" : 51314712,
-			"id_parent" : 632875802,
+			"id" : 1130233833,
+			"id_parent" : 1874119461,
 			"name" : "City_building_039",
 			"number_components" : 3
 		},
@@ -1356,12 +1334,12 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V01_C.png",
+					"Texture Path" : "building_v01_c",
 					"type" : 2
 				}
 			],
-			"id" : 1316259191,
-			"id_parent" : 632875802,
+			"id" : 2061377566,
+			"id_parent" : 1874119461,
 			"name" : "City_building_040",
 			"number_components" : 3
 		},
@@ -1395,97 +1373,23 @@
 				},
 				{
 					"Texture Active" : true,
-					"Texture Path" : "Building_V02_C.png",
+					"Texture Path" : "building_v02_c",
 					"type" : 2
 				}
 			],
-			"id" : 1858951827,
-			"id_parent" : 632875802,
+			"id" : 982877123,
+			"id_parent" : 1874119461,
 			"name" : "City_building_041",
-			"number_components" : 3
-		},
-		{
-			"Components" : 
-			[
-				{
-					"Position" : 
-					[
-						0.0,
-						0.0,
-						0.0
-					],
-					"Rotation" : 
-					[
-						-180.0,
-						-89.980216979980469,
-						0.0
-					],
-					"Scale" : 
-					[
-						1.0,
-						1.0,
-						1.0
-					],
-					"type" : 0
-				},
-				{
-					"Model name" : "Chimney.mesh",
-					"type" : 1
-				},
-				{
-					"Texture Active" : true,
-					"Texture Path" : "Baker_house.png",
-					"type" : 2
-				}
-			],
-			"id" : 653990501,
-			"id_parent" : 1835677465,
-			"name" : "Chimney",
-			"number_components" : 3
-		},
-		{
-			"Components" : 
-			[
-				{
-					"Position" : 
-					[
-						0.0,
-						0.0,
-						0.0
-					],
-					"Rotation" : 
-					[
-						-180.0,
-						-89.980216979980469,
-						0.0
-					],
-					"Scale" : 
-					[
-						1.0,
-						1.0,
-						1.0
-					],
-					"type" : 0
-				},
-				{
-					"Model name" : "Baker_house.mesh",
-					"type" : 1
-				},
-				{
-					"Texture Active" : true,
-					"Texture Path" : "Baker_house.png",
-					"type" : 2
-				}
-			],
-			"id" : 524386427,
-			"id_parent" : 1835677465,
-			"name" : "Baker_house",
 			"number_components" : 3
 		}
 	],
 	"Renderer" : 
 	{
 		"VSYNC" : true
+	},
+	"SceneManager" : 
+	{
+		"Gamemode" : false
 	},
 	"Window" : 
 	{

@@ -189,7 +189,11 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-			model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+			if (App->resource_managment->GetByNameMesh(name.c_str()) == 0)
+				model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+			else
+				model->SetResourceID(App->resource_managment->GetByNameMesh(name.c_str())); //overwrite mesh resource!
+
 			ResourceMesh* res_mesh = model->GetResource();
 			res_mesh->name = name;
 			res_mesh->imported_file = App->GetFileNameWithoutExtension(GetPath());
@@ -213,15 +217,15 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 			
 				aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
-				if (App->file_system->Exists(std::string(LIBRARY_MESH_FOLDER + name + ".mesh").c_str()))
-				{
-					LOG("Loading file with own format");
-					LoadOwnFile(name + ".mesh", model);
+				/*if (App->file_system->Exists(std::string(LIBRARY_MESH_FOLDER + name + ".mesh").c_str()))
+				{*/
+					//LOG("Loading file with own format");
+					//LoadOwnFile(name + ".mesh", model);
 
 
-				}
+		/*		}
 				else
-				{
+				{*/
 					if (model != nullptr)
 					{
 						LoadVertices(res_mesh, mesh);
@@ -250,7 +254,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 					{
 						LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
 					}
-				}
+				//}
 
 				if (scene->HasMaterials())
 				{
@@ -437,7 +441,7 @@ void ModuleImporter::CreateOwnFile(const ResourceMesh* mesh, const string name_t
 	
 
 
-	const char* file_name = mesh->imported_file.c_str();
+	const char* file_name = mesh->name.c_str();
 
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
 	uint header[13] = {
