@@ -396,11 +396,14 @@ bool ModuleFileSystem::Remove(const char * file)
 	{
 		if (PHYSFS_delete(file) == 0)
 		{
-			LOG("File deleted: [%s]", file);
-			ret = true;
+			LOG("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
 		}
 		else
-			LOG("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
+		{
+			ret = true;
+			LOG("File deleted: [%s]", file);
+		}
+
 	}
 
 	return ret;
@@ -414,6 +417,11 @@ const char * ModuleFileSystem::GetBasePath() const
 const char * ModuleFileSystem::GetWritePath() const
 {
 	return PHYSFS_getWriteDir();
+}
+
+void ModuleFileSystem::SetWritePath(const char* dir)
+{
+	PHYSFS_setWriteDir(dir);
 }
 
 const char * ModuleFileSystem::GetReadPaths() const
