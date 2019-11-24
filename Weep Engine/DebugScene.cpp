@@ -103,7 +103,7 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/FBX/Street environment_V01.fbx");
+		ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
 
 
 	}
@@ -278,7 +278,7 @@ bool DebugScene::Update(float dt)
 			resource_hvr = ImGui::IsWindowHovered();
 
 			if (ImGui::TreeNodeEx("Assets/")) {
-				PrintResourceList("Models/");
+				PrintResourceList("Assets/");
 				ImGui::TreePop();
 			}
 		}
