@@ -30,7 +30,6 @@ bool ModuleTexture::Start()
 
 	//ilutRenderer(ILUT_OPENGL);
 	LoadCheckersTexture();
-	dir = "Models/Textures/";
 	return true;
 }
 
@@ -81,27 +80,37 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 
 void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_texture)
 {
-	
-	f_path = path;
 
-	string path_name_with_extension = App->GetFileName(path);
+	string path_name_without_extension = App->GetFileNameWithoutExtension(path);
 	// Exist this ResourceTexture?
 	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
 	{
 		ResourceTexture* r = (ResourceTexture*)App->resource_managment->GetByID((*iter)->resource_id);
-		if (path_name_with_extension == r->texture_path)
+		if (path_name_without_extension == r->texture_path)
 		{
-			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path_name_with_extension.c_str());
+			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path_name_without_extension.c_str());
 			component_texture->SetResourceID((*iter)->resource_id);
 			component_texture->ActivateThisTexture();
 
 			return;
 		}
 	}
+	std::string own_file = LIBRARY_TEXTURES_FOLDER + App->GetFileNameWithoutExtension(path) + ".dds";
+	if (App->file_system->Exists(own_file.c_str()))
+	{
+		LOG("Loading own texture");
+		Load(own_file.c_str(), component_texture);
+	}
+	else
+	{
+		Load(path, component_texture);
+	}
 
-	
 
+}
 
+void ModuleTexture::Load(const char *path, ComponentTexture * component_texture)
+{
 	//Load Texture in the resource.
 	if (ilLoadImage(path))
 	{
@@ -116,7 +125,7 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 		uint id_text = ilutGLBindTexImage();
 		if (id_text > 0)
 		{
-		
+
 			int width = ilGetInteger(IL_IMAGE_WIDTH);
 			int height = ilGetInteger(IL_IMAGE_HEIGHT);
 			LOG("Size texture: %i x %i", width, height);
@@ -124,7 +133,7 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 			resource_texture->id_texture = id_text;
 			resource_texture->texture_width = width;
 			resource_texture->texture_height = height;
-			resource_texture->texture_path = path_name_with_extension;
+			resource_texture->texture_path = App->GetFileNameWithoutExtension(path);
 
 			component_texture->ActivateThisTexture();
 
@@ -162,10 +171,6 @@ void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_te
 	}
 }
 
-std::string ModuleTexture::GetPathTexture()
-{
-	return f_path;
-}
 
 void ModuleTexture::LoadCheckersTexture()
 {
