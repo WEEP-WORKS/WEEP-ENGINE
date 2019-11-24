@@ -346,8 +346,6 @@ void GameObjectManager::Hierarchy()
 
 			//create primitives should be here
 			DoForFirstChildrens(&GameObjectManager::PrintGoList);
-			
-		//	DoForAllChildrensVertical(&GameObjectManager::PrintGoList);
 
 			printed_hierarchy.clear();
 		}

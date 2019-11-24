@@ -77,11 +77,18 @@ void ComponentTexture::InspectorDraw()
 
 	if (ImGui::CollapsingHeader("Texture", ImGuiTreeNodeFlags_DefaultOpen)) {
 		const ResourceTexture* text_info = GetResource(resource_id);
-		ImGui::Text("Texture Path: %s ", text_info->texture_path.c_str());
+		if(text_info != nullptr)
+			ImGui::Text("Texture Path: %s ", text_info->texture_path.c_str());
+		else
+			ImGui::Text("Don't have texture");
+
 		ImGui::Separator();
 		ImGui::TextColored(ImVec4(1.0, 1.0, 0.1, 1.0), "Texture Size");
-		ImGui::Text("Width: %i px", text_info->texture_width);
-		ImGui::Text("Height: %i px", text_info->texture_height);
+		if (text_info != nullptr)
+		{
+			ImGui::Text("Width: %i px", text_info->texture_width);
+			ImGui::Text("Height: %i px", text_info->texture_height);
+		}
 		ImGui::Checkbox("Activate Checkers", &activate_checkers);
 
 	}
