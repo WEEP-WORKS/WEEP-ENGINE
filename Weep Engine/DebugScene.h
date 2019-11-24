@@ -48,6 +48,7 @@ private:
 	bool show_geometry_math_test = false;
 	bool show_random_generator = false;
 	bool show_debug_console = false;
+	bool show_resources = false;
 
 	bool to_save = false;
 	bool to_load = false;
@@ -79,6 +80,7 @@ private:
 
 private:
 	
+	void PrintResourceList(const char * path);
 	void resettest(bool &ret);
 	void Panels();
 	void MenuBar(bool &ret);

@@ -3,6 +3,7 @@
 #include "DebugScene.h"
 #include "ModuleRenderer3D.h"
 #include <cmath>
+#include <experimental/filesystem>
 
 //#include "par_shapes.h"
 #include "imgui.h"
@@ -260,7 +261,30 @@ bool DebugScene::Update()
 		ImGui::End();
 	}
 
+	//-------------------------------------------------------------------------
+	//----------------------------INSPECTOR------------------------------------
+	//-------------------------------------------------------------------------
+
+	if (ImGui::Begin("Resources", &show_resources))
+	{
+		if (ImGui::TreeNodeEx("Library/")) {
+			PrintResourceList("Library/");
+			ImGui::TreePop();
+		}
+	}
+  	ImGui::End();
+
 	return ret;
+}
+
+void DebugScene::PrintResourceList(const char * path)
+{
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(path)) //https://www.bfilipek.com/2019/04/dir-iterate.html
+		if (ImGui::TreeNodeEx(entry.path().filename().u8string().data())) {
+			if (!entry.path().has_extension())
+				PrintResourceList(entry.path().u8string().data());
+			ImGui::TreePop();
+		}
 }
 
 void DebugScene::Tools()
