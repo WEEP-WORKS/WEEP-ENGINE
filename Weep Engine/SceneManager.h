@@ -23,9 +23,8 @@ public:
 	void SaveTmpScene();
 	void LoadTmpScene();
 
-	//void SaveScene(const char* scene_name);
-	//void LoadScene(const char* scene_name);
-	//void DestroyScene();
+	void Save(Json::Value&) const override;
+	void Load(const Json::Value&) override;
 
 	SCENE_STATE GetState();
 	bool GetPause();
