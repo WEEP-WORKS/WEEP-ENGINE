@@ -7,6 +7,7 @@
 #include "App.h"
 #include "ModuleImporter.h"
 #include "ResourceManagment.h"
+#include "ModuleFileSystem.h"
 
 #include "ResourceTexture.h"
 #include "ResourceMesh.h"
@@ -169,11 +170,12 @@ void ComponentMesh::Save(Json::Value& scene) const
 
 	comonent_mesh["type"] = (int)type;
 
-	if(GetResource() != nullptr)
+	if (GetResource() != nullptr)
 		App->importer->CreateOwnFile(GetResource(), object->GetName());
+	
+		
 
 	comonent_mesh["Model name"] = string(object->GetName() + string(".mesh"));
-	//LoadOwnFile(string(name + ".mesh"));
 	scene.append(comonent_mesh);
 }
 
@@ -181,6 +183,11 @@ void ComponentMesh::Load(const Json::Value& component)
 {
 	App->importer->LoadOwnFile(component["Model name"].asString(), this);
 
+	/*string s = App->file_system->GetWritePath();
+	//App->file_system->SetWritePath("");
+	App->file_system->Remove(std::string(LIBRARY_MESH_FOLDER + std::string(object->GetName()) + ".mesh").c_str());
+	App->file_system->SetWritePath(s.c_str());
+	*/
 	AABB aabb;
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)GetResource()->mesh_data->vertexs.buffer, GetResource()->mesh_data->vertexs.num);

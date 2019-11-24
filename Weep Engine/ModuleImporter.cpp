@@ -533,7 +533,17 @@ void ModuleImporter::CreateOwnFile(const ResourceMesh* mesh, const string name_t
 	memcpy(cursor, mesh->mesh_data->uvs.buffer, size);
 
 	string path_to_save(LIBRARY_MESH_FOLDER + string(name_to_file) + string(".mesh"));
-	App->file_system->Save(path_to_save.c_str(), data, all_size);
+	if (App->file_system->Exists(path_to_save.c_str()))
+	{
+		/*string s = App->file_system->GetWritePath();
+		App->file_system->SetWritePath("");*/
+		App->file_system->Remove(path_to_save.c_str());
+		//App->file_system->SetWritePath(s.c_str());
+
+	}
+	
+		App->file_system->Save(path_to_save.c_str(), data, all_size);
+	RELEASE_ARRAY(data);
 
 }
 
@@ -572,6 +582,7 @@ void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 		{
 			mesh->SetResourceID((*citer)->GetResourceID());
 			LOG("The model to load was in memory... Returning the model in memory.");
+			RELEASE_ARRAY(data);
 			return;
 		}
 	}
@@ -582,32 +593,32 @@ void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 
 
 	res_mesh->mesh_data->vertexs.num = ranges[1];
-	res_mesh->mesh_data->vertexs.buffer_size = ranges[2];
+	res_mesh->mesh_data->vertexs.buffer_size = ranges[1] * 3;
 	if (res_mesh->mesh_data->vertexs.num > 0)
 		res_mesh->mesh_data->vertexs.has_data = true;
 
 	res_mesh->mesh_data->indexs.num = ranges[3];
-	res_mesh->mesh_data->indexs.buffer_size = ranges[4];
+	res_mesh->mesh_data->indexs.buffer_size = ranges[3];
 	if (res_mesh->mesh_data->indexs.num > 0)
 		res_mesh->mesh_data->indexs.has_data = true;
 
 	res_mesh->mesh_data->normals_direction.num = ranges[5];
-	res_mesh->mesh_data->normals_direction.buffer_size = ranges[6];
+	res_mesh->mesh_data->normals_direction.buffer_size = ranges[5]*3;
 	if (res_mesh->mesh_data->normals_direction.num > 0)
 		res_mesh->mesh_data->normals_direction.has_data = true;
 
 	res_mesh->mesh_data->normal_vertexs.num = ranges[7];
-	res_mesh->mesh_data->normal_vertexs.buffer_size = ranges[8];
+	res_mesh->mesh_data->normal_vertexs.buffer_size = ranges[7]*3;
 	if (res_mesh->mesh_data->normal_vertexs.num > 0)
 		res_mesh->mesh_data->normal_vertexs.has_data = true;
 
 	res_mesh->mesh_data->normal_faces.num = ranges[9];
-	res_mesh->mesh_data->normal_faces.buffer_size = ranges[10];
+	res_mesh->mesh_data->normal_faces.buffer_size = ranges[9]*3;
 	if (res_mesh->mesh_data->normal_faces.num > 0)
 		res_mesh->mesh_data->normal_faces.has_data = true;
 
 	res_mesh->mesh_data->uvs.num = ranges[11];
-	res_mesh->mesh_data->uvs.buffer_size = ranges[12];
+	res_mesh->mesh_data->uvs.buffer_size = ranges[11]*2;
 	if (res_mesh->mesh_data->uvs.num > 0)
 		res_mesh->mesh_data->uvs.has_data = true;
 
@@ -615,40 +626,43 @@ void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 	//Load Buffers----------
 	// Load vertexs
 	cursor += bytes;
-	bytes = res_mesh->mesh_data->vertexs.buffer_size;
+	bytes = sizeof(float) * res_mesh->mesh_data->vertexs.buffer_size;
 	res_mesh->mesh_data->vertexs.buffer = new float[res_mesh->mesh_data->vertexs.buffer_size];
 	memcpy(res_mesh->mesh_data->vertexs.buffer, cursor, bytes);
 
 	// Load indexs
 	cursor += bytes;
-	bytes = res_mesh->mesh_data->indexs.buffer_size;
+	bytes = sizeof(uint) * res_mesh->mesh_data->indexs.buffer_size;
 	res_mesh->mesh_data->indexs.buffer = new uint[res_mesh->mesh_data->indexs.buffer_size];
 	memcpy(res_mesh->mesh_data->indexs.buffer, cursor, bytes);
 
 	// Load normal_dir
 	cursor += bytes;
-	bytes = res_mesh->mesh_data->normals_direction.buffer_size;
+	bytes = sizeof(float) * res_mesh->mesh_data->normals_direction.buffer_size;
 	res_mesh->mesh_data->normals_direction.buffer = new float[res_mesh->mesh_data->normals_direction.buffer_size];
 	memcpy(res_mesh->mesh_data->normals_direction.buffer, cursor, bytes);
 
 	// Load normal_vertexs
 	cursor += bytes;
-	bytes = res_mesh->mesh_data->normal_vertexs.buffer_size;
+	bytes = sizeof(float) * res_mesh->mesh_data->normal_vertexs.buffer_size;
 	res_mesh->mesh_data->normal_vertexs.buffer = new float[res_mesh->mesh_data->normal_vertexs.buffer_size];
 	memcpy(res_mesh->mesh_data->normal_vertexs.buffer, cursor, bytes);
 
 	// Load normal_faces
 	cursor += bytes;
-	bytes = res_mesh->mesh_data->normal_faces.buffer_size;
+	bytes = sizeof(float) * res_mesh->mesh_data->normal_faces.buffer_size;
 	res_mesh->mesh_data->normal_faces.buffer = new float[res_mesh->mesh_data->normal_faces.buffer_size];
 	memcpy(res_mesh->mesh_data->normal_faces.buffer, cursor, bytes);
 
 	// Load uvs
 	cursor += bytes;
-	bytes = res_mesh->mesh_data->uvs.buffer_size;
+	bytes = sizeof(float) * res_mesh->mesh_data->uvs.buffer_size;
 	res_mesh->mesh_data->uvs.buffer = new float[res_mesh->mesh_data->uvs.buffer_size];
 	memcpy(res_mesh->mesh_data->uvs.buffer, cursor, bytes);
 
 	res_mesh->SetBuffersWithData();
+
+	RELEASE_ARRAY(data);
+
 }
 
