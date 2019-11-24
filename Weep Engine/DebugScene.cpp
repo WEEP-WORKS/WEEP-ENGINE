@@ -3,6 +3,7 @@
 #include "DebugScene.h"
 #include "ModuleRenderer3D.h"
 #include <cmath>
+#include <experimental/filesystem>
 
 //#include "par_shapes.h"
 #include "imgui.h"
@@ -102,12 +103,9 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
-	}
+		ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
 
-	if (ret == true)
-	{
-		//ret = App->importer->LoadFBX("Models/FBX/warrior.fbx");
+
 	}
 
 	App->profiler->SetGameTimeScale(1.0f);
@@ -153,10 +151,8 @@ bool DebugScene::PreUpdate(float dt)
 bool DebugScene::Update(float dt)
 {
 	bool ret = true;
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		App->quadtree->root_quadtree->Divide();
 
-	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		GameObject* new_go = new GameObject("AABB Test", App->game_object_manager->root);
 		AABB aabb;
@@ -178,8 +174,6 @@ bool DebugScene::Update(float dt)
 		App->window->SetAppName(name_input_buffer);
 		App->window->SetVersion(version_input_buffer);
 	}
-
-	//WE COULD CALL DOFORALLCHILDREN UPDATE WITH DT
 
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
@@ -234,9 +228,9 @@ bool DebugScene::Update(float dt)
 				ImGui::PopID();
 				ImGui::SameLine();
 				// Text rename
-				char name[25];
-				sprintf_s(name, 25, selected[0]->GetName());
-				if (ImGui::InputText("", name, 25, ImGuiInputTextFlags_AutoSelectAll))
+				char name[50];
+				sprintf_s(name, 50, selected[0]->GetName());
+				if (ImGui::InputText("", name, 50, ImGuiInputTextFlags_AutoSelectAll))
 					selected[0]->SetName(name);
 
 				ImGui::Separator();
@@ -266,9 +260,50 @@ bool DebugScene::Update(float dt)
 		ImGui::End();
 	}
 
+	//-------------------------------------------------------------------------
+	//----------------------------INSPECTOR------------------------------------
+	//-------------------------------------------------------------------------
+
+	if (App->debug_scene->show_resources)
+	{
+		if (ImGui::Begin("Resources", &show_resources))
+		{
+			resource_hvr = ImGui::IsWindowHovered();
+
+			if (ImGui::TreeNodeEx("Assets/")) {
+				PrintResourceList("Assets/");
+				ImGui::TreePop();
+			}
+		}
+		ImGui::End();
+	}
+
 	return ret;
 }
 
+
+void DebugScene::PrintResourceList(const char * path)
+{
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(path))			//https://www.bfilipek.com/2019/04/dir-iterate.html
+		if (ImGui::TreeNodeEx(entry.path().filename().u8string().data())) {
+			if (!entry.path().has_extension())
+			{
+				PrintResourceList(entry.path().u8string().data());
+			}
+			else if (ImGui::IsItemClicked())
+			{
+				if (entry.path().extension().u8string().compare(".fbx") == 0)
+				{
+					App->importer->LoadFBX(entry.path().u8string().data());
+				}
+				else if (entry.path().extension().u8string().compare(".dds") == 0)
+				{
+					//App->importer->LoadFBX(entry.path().u8string().data());
+				}
+			}
+			ImGui::TreePop();
+		}
+}
 bool DebugScene::PostUpdate(float dt)
 {
 	bool ret = true;
@@ -288,6 +323,7 @@ bool DebugScene::PostUpdate(float dt)
 	//ret = App->game_object_manager->Update(game_dt);
 
 	return ret;
+
 }
 
 void DebugScene::Tools()
@@ -351,12 +387,12 @@ void DebugScene::Tools()
 			App->scene_manager->Pause();
 		}
 
-		ImGui::SetCursorPos(ImVec2(500, 3));
-		if (ImGui::Button("Step") && App->scene_manager->GetPause())
-		{
-			App->scene_manager->Step();
-			frame_passed = false;
-		}
+		//ImGui::SetCursorPos(ImVec2(500, 3));
+		//if (ImGui::Button("Step") && App->scene_manager->GetPause())
+		//{
+		//	App->scene_manager->Step();
+		//	frame_passed = false;
+		//}
 
 		ImGui::SetCursorPos(ImVec2(570, 6));
 		ImGui::Text("Current: PLAYING");
@@ -376,11 +412,6 @@ void DebugScene::Tools()
 	ImGui::End();
 }
 
-void DebugScene::resettest(bool &ret)
-{
-	App->game_object_manager->CleanUp();
-	ret = App->importer->LoadFBX("Models/FBX/BakerHouse.fbx");
-}
 
 void DebugScene::Panels()
 {
@@ -423,15 +454,29 @@ void DebugScene::Panels()
 	// Save
 	if (to_save)
 	{
-		App->WantToSave();
+		if (App->scene_manager->GetState() != PLAY)
+			App->WantToSave();
+
+		else
+			LOG("Can't save in play mode!!");
+
 		to_save = false;
+
+
 	}
 
 	// Load
 	if (to_load)
 	{
-		App->WantToLoad();
+		if (App->scene_manager->GetState() != PLAY)
+			App->WantToLoad();
+
+		else
+			LOG("Can't load in play mode!!");
+
 		to_load = false;
+
+
 	}
 }
 
@@ -459,6 +504,7 @@ void DebugScene::MenuBar(bool &ret)
 			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
 			ImGui::MenuItem("Hierarchy", NULL, &show_hierarchy);
 			ImGui::MenuItem("Inspector", NULL, &show_inspector);
+			ImGui::MenuItem("Resources", NULL, &show_resources);
 			ImGui::EndMenu();
 		}
 

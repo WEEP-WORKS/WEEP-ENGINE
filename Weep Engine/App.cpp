@@ -11,6 +11,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleQuadtree.h"
 #include "SceneManager.h"
+#include "ResourceManagment.h"
 
 #include <list>
 #include <fstream>
@@ -36,6 +37,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	file_system = new ModuleFileSystem();
 	quadtree = new ModuleQuadtree();
 	scene_manager = new SceneManager();
+	resource_managment = new ResourceManagment();
 
 	// The order of calls is very important!
 	// Modules will Awake() Start() and Update in this order
@@ -49,6 +51,7 @@ Application::Application(int _argc, char* _args[]) : argc(argc), args(args)
 	AddModule(quadtree);
 	AddModule(importer);
 	AddModule(texture);
+	AddModule(resource_managment);
 	AddModule(game_object_manager);
 	AddModule(scene_manager);
 	AddModule(debug_scene);
@@ -352,18 +355,20 @@ std::string Application::GetFileName(const char * file_path)
 std::string Application::GetFileNameWithoutExtension(const char * file_path)
 {
 	string ret;
-	for (int i = 0; file_path[i] != '\0'; i++)
+	string path = file_path;
+	App->file_system->NormalizePath(path);
+	for (int i = 0; path.c_str()[i] != '\0'; i++)
 	{
-		if (file_path[i] == '\\' || file_path[i] == '/')
+		if (path.c_str()[i] == '\\' || path.c_str()[i] == '/')
 		{
 			ret.clear();
 			continue;
 		}
 
-		else if (file_path[i] == '.')
+		else if (path.c_str()[i] == '.')
 			return ret;
 
-		ret += file_path[i];
+		ret += path.c_str()[i];
 	}
 
 	return ret;
@@ -398,4 +403,18 @@ string Application::ToLowerCase(std::string str)
 	}
 
 	return str;
+}
+
+std::string Application::GetStringByLength(const char* string, uint lenght_desire)
+{
+	std::string ret;
+
+	bool adding = false;
+	for (uint i = 0; i < lenght_desire; i++)
+	{
+		
+		ret += string[i];
+	}
+	return ret;
+
 }

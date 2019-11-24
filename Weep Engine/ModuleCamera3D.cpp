@@ -85,30 +85,14 @@ void ModuleCamera3D::DestroyAllCameras()
 	}
 }
 
-vector<Camera3D*> ModuleCamera3D::GetCameras()
-{
-	return cameras;
-}
-
 Camera3D * ModuleCamera3D::GetEditorCamera() const
 {
 	return editor_camera;
 }
 
-void ModuleCamera3D::SetCurrentCamera( Camera3D * set)
-{
-	if (set != nullptr)
-		current_camera = set;
-}
-
 Camera3D * ModuleCamera3D::GetCurrentCamera() const
 {
 	return current_camera;
-}
-
-void ModuleCamera3D::SetCurrentCameraToEditorCamera()
-{
-	current_camera = editor_camera;
 }
 
 const float * ModuleCamera3D::GetViewMatrix() const
@@ -271,19 +255,9 @@ const float Camera3D::GetVerticalFOV() const
 	return frustum.verticalFov * RADTODEG;
 }
 
-const float Camera3D::GetHorizontalFOV() const
-{
-	return frustum.horizontalFov * RADTODEG;
-}
-
 const float4x4 Camera3D::GetViewMatrix() const
 {
 	return frustum.ViewMatrix();
-}
-
-const float4x4 Camera3D::GetProjectionMatrix() const
-{
-	return frustum.ProjectionMatrix();
 }
 
 const float4x4 Camera3D::GetOpenGLViewMatrix() const
@@ -400,34 +374,6 @@ void Camera3D::Focus(const float3 & focus_center, const float & distance)
 	Look(focus_center);
 }
 
-void Camera3D::GetElementsToDraw(vector<GameObject*>& inside)
-{
-	//vector<GameObject*> to_check = 
-
-	////Clean all objects that doesn't have aabb
-	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end();)
-	//{
-	//	if ((*it)->GetMesh() == nullptr)
-	//		it = to_check.erase(it);
-	//	else
-	//		it++;
-	//}
-
-	//test elements with frustum
-	//for (std::vector<GameObject*>::iterator it = to_check.begin(); it != to_check.end(); ++it)
-	//{
-	//	if (CheckInsideFrustum((*it)->GetMesh()->GetBbox()))
-	//	{
-	//		bool found = false;
-	//		if (std::find(inside.begin(), inside.end(), (*it)) != inside.end())
-	//			found = true;
-
-	//		if (!found)
-	//			inside.push_back((*it));
-	//	}
-	//}
-}
-
 bool Camera3D::CheckInsideFrustum(const AABB & box)
 {
 	bool ret = true;
@@ -437,13 +383,13 @@ bool Camera3D::CheckInsideFrustum(const AABB & box)
 	box.GetCornerPoints(corners);
 
 	// Test all corners for each plane
-	for (int p = 0; p < 6; ++p)
+	for (int plane = 0; plane < 6; ++plane)
 	{
 		uint corners_in = 8;
 
-		for (int c = 0; c < 8; ++c)
+		for (int corner = 0; corner < 8; ++corner)
 		{
-			if (frustum.GetPlane(p).IsOnPositiveSide(corners[c]))
+			if (frustum.GetPlane(plane).IsOnPositiveSide(corners[corner]))
 			{
 				corners_in--;
 			}

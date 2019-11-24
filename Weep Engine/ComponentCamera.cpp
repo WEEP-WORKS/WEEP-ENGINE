@@ -6,6 +6,7 @@
 #include "ComponentMesh.h"
 #include "ModuleGameObjectManager.h"
 #include "ModuleQuadtree.h"
+#include "glew/glew.h"
 
 ComponentCamera::ComponentCamera()
 {

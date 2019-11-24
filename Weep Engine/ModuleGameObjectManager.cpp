@@ -14,6 +14,8 @@
 #include "ModuleQuadtree.h"
 #include "SceneManager.h"
 
+#include "ResourceManagment.h"
+#include "ResourceMesh.h"
 //#include <functional>
 
 GameObjectManager::GameObjectManager(bool start_enabled) : Module(start_enabled)
@@ -187,9 +189,9 @@ void GameObjectManager::Destroy(GameObject * go)
 	if (go->parent != nullptr)
 		go->parent->childrens.erase(std::find(go->parent->childrens.begin(), go->parent->childrens.end(), go));
 
+	App->quadtree->DeleteGOFromQuadtree(go);
 	go->CleanUp();
 	ReleaseGameObject(go);
-	App->quadtree->DeleteGOFromQuadtree(go);
 
 }
 
@@ -212,10 +214,13 @@ void GameObjectManager::CreateCube()
 	GameObject* ret = new GameObject("Cube", root);
 	par_shapes_mesh* mesh = par_shapes_create_cube();
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
+	cmesh->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+	ResourceMesh* res_mesh = cmesh->GetResource();
+
 	ret->parametric = true;
 	if (mesh != nullptr)
 	{
-		LoadGeometryShapeInfo(cmesh, mesh);
+		LoadGeometryShapeInfo(res_mesh, mesh);
 	}
 	ret->SetName("cube");
 	ClearSelection();
@@ -227,17 +232,19 @@ void GameObjectManager::CreateSphere()
 	GameObject* ret = new GameObject("Sphere", root);
 	par_shapes_mesh* mesh = par_shapes_create_subdivided_sphere(2);
 	ComponentMesh* cmesh = (ComponentMesh*)ret->AddComponent(ComponentType::MESH);
+	cmesh->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+	ResourceMesh* res_mesh = cmesh->GetResource();
 
 	if (mesh != nullptr)
 	{
-		LoadGeometryShapeInfo(cmesh, mesh);
+		LoadGeometryShapeInfo(res_mesh, mesh);
 	}
 	ret->SetName("sphere");
 	ClearSelection();
 	AddGameObjectToSelected(ret);
 }
 
-void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_mesh * mesh) const
+void GameObjectManager::LoadGeometryShapeInfo(ResourceMesh * cmesh, par_shapes_mesh * mesh) const
 {
 	cmesh->mesh_data->vertexs.has_data = true;
 	cmesh->mesh_data->vertexs.num = mesh->npoints;
@@ -252,11 +259,11 @@ void GameObjectManager::LoadGeometryShapeInfo(ComponentMesh * cmesh, par_shapes_
 	memcpy(cmesh->mesh_data->indexs.buffer, mesh->triangles, sizeof(uint) * cmesh->mesh_data->indexs.buffer_size);
 
 
-	if (cmesh->object->parametric)
+	/*if (cmesh->object->parametric)
 	{
 		//par_shapes_unweld(mesh, true);
 		par_shapes_compute_normals(mesh);
-	}
+	}*/
 
 	if (mesh->normals != nullptr)
 	{
@@ -338,8 +345,6 @@ void GameObjectManager::Hierarchy()
 
 			//create primitives should be here
 			DoForFirstChildrens(&GameObjectManager::PrintGoList);
-			
-		//	DoForAllChildrensVertical(&GameObjectManager::PrintGoList);
 
 			printed_hierarchy.clear();
 		}
@@ -392,11 +397,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		//if (object->GetMesh())
 		//{
 		//	DrawBBox(object);
-		//}		
-
-		
-
-		
+		//}
 	}
 
 	//treenode needs to be more understood
@@ -557,6 +558,7 @@ void GameObjectManager::Load(const Json::Value& scene)
 	if (root != nullptr)
 	{
 		CleanUp();
+		App->quadtree->Clear();
 
 		//root = new GameObject("root", nullptr);
 		for (uint i = 0; i < scene["GameObjects"].size(); ++i)
@@ -565,6 +567,10 @@ void GameObjectManager::Load(const Json::Value& scene)
 			go->Load(scene["GameObjects"][i]);
 
 		}
+		//recalculate pos and transforms to Recalculate the quadtree correctly.
+		PreUpdate(App->GetDT());
+		PostUpdate(App->GetDT());
+		App->quadtree->to_recalculate = true;
 	}
 	LOG("Load succesful");
 }
@@ -676,7 +682,7 @@ void GameObjectManager::MousePick()
 {
 	float distance = 999999.f;
 	GameObject* closest = nullptr;
-	//picking, closest, distance
+
 	root->DoForAllChildrens(&GameObject::TestRay, distance, closest);
 
 	if (closest != nullptr)

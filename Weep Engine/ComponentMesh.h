@@ -7,8 +7,8 @@
 #include "MathGeoLib/include/Math/float3.h"
 #include "MathGeoLib/include\MathGeoLib.h"
 
+class ResourceMesh;
 class ComponentTexture;
-
 
 
 class ComponentMesh : public Component
@@ -16,17 +16,8 @@ class ComponentMesh : public Component
 public:
 	
 
-	//Normals:------
-	uint				num_faces					= 0u;		// Number of faces of the mesh.
-	float				normal_lenght				= 0.5f;		// Lenght of all normals.
+	Color color;
 
-	//UVs
-	uint				num_uvs_channels			= 0u; 
-	uint				channel_buffer_size			= 0u; 
-
-	MeshData*			mesh_data;
-
-	Color				color;
 
 private:
 
@@ -34,6 +25,9 @@ private:
 
 	bool				activate_face_normals		= false;
 	bool				activate_vertex_normals		= false;
+
+	UID resource_id = 0u;
+
 
 public:
 	ComponentMesh();
@@ -44,11 +38,8 @@ public:
 
 	void OnGetBoundingBox(AABB & box);
 
-	AABB GetBbox();
 
-	void SetBuffersWithData();
-
-	void CalculateNormals();
+	
 
 	void SetTexture(ComponentTexture*);
 
@@ -56,6 +47,12 @@ public:
 
 	void Save(Json::Value&) const override;
 	void Load(const Json::Value&) override;
+
+	const ResourceMesh* GetResource() const;
+	ResourceMesh* GetResource();
+
+	const UID GetResourceID() const;
+	void SetResourceID(UID);
 
 
 	ComponentTexture* GetTexture() const;
@@ -66,9 +63,7 @@ private:
 
 	void RenderModel();
 
-	void CalculateFacesNormals();
-
-	void CalculateVertexsNormals();
+	
 
 	void RenderVertexNormals();
 

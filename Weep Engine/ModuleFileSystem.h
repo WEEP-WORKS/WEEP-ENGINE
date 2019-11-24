@@ -54,7 +54,10 @@ public:
 
 	const char* GetBasePath() const;
 	const char* GetWritePath() const;
+	void SetWritePath(const char*);
 	const char* GetReadPaths() const;
+
+
 
 private:
 

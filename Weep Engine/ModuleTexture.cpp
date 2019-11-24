@@ -4,7 +4,9 @@
 #include "GameObject.h"
 #include "ComponentTexture.h"
 #include "ModuleFileSystem.h"
-
+#include "ResourceTexture.h"
+#include "ResourceManagment.h"
+#include "glew/glew.h"
 #include "DevIL/il.h"
 #include "DevIL/ilu.h"
 #include "DevIL/ilut.h"//temporally all DevIL
@@ -28,7 +30,6 @@ bool ModuleTexture::Start()
 
 	//ilutRenderer(ILUT_OPENGL);
 	LoadCheckersTexture();
-	dir = "Models/Textures/";
 	return true;
 }
 
@@ -45,7 +46,7 @@ bool ModuleTexture::CleanUp()
 
 void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, const char * file_extension)
 {
-	if (strcmp("png", file_extension) == 0 || strcmp("dds", file_extension) == 0)
+	if (strcmp("png", file_extension) == 0 || strcmp("dds", file_extension) == 0 || strcmp("tga", file_extension) == 0 )
 	{
 		for (std::vector<GameObject*>::iterator iter = App->game_object_manager->selected.begin(); iter != App->game_object_manager->selected.end(); ++iter)
 		{
@@ -54,19 +55,19 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 
 			for (std::vector<ComponentTexture*>::iterator iter2 = textures.begin(); iter2 != textures.end(); ++iter2)
 			{
-				if ((*iter2)->texture_path == file_name)
+				if ((*iter2)->GetResource((*iter2)->GetResourceID())->texture_path == file_name)
 				{
 					LOG("there is a texture component with the same texture in this game object");
 					to_load = false;;
 				}
+			
 			}
 
 			if (to_load)
 			{
 				ComponentTexture* text = (ComponentTexture*)(*iter)->AddComponent(ComponentType::TEXTURE);
 
-				text->id_texture = LoadTexture(file_path, text->texture_width, text->texture_height);
-				text->texture_path = file_name;
+				LoadTexture(file_path, text);
 				text->ActivateThisTexture();
 			}
 		}
@@ -77,48 +78,73 @@ void ModuleTexture::OnLoadFile(const char * file_path, const char * file_name, c
 	}
 }
 
-uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
+void ModuleTexture::LoadTexture(const char* path, ComponentTexture* component_texture)
 {
-	uint ret = 0u;
 
-	f_path = path;
-
+	string path_name_without_extension = App->GetFileNameWithoutExtension(path);
+	// GetByNameMesh this ResourceTexture?
 	for (std::vector<TextureInfo*>::iterator iter = textures_paths.begin(); iter != textures_paths.end(); ++iter)
 	{
-		if (path == (*iter)->path)
+		ResourceTexture* r = (ResourceTexture*)App->resource_managment->GetByID((*iter)->resource_id);
+		if (path_name_without_extension == r->texture_path)
 		{
-			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path);
-			width = (*iter)->width;
-			height = (*iter)->height;
-			return (*iter)->id;
+			LOG("The texture had already been loaded. returning saved texture...The texture was %s", path_name_without_extension.c_str());
+			component_texture->SetResourceID((*iter)->resource_id);
+			component_texture->ActivateThisTexture();
+
+			return;
 		}
 	}
+	std::string own_file = LIBRARY_TEXTURES_FOLDER + App->GetFileNameWithoutExtension(path) + ".dds";
+	if (App->file_system->Exists(own_file.c_str()))
+	{
+		LOG("Loading own texture");
+		Load(own_file.c_str(), component_texture);
+	}
+	else
+	{
+		Load(path, component_texture);
+	}
 
+
+}
+
+void ModuleTexture::Load(const char *path, ComponentTexture * component_texture)
+{
+	//Load Texture in the resource.
 	if (ilLoadImage(path))
 	{
 		LOG("Image Loaded correctly. The texture was %s", path);
 
-		ret = ilutGLBindTexImage();
-		if (ret > 0)
+		if (component_texture->GetResource(component_texture->GetResourceID()) == nullptr)
 		{
-		
+			component_texture->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::TEXTURE));
+		}
+		ResourceTexture* resource_texture = component_texture->GetResource(component_texture->GetResourceID());
 
+		uint id_text = ilutGLBindTexImage();
+		if (id_text > 0)
+		{
 
-		
-			width = ilGetInteger(IL_IMAGE_WIDTH);
-			height = ilGetInteger(IL_IMAGE_HEIGHT);
-
+			int width = ilGetInteger(IL_IMAGE_WIDTH);
+			int height = ilGetInteger(IL_IMAGE_HEIGHT);
 			LOG("Size texture: %i x %i", width, height);
 
+			resource_texture->id_texture = id_text;
+			resource_texture->texture_width = width;
+			resource_texture->texture_height = height;
+			resource_texture->texture_path = App->GetFileNameWithoutExtension(path);
+
+			component_texture->ActivateThisTexture();
+
 			TextureInfo* new_texture = new TextureInfo();
-			new_texture->width = width;
-			new_texture->height = height;
-			new_texture->id = ret;
-			new_texture->path = path;
+			new_texture->resource_id = component_texture->GetResourceID();
 			textures_paths.push_back(new_texture);
 
+
+
+
 			string name_file;
-			
 			ILuint size;
 			ILubyte *data;
 			ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);// To pick a specific DXT compression use
@@ -132,7 +158,7 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 				RELEASE_ARRAY(data);
 			}
 
-			ilDeleteImages(1, &ret);
+			ilDeleteImages(1, &id_text);
 		}
 		else
 		{
@@ -143,18 +169,15 @@ uint ModuleTexture::LoadTexture(const char* path, int& width, int& height)
 	{
 		LOG("Image Don't loaded correctly. the path %s is not found", path);
 	}
-
-	return ret;
 }
 
-std::string ModuleTexture::GetPathTexture()
-{
-	return f_path;
-}
 
 void ModuleTexture::LoadCheckersTexture()
 {
 	checkersTexture = new ComponentTexture();
+	checkersTexture->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::TEXTURE));
+	checkersTexture->GetResource(checkersTexture->GetResourceID())->texture_path = "Checkers";
+
 	GLubyte checkImage[checkImageHeight][checkImageWidth][4];
 	for (int i = 0; i < checkImageHeight; i++) {
 		for (int j = 0; j < checkImageWidth; j++) {
@@ -167,8 +190,8 @@ void ModuleTexture::LoadCheckersTexture()
 	}
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &checkersTexture->id_texture);
-	glBindTexture(GL_TEXTURE_2D, checkersTexture->id_texture);
+	glGenTextures(1, &checkersTexture->GetResource(checkersTexture->GetResourceID())->id_texture);
+	glBindTexture(GL_TEXTURE_2D, checkersTexture->GetResource(checkersTexture->GetResourceID())->id_texture);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);

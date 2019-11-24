@@ -12,6 +12,11 @@
 #include "Assimp/include/cfileio.h"
 #include "Assimp/include/version.h"
 #include "ModuleFileSystem.h"
+#include "ModuleQuadtree.h"
+
+#include "ResourceManagment.h"
+#include "ResourceMesh.h"
+
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
@@ -67,20 +72,60 @@ bool ModuleImporter::LoadFBX(const char* path)
 {
 	bool ret = true;
 
-	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+	const std::vector<ResourceMesh*> meshes = App->resource_managment->GetAllMeshes();
+	std::vector<ResourceMesh*> meshes_of_this_model_in_memory;
 
-	if (scene != nullptr && scene->HasMeshes())
+	for (std::vector<ResourceMesh*>::const_iterator citer = meshes.cbegin(); citer != meshes.cend(); ++citer)
 	{
-		LoadPath((char*)path);
-		LoadAllMeshes(scene);
+		if ((*citer)->imported_file == App->GetFileNameWithoutExtension(path))
+			meshes_of_this_model_in_memory.push_back(*citer);
+	}
+
+	if (!meshes_of_this_model_in_memory.empty())
+	{
+		GameObject* root_go = nullptr;
+
+		if (meshes_of_this_model_in_memory.size() > 1)
+			root_go = new GameObject(std::string(std::string("group_") + App->GetFileNameWithoutExtension(path)), App->game_object_manager->root);
+		else
+			root_go = App->game_object_manager->root;
+
+		for (std::vector<ResourceMesh*>::const_iterator citer = meshes_of_this_model_in_memory.cbegin(); citer != meshes_of_this_model_in_memory.cend(); ++citer)
+		{
+			GameObject* object = new GameObject((*citer)->name.c_str(), root_go);//HIERARCHY NOT IMPLEMENTED!
+			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
+			model->SetResourceID((*citer)->GetResourceID());
+			if ((*citer)->texture_binded_id != 0)
+			{
+				ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
+				text->has_texture = true;
+				text->SetResourceID((*citer)->texture_binded_id);
+				text->ActivateThisTexture();
+			}
+
+			object->local_bbox = model->GetResource()->GetBbox();
+			App->quadtree->Insert(object);
+			LOG("Returning mesh in memory");
+		}
 	}
 	else
 	{
-		LOG("Error loading scene %s.", path);
-		ret = false;
-	}
 
-	aiReleaseImport(scene);
+		const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_GenBoundingBoxes);
+
+		if (scene != nullptr && scene->HasMeshes())
+		{
+			LoadPath((char*)path);
+			LoadAllMeshes(scene);
+		}
+		else
+		{
+			LOG("Error loading scene %s.", path);
+			ret = false;
+		}
+
+		aiReleaseImport(scene);
+	}
 
 	return ret;
 }
@@ -129,6 +174,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 		for (uint i = 0; i < current->current_node->mNumMeshes; ++i)
 		{
 			//load current
+			string name = current->current_node->mName.C_Str();
 
 			// ignore aiNodes with no game object, all transformation, rotations...
 			Node<aiNode>* parent = current->parent;
@@ -137,25 +183,28 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 				parent = parent->parent;
 			}
 
-			//aiNode* node = scene->mRootNode->mChildren[i];
-
 
 			//create gameObject.
-			string name = current->current_node->mName.C_Str();//App->GetFileNameWithoutExtension(GetPath()); name += "_"; name += std::to_string(parent->current_go->childrens.size() + 1/*plus 1 to start in 1 nad not in 0*/);
+			
 			GameObject* object = new GameObject(name.c_str(), parent->current_go);
 
 			ComponentMesh* model = (ComponentMesh*)object->AddComponent(ComponentType::MESH);
-			aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
+			if (App->resource_managment->GetByNameMesh(name.c_str()) != 0)
+				model->SetResourceID(App->resource_managment->GetByNameMesh(name.c_str())); //ove
+
+
+			ResourceMesh* res_mesh = nullptr;
+
 
 			// Set mesh pos, rot and scale
 			aiVector3D translation;
 			aiVector3D scaling;
 			aiQuaternion rotation;
 
-			aiNode* node = scene->mRootNode->mChildren[i];
-			if (node != nullptr)
+
+			if (current->current_node != nullptr)
 			{
-				node->mTransformation.Decompose(scaling, rotation, translation);
+				current->current_node->mTransformation.Decompose(scaling, rotation, translation);
 				float3 pos(translation.x, translation.y, translation.z);
 				float3 scale(scaling.x, scaling.y, scaling.z);
 				Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
@@ -164,65 +213,76 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 			object->GetTransform()->SetPosition(float3(translation.x, translation.y, translation.z));
 			object->GetTransform()->SetRotationQuat(Quat(rotation.x, rotation.y, rotation.w, rotation.z));
 
-			if (model != nullptr)
-			{
-				LoadVertices(model, mesh);
-
-				if (mesh->HasFaces())
+			
+				aiMesh* mesh = scene->mMeshes[current->current_node->mMeshes[i]];
+				if (App->resource_managment->GetByNameMesh(name.c_str()) == 0 && App->file_system->Exists(std::string(LIBRARY_MESH_FOLDER + name + ".mesh").c_str()))
 				{
-					LoadIndexs(model, mesh);
+					LOG("Loading file with own format");
+					LoadOwnFile(name + ".mesh", model);
+
+
+				}
+				else
+				{
+					if (model->GetResource() == nullptr)
+						model->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+
+					res_mesh = model->GetResource();
+					res_mesh->imported_file = App->GetFileNameWithoutExtension(GetPath());
+					res_mesh->name = "";
+					if (model != nullptr)
+					{
+						LoadVertices(res_mesh, mesh);
+
+						if (mesh->HasFaces())
+						{
+							LoadIndexs(res_mesh, mesh);
+						}
+
+						if (mesh->HasNormals())
+						{
+							LoadNormals(res_mesh, mesh);
+						}
+
+						res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
+
+						LoadUVs(res_mesh, mesh);
+
+						res_mesh->SetBuffersWithData();
+
+						CreateOwnFile(res_mesh, name);
+						//LoadOwnFile(string(name + ".mesh"),);
+
+					}
+					else
+					{
+						LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
+					}
 				}
 
-				if (mesh->HasNormals())
+				if (scene->HasMaterials())
 				{
-					LoadNormals(model, mesh);
-				}
-
-				model->num_uvs_channels = mesh->GetNumUVChannels();
-
-				LoadUVs(model, mesh);
-
-				model->SetBuffersWithData();
-
-				if (model->num_uvs_channels > 0 && scene->HasMaterials())
-				{
+					res_mesh = model->GetResource();
 
 					ComponentTexture* text = (ComponentTexture*)object->AddComponent(ComponentType::TEXTURE);
-					model->num_uvs_channels = mesh->GetNumUVChannels();
+					res_mesh->num_uvs_channels = mesh->GetNumUVChannels();
 
 
 					LoadMaterials(scene, mesh, text);
 
-					text->ActivateThisTexture();
+					res_mesh->texture_binded_id = text->GetResourceID();
+
+
 				}
+				res_mesh->name = name;
 
-				CreateOwnFile(model, name);
-				//LoadOwnFile(string(name + ".mesh"));
-				
-			}
-			else
-			{
-				LOG("The component Mesh was not created correctly, it is possible that such a component already exists in this game objects. Only is posible to have 1 component mesh by Game Object.");
-			}
-			
-			AABB aabb;
+				//AABB
+				AABB aabb;
+				aabb.SetNegativeInfinity();
+				aabb.Enclose((float3*)res_mesh->mesh_data->vertexs.buffer, res_mesh->mesh_data->vertexs.num);
+				res_mesh->mesh_data->aabb = aabb;
+				object->AddAABB(aabb);
 
-			aabb.SetNegativeInfinity();
-
-			aabb.Enclose((float3*)mesh->mVertices, mesh->mNumVertices);
-
-			model->mesh_data->aabb = aabb;
-
-			object->AddAABB(aabb);
-				
-			//// Generate global OBB
-			//OBB obb = aabb;
-			//obb.Transform(object->transform->GetGlobalTransform());
-			//// Generate global AABB
-			//aabb.SetNegativeInfinity();
-			//aabb.Enclose(obb);
-
-			//App->game_object_manager->AddObject(object);
 		}
 		
 	}
@@ -251,7 +311,7 @@ void ModuleImporter::LoadAllMeshes(const aiScene * scene)
 
 // ----------------------------Vertexs----------------------------
 
-void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadVertices(ResourceMesh * model, aiMesh * mesh)
 {
 	model->mesh_data->vertexs.has_data = true;
 
@@ -267,7 +327,7 @@ void ModuleImporter::LoadVertices(ComponentMesh * model, aiMesh * mesh)
 
 // ----------------------------Indexs----------------------------
 
-void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadIndexs(ResourceMesh * model, aiMesh * mesh)
 {
 	model->mesh_data->indexs.has_data = true;
 
@@ -299,7 +359,7 @@ void ModuleImporter::LoadIndexs(ComponentMesh * model, aiMesh * mesh)
 
 // ----------------------------Normals----------------------------
 
-void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadNormals(ResourceMesh * model, aiMesh * mesh)
 {
 	//load normals direction of the vertex_normals.
 	model->mesh_data->normals_direction.has_data = true;
@@ -321,7 +381,7 @@ void ModuleImporter::LoadNormals(ComponentMesh * model, aiMesh * mesh)
 
  //----------------------------UVs----------------------------
 
-void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
+void ModuleImporter::LoadUVs(ResourceMesh * model, aiMesh * mesh)
 {
 	model->mesh_data->uvs.has_data = true;
 
@@ -330,7 +390,7 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 	model->mesh_data->uvs.buffer_size = model->num_uvs_channels * model->mesh_data->uvs.num * 2/*only save 2 coordinates, the 3rt coordinate will be always 0, so don't save it*/; // number of uvs * number of components of the vector (2) * number of channels of the mesh
 	model->mesh_data->uvs.buffer = new float[model->mesh_data->uvs.buffer_size];
 
-	model->channel_buffer_size = model->mesh_data->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
+	uint channel_buffer_size = model->mesh_data->uvs.num * 2;//the same as uvs_buffer_size without the multiplication by the number of channels because we want to save only the size of 1 channel.
 	for (uint channel = 0; channel < model->num_uvs_channels; ++channel)
 	{
 		if (mesh->HasTextureCoords(channel)) // if this channel have texture coords...
@@ -340,14 +400,14 @@ void ModuleImporter::LoadUVs(ComponentMesh * model, aiMesh * mesh)
 			{
 				for (uint j = 0; j < model->mesh_data->uvs.num; ++j)
 				{								//start index of the current channel.  start index of the current channel of the mesh.  Only copy the values in 1 channel size.
-					memcpy(&model->mesh_data->uvs.buffer[(channel * model->channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
+					memcpy(&model->mesh_data->uvs.buffer[(channel * channel_buffer_size) + j*2], &mesh->mTextureCoords[channel][j], sizeof(float) * 2);
 
 				}
 			}
 			else // if the channel don't have 2 components by vector, don't save it and fill it with 0.
 			{
 				LOG("This channel of the UVs don't have 2 components by vector.");
-				memset(&model->mesh_data->uvs.buffer[channel * model->channel_buffer_size], 0, sizeof(float) * model->channel_buffer_size);
+				memset(&model->mesh_data->uvs.buffer[channel * channel_buffer_size], 0, sizeof(float) * channel_buffer_size);
 			}
 		}
 	}
@@ -369,14 +429,13 @@ void ModuleImporter::LoadMaterials(const aiScene * scene, aiMesh * mesh, Compone
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
 		std::string name = App->GetFileName(path.C_Str());
-		std::string dir = "Models/Textures/";
+		std::string dir = "Assets/Textures/";
 		std::string f_path = dir + name;
-		model->id_texture = App->texture->LoadTexture(f_path.c_str(), model->texture_width, model->texture_height );
-		model->texture_path = f_path.c_str();
+		App->texture->LoadTexture(f_path.c_str(), model);
 	}
 }
 
-void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_to_file)
+void ModuleImporter::CreateOwnFile(const ResourceMesh* mesh, const string name_to_file)
 {
 
 	uint size_vertexs = sizeof(float) * mesh->mesh_data->vertexs.buffer_size;
@@ -385,36 +444,31 @@ void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_
 	uint size_normal_vertexs = sizeof(float) * mesh->mesh_data->normal_vertexs.buffer_size;
 	uint size_normal_faces = sizeof(float) * mesh->mesh_data->normal_faces.buffer_size;
 	uint size_uvs = sizeof(float) * mesh->mesh_data->uvs.buffer_size;
+	
 
 
-
+	const char* file_name = name_to_file.c_str();
 
 	// amount of indices / vertices / colors / normals / texture_coords / AABB
-	uint header[12] = { 
+	uint header[7] = {
+		strlen(file_name),
 		mesh->mesh_data->vertexs.num,
-		size_vertexs,
-
 		mesh->mesh_data->indexs.num,
-		size_indexs,
-
 		mesh->mesh_data->normals_direction.num,
-		size_normals_dir,
-
 		mesh->mesh_data->normal_vertexs.num,
-		size_normal_vertexs,
-
 		mesh->mesh_data->normal_faces.num,
-		size_normal_faces, 
+		mesh->mesh_data->uvs.num
 
-		mesh->mesh_data->uvs.num,
-		size_uvs 
 	};
+
+
 
 	//TODO AABB??
 
 	// size----------------
 	// Set the size of the entire file size
 	uint all_size = sizeof(header) +
+		strlen(file_name) +
 		size_vertexs +
 		size_indexs +
 		size_normals_dir +
@@ -431,6 +485,10 @@ void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_
 	// First store header
 	uint size = sizeof(header); 
 	memcpy(cursor, header, size);
+
+	cursor += size;
+	size = strlen(file_name);
+	memcpy(cursor, file_name, size);
 
 	// Store vertexs
 	cursor += size;
@@ -463,13 +521,24 @@ void ModuleImporter::CreateOwnFile(const ComponentMesh* mesh, const string name_
 	memcpy(cursor, mesh->mesh_data->uvs.buffer, size);
 
 	string path_to_save(LIBRARY_MESH_FOLDER + string(name_to_file) + string(".mesh"));
-	App->file_system->Save(path_to_save.c_str(), data, all_size);
+	if (App->file_system->Exists(path_to_save.c_str()))
+	{
+		/*string s = App->file_system->GetWritePath();
+		App->file_system->SetWritePath("");*/
+		App->file_system->Remove(path_to_save.c_str());
+		//App->file_system->SetWritePath(s.c_str());
+
+	}
+	
+		App->file_system->Save(path_to_save.c_str(), data, all_size);
+	RELEASE_ARRAY(data);
 
 }
 
 void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 {
-	//relative_path wiht extension of the own format.
+	//relative_path with extension of the own format.
+
 
 	string full_path(LIBRARY_MESH_FOLDER + name_file);
 
@@ -482,78 +551,106 @@ void ModuleImporter::LoadOwnFile(string name_file, ComponentMesh* mesh)
 
 
 	//Load Header----------
-	uint ranges[12];
+	uint ranges[7];
 	uint bytes = sizeof(ranges);
 	memcpy(ranges, cursor, bytes);
 
-	mesh->mesh_data->vertexs.num = ranges[0];
-	mesh->mesh_data->vertexs.buffer_size = ranges[1];
-	if (mesh->mesh_data->vertexs.num > 0)
-		mesh->mesh_data->vertexs.has_data = true;
+	cursor += bytes;
+	bytes = ranges[0];
+	char* file_name = new char[ranges[0]];
+	memcpy(file_name, cursor, bytes);
+	std::string name = App->GetStringByLength(file_name, ranges[0]);
 
-	mesh->mesh_data->indexs.num = ranges[2];
-	mesh->mesh_data->indexs.buffer_size = ranges[3];
-	if (mesh->mesh_data->indexs.num > 0)
-		mesh->mesh_data->indexs.has_data = true;
+	const std::vector<ResourceMesh*> meshes = App->resource_managment->GetAllMeshes();
+	std::vector<ResourceMesh*> meshes_of_this_model_in_memory;
 
-	mesh->mesh_data->normals_direction.num = ranges[4];
-	mesh->mesh_data->normals_direction.buffer_size = ranges[5];
-	if (mesh->mesh_data->normals_direction.num > 0)
-		mesh->mesh_data->normals_direction.has_data = true;
+	for (std::vector<ResourceMesh*>::const_iterator citer = meshes.cbegin(); citer != meshes.cend(); ++citer)
+	{
+		if ((*citer)->name == name)
+		{
+			mesh->SetResourceID((*citer)->GetResourceID());
+			LOG("The model to load was in memory... Returning the model in memory.");
+			RELEASE_ARRAY(data);
+			return;
+		}
+	}
 
-	mesh->mesh_data->normal_vertexs.num = ranges[6];
-	mesh->mesh_data->normal_vertexs.buffer_size = ranges[7];
-	if (mesh->mesh_data->normal_vertexs.num > 0)
-		mesh->mesh_data->normal_vertexs.has_data = true;
+	mesh->SetResourceID(App->resource_managment->CreateNewResource(Resource::Type::MESH));
+	ResourceMesh* res_mesh = mesh->GetResource();
+	
 
-	mesh->mesh_data->normal_faces.num = ranges[8];
-	mesh->mesh_data->normal_faces.buffer_size = ranges[9];
-	if (mesh->mesh_data->normal_faces.num > 0)
-		mesh->mesh_data->normal_faces.has_data = true;
 
-	mesh->mesh_data->uvs.num = ranges[10];
-	mesh->mesh_data->uvs.buffer_size = ranges[11];
-	if (mesh->mesh_data->uvs.num > 0)
-		mesh->mesh_data->uvs.has_data = true;
+	res_mesh->mesh_data->vertexs.num = ranges[1];
+	res_mesh->mesh_data->vertexs.buffer_size = ranges[1] * 3;
+	if (res_mesh->mesh_data->vertexs.num > 0)
+		res_mesh->mesh_data->vertexs.has_data = true;
+
+	res_mesh->mesh_data->indexs.num = ranges[2];
+	res_mesh->mesh_data->indexs.buffer_size = ranges[2];
+	if (res_mesh->mesh_data->indexs.num > 0)
+		res_mesh->mesh_data->indexs.has_data = true;
+
+	res_mesh->mesh_data->normals_direction.num = ranges[3];
+	res_mesh->mesh_data->normals_direction.buffer_size = ranges[3]*3;
+	if (res_mesh->mesh_data->normals_direction.num > 0)
+		res_mesh->mesh_data->normals_direction.has_data = true;
+
+	res_mesh->mesh_data->normal_vertexs.num = ranges[4];
+	res_mesh->mesh_data->normal_vertexs.buffer_size = ranges[4]*3*2;
+	if (res_mesh->mesh_data->normal_vertexs.num > 0)
+		res_mesh->mesh_data->normal_vertexs.has_data = true;
+
+	res_mesh->mesh_data->normal_faces.num = ranges[5];
+	res_mesh->mesh_data->normal_faces.buffer_size = ranges[5]*3*2;
+	if (res_mesh->mesh_data->normal_faces.num > 0)
+		res_mesh->mesh_data->normal_faces.has_data = true;
+
+	res_mesh->mesh_data->uvs.num = ranges[6];
+	res_mesh->mesh_data->uvs.buffer_size = ranges[6]*2;
+	if (res_mesh->mesh_data->uvs.num > 0)
+		res_mesh->mesh_data->uvs.has_data = true;
 
 
 	//Load Buffers----------
 	// Load vertexs
 	cursor += bytes;
-	bytes = mesh->mesh_data->vertexs.buffer_size;
-	mesh->mesh_data->vertexs.buffer = new float[mesh->mesh_data->vertexs.buffer_size];
-	memcpy(mesh->mesh_data->vertexs.buffer, cursor, bytes);
+	bytes = sizeof(float) * res_mesh->mesh_data->vertexs.buffer_size;
+	res_mesh->mesh_data->vertexs.buffer = new float[res_mesh->mesh_data->vertexs.buffer_size];
+	memcpy(res_mesh->mesh_data->vertexs.buffer, cursor, bytes);
 
 	// Load indexs
 	cursor += bytes;
-	bytes = mesh->mesh_data->indexs.buffer_size;
-	mesh->mesh_data->indexs.buffer = new uint[mesh->mesh_data->indexs.buffer_size];
-	memcpy(mesh->mesh_data->indexs.buffer, cursor, bytes);
+	bytes = sizeof(uint) * res_mesh->mesh_data->indexs.buffer_size;
+	res_mesh->mesh_data->indexs.buffer = new uint[res_mesh->mesh_data->indexs.buffer_size];
+	memcpy(res_mesh->mesh_data->indexs.buffer, cursor, bytes);
 
 	// Load normal_dir
 	cursor += bytes;
-	bytes = mesh->mesh_data->normals_direction.buffer_size;
-	mesh->mesh_data->normals_direction.buffer = new float[mesh->mesh_data->normals_direction.buffer_size];
-	memcpy(mesh->mesh_data->normals_direction.buffer, cursor, bytes);
+	bytes = sizeof(float) * res_mesh->mesh_data->normals_direction.buffer_size;
+	res_mesh->mesh_data->normals_direction.buffer = new float[res_mesh->mesh_data->normals_direction.buffer_size];
+	memcpy(res_mesh->mesh_data->normals_direction.buffer, cursor, bytes);
 
 	// Load normal_vertexs
 	cursor += bytes;
-	bytes = mesh->mesh_data->normal_vertexs.buffer_size;
-	mesh->mesh_data->normal_vertexs.buffer = new float[mesh->mesh_data->normal_vertexs.buffer_size];
-	memcpy(mesh->mesh_data->normal_vertexs.buffer, cursor, bytes);
+	bytes = sizeof(float) * res_mesh->mesh_data->normal_vertexs.buffer_size;
+	res_mesh->mesh_data->normal_vertexs.buffer = new float[res_mesh->mesh_data->normal_vertexs.buffer_size];
+	memcpy(res_mesh->mesh_data->normal_vertexs.buffer, cursor, bytes);
 
 	// Load normal_faces
 	cursor += bytes;
-	bytes = mesh->mesh_data->normal_faces.buffer_size;
-	mesh->mesh_data->normal_faces.buffer = new float[mesh->mesh_data->normal_faces.buffer_size];
-	memcpy(mesh->mesh_data->normal_faces.buffer, cursor, bytes);
+	bytes = sizeof(float) * res_mesh->mesh_data->normal_faces.buffer_size;
+	res_mesh->mesh_data->normal_faces.buffer = new float[res_mesh->mesh_data->normal_faces.buffer_size];
+	memcpy(res_mesh->mesh_data->normal_faces.buffer, cursor, bytes);
 
 	// Load uvs
 	cursor += bytes;
-	bytes = mesh->mesh_data->uvs.buffer_size;
-	mesh->mesh_data->uvs.buffer = new float[mesh->mesh_data->uvs.buffer_size];
-	memcpy(mesh->mesh_data->uvs.buffer, cursor, bytes);
+	bytes = sizeof(float) * res_mesh->mesh_data->uvs.buffer_size;
+	res_mesh->mesh_data->uvs.buffer = new float[res_mesh->mesh_data->uvs.buffer_size];
+	memcpy(res_mesh->mesh_data->uvs.buffer, cursor, bytes);
 
-	mesh->SetBuffersWithData();
+	res_mesh->SetBuffersWithData();
+
+	RELEASE_ARRAY(data);
+
 }
 

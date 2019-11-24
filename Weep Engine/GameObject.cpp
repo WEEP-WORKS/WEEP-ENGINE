@@ -13,6 +13,8 @@
 #include "ModuleQuadtree.h"
 #include <list>
 
+#include "ResourceMesh.h"
+
 GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
 	LOG("New Game Object created!");
@@ -512,6 +514,12 @@ void GameObject::Load(const Json::Value& Json_go)
 	{
 		(*citer)->Load(Json_go["Components"][current_component++]);
 	}
+	if (GetMesh() != nullptr)
+	{
+		CalcGlobalTransform();
+		CalcBBox();
+		App->quadtree->Insert(this);
+	}
 }
 
 const bool GameObject::IsThisGOId(const uint& id) const
@@ -559,10 +567,10 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 		Rect rect = App->window->GetWindowRect();
 		float2 mouse_pos = App->input->GetMouse();
 
-		if (PointInRect(mouse_pos, rect) && !App->debug_scene->window_hvr && !App->game_object_manager->window_hvr && !App->debug_scene->about_hvr && !App->debug_scene->config_hvr && !App->debug_scene->menubar_hvr && !App->debug_scene->tools_hvr && !App->debug_scene->random_hvr && !App->debug_scene->mathgeo_hvr)
+		if (PointInRect(mouse_pos, rect) && !App->debug_scene->window_hvr && !App->game_object_manager->window_hvr && !App->debug_scene->about_hvr && !App->debug_scene->config_hvr && !App->debug_scene->menubar_hvr && !App->debug_scene->tools_hvr && !App->debug_scene->random_hvr && !App->debug_scene->mathgeo_hvr && !App->debug_scene->resource_hvr)
 		{
-			// The point (1, 1) corresponds to the top-right corner of the near plane
-			// (-1, -1) is bottom-left
+			// MouseX - WindowX/Window Size
+			// MouseY - WindowY/Window Height
 
 			float first_normalized_x = (mouse_pos.x - rect.left) / (rect.right - rect.left);
 			float first_normalized_y = (mouse_pos.y - rect.top) / (rect.bottom - rect.top);
@@ -585,13 +593,13 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 
 					// Check every triangle
 					Triangle tri;
-					uint* indices = cmesh->mesh_data->indexs.buffer;
-					float* vertices = cmesh->mesh_data->vertexs.buffer;
-					for (int i = 0; i < cmesh->mesh_data->indexs.num;)
+					uint* indices = cmesh->GetResource()->mesh_data->indexs.buffer;
+					float* vertices = cmesh->GetResource()->mesh_data->vertexs.buffer;
+					for (int i = 0; i < cmesh->GetResource()->mesh_data->indexs.num;)
 					{
-						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
-						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
-						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.a.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
+						tri.b.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
+						tri.c.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
 
 						float current_distance;
 						float3 hit_point;

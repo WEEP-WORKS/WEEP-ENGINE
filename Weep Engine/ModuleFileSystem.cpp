@@ -37,9 +37,7 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path) : Module(true)
 	// Make sure standard paths exist
 	const char* dirs[] = {
 		SETTINGS_FOLDER, ASSETS_FOLDER, LIBRARY_FOLDER,
-		LIBRARY_AUDIO_FOLDER, LIBRARY_MESH_FOLDER,
-		LIBRARY_MATERIAL_FOLDER, LIBRARY_SCENE_FOLDER, LIBRARY_MODEL_FOLDER, 
-		LIBRARY_TEXTURES_FOLDER, LIBRARY_ANIMATION_FOLDER, LIBRARY_STATE_MACHINE_FOLDER,
+		LIBRARY_MESH_FOLDER, LIBRARY_TEXTURES_FOLDER
 	};
 
 	for (uint i = 0; i < sizeof(dirs)/sizeof(const char*); ++i)
@@ -396,11 +394,14 @@ bool ModuleFileSystem::Remove(const char * file)
 	{
 		if (PHYSFS_delete(file) == 0)
 		{
-			LOG("File deleted: [%s]", file);
-			ret = true;
+			LOG("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
 		}
 		else
-			LOG("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
+		{
+			ret = true;
+			LOG("File deleted: [%s]", file);
+		}
+
 	}
 
 	return ret;
@@ -414,6 +415,11 @@ const char * ModuleFileSystem::GetBasePath() const
 const char * ModuleFileSystem::GetWritePath() const
 {
 	return PHYSFS_getWriteDir();
+}
+
+void ModuleFileSystem::SetWritePath(const char* dir)
+{
+	PHYSFS_setWriteDir(dir);
 }
 
 const char * ModuleFileSystem::GetReadPaths() const

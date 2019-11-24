@@ -52,6 +52,12 @@
     <Filter Include="Sources\GameObject\Components">
       <UniqueIdentifier>{9a83466b-e021-439d-940b-1bf45e38f833}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Resources">
+      <UniqueIdentifier>{f27fe106-2c59-426d-91b7-c8cb80a2ca1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Icon">
+      <UniqueIdentifier>{533394dc-ba23-4161-a27e-961e820ff133}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -351,9 +357,6 @@
     <ClInclude Include="ModuleGameObjectManager.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Sources\GameObject\Components</Filter>
-    </ClInclude>
     <ClInclude Include="ComponentMesh.h">
       <Filter>Sources\GameObject\Components</Filter>
     </ClInclude>
@@ -384,6 +387,22 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Sources\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTexture.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManagment.h">
+      <Filter>Sources\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -596,6 +615,18 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Sources\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManagment.cpp">
+      <Filter>Sources\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
@@ -622,5 +653,12 @@
     <None Include="Game\SaveFile.json">
       <Filter>Sources</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\LLUIS\Desktop\weep_works.ico" />
+    <Image Include="Game\Assets\weep_works.ico" />
   </ItemGroup>
 </Project>

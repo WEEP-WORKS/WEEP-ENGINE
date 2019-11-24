@@ -10,8 +10,6 @@ class ComponentTransform : public Component
 public:
 	ComponentTransform();
 
-	void Update();
-
 	void Save(Json::Value&) const override;
 	void Load(const Json::Value&) override;
 
