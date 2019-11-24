@@ -34,8 +34,6 @@ Github organization: https://github.com/WEEP-WORKS/
 
 - F11 (quadtree dynamic).
 
-- SPACE (Divide Quadtree).
-
 ###GameObject controls:
 
 - W (Transform GO).
