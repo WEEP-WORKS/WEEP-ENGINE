@@ -219,6 +219,8 @@ bool DebugScene::Update(float dt)
 
 		if (ImGui::Begin("Inspector",NULL, ImGuiWindowFlags_NoSavedSettings))
 		{
+			window_hvr = ImGui::IsWindowHovered();
+
 			vector<GameObject*> selected = App->game_object_manager->selected;
 
 			ImGui::Separator();
@@ -295,6 +297,8 @@ void DebugScene::Tools()
 	bool open = true;
 	ImGui::Begin("tool_Bar", &open, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
 		| ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+	tools_hvr = ImGui::IsWindowHovered();
 
 	ImGui::SetCursorPos(ImVec2(20, 3));
 	if (ImGui::Button("Move"))
@@ -435,6 +439,8 @@ void DebugScene::MenuBar(bool &ret)
 {
 	if (ImGui::BeginMainMenuBar())
 	{
+		menubar_hvr = ImGui::IsAnyItemHovered();
+
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Open in Explorer", ""))
@@ -546,6 +552,8 @@ void DebugScene::Configuration()
 	ImGui::SetNextWindowPosCenter(ImGuiCond_::ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Configuration", &show_app_configuration, ImGuiWindowFlags_NoSavedSettings))
 	{
+		bool config_hvr = ImGui::IsAnyWindowHovered();
+
 		if (ImGui::CollapsingHeader("App"))
 			AppInfo();
 
@@ -748,6 +756,7 @@ void DebugScene::UpdateVRAMInfo1()
 void DebugScene::AppAbout()
 {
 	ImGui::Begin("About Weep Engine", &show_app_about, ImGuiWindowFlags_AlwaysAutoResize);
+	about_hvr = ImGui::IsWindowHovered();
 	ImGui::Text(App->window->GetTitleWithVersion().c_str());
 	ImGui::Separator();
 	ImGui::Text("By Jorge Gemas and Lluis Moreu.");
@@ -810,6 +819,7 @@ void DebugScene::AppAbout()
 void DebugScene::MathGeoTest()
 {
 	ImGui::Begin("Geometry Math test", &show_geometry_math_test, ImGuiWindowFlags_AlwaysAutoResize);
+	mathgeo_hvr = ImGui::IsWindowHovered();
 
 	ImGui::Text("Contact: %s", contact ? "Yes" : "No");
 
@@ -941,7 +951,8 @@ void DebugScene::MathGeoTest()
 void DebugScene::RandomGenerator()
 {
 	ImGui::Begin("Random Number Generation", &show_random_generator, ImGuiWindowFlags_AlwaysAutoResize);
-	
+	random_hvr = ImGui::IsWindowHovered();
+
 	ImGui::InputFloat2("Min | Max FLOAT", range_demo.ptr(), 2);
 	ImGui::InputFloat2("Min | Max INT", range_demo1.ptr(), 2);
 	ImGui::InputInt("Number of generations", &quantity_demo);

@@ -97,7 +97,7 @@ bool GameObjectManager::Update(float dt)
 			float3 rot(rotation[0], rotation[1], rotation[2]);
 			float3 sc(scale[0], scale[1], scale[2]);
 
-			LOG("%f, %f, %f", sc.x, sc.y, sc.z);
+			//LOG("%f, %f, %f", sc.x, sc.y, sc.z);
 
 			switch (current_gizmo_operation)
 			{
@@ -334,6 +334,7 @@ void GameObjectManager::Hierarchy()
 
 		if (ImGui::Begin("Hierarchy",NULL, ImGuiWindowFlags_NoSavedSettings))
 		{
+			window_hvr = ImGui::IsWindowHovered();
 
 			//create primitives should be here
 			DoForFirstChildrens(&GameObjectManager::PrintGoList);
