@@ -182,8 +182,6 @@ bool DebugScene::Update(float dt)
 		App->window->SetVersion(version_input_buffer);
 	}
 
-	//WE COULD CALL DOFORALLCHILDREN UPDATE WITH DT
-
 	//-------------------------------------------------------------------------
 	//------------------------------PLANE--------------------------------------
 	//-------------------------------------------------------------------------
@@ -273,14 +271,19 @@ bool DebugScene::Update(float dt)
 	//----------------------------INSPECTOR------------------------------------
 	//-------------------------------------------------------------------------
 
-	if (ImGui::Begin("Resources", &show_resources))
+	if (App->debug_scene->show_resources)
 	{
-		if (ImGui::TreeNodeEx("Library/")) {
-			PrintResourceList("Library/");
-			ImGui::TreePop();
+		if (ImGui::Begin("Resources", &show_resources))
+		{
+			resource_hvr = ImGui::IsWindowHovered();
+
+			if (ImGui::TreeNodeEx("Assets/")) {
+				PrintResourceList("Models/");
+				ImGui::TreePop();
+			}
 		}
+		ImGui::End();
 	}
-  	ImGui::End();
 
 	return ret;
 }
@@ -288,10 +291,23 @@ bool DebugScene::Update(float dt)
 
 void DebugScene::PrintResourceList(const char * path)
 {
-	for (const auto & entry : std::experimental::filesystem::directory_iterator(path)) //https://www.bfilipek.com/2019/04/dir-iterate.html
+	for (const auto & entry : std::experimental::filesystem::directory_iterator(path))			//https://www.bfilipek.com/2019/04/dir-iterate.html
 		if (ImGui::TreeNodeEx(entry.path().filename().u8string().data())) {
 			if (!entry.path().has_extension())
+			{
 				PrintResourceList(entry.path().u8string().data());
+			}
+			else if (ImGui::IsItemClicked())
+			{
+				if (entry.path().extension().u8string().compare(".fbx") == 0)
+				{
+					App->importer->LoadFBX(entry.path().u8string().data());
+				}
+				else if (entry.path().extension().u8string().compare(".dds") == 0)
+				{
+					//App->importer->LoadFBX(entry.path().u8string().data());
+				}
+			}
 			ImGui::TreePop();
 		}
 }
@@ -378,12 +394,12 @@ void DebugScene::Tools()
 			App->scene_manager->Pause();
 		}
 
-		ImGui::SetCursorPos(ImVec2(500, 3));
-		if (ImGui::Button("Step") && App->scene_manager->GetPause())
-		{
-			App->scene_manager->Step();
-			frame_passed = false;
-		}
+		//ImGui::SetCursorPos(ImVec2(500, 3));
+		//if (ImGui::Button("Step") && App->scene_manager->GetPause())
+		//{
+		//	App->scene_manager->Step();
+		//	frame_passed = false;
+		//}
 
 		ImGui::SetCursorPos(ImVec2(570, 6));
 		ImGui::Text("Current: PLAYING");
@@ -486,6 +502,7 @@ void DebugScene::MenuBar(bool &ret)
 			ImGui::MenuItem("Configuration", "LShift+P", &show_app_configuration);
 			ImGui::MenuItem("Hierarchy", NULL, &show_hierarchy);
 			ImGui::MenuItem("Inspector", NULL, &show_inspector);
+			ImGui::MenuItem("Resources", NULL, &show_resources);
 			ImGui::EndMenu();
 		}
 

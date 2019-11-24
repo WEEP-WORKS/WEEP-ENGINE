@@ -50,6 +50,7 @@ public:
 	bool tools_hvr = false;
 	bool mathgeo_hvr = false;
 	bool random_hvr = false;
+	bool resource_hvr = false;
 
 private:
 
@@ -59,7 +60,7 @@ private:
 	bool show_geometry_math_test = false;
 	bool show_random_generator = false;
 	bool show_debug_console = false;
-	bool show_resources = false;
+	bool show_resources = true;
 
 	bool to_save = false;
 	bool to_load = false;

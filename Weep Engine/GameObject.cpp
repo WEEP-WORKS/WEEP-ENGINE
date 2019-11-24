@@ -567,7 +567,7 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 		Rect rect = App->window->GetWindowRect();
 		float2 mouse_pos = App->input->GetMouse();
 
-		if (PointInRect(mouse_pos, rect) && !App->debug_scene->window_hvr && !App->game_object_manager->window_hvr && !App->debug_scene->about_hvr && !App->debug_scene->config_hvr && !App->debug_scene->menubar_hvr && !App->debug_scene->tools_hvr && !App->debug_scene->random_hvr && !App->debug_scene->mathgeo_hvr)
+		if (PointInRect(mouse_pos, rect) && !App->debug_scene->window_hvr && !App->game_object_manager->window_hvr && !App->debug_scene->about_hvr && !App->debug_scene->config_hvr && !App->debug_scene->menubar_hvr && !App->debug_scene->tools_hvr && !App->debug_scene->random_hvr && !App->debug_scene->mathgeo_hvr && !App->debug_scene->resource_hvr)
 		{
 			// MouseX - WindowX/Window Size
 			// MouseY - WindowY/Window Height
