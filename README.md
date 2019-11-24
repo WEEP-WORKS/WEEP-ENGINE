@@ -28,7 +28,7 @@ Github organization: https://github.com/WEEP-WORKS/
 
 ###Quadtree Debug controls:
 
-- F9 (Dummy GO with AABB).
+- 1 (Dummy GO with AABB).
 
 - F10 (recalculate Octree).
 
