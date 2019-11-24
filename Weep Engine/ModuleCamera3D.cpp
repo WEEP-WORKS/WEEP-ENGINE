@@ -85,30 +85,14 @@ void ModuleCamera3D::DestroyAllCameras()
 	}
 }
 
-vector<Camera3D*> ModuleCamera3D::GetCameras()
-{
-	return cameras;
-}
-
 Camera3D * ModuleCamera3D::GetEditorCamera() const
 {
 	return editor_camera;
 }
 
-void ModuleCamera3D::SetCurrentCamera( Camera3D * set)
-{
-	if (set != nullptr)
-		current_camera = set;
-}
-
 Camera3D * ModuleCamera3D::GetCurrentCamera() const
 {
 	return current_camera;
-}
-
-void ModuleCamera3D::SetCurrentCameraToEditorCamera()
-{
-	current_camera = editor_camera;
 }
 
 const float * ModuleCamera3D::GetViewMatrix() const
@@ -271,19 +255,9 @@ const float Camera3D::GetVerticalFOV() const
 	return frustum.verticalFov * RADTODEG;
 }
 
-const float Camera3D::GetHorizontalFOV() const
-{
-	return frustum.horizontalFov * RADTODEG;
-}
-
 const float4x4 Camera3D::GetViewMatrix() const
 {
 	return frustum.ViewMatrix();
-}
-
-const float4x4 Camera3D::GetProjectionMatrix() const
-{
-	return frustum.ProjectionMatrix();
 }
 
 const float4x4 Camera3D::GetOpenGLViewMatrix() const
