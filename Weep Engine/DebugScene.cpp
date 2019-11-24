@@ -79,6 +79,7 @@ bool DebugScene::Awake()
 	go->AddComponent(ComponentType::CAMERA);
 	ComponentCamera* c = (ComponentCamera*)go->GetCam();
 	c->GetCamera()->SetFarPlaneDistance(100.0f);
+	go->GetTransform()->SetPosition(float3(0.f, 0.f, -50.f));
 
 	return ret;
 }

@@ -56,13 +56,13 @@ bool GameObjectManager::Update(float dt)
 	root->DoForAllChildrens(&GameObject::Update);
 
 
-	/*for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
+	for (vector<GameObject*>::iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		if((*it)->GetMesh())
 			DrawBBox(*it);
-	}*/
+	}
 	
-	DoForAllChildrens(&GameObjectManager::DrawBBox);
+	//DoForAllChildrens(&GameObjectManager::DrawBBox);
 
 
 
