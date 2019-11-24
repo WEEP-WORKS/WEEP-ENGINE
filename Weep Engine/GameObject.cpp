@@ -569,8 +569,8 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 
 		if (PointInRect(mouse_pos, rect) && !App->debug_scene->window_hvr && !App->game_object_manager->window_hvr && !App->debug_scene->about_hvr && !App->debug_scene->config_hvr && !App->debug_scene->menubar_hvr && !App->debug_scene->tools_hvr && !App->debug_scene->random_hvr && !App->debug_scene->mathgeo_hvr)
 		{
-			// The point (1, 1) corresponds to the top-right corner of the near plane
-			// (-1, -1) is bottom-left
+			// MouseX - WindowX/Window Size
+			// MouseY - WindowY/Window Height
 
 			float first_normalized_x = (mouse_pos.x - rect.left) / (rect.right - rect.left);
 			float first_normalized_y = (mouse_pos.y - rect.top) / (rect.bottom - rect.top);
@@ -597,9 +597,9 @@ void GameObject::TestRay(float& distance, GameObject*& closest)
 					float* vertices = cmesh->GetResource()->mesh_data->vertexs.buffer;
 					for (int i = 0; i < cmesh->GetResource()->mesh_data->indexs.num;)
 					{
-						tri.a.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
-						tri.b.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
-						tri.c.Set(vertices[(indices[i])], vertices[(indices[i] + 1)], vertices[(indices[i] + 2)]); ++i;
+						tri.a.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
+						tri.b.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
+						tri.c.Set(vertices[(3 * indices[i])], vertices[(3 * indices[i]) + 1], vertices[(3 * indices[i]) + 2]); ++i;
 
 						float current_distance;
 						float3 hit_point;

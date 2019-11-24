@@ -397,11 +397,7 @@ void GameObjectManager::PrintGoList(GameObject * object)
 		//if (object->GetMesh())
 		//{
 		//	DrawBBox(object);
-		//}		
-
-		
-
-		
+		//}
 	}
 
 	//treenode needs to be more understood
@@ -686,7 +682,7 @@ void GameObjectManager::MousePick()
 {
 	float distance = 999999.f;
 	GameObject* closest = nullptr;
-	//picking, closest, distance
+
 	root->DoForAllChildrens(&GameObject::TestRay, distance, closest);
 
 	if (closest != nullptr)
