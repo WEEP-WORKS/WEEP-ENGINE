@@ -1,7 +1,7 @@
 # WEEP-ENGINE
 An OPEN-GL Engine for educational porpouses. Created by two hetties that use urban dictionary.
 
-﻿# Version of the game
+# Version of the game
 
 WeepEngine v.0.3
 
@@ -20,13 +20,13 @@ Github repository: https://github.com/WEEP-WORKS/WEEP-ENGINE
 Github organization: https://github.com/WEEP-WORKS/
 
 ## Controls
-###General controls:
+### General controls:
 
 - ESC (quit).
 
 - LSHIFT + P (Open Configuration).
 
-###Quadtree Debug controls:
+### Quadtree Debug controls:
 
 - 1 (Dummy GO with AABB).
 
@@ -34,7 +34,7 @@ Github organization: https://github.com/WEEP-WORKS/
 
 - F11 (quadtree dynamic).
 
-###GameObject controls:
+### GameObject controls:
 
 - W (Transform GO).
 
@@ -46,7 +46,7 @@ Github organization: https://github.com/WEEP-WORKS/
 
 - LCTRL in Hierarchy (multiselect GO).
 
-###Cam controls:
+### Cam controls:
 
 - While right click, WASD (Movement free).
 
