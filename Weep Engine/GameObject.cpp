@@ -4,6 +4,7 @@
 #include "ComponentMesh.h"
 #include "ComponentTexture.h"
 #include "ComponentTransform.h"
+#include "ComponentRender2D.h"
 #include "App.h"
 #include "ModuleGameObjectManager.h"
 #include "DebugScene.h"
@@ -123,6 +124,12 @@ Component* GameObject::AddComponent(const ComponentType& type)
 		ret->type = type;
 		
 		LOG("Component Camera added correcly.");
+		break;
+	case ComponentType::RENDER2D:
+		ret = new ComponentRender2D();
+		ret->type = type;
+
+		LOG("Component Render2D added correcly.");
 		break;
 	default:
 		LOG("Component not found in the function. Not accepted.");

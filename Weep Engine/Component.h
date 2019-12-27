@@ -13,7 +13,8 @@ enum class ComponentType
 	TRANSFORM,
 	MESH,
 	TEXTURE,
-	CAMERA
+	CAMERA,
+	RENDER2D
 };
 
 

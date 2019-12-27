@@ -403,6 +403,9 @@
       <Filter>Sources\Resources</Filter>
     </ClInclude>
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="ComponentRender2D.h">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -626,6 +629,9 @@
     </ClCompile>
     <ClCompile Include="ResourceManagment.cpp">
       <Filter>Sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentRender2D.cpp">
+      <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
