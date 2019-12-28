@@ -74,7 +74,7 @@ UIFont* UIFontsSystem::GetFont(const char * name)
 	return ret;
 }
 
-/*SuStoTexture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size)
+/*Texture UIFontsSystem::LoadText(const char * text, UIFont * font, uint size)
 {
 	stbtt_fontinfo info = font->GetInfo();
 
@@ -155,7 +155,7 @@ UIFont* UIFontsSystem::GetFont(const char * name)
 
 	RELEASE_ARRAY(bitmap)
 
-	return SuStoTexture(id, SuStoVec2(bitmap_x, bitmap_y));
+	return Texture(id, vec2(bitmap_x, bitmap_y));
 }*/
 
 void UIFontsSystem::UnloadText(uint id)

@@ -46,14 +46,14 @@ public:
 	void LoadFont(const char* filepath, const char* set_name);
 	void UnloadFont(const char* name);
 	UIFont* GetFont(const char* name);
-	//SuStoTexture LoadText(const char* text, UIFont* font, uint size);
+	//Texture LoadText(const char* text, UIFont* font, uint size);
 	void UnloadText(uint id);
 
 	std::function<uint(unsigned char * buffer, uint buffer_size, uint width, uint height)> LoadTexture;
 	std::function<void(uint)> UnloadTexture;
 
 private:
-	//SuStoUIMain* ui_main = nullptr;
+	//UIMain* ui_main = nullptr;
 	std::vector<UIFont*> fonts;
 };
 
