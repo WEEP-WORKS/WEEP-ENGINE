@@ -80,7 +80,7 @@ bool DebugScene::Awake()
 	ComponentCamera* c = (ComponentCamera*)go->GetCam();
 	c->GetCamera()->SetFarPlaneDistance(100.0f);
 	go->GetTransform()->SetPosition(float3(0.f, 0.f, -50.f));
-
+	
 	return ret;
 }
 
@@ -104,14 +104,45 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
+		//ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
 
 
 	}
 
+	//GameObject* quad = new GameObject("UIQuad", App->game_object_manager->root);
+	//quad->AddComponent(ComponentType::RENDER2D);
 	App->profiler->SetGameTimeScale(1.0f);
 
+
+	//---
+	//init2d();
+
+	glDisable(GL_TEXTURE_2D);
+
+	glDisable(GL_CULL_FACE);
+
 	return true;
+}
+
+void DebugScene::init2d()
+{
+	Rect rect = App->window->GetWindowRect();
+
+	//Set the viewport
+	glViewport(0.f, 0.f, rect.right, rect.bottom);
+
+
+
+	//Initialize clear color
+	glClearColor(0.f, 0.f, 0.f, 1.f);
+
+	//Check for error
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+	{
+		printf("Error initializing OpenGL! %s\n", gluErrorString(error));
+		//return false;
+	}
 }
 
 bool DebugScene::CleanUp()
@@ -151,6 +182,9 @@ bool DebugScene::PreUpdate(float dt)
 
 bool DebugScene::Update(float dt)
 {
+
+
+
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -181,6 +215,8 @@ bool DebugScene::Update(float dt)
 	//-------------------------------------------------------------------------
 
 	Plane();
+
+	Rect2D();
 	
 	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
 
@@ -280,6 +316,37 @@ bool DebugScene::Update(float dt)
 	}
 
 	return ret;
+}
+
+void DebugScene::Rect2D()
+{
+	Rect rect = App->window->GetWindowRect();
+
+	//Initialize Projection Matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0, rect.right, rect.bottom, 0.0, 1.0, -1.0);
+
+	//Initialize Modelview Matrix
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	//Reset modelview matrix
+	//glLoadIdentity();
+
+	//Move to center of the screen
+	glTranslatef(rect.right / 2.f, rect.bottom / 2.f, 0.f);
+
+
+	//Red quad
+	glBegin(GL_QUADS);
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex2f(0, 0);
+	glVertex2f(0, rect.bottom / 2);
+	glVertex2f(rect.right / 2, rect.bottom / 2);
+	glVertex2f(rect.right / 2, 0);
+	glEnd();
+
 }
 
 
@@ -552,7 +619,11 @@ void DebugScene::MenuBar(bool &ret)
 
 void DebugScene::Plane()
 {
+	Rect rect = App->window->GetWindowRect();
+
 	//it would be nice to clean this plane ando do it with vars in config.
+
+
 
 	glLineWidth(2.0f);
 
@@ -560,13 +631,13 @@ void DebugScene::Plane()
 
 	glBegin(GL_LINES);
 
-	for (float i = -100.f; i <= 100.f; i++)
+	for (float i = -1000.f; i <= 1000.f; i++)
 	{
-		glVertex3f(i, 0.f, 100.f);
-		glVertex3f(i, 0.f, -100.f);
+		glVertex3f(i, 0.f, 1000.f);
+		glVertex3f(i, 0.f, -1000.f);
 
-		glVertex3f(-100.f, 0.f, -i);
-		glVertex3f(100.f, 0.f, -i);
+		glVertex3f(-1000.f, 0.f, -i);
+		glVertex3f(1000.f, 0.f, -i);
 	}
 	glLineWidth(1.0f); // why it doesnt work?
 	glEnd();

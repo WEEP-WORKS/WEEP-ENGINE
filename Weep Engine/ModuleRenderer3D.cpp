@@ -154,8 +154,13 @@ bool ModuleRenderer3D::PreUpdate(float dt)
 	bool ret = true;
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	//Reset Projection
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
+	
+	//Reset ModelView
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
