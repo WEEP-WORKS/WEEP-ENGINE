@@ -20,8 +20,8 @@ ComponentMesh::ComponentMesh()
 
 void ComponentMesh::PostUpdate()
 {
-	if(object->isInsideFrustum)
-		Render();
+	//if(object->isInsideFrustum)
+		//Render();
 }
 
 void ComponentMesh::CleanUp()

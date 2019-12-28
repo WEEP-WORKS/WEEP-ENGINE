@@ -4,9 +4,9 @@
 #include "Globals.h"
 #include "Component.h"
 #include "Color.h"
+#include "ResourceMesh.h"
 
 class ComponentTexture;
-
 class ComponentRender2D : public Component
 {
 
@@ -27,9 +27,12 @@ private:
 	void Render();
 	void Draw(float * vertices, uint num_indices, uint * indices, float * uvs, uint texture_id);
 
-
 private:
 	ComponentTexture*	texture = nullptr;
+	BuffersData<float>	vertexs;
+	BuffersData<float>	indexs;
+	BuffersData<float>	uvs;
+
 };
 
 #endif //__COMPONENTRENDER_H__

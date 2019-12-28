@@ -26,8 +26,10 @@ public:
 
 	bool Awake();
 	bool Start();
+	void init2d();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
+	void Rect2D();
 	bool PostUpdate(float dt);
 
 	void Tools();
