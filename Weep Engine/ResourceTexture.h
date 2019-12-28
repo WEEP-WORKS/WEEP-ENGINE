@@ -27,4 +27,4 @@ public:
 	int				texture_height = 0;
 };
 #endif // !__RESOURCETEXTURE_H__
-
+
