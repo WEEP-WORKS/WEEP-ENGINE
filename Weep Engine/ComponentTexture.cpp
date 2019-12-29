@@ -65,16 +65,20 @@ void ComponentTexture::SetCheckersToGOSelected()
 
 void ComponentTexture::InspectorDraw()
 {
-	bool to_active = IsTextureActive();
-	if (ImGui::Checkbox("", &to_active))
-	if (to_active == true)
+	if (object->GetRender2D() == nullptr)
 	{
-		ActivateThisTexture();
+		bool to_active = IsTextureActive();
+		if (ImGui::Checkbox("", &to_active))
+			if (to_active == true)
+			{
+				ActivateThisTexture();
+			}
+			else
+			{
+				DesactivateTexture();
+			}
 	}
-	else
-	{
-		DesactivateTexture();
-	}
+
 
 	ImGui::SameLine();
 
@@ -92,7 +96,9 @@ void ComponentTexture::InspectorDraw()
 			ImGui::Text("Width: %i px", text_info->texture_width);
 			ImGui::Text("Height: %i px", text_info->texture_height);
 		}
-		ImGui::Checkbox("Activate Checkers", &activate_checkers);
+
+		if (object->GetRender2D() == nullptr)
+			ImGui::Checkbox("Activate Checkers", &activate_checkers);
 
 	}
 

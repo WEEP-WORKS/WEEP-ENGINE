@@ -113,13 +113,5 @@ ComponentTexture* ComponentRender2D::GetTexture() const
 
 void ComponentRender2D::InspectorDraw()
 {
-	bool to_active = IsActive();
-	if (ImGui::Checkbox("", &to_active))
-		SetActive(to_active);
-	ImGui::SameLine();
-	if (ImGui::CollapsingHeader("Render2D", ImGuiTreeNodeFlags_DefaultOpen))
-	{
-		
-	}
 
 }
