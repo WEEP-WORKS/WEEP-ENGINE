@@ -110,7 +110,8 @@ bool DebugScene::Start()
 	GameObject* quad = new GameObject("UIQuad", App->game_object_manager->root);
 	quad->AddComponent(ComponentType::RENDER2D);
 	quad->AddComponentUIImage(float2{ 100, 100 }, Rect{ 0, 0, 500, 200 });
-
+	ComponentTexture* text = (ComponentTexture*)quad->AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Lenna.png", text);
 	App->profiler->SetGameTimeScale(1.0f);
 
 

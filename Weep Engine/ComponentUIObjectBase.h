@@ -51,6 +51,7 @@ public:
 	Rect rect_world;
 
 	BuffersData<float>	vertexs_quad;
+	BuffersData<float>	uv_quad;
 protected:
 	bool focus = false;
 	bool visible = true;

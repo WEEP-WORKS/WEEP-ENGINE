@@ -45,6 +45,28 @@ ComponentUIObjectBase::ComponentUIObjectBase(float2 local_pos, Rect rect_sprites
 	glBindBuffer(GL_ARRAY_BUFFER, vertexs_quad.id_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * /*vertexs.buffer_size*/ 4 * 2, vertexs_quad.buffer, GL_STATIC_DRAW);
 
+
+	uv_quad.buffer = new float[8];
+	//vertice 1
+	uv_quad.buffer[0] = 0;
+	uv_quad.buffer[1] = 1;
+
+	//vertice 2
+	uv_quad.buffer[2] = 0;
+	uv_quad.buffer[3] = 0;
+
+	//vertice 3
+	uv_quad.buffer[4] = 1;
+	uv_quad.buffer[5] = 0;
+
+	//vertice 4
+	uv_quad.buffer[6] = 1;
+	uv_quad.buffer[7] = 1;
+
+	glGenBuffers(1, &uv_quad.id_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uv_quad.id_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * /*vertexs.buffer_size*/ 4 * 2, uv_quad.buffer, GL_STATIC_DRAW);
+
 }
 void ComponentUIObjectBase::PreUpdate()
 {
@@ -56,7 +78,7 @@ void ComponentUIObjectBase::PreUpdate()
 void ComponentUIObjectBase::PostUpdate()
 {
 	//App->render->DrawQuad(rect_world, 255, 0, 0, 200, true, false);
-	object->GetRender2D()->Render(vertexs_quad);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
+	object->GetRender2D()->Render(vertexs_quad, uv_quad);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
 
 	return;
 }

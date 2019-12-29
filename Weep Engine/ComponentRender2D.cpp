@@ -29,7 +29,7 @@ void ComponentRender2D::CleanUp()
 
 
 
-void ComponentRender2D::Render(BuffersData<float>& vertexs)
+void ComponentRender2D::Render(BuffersData<float>& vertexs, BuffersData<float>& uvs)
 {
 	Rect rect = App->window->GetWindowRect();
 
@@ -50,12 +50,20 @@ void ComponentRender2D::Render(BuffersData<float>& vertexs)
 	glVertex2f(vertexs.buffer[4], vertexs.buffer[5]);
 	glVertex2f(vertexs.buffer[6], vertexs.buffer[7]);
 	glEnd();*/
-	glColor3f(1.f, 0.f, 0.f);
+	//glColor3f(1.f, 0.f, 0.f);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexs.id_buffer);
 	glVertexPointer(2, GL_FLOAT, 0, NULL);
-	// … draw other buffers
+
+	glBindBuffer(GL_ARRAY_BUFFER, uvs.id_buffer);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL); //every texCoord have 2 coordinates.
+
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//bind texture
+	glBindTexture(GL_TEXTURE_2D, object->GetTextureActivated()->GetResource(object->GetTextureActivated()->GetResourceID())->id_texture);
+
+
 	glDrawArrays(GL_QUADS, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 

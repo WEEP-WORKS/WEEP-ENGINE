@@ -174,7 +174,10 @@ ComponentUIObjectBase* GameObject::AddComponentUI(const UIType& type, float2 loc
 
 ComponentUIImage* GameObject::AddComponentUIImage(float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent)
 {
-	return (ComponentUIImage*)AddComponentUI(UIType::IMAGE, local_pos, rect_spritesheet_original, draggable, parent);
+	ComponentUIImage* ret = (ComponentUIImage*)AddComponentUI(UIType::IMAGE, local_pos, rect_spritesheet_original, draggable, parent);
+	ComponentTexture* texture = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+
+	return ret;
 }
 
 void GameObject::AddToComponentList(Component * ret)

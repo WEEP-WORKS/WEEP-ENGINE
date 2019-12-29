@@ -19,7 +19,9 @@ void ComponentTexture::ActivateThisTexture()
 
 	}
 	texture_active = true;
+	if(object->GetMesh())
 	object->GetMesh()->SetTexture(this);
+
 	LOG("The texture has been activated correctly");
 
 }
