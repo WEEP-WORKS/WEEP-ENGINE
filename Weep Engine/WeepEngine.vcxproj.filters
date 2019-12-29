@@ -412,6 +412,12 @@
     <ClInclude Include="ModuleFonts.h">
       <Filter>Sources\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentUIObjectBase.h">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUIImage.h">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -641,6 +647,12 @@
     </ClCompile>
     <ClCompile Include="ModuleFonts.cpp">
       <Filter>Sources\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUIObjectBase.cpp">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUIImage.cpp">
+      <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

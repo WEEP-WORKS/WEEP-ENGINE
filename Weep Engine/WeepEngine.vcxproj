@@ -83,6 +83,8 @@
     <ClInclude Include="ComponentRender2D.h" />
     <ClInclude Include="ComponentTexture.h" />
     <ClInclude Include="ComponentTransform.h" />
+    <ClInclude Include="ComponentUIImage.h" />
+    <ClInclude Include="ComponentUIObjectBase.h" />
     <ClInclude Include="DebugScene.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
@@ -202,6 +204,8 @@
     <ClCompile Include="ComponentRender2D.cpp" />
     <ClCompile Include="ComponentTexture.cpp" />
     <ClCompile Include="ComponentTransform.cpp" />
+    <ClCompile Include="ComponentUIImage.cpp" />
+    <ClCompile Include="ComponentUIObjectBase.cpp" />
     <ClCompile Include="DebugScene.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />

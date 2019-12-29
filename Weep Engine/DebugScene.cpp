@@ -104,22 +104,22 @@ bool DebugScene::Start()
 
 	if (ret == true)
 	{
-		//ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
-
-
+		ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
 	}
 
-	//GameObject* quad = new GameObject("UIQuad", App->game_object_manager->root);
-	//quad->AddComponent(ComponentType::RENDER2D);
+	GameObject* quad = new GameObject("UIQuad", App->game_object_manager->root);
+	quad->AddComponent(ComponentType::RENDER2D);
+	quad->AddComponentUIImage(float2{ 100, 100 }, Rect{ 0, 0, 500, 200 });
+
 	App->profiler->SetGameTimeScale(1.0f);
 
 
 	//---
 	//init2d();
 
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 
-	glDisable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
 
 	return true;
 }
@@ -215,8 +215,6 @@ bool DebugScene::Update(float dt)
 	//-------------------------------------------------------------------------
 
 	Plane();
-
-	Rect2D();
 	
 	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); //color = white
 
@@ -318,36 +316,7 @@ bool DebugScene::Update(float dt)
 	return ret;
 }
 
-void DebugScene::Rect2D()
-{
-	Rect rect = App->window->GetWindowRect();
 
-	//Initialize Projection Matrix
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0.0, rect.right, rect.bottom, 0.0, 1.0, -1.0);
-
-	//Initialize Modelview Matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	//Reset modelview matrix
-	//glLoadIdentity();
-
-	//Move to center of the screen
-	glTranslatef(rect.right / 2.f, rect.bottom / 2.f, 0.f);
-
-
-	//Red quad
-	glBegin(GL_QUADS);
-	glColor3f(1.f, 0.f, 0.f);
-	glVertex2f(0, 0);
-	glVertex2f(0, rect.bottom / 2);
-	glVertex2f(rect.right / 2, rect.bottom / 2);
-	glVertex2f(rect.right / 2, 0);
-	glEnd();
-
-}
 
 
 void DebugScene::PrintResourceList(const char * path)

@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "imgui.h"
 #include "App.h"
+#include "ModuleCamera3D.h"
 #include "ModuleImporter.h"
 #include "ResourceManagment.h"
 #include "ModuleFileSystem.h"
@@ -20,8 +21,8 @@ ComponentMesh::ComponentMesh()
 
 void ComponentMesh::PostUpdate()
 {
-	//if(object->isInsideFrustum)
-		//Render();
+	if(object->isInsideFrustum)
+		Render();
 }
 
 void ComponentMesh::CleanUp()
@@ -38,6 +39,14 @@ void ComponentMesh::OnGetBoundingBox(AABB& box)
 
 void ComponentMesh::Render()
 {
+	//Reset Projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
+
+	//Reset ModelView
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(App->camera->GetViewMatrix());
 	// Push matrix
 	glPushMatrix();
 	glMultMatrixf(object->ConstGetTransform()->GetGlobalTransform().Transposed().ptr());

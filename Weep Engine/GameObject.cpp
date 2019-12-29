@@ -15,6 +15,8 @@
 #include <list>
 
 #include "ResourceMesh.h"
+#include "ComponentRender2D.h".
+#include "ComponentUIImage.h"
 
 GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
@@ -142,7 +144,40 @@ Component* GameObject::AddComponent(const ComponentType& type)
 	return ret;
 }
 
-void GameObject::AddToComponentList(Component * &ret)
+ComponentUIObjectBase* GameObject::AddComponentUI(const UIType& type, float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent)
+{
+	ComponentUIObjectBase* ret = nullptr;
+
+	/*for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == type && type != ComponentType::TEXTURE)
+		{
+			LOG("This game object already has a component of this type. Create another game object and add this component!");
+			return ret;
+		}
+	}*/
+
+	switch (type)
+	{
+	case UIType::IMAGE:
+		ret = new ComponentUIImage(type, local_pos, rect_spritesheet_original, draggable, parent);
+		break;
+	default:
+		break;
+	}
+
+	if (ret != nullptr)
+		AddToComponentList((Component*)ret);
+
+	return ret;
+}
+
+ComponentUIImage* GameObject::AddComponentUIImage(float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent)
+{
+	return (ComponentUIImage*)AddComponentUI(UIType::IMAGE, local_pos, rect_spritesheet_original, draggable, parent);
+}
+
+void GameObject::AddToComponentList(Component * ret)
 {
 	ret->object = this;
 	components.push_back(ret);
@@ -243,6 +278,19 @@ ComponentCamera* GameObject::GetCam() const
 		if ((*iter)->type == ComponentType::CAMERA)
 		{
 			return (ComponentCamera*)(*iter);
+		}
+	}
+
+	return nullptr;
+}
+
+ComponentRender2D* GameObject::GetRender2D() const
+{
+	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == ComponentType::RENDER2D)
+		{
+			return (ComponentRender2D*)(*iter);
 		}
 	}
 

@@ -21,17 +21,17 @@ public:
 
 	void SetTexture(ComponentTexture* texture);
 	ComponentTexture* GetTexture() const;
+	void Render(BuffersData<float>& vertexs);
 
 private:
 
-	void Render();
+
 	void Draw(float * vertices, uint num_indices, uint * indices, float * uvs, uint texture_id);
 
 private:
 	ComponentTexture*	texture = nullptr;
-	BuffersData<float>	vertexs;
-	BuffersData<float>	indexs;
-	BuffersData<float>	uvs;
+	
+	//BuffersData<float>	uvs;
 
 };
 

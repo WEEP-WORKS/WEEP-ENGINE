@@ -17,10 +17,6 @@ enum class ComponentType
 	RENDER2D
 };
 
-
-
-
-
 class Component
 {
 public:
