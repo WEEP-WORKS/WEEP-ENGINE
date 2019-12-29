@@ -24,7 +24,7 @@ public:
 	void PreUpdate() override;
 	void PostUpdate() override;
 	void CleanUp() override;
-
+	void InspectorDraw() override;
 	const bool IsClicked() const;
 public:
 	Module* listener = nullptr;
