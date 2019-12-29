@@ -80,7 +80,8 @@ void ComponentUIObjectBase::PreUpdate()
 void ComponentUIObjectBase::PostUpdate()
 {
 	//App->render->DrawQuad(rect_world, 255, 0, 0, 200, true, false);
-	object->GetRender2D()->Render(vertexs_quad, uv_quad, object->GetTextureActivated()->GetResource(object->GetTextureActivated()->GetResourceID())->id_texture);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
+	if (GetVisible())
+		object->GetRender2D()->Render(vertexs_quad, uv_quad, object->GetTextureActivated()->GetResource(object->GetTextureActivated()->GetResourceID())->id_texture);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
 
 	return;
 }
@@ -93,7 +94,6 @@ void ComponentUIObjectBase::CleanUp()
 
 void ComponentUIObjectBase::Update()
 {
-	
 	return;
 }
 
@@ -117,7 +117,7 @@ void ComponentUIObjectBase::SetAllVisible(const bool visible)
 	list<ComponentUIObjectBase*> all_childrens;
 	all_childrens.push_back(this);
 
-	while (all_childrens.empty())
+	while (!all_childrens.empty())
 	{
 		list<ComponentUIObjectBase*>::iterator current_ui_object = all_childrens.begin();
 

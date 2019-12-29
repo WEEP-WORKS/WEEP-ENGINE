@@ -13,59 +13,61 @@ ComponentUIButton::ComponentUIButton(UIType _type, float2 local_pos, Rect rect_s
 void ComponentUIButton::PreUpdate()
 {
 	bool ret = true;
-
-	switch (state)
+	if (GetVisible())
 	{
-	case ComponentUIButton::UIButtonState::NONE:
-		if (MouseInRect())
+		switch (state)
 		{
-			state = UIButtonState::HOVER;
-			current_texture_id = texture_id_hover;
-			LOG("Mouse Enter!");
-			
-		}
-		break;
-	case ComponentUIButton::UIButtonState::HOVER:
-		if (!MouseInRect())
-		{
-			state = UIButtonState::NONE;
-			current_texture_id = texture_id_background;
-			LOG("Mouse Exit!");
-		}
-		else if (App->input->GetMouseButton(1) == KEY_DOWN)
-		{
-			state = UIButtonState::CLICKED;
-			current_texture_id = texture_id_clicked;
-		}
-		break;
-	case ComponentUIButton::UIButtonState::CLICKED:
-		if (App->input->GetMouseButton(1) == KEY_UP)
-		{
+		case ComponentUIButton::UIButtonState::NONE:
 			if (MouseInRect())
 			{
 				state = UIButtonState::HOVER;
 				current_texture_id = texture_id_hover;
-				ret = listener->ButtonEvent(button_type);
+				LOG("Mouse Enter!");
+
 			}
-			else
+			break;
+		case ComponentUIButton::UIButtonState::HOVER:
+			if (!MouseInRect())
 			{
 				state = UIButtonState::NONE;
 				current_texture_id = texture_id_background;
+				LOG("Mouse Exit!");
 			}
+			else if (App->input->GetMouseButton(1) == KEY_DOWN)
+			{
+				state = UIButtonState::CLICKED;
+				current_texture_id = texture_id_clicked;
+			}
+			break;
+		case ComponentUIButton::UIButtonState::CLICKED:
+			if (App->input->GetMouseButton(1) == KEY_UP)
+			{
+				if (MouseInRect())
+				{
+					state = UIButtonState::HOVER;
+					current_texture_id = texture_id_hover;
+					ret = listener->ButtonEvent(button_type);
+				}
+				else
+				{
+					state = UIButtonState::NONE;
+					current_texture_id = texture_id_background;
+				}
+			}
+
+			break;
+		default:
+			break;
 		}
-
-		break;
-	default:
-		break;
 	}
-
 	return;
 }
 
 void ComponentUIButton::PostUpdate()
 {
 	//App->render->DrawQuad(rect_world, 255, 0, 0, 50, true, false);
-	object->GetRender2D()->Render(vertexs_quad, uv_quad, current_texture_id);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
+	if(GetVisible())
+		object->GetRender2D()->Render(vertexs_quad, uv_quad, current_texture_id);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
 
 
 	return;
