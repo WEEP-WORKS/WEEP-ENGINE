@@ -146,7 +146,7 @@ bool DebugScene::Start()
 
 	GameObject* window_image = new GameObject("Window Image", App->game_object_manager->root);
 	window_image->AddComponent(ComponentType::RENDER2D);
-	wndw_img = window_image->AddComponentUIImage(float2{ (float)window.right / 2 - 401 / 2, (float)window.bottom / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, false);
+	wndw_img = window_image->AddComponentUIImage(float2{ (float)window.right / 2 - 401 / 2, (float)window.bottom / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, true);
 	vsync_ckbx->parent = wndw_img;
 	wndw_img->childrens.push_back(vsync_ckbx);
 	vsync_img->parent = wndw_img;
