@@ -136,11 +136,19 @@ bool DebugScene::Start()
 	vsync_checkbox->AddComponent(ComponentType::RENDER2D);
 	ComponentUICheckBox* vsync_ckbx = vsync_checkbox->AddComponentUICheckBox(float2{ 1024 / 2 - 150, 768 / 2 - 62/2 }, Rect{ 0, 0, 62, 62 }, UICheckBoxType::VSYNC, this, false);
 
+	GameObject* vsync_image = new GameObject("Vsync Text", App->game_object_manager->root);
+	vsync_image->AddComponent(ComponentType::RENDER2D);
+	ComponentUIImage* vsync_img = vsync_image->AddComponentUIImage(float2{ 1024 / 2 - 107 / 2, 768 / 2 - 23 / 2 }, Rect{ 0, 0, 107, 23 }, false);
+	ComponentTexture* text_vsync_img = (ComponentTexture*)vsync_image->AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/GUI/vsync.png", text_vsync_img);
+
 	GameObject* window_image = new GameObject("Window Image", App->game_object_manager->root);
 	window_image->AddComponent(ComponentType::RENDER2D);
-	wndw_img = window_image->AddComponentUIImage(float2{ 1024 / 2 - 401 / 2, 768 / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, true);
+	wndw_img = window_image->AddComponentUIImage(float2{ 1024 / 2 - 401 / 2, 768 / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, false);
 	vsync_ckbx->parent = wndw_img;
 	wndw_img->childrens.push_back(vsync_ckbx);
+	vsync_img->parent = wndw_img;
+	wndw_img->childrens.push_back(vsync_img);
 
 	ComponentTexture* text_wndw_img = (ComponentTexture*)window_image->AddComponent(ComponentType::TEXTURE);
 	App->texture->LoadTexture("Assets/GUI/window.png", text_wndw_img);
