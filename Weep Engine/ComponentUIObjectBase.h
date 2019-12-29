@@ -20,6 +20,7 @@ class ComponentUIObjectBase : public Component
 {
 public:
 	ComponentUIObjectBase(float2 pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent);
+	void SetBufferVertexPos();
 	virtual void PreUpdate() override;
 	virtual void Update() override;
 	virtual void CleanUp() override;
@@ -30,6 +31,8 @@ public:
 	const bool GetVisible() const;
 	void SetAllVisible(const bool visible);
 	virtual void SetFocusThis(bool focus_value);
+	void SetPos(float2 mouse_move);
+
 
 private:
 	void SetVisible(const bool visible);
@@ -42,10 +45,7 @@ public:
 	bool draggable = false;
 	UIType type = UIType::NONE;
 	float2 local_pos;
-	float2 world_pos_original;
-	float2 world_pos_final;
-	Rect rect_spritesheet_original;
-	Rect rect_spritesheet_final;
+	float2 world_pos;
 	Rect rect_world;
 
 	BuffersData<float>	vertexs_quad;

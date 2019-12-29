@@ -111,7 +111,7 @@ bool DebugScene::Start()
 
 	GameObject* quad = new GameObject("UIQuad", App->game_object_manager->root);
 	quad->AddComponent(ComponentType::RENDER2D);
-	ComponentUIImage* retimage = quad->AddComponentUIImage(float2{ 100, 100 }, Rect{ 0, 0, 500, 200 });
+	ComponentUIImage* retimage = quad->AddComponentUIImage(float2{ 100, 100 }, Rect{ 0, 0, 500, 200 }, true);
 	ComponentTexture* text = (ComponentTexture*)quad->AddComponent(ComponentType::TEXTURE);
 	App->texture->LoadTexture("Assets/Textures/Lenna.png", text);
 
@@ -120,7 +120,7 @@ bool DebugScene::Start()
 	button->AddComponent(ComponentType::RENDER2D);
 	ComponentUIButton* retbut = button->AddComponentUIButton(float2{ 650,400 }, Rect{ 0, 0, 300, 200 }, UIButtonType::TEST,  this, false, retimage);
 	
-	retimage->SetAllVisible(false);
+	//retimage->SetAllVisible(false);
 	App->profiler->SetGameTimeScale(1.0f);
 
 
