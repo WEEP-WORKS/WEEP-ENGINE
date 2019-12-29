@@ -10,8 +10,9 @@
 #include "ModuleImporter.h"
 #include "ResourceManagment.h"
 #include "ModuleFileSystem.h"
-
+#include "SceneManager.h"
 #include "ResourceTexture.h"
+#include "ModuleCamera3D.h"
 
 ComponentRender2D::ComponentRender2D()
 {
@@ -32,15 +33,29 @@ void ComponentRender2D::CleanUp()
 void ComponentRender2D::Render(BuffersData<float>& vertexs, BuffersData<float>& uvs, uint texture_id)
 {
 	Rect rect = App->window->GetWindowRect();
+	if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
+	{
+		//Initialize Projection Matrix
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0.0, rect.right, rect.bottom, 0.0, 1.0, -1.0);
 
-	//Initialize Projection Matrix
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0.0, rect.right, rect.bottom, 0.0, 1.0, -1.0);
+		//Initialize Modelview Matrix
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+	}
+	else
+	{
+		//Reset Projection
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glLoadMatrixf(App->camera->GetCurrentCamera()->GetOpenGLProjectionMatrix().ptr());
 
-	//Initialize Modelview Matrix
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+		//Reset ModelView
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(App->camera->GetViewMatrix());
+
+	}
 
 	//Red quad
 	/*glBegin(GL_QUADS);

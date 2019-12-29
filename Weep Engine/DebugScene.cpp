@@ -248,12 +248,14 @@ bool DebugScene::Update(float dt)
 			bg_img->SetAllVisible(false);
 			crsshair_img->SetAllVisible(false);
 			wndw_img->SetAllVisible(true);
+			wndw_menu = true;
 		}
 		else if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && wndw_menu == true)
 		{
 			bg_img->SetAllVisible(false);
 			wndw_img->SetAllVisible(false);
 			crsshair_img->SetAllVisible(true);
+			wndw_menu = false;
 		}
 	}
 	else

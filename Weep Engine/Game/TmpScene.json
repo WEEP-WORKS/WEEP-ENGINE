@@ -26,7 +26,7 @@
 					"type" : 0
 				}
 			],
-			"id" : 1926519779,
+			"id" : 29144451,
 			"id_parent" : "nullptr",
 			"name" : "root",
 			"number_components" : 1
@@ -63,8 +63,8 @@
 					"type" : 3
 				}
 			],
-			"id" : 847393080,
-			"id_parent" : 1926519779,
+			"id" : 1841260303,
+			"id_parent" : 29144451,
 			"name" : "CAMERA",
 			"number_components" : 2
 		},
@@ -93,8 +93,8 @@
 					"type" : 0
 				}
 			],
-			"id" : 682872296,
-			"id_parent" : 1926519779,
+			"id" : 642214792,
+			"id_parent" : 29144451,
 			"name" : "group_street environment_v01_1",
 			"number_components" : 1
 		},
@@ -138,10 +138,10 @@
 					"type" : 2
 				}
 			],
-			"id" : 201806152,
-			"id_parent" : 1926519779,
+			"id" : 241455773,
+			"id_parent" : 29144451,
 			"name" : "Play Button",
-			"number_components" : 6
+			"number_components" : 4
 		},
 		{
 			"Components" : 
@@ -173,10 +173,10 @@
 					"type" : 2
 				}
 			],
-			"id" : 1108089718,
-			"id_parent" : 1926519779,
+			"id" : 2037866964,
+			"id_parent" : 29144451,
 			"name" : "Background Image",
-			"number_components" : 4
+			"number_components" : 2
 		},
 		{
 			"Components" : 
@@ -213,10 +213,10 @@
 					"type" : 2
 				}
 			],
-			"id" : 111722050,
-			"id_parent" : 1926519779,
+			"id" : 533794295,
+			"id_parent" : 29144451,
 			"name" : "Vsync Checkbox",
-			"number_components" : 5
+			"number_components" : 3
 		},
 		{
 			"Components" : 
@@ -248,10 +248,10 @@
 					"type" : 2
 				}
 			],
-			"id" : 15073616,
-			"id_parent" : 1926519779,
+			"id" : 1088100860,
+			"id_parent" : 29144451,
 			"name" : "Window Image",
-			"number_components" : 4
+			"number_components" : 2
 		},
 		{
 			"Components" : 
@@ -283,10 +283,10 @@
 					"type" : 2
 				}
 			],
-			"id" : 1468199800,
-			"id_parent" : 1926519779,
+			"id" : 36842488,
+			"id_parent" : 29144451,
 			"name" : "Crosshair Image",
-			"number_components" : 4
+			"number_components" : 2
 		},
 		{
 			"Components" : 
@@ -322,8 +322,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1259142530,
-			"id_parent" : 682872296,
+			"id" : 1026503292,
+			"id_parent" : 642214792,
 			"name" : "City_building_004",
 			"number_components" : 3
 		},
@@ -361,8 +361,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 332126943,
-			"id_parent" : 682872296,
+			"id" : 77403819,
+			"id_parent" : 642214792,
 			"name" : "City_building_001",
 			"number_components" : 3
 		},
@@ -400,8 +400,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1053471354,
-			"id_parent" : 682872296,
+			"id" : 894812276,
+			"id_parent" : 642214792,
 			"name" : "City_building_007",
 			"number_components" : 3
 		},
@@ -439,8 +439,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 720140843,
-			"id_parent" : 682872296,
+			"id" : 1372351573,
+			"id_parent" : 642214792,
 			"name" : "City_building_008",
 			"number_components" : 3
 		},
@@ -477,8 +477,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1772407641,
-			"id_parent" : 682872296,
+			"id" : 793925156,
+			"id_parent" : 642214792,
 			"name" : "Line002",
 			"number_components" : 3
 		},
@@ -515,8 +515,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 234533794,
-			"id_parent" : 682872296,
+			"id" : 1929179390,
+			"id_parent" : 642214792,
 			"name" : "Plane001",
 			"number_components" : 3
 		},
@@ -554,8 +554,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1159103933,
-			"id_parent" : 682872296,
+			"id" : 1328576869,
+			"id_parent" : 642214792,
 			"name" : "City_building_010",
 			"number_components" : 3
 		},
@@ -593,8 +593,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1981916074,
-			"id_parent" : 682872296,
+			"id" : 434553065,
+			"id_parent" : 642214792,
 			"name" : "City_building_010",
 			"number_components" : 3
 		},
@@ -632,8 +632,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 712217263,
-			"id_parent" : 682872296,
+			"id" : 269319429,
+			"id_parent" : 642214792,
 			"name" : "City_building_011",
 			"number_components" : 3
 		},
@@ -671,8 +671,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 2028141740,
-			"id_parent" : 682872296,
+			"id" : 608244452,
+			"id_parent" : 642214792,
 			"name" : "City_building_013",
 			"number_components" : 3
 		},
@@ -710,8 +710,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 2058806643,
-			"id_parent" : 682872296,
+			"id" : 356957499,
+			"id_parent" : 642214792,
 			"name" : "City_building_014",
 			"number_components" : 3
 		},
@@ -749,8 +749,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 233789641,
-			"id_parent" : 682872296,
+			"id" : 1057274795,
+			"id_parent" : 642214792,
 			"name" : "City_building_016",
 			"number_components" : 3
 		},
@@ -788,8 +788,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 890035448,
-			"id_parent" : 682872296,
+			"id" : 1379018123,
+			"id_parent" : 642214792,
 			"name" : "City_building_016",
 			"number_components" : 3
 		},
@@ -827,8 +827,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1664774670,
-			"id_parent" : 682872296,
+			"id" : 1069334954,
+			"id_parent" : 642214792,
 			"name" : "City_building_017",
 			"number_components" : 3
 		},
@@ -866,8 +866,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1437387833,
-			"id_parent" : 682872296,
+			"id" : 1353241885,
+			"id_parent" : 642214792,
 			"name" : "City_building_017",
 			"number_components" : 3
 		},
@@ -905,8 +905,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1787854740,
-			"id_parent" : 682872296,
+			"id" : 1798198048,
+			"id_parent" : 642214792,
 			"name" : "City_building_022",
 			"number_components" : 3
 		},
@@ -944,8 +944,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1935189773,
-			"id_parent" : 682872296,
+			"id" : 492130649,
+			"id_parent" : 642214792,
 			"name" : "City_building_023",
 			"number_components" : 3
 		},
@@ -983,8 +983,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1018140547,
-			"id_parent" : 682872296,
+			"id" : 1673809791,
+			"id_parent" : 642214792,
 			"name" : "City_building_024",
 			"number_components" : 3
 		},
@@ -1022,8 +1022,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1970286158,
-			"id_parent" : 682872296,
+			"id" : 1258838403,
+			"id_parent" : 642214792,
 			"name" : "City_building_026",
 			"number_components" : 3
 		},
@@ -1061,8 +1061,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 627170346,
-			"id_parent" : 682872296,
+			"id" : 633337546,
+			"id_parent" : 642214792,
 			"name" : "City_building_028",
 			"number_components" : 3
 		},
@@ -1099,8 +1099,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1589148062,
-			"id_parent" : 682872296,
+			"id" : 1459049862,
+			"id_parent" : 642214792,
 			"name" : "Object010",
 			"number_components" : 3
 		},
@@ -1138,8 +1138,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1867214709,
-			"id_parent" : 682872296,
+			"id" : 238971908,
+			"id_parent" : 642214792,
 			"name" : "City_building_030",
 			"number_components" : 3
 		},
@@ -1177,8 +1177,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1580167791,
-			"id_parent" : 682872296,
+			"id" : 907393559,
+			"id_parent" : 642214792,
 			"name" : "City_building_031",
 			"number_components" : 3
 		},
@@ -1216,8 +1216,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1569508695,
-			"id_parent" : 682872296,
+			"id" : 1120527340,
+			"id_parent" : 642214792,
 			"name" : "City_building_032",
 			"number_components" : 3
 		},
@@ -1255,8 +1255,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 354444294,
-			"id_parent" : 682872296,
+			"id" : 595493571,
+			"id_parent" : 642214792,
 			"name" : "City_building_033",
 			"number_components" : 3
 		},
@@ -1294,8 +1294,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 31604897,
-			"id_parent" : 682872296,
+			"id" : 1686101256,
+			"id_parent" : 642214792,
 			"name" : "City_building_034",
 			"number_components" : 3
 		},
@@ -1333,8 +1333,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1341279509,
-			"id_parent" : 682872296,
+			"id" : 156948015,
+			"id_parent" : 642214792,
 			"name" : "City_building_035",
 			"number_components" : 3
 		},
@@ -1372,8 +1372,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 41789941,
-			"id_parent" : 682872296,
+			"id" : 480956379,
+			"id_parent" : 642214792,
 			"name" : "City_building_036",
 			"number_components" : 3
 		},
@@ -1411,8 +1411,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1764624323,
-			"id_parent" : 682872296,
+			"id" : 1099038335,
+			"id_parent" : 642214792,
 			"name" : "City_building_037",
 			"number_components" : 3
 		},
@@ -1450,8 +1450,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1665514007,
-			"id_parent" : 682872296,
+			"id" : 1305578425,
+			"id_parent" : 642214792,
 			"name" : "City_building_038",
 			"number_components" : 3
 		},
@@ -1489,8 +1489,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1371161582,
-			"id_parent" : 682872296,
+			"id" : 1282684003,
+			"id_parent" : 642214792,
 			"name" : "City_building_039",
 			"number_components" : 3
 		},
@@ -1528,8 +1528,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1697423978,
-			"id_parent" : 682872296,
+			"id" : 782996015,
+			"id_parent" : 642214792,
 			"name" : "City_building_040",
 			"number_components" : 3
 		},
@@ -1567,15 +1567,15 @@
 					"type" : 2
 				}
 			],
-			"id" : 329677928,
-			"id_parent" : 682872296,
+			"id" : 1240664867,
+			"id_parent" : 642214792,
 			"name" : "City_building_041",
 			"number_components" : 3
 		}
 	],
 	"Renderer" : 
 	{
-		"VSYNC" : true
+		"VSYNC" : false
 	},
 	"SceneManager" : 
 	{
