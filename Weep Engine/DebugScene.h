@@ -65,7 +65,7 @@ private:
 	bool show_demo_window = false;
 	bool show_geometry_math_test = false;
 	bool show_random_generator = false;
-	bool show_debug_console = false;
+	bool show_debug_console = true;
 	bool show_resources = true;
 
 	bool to_save = false;
