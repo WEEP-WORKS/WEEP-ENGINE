@@ -36,6 +36,7 @@ public:
 
 	bool GetVsync() const;
 	int GetRefreshRate() const;
+	void SetVsync(bool set);
 
 private:
 
@@ -69,7 +70,7 @@ private:
 
 private:
 
-	void SetVsync(bool set);
+
 
 	void SetAmbientLight(const bool & enabled, const float color[4]) const;
 

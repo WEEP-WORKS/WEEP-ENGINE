@@ -6,7 +6,8 @@
 class Module;
 enum class UICheckBoxType
 {
-	TEST
+	TEST,
+	VSYNC
 };
 
 class ComponentUICheckBox : public ComponentUIObjectBase

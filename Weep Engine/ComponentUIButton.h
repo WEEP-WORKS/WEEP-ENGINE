@@ -6,7 +6,8 @@
 class Module;
 enum class UIButtonType
 {
-	TEST
+	TEST,
+	PLAY
 };
 
 class ComponentUIButton : public ComponentUIObjectBase

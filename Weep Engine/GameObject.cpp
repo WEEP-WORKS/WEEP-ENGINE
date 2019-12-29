@@ -194,15 +194,15 @@ ComponentUIButton* GameObject::AddComponentUIButton(float2 local_pos, Rect rect_
 	ComponentUIButton* ret = (ComponentUIButton*)AddComponentUI(UIType::BUTTON, local_pos, rect_spritesheet_original, draggable, parent);
 	
 	ComponentTexture* texture_background = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
-	App->texture->LoadTexture("Assets/Textures/Lenna.png", texture_background);
+	App->texture->LoadTexture("Assets/GUI/button_idle.png", texture_background);
 	ret->texture_id_background = texture_background->GetResource(texture_background->GetResourceID())->id_texture;
 
 	ComponentTexture* texture_hover = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
-	App->texture->LoadTexture("Assets/Textures/Baker_house.png", texture_hover);
+	App->texture->LoadTexture("Assets/GUI/button_hovered.png", texture_hover);
 	ret->texture_id_hover = texture_hover->GetResource(texture_hover->GetResourceID())->id_texture;
 
 	ComponentTexture* texture_clicked = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
-	App->texture->LoadTexture("Assets/Textures/Building_V01_C.png", texture_clicked);
+	App->texture->LoadTexture("Assets/GUI/button_pressed.png", texture_clicked);
 	ret->texture_id_clicked = texture_clicked->GetResource(texture_clicked->GetResourceID())->id_texture;
 
 	ret->current_texture_id = ret->texture_id_background;
@@ -217,11 +217,11 @@ ComponentUICheckBox * GameObject::AddComponentUICheckBox(float2 local_pos, Rect 
 	ComponentUICheckBox* ret = (ComponentUICheckBox*)AddComponentUI(UIType::CHECKBOX, local_pos, rect_spritesheet_original, draggable, parent);
 
 	ComponentTexture* texture_background = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
-	App->texture->LoadTexture("Assets/Textures/Lenna.png", texture_background);
+	App->texture->LoadTexture("Assets/GUI/checkbox_idle.png", texture_background);
 	ret->texture_id_background = texture_background->GetResource(texture_background->GetResourceID())->id_texture;
 
 	ComponentTexture* texture_clicked = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
-	App->texture->LoadTexture("Assets/Textures/Building_V01_C.png", texture_clicked);
+	App->texture->LoadTexture("Assets/GUI/checkbox_disabled.png", texture_clicked);
 	ret->texture_id_clicked = texture_clicked->GetResource(texture_clicked->GetResourceID())->id_texture;
 
 	ret->current_texture_id = ret->texture_id_background;

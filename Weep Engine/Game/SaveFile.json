@@ -1385,7 +1385,7 @@
 	],
 	"Renderer" : 
 	{
-		"VSYNC" : true
+		"VSYNC" : false
 	},
 	"SceneManager" : 
 	{
