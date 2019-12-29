@@ -62,3 +62,24 @@ void ComponentUICheckBox::CleanUp()
 
 	return;
 }
+
+void ComponentUICheckBox::InspectorDraw()
+{
+	if (ImGui::CollapsingHeader("UICheckbox", ImGuiTreeNodeFlags_DefaultOpen)) {
+		if (parent != nullptr)
+		{
+			ImGui::Text("Parent: %s ", parent->object->GetName());
+			ImGui::Text("Has Parent, be careful when drag");
+		}
+		else
+			ImGui::Text("Don't have parent");
+
+		ImGui::Separator();
+
+		float2 position = local_pos;
+
+		if (ImGui::DragFloat2("Position", (float*)&position, 0.1f))
+			SetPos(position - local_pos);
+
+	}
+}

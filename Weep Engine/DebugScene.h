@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "imgui.h"
 #include "glew/glew.h"
+#include "ComponentUIImage.h"
 
 #define MAX_SNAKE 2
 #define LIB_NUM 11
@@ -94,6 +95,11 @@ private:
 	int   max_fps_slider = 0;
 
 	ImGuiTextBuffer debug_console_buff;
+
+	ComponentUIImage* bg_img = nullptr;
+	ComponentUIImage* wndw_img = nullptr;
+	ComponentUIImage* crsshair_img = nullptr;
+	bool wndw_menu = false;
 
 private:
 	

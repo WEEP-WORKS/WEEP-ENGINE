@@ -335,7 +335,7 @@ void GameObjectManager::Hierarchy()
 {
 	if (App->debug_scene->show_hierarchy)
 	{
-		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(240, 768-50), ImGuiCond_FirstUseEver);
 		ImGui::SetNextWindowPos(ImVec2(0, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
 
 

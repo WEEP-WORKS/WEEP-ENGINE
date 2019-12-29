@@ -6,7 +6,8 @@
 class Module;
 enum class UICheckBoxType
 {
-	TEST
+	TEST,
+	VSYNC
 };
 
 class ComponentUICheckBox : public ComponentUIObjectBase
@@ -23,7 +24,7 @@ public:
 	void PreUpdate() override;
 	void PostUpdate() override;
 	void CleanUp() override;
-
+	void InspectorDraw() override;
 	const bool IsClicked() const;
 public:
 	Module* listener = nullptr;

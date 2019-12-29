@@ -1385,7 +1385,7 @@
 	],
 	"Renderer" : 
 	{
-		"VSYNC" : true
+		"VSYNC" : false
 	},
 	"SceneManager" : 
 	{
@@ -1394,12 +1394,12 @@
 	"Window" : 
 	{
 		"Brightness" : 1.0,
-		"Height" : 1024,
+		"Height" : 768,
 		"Organization" : "Weep Works",
 		"Size" : 1.0,
 		"Title" : "Weep Engine",
 		"Version" : "v.0.3",
-		"Width" : 1280,
+		"Width" : 1024,
 		"flags" : 
 		{
 			"Borderless" : false,

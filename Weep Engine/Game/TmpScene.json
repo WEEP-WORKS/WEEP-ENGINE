@@ -26,9 +26,76 @@
 					"type" : 0
 				}
 			],
-			"id" : 1392059636,
+			"id" : 1644960052,
 			"id_parent" : "nullptr",
 			"name" : "root",
+			"number_components" : 1
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						-50.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"FOV" : 120.00000762939453,
+					"Far Plane" : 100.0,
+					"Frustum Culling" : true,
+					"Near Plane" : 0.10000000149011612,
+					"type" : 3
+				}
+			],
+			"id" : 608369429,
+			"id_parent" : 1644960052,
+			"name" : "CAMERA",
+			"number_components" : 2
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						-0.0,
+						0.0,
+						-180.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				}
+			],
+			"id" : 468046628,
+			"id_parent" : 1644960052,
+			"name" : "group_street environment_v01_1",
 			"number_components" : 1
 		},
 		{
@@ -56,17 +123,25 @@
 					"type" : 0
 				},
 				{
-					"FOV" : 120.00000762939453,
-					"Far Plane" : 100.0,
-					"Frustum Culling" : true,
-					"Near Plane" : 0.10000000149011612,
-					"type" : 3
+					"Texture Active" : false,
+					"Texture Path" : "button_idle",
+					"type" : 2
+				},
+				{
+					"Texture Active" : false,
+					"Texture Path" : "button_hovered",
+					"type" : 2
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "button_pressed",
+					"type" : 2
 				}
 			],
-			"id" : 646928846,
-			"id_parent" : 1392059636,
-			"name" : "CAMERA",
-			"number_components" : 2
+			"id" : 156945252,
+			"id_parent" : 1644960052,
+			"name" : "Play Button",
+			"number_components" : 6
 		},
 		{
 			"Components" : 
@@ -75,28 +150,143 @@
 					"Position" : 
 					[
 						0.0,
-						28.899999618530273,
+						0.0,
 						0.0
 					],
 					"Rotation" : 
 					[
-						-0.0,
-						41.099998474121094,
-						-180.0
+						0.0,
+						0.0,
+						0.0
 					],
 					"Scale" : 
 					[
 						1.0,
-						3.7000000476837158,
-						2.7000000476837158
+						1.0,
+						1.0
 					],
 					"type" : 0
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "background_main",
+					"type" : 2
 				}
 			],
-			"id" : 658658835,
-			"id_parent" : 1392059636,
-			"name" : "group_street environment_v01_1",
-			"number_components" : 1
+			"id" : 288593556,
+			"id_parent" : 1644960052,
+			"name" : "Background Image",
+			"number_components" : 4
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"Texture Active" : false,
+					"Texture Path" : "checkbox_idle",
+					"type" : 2
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "checkbox_disabled",
+					"type" : 2
+				}
+			],
+			"id" : 314960944,
+			"id_parent" : 1644960052,
+			"name" : "Vsync Checkbox",
+			"number_components" : 5
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "window",
+					"type" : 2
+				}
+			],
+			"id" : 2087846354,
+			"id_parent" : 1644960052,
+			"name" : "Window Image",
+			"number_components" : 4
+		},
+		{
+			"Components" : 
+			[
+				{
+					"Position" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Rotation" : 
+					[
+						0.0,
+						0.0,
+						0.0
+					],
+					"Scale" : 
+					[
+						1.0,
+						1.0,
+						1.0
+					],
+					"type" : 0
+				},
+				{
+					"Texture Active" : true,
+					"Texture Path" : "crosshair",
+					"type" : 2
+				}
+			],
+			"id" : 1225397345,
+			"id_parent" : 1644960052,
+			"name" : "Crosshair Image",
+			"number_components" : 4
 		},
 		{
 			"Components" : 
@@ -132,8 +322,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1268437144,
-			"id_parent" : 658658835,
+			"id" : 2104912057,
+			"id_parent" : 468046628,
 			"name" : "City_building_004",
 			"number_components" : 3
 		},
@@ -171,8 +361,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1039870490,
-			"id_parent" : 658658835,
+			"id" : 1798249117,
+			"id_parent" : 468046628,
 			"name" : "City_building_001",
 			"number_components" : 3
 		},
@@ -210,8 +400,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 854676626,
-			"id_parent" : 658658835,
+			"id" : 1900121851,
+			"id_parent" : 468046628,
 			"name" : "City_building_007",
 			"number_components" : 3
 		},
@@ -249,8 +439,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 964487670,
-			"id_parent" : 658658835,
+			"id" : 1243249624,
+			"id_parent" : 468046628,
 			"name" : "City_building_008",
 			"number_components" : 3
 		},
@@ -287,8 +477,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1077398674,
-			"id_parent" : 658658835,
+			"id" : 1953680169,
+			"id_parent" : 468046628,
 			"name" : "Line002",
 			"number_components" : 3
 		},
@@ -325,8 +515,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 116776491,
-			"id_parent" : 658658835,
+			"id" : 1995295910,
+			"id_parent" : 468046628,
 			"name" : "Plane001",
 			"number_components" : 3
 		},
@@ -364,8 +554,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1870476016,
-			"id_parent" : 658658835,
+			"id" : 221876621,
+			"id_parent" : 468046628,
 			"name" : "City_building_010",
 			"number_components" : 3
 		},
@@ -403,8 +593,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1002355856,
-			"id_parent" : 658658835,
+			"id" : 422357770,
+			"id_parent" : 468046628,
 			"name" : "City_building_010",
 			"number_components" : 3
 		},
@@ -442,8 +632,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 388457664,
-			"id_parent" : 658658835,
+			"id" : 1624210446,
+			"id_parent" : 468046628,
 			"name" : "City_building_011",
 			"number_components" : 3
 		},
@@ -481,8 +671,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1549458673,
-			"id_parent" : 658658835,
+			"id" : 1256544534,
+			"id_parent" : 468046628,
 			"name" : "City_building_013",
 			"number_components" : 3
 		},
@@ -520,8 +710,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 316233182,
-			"id_parent" : 658658835,
+			"id" : 1993157422,
+			"id_parent" : 468046628,
 			"name" : "City_building_014",
 			"number_components" : 3
 		},
@@ -559,8 +749,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 468014978,
-			"id_parent" : 658658835,
+			"id" : 1662058863,
+			"id_parent" : 468046628,
 			"name" : "City_building_016",
 			"number_components" : 3
 		},
@@ -598,8 +788,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 2048891054,
-			"id_parent" : 658658835,
+			"id" : 1338749622,
+			"id_parent" : 468046628,
 			"name" : "City_building_016",
 			"number_components" : 3
 		},
@@ -637,8 +827,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1390302206,
-			"id_parent" : 658658835,
+			"id" : 2186168,
+			"id_parent" : 468046628,
 			"name" : "City_building_017",
 			"number_components" : 3
 		},
@@ -676,8 +866,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 699462695,
-			"id_parent" : 658658835,
+			"id" : 1879347038,
+			"id_parent" : 468046628,
 			"name" : "City_building_017",
 			"number_components" : 3
 		},
@@ -715,8 +905,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 953109223,
-			"id_parent" : 658658835,
+			"id" : 136488182,
+			"id_parent" : 468046628,
 			"name" : "City_building_022",
 			"number_components" : 3
 		},
@@ -754,8 +944,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1320005830,
-			"id_parent" : 658658835,
+			"id" : 1976064694,
+			"id_parent" : 468046628,
 			"name" : "City_building_023",
 			"number_components" : 3
 		},
@@ -793,8 +983,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 710700712,
-			"id_parent" : 658658835,
+			"id" : 1355183213,
+			"id_parent" : 468046628,
 			"name" : "City_building_024",
 			"number_components" : 3
 		},
@@ -832,8 +1022,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1671043272,
-			"id_parent" : 658658835,
+			"id" : 1663924975,
+			"id_parent" : 468046628,
 			"name" : "City_building_026",
 			"number_components" : 3
 		},
@@ -871,8 +1061,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1924547334,
-			"id_parent" : 658658835,
+			"id" : 262830707,
+			"id_parent" : 468046628,
 			"name" : "City_building_028",
 			"number_components" : 3
 		},
@@ -909,8 +1099,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 962753143,
-			"id_parent" : 658658835,
+			"id" : 1975979607,
+			"id_parent" : 468046628,
 			"name" : "Object010",
 			"number_components" : 3
 		},
@@ -948,8 +1138,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 576978639,
-			"id_parent" : 658658835,
+			"id" : 1873792127,
+			"id_parent" : 468046628,
 			"name" : "City_building_030",
 			"number_components" : 3
 		},
@@ -987,8 +1177,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1148208684,
-			"id_parent" : 658658835,
+			"id" : 2092569558,
+			"id_parent" : 468046628,
 			"name" : "City_building_031",
 			"number_components" : 3
 		},
@@ -1026,8 +1216,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1505512836,
-			"id_parent" : 658658835,
+			"id" : 1494585038,
+			"id_parent" : 468046628,
 			"name" : "City_building_032",
 			"number_components" : 3
 		},
@@ -1065,8 +1255,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 927312380,
-			"id_parent" : 658658835,
+			"id" : 332298860,
+			"id_parent" : 468046628,
 			"name" : "City_building_033",
 			"number_components" : 3
 		},
@@ -1104,8 +1294,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 614328219,
-			"id_parent" : 658658835,
+			"id" : 137602929,
+			"id_parent" : 468046628,
 			"name" : "City_building_034",
 			"number_components" : 3
 		},
@@ -1143,8 +1333,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 860621347,
-			"id_parent" : 658658835,
+			"id" : 128970642,
+			"id_parent" : 468046628,
 			"name" : "City_building_035",
 			"number_components" : 3
 		},
@@ -1182,8 +1372,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 377564540,
-			"id_parent" : 658658835,
+			"id" : 435938575,
+			"id_parent" : 468046628,
 			"name" : "City_building_036",
 			"number_components" : 3
 		},
@@ -1221,8 +1411,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1221000060,
-			"id_parent" : 658658835,
+			"id" : 93147024,
+			"id_parent" : 468046628,
 			"name" : "City_building_037",
 			"number_components" : 3
 		},
@@ -1260,8 +1450,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1252494412,
-			"id_parent" : 658658835,
+			"id" : 1735827611,
+			"id_parent" : 468046628,
 			"name" : "City_building_038",
 			"number_components" : 3
 		},
@@ -1299,8 +1489,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1339971417,
-			"id_parent" : 658658835,
+			"id" : 411870506,
+			"id_parent" : 468046628,
 			"name" : "City_building_039",
 			"number_components" : 3
 		},
@@ -1338,8 +1528,8 @@
 					"type" : 2
 				}
 			],
-			"id" : 1312913630,
-			"id_parent" : 658658835,
+			"id" : 1634843482,
+			"id_parent" : 468046628,
 			"name" : "City_building_040",
 			"number_components" : 3
 		},
@@ -1377,15 +1567,15 @@
 					"type" : 2
 				}
 			],
-			"id" : 865883322,
-			"id_parent" : 658658835,
+			"id" : 657285675,
+			"id_parent" : 468046628,
 			"name" : "City_building_041",
 			"number_components" : 3
 		}
 	],
 	"Renderer" : 
 	{
-		"VSYNC" : true
+		"VSYNC" : false
 	},
 	"SceneManager" : 
 	{
@@ -1394,12 +1584,12 @@
 	"Window" : 
 	{
 		"Brightness" : 1.0,
-		"Height" : 1024,
+		"Height" : 768,
 		"Organization" : "Weep Works",
 		"Size" : 1.0,
 		"Title" : "Weep Engine",
-		"Version" : "v.0.2",
-		"Width" : 1280,
+		"Version" : "v.0.3",
+		"Width" : 1024,
 		"flags" : 
 		{
 			"Borderless" : false,

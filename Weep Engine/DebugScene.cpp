@@ -110,23 +110,54 @@ bool DebugScene::Start()
 		ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
 	}
 
-	GameObject* quad = new GameObject("UIQuad", App->game_object_manager->root);
-	quad->AddComponent(ComponentType::RENDER2D);
-	ComponentUIImage* retimage = quad->AddComponentUIImage(float2{ 100, 100 }, Rect{ 0, 0, 500, 200 }, true);
-	ComponentTexture* text = (ComponentTexture*)quad->AddComponent(ComponentType::TEXTURE);
-	App->texture->LoadTexture("Assets/Textures/Lenna.png", text);
+	//-------------------------------------------------------------------------
+	//----------------------------MAIN MENU------------------------------------
+	//-------------------------------------------------------------------------
+	GameObject* play_button = new GameObject("Play Button", App->game_object_manager->root); //child of background_image
+	play_button->AddComponent(ComponentType::RENDER2D);
+	ComponentUIButton* play_btn = play_button->AddComponentUIButton(float2{ 1024 / 2 - 110 / 2, 768 / 2 }, Rect{ 0, 0, 110, 110 }, UIButtonType::PLAY, this, false);
 
+	GameObject* background_image = new GameObject("Background Image", App->game_object_manager->root);
+	background_image->AddComponent(ComponentType::RENDER2D);
+	bg_img = background_image->AddComponentUIImage(float2{ 0, 0 }, Rect{ 0, 0, 1024, 768 }, false);
+	ComponentTexture* text_bg_img = (ComponentTexture*)background_image->AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/GUI/background_main.png", text_bg_img);
+	play_btn->parent = bg_img;
+	bg_img->childrens.push_back(play_btn);
 
-	GameObject* button = new GameObject("UIQuad", App->game_object_manager->root);
-	button->AddComponent(ComponentType::RENDER2D);
-	ComponentUIButton* retbut = button->AddComponentUIButton(float2{ 650,400 }, Rect{ 0, 0, 300, 200 }, UIButtonType::TEST,  this, false, retimage);
+	//crashes
+	//play_button->parent = background_image;
+	//background_image->childrens.push_back(play_button);
 	
-	GameObject* check_box = new GameObject("UIQuad", App->game_object_manager->root);
-	button->AddComponent(ComponentType::RENDER2D);
-	ComponentUICheckBox* ret_check_box = check_box->AddComponentUICheckBox(float2{ 300,400 }, Rect{ 0, 0, 50, 50 }, UICheckBoxType::TEST, this, false, retimage);
+	//-------------------------------------------------------------------------
+	//--------------------------CONFIGURATION----------------------------------
+	//-------------------------------------------------------------------------
+	GameObject* vsync_checkbox = new GameObject("Vsync Checkbox", App->game_object_manager->root); //child of background_window
+	vsync_checkbox->AddComponent(ComponentType::RENDER2D);
+	ComponentUICheckBox* vsync_ckbx = vsync_checkbox->AddComponentUICheckBox(float2{ 1024 / 2 - 150, 768 / 2 - 62/2 }, Rect{ 0, 0, 62, 62 }, UICheckBoxType::VSYNC, this, false);
 
+	GameObject* window_image = new GameObject("Window Image", App->game_object_manager->root);
+	window_image->AddComponent(ComponentType::RENDER2D);
+	wndw_img = window_image->AddComponentUIImage(float2{ 1024 / 2 - 401 / 2, 768 / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, true);
+	vsync_ckbx->parent = wndw_img;
+	wndw_img->childrens.push_back(vsync_ckbx);
 
-	//retimage->SetAllVisible(false);
+	ComponentTexture* text_wndw_img = (ComponentTexture*)window_image->AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/GUI/window.png", text_wndw_img);
+
+	//-------------------------------------------------------------------------
+	//-----------------------------INGAME--------------------------------------
+	//-------------------------------------------------------------------------
+	GameObject* crosshair_image = new GameObject("Crosshair Image", App->game_object_manager->root);
+	crosshair_image->AddComponent(ComponentType::RENDER2D);
+	crsshair_img = crosshair_image->AddComponentUIImage(float2{ 1024 / 2 - 35 / 2, 768 / 2 - 35 / 2 }, Rect{ 0, 0, 35, 35 }, false);
+	ComponentTexture* text_crsshair_img = (ComponentTexture*)crosshair_image->AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/GUI/crosshair.png", text_crsshair_img);
+
+	bg_img->SetAllVisible(true);
+	wndw_img->SetAllVisible(false);
+	crsshair_img->SetAllVisible(false);
+
 	App->profiler->SetGameTimeScale(1.0f);
 
 
@@ -198,9 +229,6 @@ bool DebugScene::PreUpdate(float dt)
 
 bool DebugScene::Update(float dt)
 {
-
-
-
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -218,6 +246,21 @@ bool DebugScene::Update(float dt)
 		LoadStyle("blue_yellow");
 		App->window->SetAppName("Weep Game (EXECUTING GAME MODE)");
 		App->window->SetVersion("");
+
+		if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && wndw_menu == false)
+		{
+			bg_img->SetAllVisible(false);
+			crsshair_img->SetAllVisible(false);
+			wndw_img->SetAllVisible(true);
+			wndw_menu = true;
+		}
+		else if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && wndw_menu == true)
+		{
+			bg_img->SetAllVisible(false);
+			wndw_img->SetAllVisible(false);
+			crsshair_img->SetAllVisible(true);
+			wndw_menu = false;
+		}
 	}
 	else
 	{
@@ -253,8 +296,8 @@ bool DebugScene::Update(float dt)
 	if (App->debug_scene->show_inspector)
 	{
 
-		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowPos(ImVec2(970, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(240, 768 - 50), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(784, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
 
 		//if (App->scene_manager->GetState() == PLAY)
 		//	App->debug_scene->show_inspector = false;
@@ -312,7 +355,7 @@ bool DebugScene::Update(float dt)
 	}
 
 	//-------------------------------------------------------------------------
-	//----------------------------INSPECTOR------------------------------------
+	//----------------------------RESOURCES------------------------------------
 	//-------------------------------------------------------------------------
 
 	if (App->debug_scene->show_resources)
@@ -1299,6 +1342,14 @@ bool DebugScene::ButtonEvent(const UIButtonType type)
 	case UIButtonType::TEST:
 		LOG("button clicked!! Do Something");
 		break;
+	case UIButtonType::PLAY:
+		if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
+		{
+			bg_img->SetAllVisible(false);
+			//wndw_img->SetAllVisible(false);
+			crsshair_img->SetAllVisible(true);
+		}
+		break;
 	default:
 		break;
 	}
@@ -1320,7 +1371,20 @@ bool DebugScene::CheckBoxEvent(const UICheckBoxType type, const bool is_clicked)
 		{
 			LOG("CheckBox clicked (Desactivate). Do Something");
 		}
-
+	case UICheckBoxType::VSYNC:
+		if (App->scene_manager->GetState() == SCENE_STATE::PLAY)
+		{
+			if (is_clicked)
+			{
+				App->renderer3D->SetVsync(true);
+				LOG("CheckBox clicked (activate). vsync on");
+			}
+			else
+			{
+				App->renderer3D->SetVsync(false);
+				LOG("CheckBox clicked (activate). vsync off");
+			}
+		}
 	default:
 		break;
 	}
