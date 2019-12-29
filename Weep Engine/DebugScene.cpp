@@ -124,6 +124,10 @@ bool DebugScene::Start()
 	App->texture->LoadTexture("Assets/GUI/background_main.png", text_bg_img);
 	play_btn->parent = bg_img;
 	bg_img->childrens.push_back(play_btn);
+
+	//crashes
+	//play_button->parent = background_image;
+	//background_image->childrens.push_back(play_button);
 	
 	//-------------------------------------------------------------------------
 	//--------------------------CONFIGURATION----------------------------------

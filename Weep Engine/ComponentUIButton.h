@@ -25,6 +25,8 @@ public:
 	void PreUpdate() override;
 	void PostUpdate() override;
 	void CleanUp() override;
+	void InspectorDraw() override;
+
 public:
 	Module* listener = nullptr;
 	UIButtonType button_type;
