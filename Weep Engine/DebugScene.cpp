@@ -275,6 +275,9 @@ bool DebugScene::Update(float dt)
 		LoadStyle("green_purple");
 		App->window->SetAppName(name_input_buffer);
 		App->window->SetVersion(version_input_buffer);
+		bg_img->SetAllVisible(true);
+		wndw_img->SetAllVisible(false);
+		crsshair_img->SetAllVisible(false);
 	}
 
 	//-------------------------------------------------------------------------

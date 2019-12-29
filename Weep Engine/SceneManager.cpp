@@ -102,7 +102,7 @@ void SceneManager::Edit()
 		pause = false;
 		step = false;
 
-		LoadTmpScene();
+		//LoadTmpScene();
 
 		App->profiler->SetGameTime(0.0f);
 
@@ -115,7 +115,7 @@ void SceneManager::Play()
 	{
 		state = PLAY;
 
-		SaveTmpScene();
+		//SaveTmpScene();
 	}
 }
 
