@@ -48,6 +48,13 @@
         </br></br> <li>The Resources structure that manages the meshes and textures, creating its .meta file just like Unity.</li>
         </br></br> <li>The GUI where there are some classes that represent diferent elements of gui such as: images, buttons, checkboxes and input texts.</li>
         </ul>
+        <h1>The User Interface</h1>
+        In order to create a UIElement, you need to create an empty GameObject and then add 2 components, the Render2D in order to render with GLORTHO and the component of your choice (Button, Image or Checkbox);
+        </br></br>&nbsp &nbsp &nbsp &nbsp NOTE: It's important to create first the childs in order to print them in front of the parents. Then when you create the parents, you add your childs by doing this:
+        </br></br>&nbsp &nbsp &nbsp &nbsp vsync_img->parent = wndw_img;
+        </br></br>&nbsp &nbsp &nbsp &nbsp wndw_img->childrens.push_back(vsync_img);
+        </br></br>For exemple,in this case, the vsync image is a child of wndw image.
+        </br></br>Keep in mind that if you want to create an image you also have to add a Texture Component with its path, but if you create a Button you'll have to change the AddComponentUIButton function, same applies to Checkbox.
         </br></br><img src="images/MainMenu.gif" alt="UI gif" width="1400" class="center">
         <img src="images/InGameMenu.gif" alt="UI gif" width="1400" class="center">
         </p>
