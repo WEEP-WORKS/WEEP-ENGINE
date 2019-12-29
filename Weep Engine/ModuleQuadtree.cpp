@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "App.h"
 #include "ModuleInput.h"
+#include "SceneManager.h"
 
 ModuleQuadtree::ModuleQuadtree()
 {
@@ -33,7 +34,11 @@ bool ModuleQuadtree::PreUpdate(float dt)
 
 bool ModuleQuadtree::PostUpdate(float dt)
 {
-	Draw();
+	if (App->scene_manager->GetState() == SCENE_STATE::EDIT)
+	{
+		Draw();
+	}
+
 	return true;
 }
 

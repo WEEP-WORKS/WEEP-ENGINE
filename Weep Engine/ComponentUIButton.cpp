@@ -4,6 +4,7 @@
 #include "ComponentRender2D.h"
 #include "App.h"
 #include "ModuleInput.h"
+//#include "ModuleWindow.h"
 
 ComponentUIButton::ComponentUIButton(UIType _type, float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent) : ComponentUIObjectBase(local_pos, rect_spritesheet_original, draggable, parent)
 {
@@ -68,6 +69,11 @@ void ComponentUIButton::PostUpdate()
 	//App->render->DrawQuad(rect_world, 255, 0, 0, 50, true, false);
 	if(GetVisible())
 		object->GetRender2D()->Render(vertexs_quad, uv_quad, current_texture_id);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
+
+	//Rect window = App->window->GetWindowRect();
+	//float2 position = local_pos;
+	//float2{ (float)window.right / 2 - 110 / 2, (float)window.bottom / 2
+	//SetPos(position - local_pos);
 
 	return;
 }

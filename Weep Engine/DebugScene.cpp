@@ -35,6 +35,7 @@
 #include "ComponentUIButton.h"
 #include "ComponentUIImage.h"
 #include "ComponentUICheckBox.h"
+#include "MathGeoLib/include/Math/Rect.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -110,12 +111,13 @@ bool DebugScene::Start()
 		ret = App->importer->LoadFBX("Assets/FBX/Street environment_V01.fbx");
 	}
 
+	Rect window = App->window->GetWindowRect();
 	//-------------------------------------------------------------------------
 	//----------------------------MAIN MENU------------------------------------
 	//-------------------------------------------------------------------------
 	GameObject* play_button = new GameObject("Play Button", App->game_object_manager->root); //child of background_image
 	play_button->AddComponent(ComponentType::RENDER2D);
-	ComponentUIButton* play_btn = play_button->AddComponentUIButton(float2{ 1024 / 2 - 110 / 2, 768 / 2 }, Rect{ 0, 0, 110, 110 }, UIButtonType::PLAY, this, false);
+	ComponentUIButton* play_btn = play_button->AddComponentUIButton(float2{ (float)window.right / 2 - 110 / 2, (float)window.bottom / 2 }, Rect{ 0, 0, 110, 110 }, UIButtonType::PLAY, this, false);
 
 	GameObject* background_image = new GameObject("Background Image", App->game_object_manager->root);
 	background_image->AddComponent(ComponentType::RENDER2D);
@@ -134,17 +136,17 @@ bool DebugScene::Start()
 	//-------------------------------------------------------------------------
 	GameObject* vsync_checkbox = new GameObject("Vsync Checkbox", App->game_object_manager->root); //child of background_window
 	vsync_checkbox->AddComponent(ComponentType::RENDER2D);
-	ComponentUICheckBox* vsync_ckbx = vsync_checkbox->AddComponentUICheckBox(float2{ 1024 / 2 - 150, 768 / 2 - 62/2 }, Rect{ 0, 0, 62, 62 }, UICheckBoxType::VSYNC, this, false);
+	ComponentUICheckBox* vsync_ckbx = vsync_checkbox->AddComponentUICheckBox(float2{ (float)window.right / 2 - (float)window.right / 6, (float)window.bottom / 2 - 62/2 }, Rect{ 0, 0, 62, 62 }, UICheckBoxType::VSYNC, this, false); //150
 
 	GameObject* vsync_image = new GameObject("Vsync Text", App->game_object_manager->root);
 	vsync_image->AddComponent(ComponentType::RENDER2D);
-	ComponentUIImage* vsync_img = vsync_image->AddComponentUIImage(float2{ 1024 / 2 - 107 / 2, 768 / 2 - 23 / 2 }, Rect{ 0, 0, 107, 23 }, false);
+	ComponentUIImage* vsync_img = vsync_image->AddComponentUIImage(float2{ (float)window.right / 2 - 107 / 2, (float)window.bottom / 2 - 23 / 2 }, Rect{ 0, 0, 107, 23 }, false);
 	ComponentTexture* text_vsync_img = (ComponentTexture*)vsync_image->AddComponent(ComponentType::TEXTURE);
 	App->texture->LoadTexture("Assets/GUI/vsync.png", text_vsync_img);
 
 	GameObject* window_image = new GameObject("Window Image", App->game_object_manager->root);
 	window_image->AddComponent(ComponentType::RENDER2D);
-	wndw_img = window_image->AddComponentUIImage(float2{ 1024 / 2 - 401 / 2, 768 / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, false);
+	wndw_img = window_image->AddComponentUIImage(float2{ (float)window.right / 2 - 401 / 2, (float)window.bottom / 2 - 253 / 2}, Rect{ 0, 0, 401, 253 }, false);
 	vsync_ckbx->parent = wndw_img;
 	wndw_img->childrens.push_back(vsync_ckbx);
 	vsync_img->parent = wndw_img;
@@ -158,7 +160,7 @@ bool DebugScene::Start()
 	//-------------------------------------------------------------------------
 	GameObject* crosshair_image = new GameObject("Crosshair Image", App->game_object_manager->root);
 	crosshair_image->AddComponent(ComponentType::RENDER2D);
-	crsshair_img = crosshair_image->AddComponentUIImage(float2{ 1024 / 2 - 35 / 2, 768 / 2 - 35 / 2 }, Rect{ 0, 0, 35, 35 }, false);
+	crsshair_img = crosshair_image->AddComponentUIImage(float2{ (float)window.right / 2 - 35 / 2, (float)window.bottom / 2 - 35 / 2 }, Rect{ 0, 0, 35, 35 }, false);
 	ComponentTexture* text_crsshair_img = (ComponentTexture*)crosshair_image->AddComponent(ComponentType::TEXTURE);
 	App->texture->LoadTexture("Assets/GUI/crosshair.png", text_crsshair_img);
 

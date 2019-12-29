@@ -38,7 +38,7 @@ void ComponentRender2D::Render(BuffersData<float>& vertexs, BuffersData<float>& 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0.0, rect.right, rect.bottom, 0.0, 1.0, -1.0);
+		glOrtho(0.0, rect.right, rect.bottom, 0.0, 0.0, -0.001);
 
 		//Initialize Modelview Matrix
 		glMatrixMode(GL_MODELVIEW);
