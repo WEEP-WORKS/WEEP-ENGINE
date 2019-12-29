@@ -34,6 +34,7 @@
 #include "SceneManager.h"
 #include "ComponentUIButton.h"
 #include "ComponentUIImage.h"
+#include "ComponentUICheckBox.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -120,6 +121,11 @@ bool DebugScene::Start()
 	button->AddComponent(ComponentType::RENDER2D);
 	ComponentUIButton* retbut = button->AddComponentUIButton(float2{ 650,400 }, Rect{ 0, 0, 300, 200 }, UIButtonType::TEST,  this, false, retimage);
 	
+	GameObject* check_box = new GameObject("UIQuad", App->game_object_manager->root);
+	button->AddComponent(ComponentType::RENDER2D);
+	ComponentUICheckBox* ret_check_box = check_box->AddComponentUICheckBox(float2{ 300,400 }, Rect{ 0, 0, 50, 50 }, UICheckBoxType::TEST, this, false, retimage);
+
+
 	//retimage->SetAllVisible(false);
 	App->profiler->SetGameTimeScale(1.0f);
 
@@ -1297,5 +1303,26 @@ bool DebugScene::ButtonEvent(const UIButtonType type)
 		break;
 	}
 
+	return true;
+}
+
+bool DebugScene::CheckBoxEvent(const UICheckBoxType type, const bool is_clicked)
+{
+	//if is_clicked is true, the check box is it activating in this frame.
+	switch (type)
+	{
+	case UICheckBoxType::TEST:
+		if (is_clicked)
+		{
+			LOG("CheckBox clicked (activate). Do Something");
+		}
+		else
+		{
+			LOG("CheckBox clicked (Desactivate). Do Something");
+		}
+
+	default:
+		break;
+	}
 	return true;
 }

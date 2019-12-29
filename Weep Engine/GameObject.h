@@ -17,9 +17,11 @@ class ComponentCamera;
 class ComponentRender2D;
 class ComponentUIImage;
 class ComponentUIButton;
+class ComponentUICheckBox;
 class Module;
 enum class ComponentType;
 enum class UIButtonType;
+enum class UICheckBoxType;
 
 class GameObject
 {
@@ -38,6 +40,8 @@ public:
 	Component* AddComponent(const ComponentType&);
 	ComponentUIImage* AddComponentUIImage(float2 local_pos, Rect rect_spritesheet_original, bool draggable = false, ComponentUIObjectBase* parent = nullptr);
 	ComponentUIButton* AddComponentUIButton(float2 local_pos, Rect rect_spritesheet_original, UIButtonType type, Module* listener, bool draggable = false, ComponentUIObjectBase* parent = nullptr);
+	ComponentUICheckBox* AddComponentUICheckBox(float2 local_pos, Rect rect_spritesheet_original, UICheckBoxType type, Module* listener, bool draggable = false, ComponentUIObjectBase* parent = nullptr);
+
 
 	void AddToComponentList(Component * ret);
 

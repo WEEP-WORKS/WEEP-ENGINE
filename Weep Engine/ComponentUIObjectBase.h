@@ -10,10 +10,8 @@ enum class UIType
 {
 	NONE = -1,
 	IMAGE,
-	TEXT,
 	BUTTON,
-	INPUTTEXT,
-	SCROLLBAR
+	CHECKBOX
 };
 
 class ComponentUIObjectBase : public Component
@@ -30,7 +28,6 @@ public:
 
 	const bool GetVisible() const;
 	void SetAllVisible(const bool visible);
-	virtual void SetFocusThis(bool focus_value);
 	void SetPos(float2 mouse_move);
 
 
@@ -51,7 +48,6 @@ public:
 	BuffersData<float>	vertexs_quad;
 	BuffersData<float>	uv_quad;
 protected:
-	bool focus = false;
 	bool visible = true;
 };
 

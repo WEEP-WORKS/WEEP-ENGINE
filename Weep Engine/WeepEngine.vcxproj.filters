@@ -421,6 +421,9 @@
     <ClInclude Include="ComponentUIButton.h">
       <Filter>Sources\GameObject\Components</Filter>
     </ClInclude>
+    <ClInclude Include="ComponentUICheckBox.h">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -655,6 +658,9 @@
       <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
     <ClCompile Include="ComponentUIButton.cpp">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUICheckBox.cpp">
       <Filter>Sources\GameObject\Components</Filter>
     </ClCompile>
   </ItemGroup>

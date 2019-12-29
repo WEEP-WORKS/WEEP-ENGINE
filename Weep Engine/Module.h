@@ -2,6 +2,7 @@
 
 class Application;
 enum class UIButtonType;
+enum class UICheckBoxType;
 
 using namespace std;
 
@@ -65,6 +66,11 @@ public:
 	}
 
 	virtual bool ButtonEvent(const UIButtonType type)
+	{
+		return true;
+	}
+
+	virtual bool CheckBoxEvent(const UICheckBoxType type, const bool is_clicked)
 	{
 		return true;
 	}

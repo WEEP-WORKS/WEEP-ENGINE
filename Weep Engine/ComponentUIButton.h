@@ -1,5 +1,5 @@
-#ifndef __UIBUTTON_H__
-#define __UIBUTTON_H__
+#ifndef __COMPONENTUIBUTTON_H__
+#define __COMPONENTUIBUTTON_H__
 
 #include "ComponentUIObjectBase.h"
 
@@ -36,4 +36,4 @@ public:
 
 };
 
-#endif // !__UIBUTTON_H__
+#endif // !__COMPONENTUIBUTTON_H__

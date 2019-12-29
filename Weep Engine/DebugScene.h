@@ -30,6 +30,8 @@ public:
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	bool ButtonEvent(const UIButtonType type) override;
+	bool CheckBoxEvent(const UICheckBoxType type, const bool is_clicked) override;
+
 
 	bool PostUpdate(float dt);
 

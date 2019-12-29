@@ -20,6 +20,7 @@
 #include "ComponentRender2D.h".
 #include "ComponentUIImage.h"
 #include "ComponentUIButton.h"
+#include "ComponentUICheckBox.h"
 
 GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
@@ -167,6 +168,9 @@ ComponentUIObjectBase* GameObject::AddComponentUI(const UIType& type, float2 loc
 	case UIType::BUTTON:
 		ret = new ComponentUIButton(type, local_pos, rect_spritesheet_original, draggable, parent);
 		break;
+	case UIType::CHECKBOX:
+		ret = new ComponentUICheckBox(type, local_pos, rect_spritesheet_original, draggable, parent);
+		break;
 	default:
 		break;
 	}
@@ -204,6 +208,25 @@ ComponentUIButton* GameObject::AddComponentUIButton(float2 local_pos, Rect rect_
 	ret->current_texture_id = ret->texture_id_background;
 	ret->listener = listener;
 	ret->button_type = type;
+
+	return ret;
+}
+
+ComponentUICheckBox * GameObject::AddComponentUICheckBox(float2 local_pos, Rect rect_spritesheet_original, UICheckBoxType type, Module * listener, bool draggable, ComponentUIObjectBase * parent)
+{
+	ComponentUICheckBox* ret = (ComponentUICheckBox*)AddComponentUI(UIType::CHECKBOX, local_pos, rect_spritesheet_original, draggable, parent);
+
+	ComponentTexture* texture_background = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Lenna.png", texture_background);
+	ret->texture_id_background = texture_background->GetResource(texture_background->GetResourceID())->id_texture;
+
+	ComponentTexture* texture_clicked = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Building_V01_C.png", texture_clicked);
+	ret->texture_id_clicked = texture_clicked->GetResource(texture_clicked->GetResourceID())->id_texture;
+
+	ret->current_texture_id = ret->texture_id_background;
+	ret->listener = listener;
+	ret->check_box_type = type;
 
 	return ret;
 }

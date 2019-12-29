@@ -76,14 +76,11 @@ void ComponentUIObjectBase::SetBufferVertexPos()
 }
 void ComponentUIObjectBase::PreUpdate()
 {
-	/*if (MouseInRect() && App->input->GetMouseButton(0) == KEY_DOWN)
-		App->gui->SetFocus(this);*/
 
 	return;
 }
 void ComponentUIObjectBase::PostUpdate()
 {
-	//App->render->DrawQuad(rect_world, 255, 0, 0, 200, true, false);
 	if (GetVisible())
 		object->GetRender2D()->Render(vertexs_quad, uv_quad, object->GetTextureActivated()->GetResource(object->GetTextureActivated()->GetResourceID())->id_texture);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
 
@@ -219,11 +216,6 @@ void ComponentUIObjectBase::SetAllVisible(const bool visible)
 void ComponentUIObjectBase::SetVisible(const bool visible)
 {
 	this->visible = visible;
-}
-
-void ComponentUIObjectBase::SetFocusThis(bool focus_value)
-{
-	focus = focus_value;
 }
 
 void ComponentUIObjectBase::SetPos(float2 mouse_move)
