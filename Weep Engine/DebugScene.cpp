@@ -253,8 +253,8 @@ bool DebugScene::Update(float dt)
 	if (App->debug_scene->show_inspector)
 	{
 
-		ImGui::SetNextWindowSize(ImVec2(310, 984), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowPos(ImVec2(970, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(240, 768 - 50), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowPos(ImVec2(784, 45), ImGuiCond_::ImGuiCond_FirstUseEver);
 
 		//if (App->scene_manager->GetState() == PLAY)
 		//	App->debug_scene->show_inspector = false;
@@ -312,7 +312,7 @@ bool DebugScene::Update(float dt)
 	}
 
 	//-------------------------------------------------------------------------
-	//----------------------------INSPECTOR------------------------------------
+	//----------------------------RESOURCES------------------------------------
 	//-------------------------------------------------------------------------
 
 	if (App->debug_scene->show_resources)
