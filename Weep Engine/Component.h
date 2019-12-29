@@ -17,10 +17,6 @@ enum class ComponentType
 	RENDER2D
 };
 
-
-
-
-
 class Component
 {
 public:
@@ -28,6 +24,7 @@ public:
 	GameObject*		object = nullptr;
 
 public:
+	virtual void PreUpdate() {};
 	virtual void Update() {};
 	virtual void PostUpdate() {};
 

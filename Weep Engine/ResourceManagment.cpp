@@ -9,8 +9,9 @@
 
 ResourceManagment::ResourceManagment()
 {
-	SetName("Texture");
+	SetName("ResourceManagement");
 }
+
 UID ResourceManagment::CreateNewResource(Resource::Type type)
 {
 	Resource* ret = nullptr;

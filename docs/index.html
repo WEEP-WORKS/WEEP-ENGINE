@@ -37,8 +37,19 @@
         <h1>What is the engine about?</h1>
         <p>3D Engine made by Jorge Gemas and Lluís Moreu for the 3D engines subject during the 3rd year of Game Design and Game Development degree at CITM.
         </br></br>The engine was born for the 3d engines assignment and has a User Interface subsytem.
-        </br></br><img src="images/.jpg" alt="Client BT" width="1400" class="center">
-        <img src="images/.jpg" alt="DJ BT" width="1400" class="center">
+        </br></br>On the top of everything there is the main module called App.cpp . This module manages all the other modules calling in a loop its respective Awake, PreUpdate, Update, Postupdte, Cleanup that they share through a base class Module.h . Do not forget that there is a Main.cpp that has a switch of the different states said before.
+        
+        <h1>Core subsystems</h1>
+        Then the game is divided in 5 main blocks:
+        <ul>
+                    <li>The Scene where everything is printed managed by a module called SceneManager, including the ImGui menus.</li>
+        </br></br> <li>The Modules that manage different aspects of the game such as: camera, input, importer, renderer, texture, window, etc…</li>
+        </br></br> <li>The GameObject structure with its components such as: camera, mesh, texture, transform and the UI components; everything managed by a module called GameObjectManager.</li>
+        </br></br> <li>The Resources structure that manages the meshes and textures, creating its .meta file just like Unity.</li>
+        </br></br> <li>The GUI where there are some classes that represent diferent elements of gui such as: images, buttons, checkboxes and input texts.</li>
+        </ul>
+        </br></br><img src="images/.gif" alt="UI gif" width="1400" class="center">
+        <img src="images/.gif" alt="UI gif" width="1400" class="center">
         </p>
     </section>
     <section class="video_gallery">

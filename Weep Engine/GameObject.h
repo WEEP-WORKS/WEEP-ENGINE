@@ -6,6 +6,7 @@
 #include "Globals.h"
 #include "ComponentTransform.h"
 #include "MathGeoLib/include\MathGeoLib.h"
+#include "ComponentUIObjectBase.h"
 
 #include "jsoncpp/json/json.h"
 
@@ -13,8 +14,14 @@ class Component;
 class ComponentTexture;
 class ComponentMesh;
 class ComponentCamera;
+class ComponentRender2D;
+class ComponentUIImage;
+class ComponentUIButton;
+class ComponentUICheckBox;
+class Module;
 enum class ComponentType;
-
+enum class UIButtonType;
+enum class UICheckBoxType;
 
 class GameObject
 {
@@ -31,7 +38,12 @@ public:
 	void Load(const Json::Value&);
 
 	Component* AddComponent(const ComponentType&);
-	void AddToComponentList(Component * &ret);
+	ComponentUIImage* AddComponentUIImage(float2 local_pos, Rect rect_spritesheet_original, bool draggable = false, ComponentUIObjectBase* parent = nullptr);
+	ComponentUIButton* AddComponentUIButton(float2 local_pos, Rect rect_spritesheet_original, UIButtonType type, Module* listener, bool draggable = false, ComponentUIObjectBase* parent = nullptr);
+	ComponentUICheckBox* AddComponentUICheckBox(float2 local_pos, Rect rect_spritesheet_original, UICheckBoxType type, Module* listener, bool draggable = false, ComponentUIObjectBase* parent = nullptr);
+
+
+	void AddToComponentList(Component * ret);
 
 	void SetSelected(const bool & set);
 
@@ -57,6 +69,7 @@ public:
 
 	ComponentCamera * GetCam() const;
 
+	ComponentRender2D* GetRender2D() const;
 	ComponentTransform* GetTransform() const;
 	const ComponentTransform* ConstGetTransform() const;
 
@@ -92,6 +105,9 @@ public:
 	const bool IsParentOfMyParents(const GameObject* possible_parent) const;
 	const bool IsThisGOId(const uint& id) const ;
 	void TestRay(float& distance, GameObject*& closest);//const LineSegment & segment, GameObject *& closest, float & dist
+
+private:
+	ComponentUIObjectBase* AddComponentUI(const UIType& type, float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent);
 
 
 public:

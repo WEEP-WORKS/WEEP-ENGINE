@@ -12,9 +12,15 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleQuadtree.h"
+#include "ModuleTexture.h"
 #include <list>
 
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
+#include "ComponentRender2D.h".
+#include "ComponentUIImage.h"
+#include "ComponentUIButton.h"
+#include "ComponentUICheckBox.h"
 
 GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
@@ -41,6 +47,14 @@ void GameObject::PreUpdate()
 	if (IsActive())
 	{
 		isInsideFrustum = false;
+
+		for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+		{
+			if ((*iter)->IsActive())
+			{
+				(*iter)->PreUpdate();
+			}
+		}
 	}
 }
 
@@ -142,7 +156,82 @@ Component* GameObject::AddComponent(const ComponentType& type)
 	return ret;
 }
 
-void GameObject::AddToComponentList(Component * &ret)
+ComponentUIObjectBase* GameObject::AddComponentUI(const UIType& type, float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent)
+{
+	ComponentUIObjectBase* ret = nullptr;
+
+	switch (type)
+	{
+	case UIType::IMAGE:
+		ret = new ComponentUIImage(type, local_pos, rect_spritesheet_original, draggable, parent);
+		break;
+	case UIType::BUTTON:
+		ret = new ComponentUIButton(type, local_pos, rect_spritesheet_original, draggable, parent);
+		break;
+	case UIType::CHECKBOX:
+		ret = new ComponentUICheckBox(type, local_pos, rect_spritesheet_original, draggable, parent);
+		break;
+	default:
+		break;
+	}
+
+	if (ret != nullptr)
+		AddToComponentList((Component*)ret);
+
+	return ret;
+}
+
+ComponentUIImage* GameObject::AddComponentUIImage(float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent)
+{
+	ComponentUIImage* ret = (ComponentUIImage*)AddComponentUI(UIType::IMAGE, local_pos, rect_spritesheet_original, draggable, parent);
+	//ComponentTexture* texture = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+
+	return ret;
+}
+
+ComponentUIButton* GameObject::AddComponentUIButton(float2 local_pos, Rect rect_spritesheet_original, UIButtonType type, Module* listener, bool draggable, ComponentUIObjectBase* parent)
+{
+	ComponentUIButton* ret = (ComponentUIButton*)AddComponentUI(UIType::BUTTON, local_pos, rect_spritesheet_original, draggable, parent);
+	
+	ComponentTexture* texture_background = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Lenna.png", texture_background);
+	ret->texture_id_background = texture_background->GetResource(texture_background->GetResourceID())->id_texture;
+
+	ComponentTexture* texture_hover = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Baker_house.png", texture_hover);
+	ret->texture_id_hover = texture_hover->GetResource(texture_hover->GetResourceID())->id_texture;
+
+	ComponentTexture* texture_clicked = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Building_V01_C.png", texture_clicked);
+	ret->texture_id_clicked = texture_clicked->GetResource(texture_clicked->GetResourceID())->id_texture;
+
+	ret->current_texture_id = ret->texture_id_background;
+	ret->listener = listener;
+	ret->button_type = type;
+
+	return ret;
+}
+
+ComponentUICheckBox * GameObject::AddComponentUICheckBox(float2 local_pos, Rect rect_spritesheet_original, UICheckBoxType type, Module * listener, bool draggable, ComponentUIObjectBase * parent)
+{
+	ComponentUICheckBox* ret = (ComponentUICheckBox*)AddComponentUI(UIType::CHECKBOX, local_pos, rect_spritesheet_original, draggable, parent);
+
+	ComponentTexture* texture_background = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Lenna.png", texture_background);
+	ret->texture_id_background = texture_background->GetResource(texture_background->GetResourceID())->id_texture;
+
+	ComponentTexture* texture_clicked = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Building_V01_C.png", texture_clicked);
+	ret->texture_id_clicked = texture_clicked->GetResource(texture_clicked->GetResourceID())->id_texture;
+
+	ret->current_texture_id = ret->texture_id_background;
+	ret->listener = listener;
+	ret->check_box_type = type;
+
+	return ret;
+}
+
+void GameObject::AddToComponentList(Component * ret)
 {
 	ret->object = this;
 	components.push_back(ret);
@@ -243,6 +332,19 @@ ComponentCamera* GameObject::GetCam() const
 		if ((*iter)->type == ComponentType::CAMERA)
 		{
 			return (ComponentCamera*)(*iter);
+		}
+	}
+
+	return nullptr;
+}
+
+ComponentRender2D* GameObject::GetRender2D() const
+{
+	for (std::vector<Component*>::const_iterator iter = components.begin(); iter != components.end(); ++iter)
+	{
+		if ((*iter)->type == ComponentType::RENDER2D)
+		{
+			return (ComponentRender2D*)(*iter);
 		}
 	}
 

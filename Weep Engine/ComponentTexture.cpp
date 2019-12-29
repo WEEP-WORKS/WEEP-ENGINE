@@ -19,7 +19,9 @@ void ComponentTexture::ActivateThisTexture()
 
 	}
 	texture_active = true;
+	if(object->GetMesh())
 	object->GetMesh()->SetTexture(this);
+
 	LOG("The texture has been activated correctly");
 
 }
@@ -33,6 +35,7 @@ bool ComponentTexture::IsTextureActive() const
 void ComponentTexture::DesactivateTexture()
 {
 	texture_active = false;
+	if (object->GetMesh())
 	object->GetMesh()->SetTexture(nullptr);
 }
 
