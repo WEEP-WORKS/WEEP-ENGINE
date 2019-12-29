@@ -122,7 +122,7 @@ bool DebugScene::Start()
 	ComponentUIButton* retbut = button->AddComponentUIButton(float2{ 650,400 }, Rect{ 0, 0, 300, 200 }, UIButtonType::TEST,  this, false, retimage);
 	
 	GameObject* check_box = new GameObject("UIQuad", App->game_object_manager->root);
-	button->AddComponent(ComponentType::RENDER2D);
+	check_box->AddComponent(ComponentType::RENDER2D);
 	ComponentUICheckBox* ret_check_box = check_box->AddComponentUICheckBox(float2{ 300,400 }, Rect{ 0, 0, 50, 50 }, UICheckBoxType::TEST, this, false, retimage);
 
 
