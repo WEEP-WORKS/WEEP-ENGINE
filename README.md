@@ -3,7 +3,7 @@ An OPEN-GL Engine for educational porpouses. Created by two hetties that use urb
 
 # Version of the game
 
-WeepEngine v.0.3
+WeepEngine v.0.4
 
 ## Description
 
@@ -19,12 +19,18 @@ Github repository: https://github.com/WEEP-WORKS/WEEP-ENGINE
 
 Github organization: https://github.com/WEEP-WORKS/
 
+Website: https://weep-works.github.io/WEEP-ENGINE/
+
 ## Controls
 ### General controls:
 
 - ESC (quit).
 
 - LSHIFT + P (Open Configuration).
+
+- While in Play Mode and InGameMenu F1 (Open Window with vsync checkbox).
+
+- PlayMode to see the UI Menus.
 
 ### Quadtree Debug controls:
 
@@ -81,6 +87,10 @@ Jorge Gemas -> GameObject Parent-Child structure, Own File Formats, Scene Serial
 
 Lluís Moreu -> Transform component, Load transformations from assimp, New Camera editor and Component, Mouse Picking and Gizmos, Time management including Gamemode & Anything including ImGui.
 
+### Assignment 3
+Jorge Gemas -> Help with the Render of UI,  made all related with the GameObjects and components of the UI (image, button, checkbox), less the inspector. 
+
+Lluís Moreu -> Render of the UI, inspector of the UI Components, Website & building the Demo with its atlas separated.
 ## MIT License
 
 Copyright (c) [2019] [Lluís Moreu & Jorge Gemas]
