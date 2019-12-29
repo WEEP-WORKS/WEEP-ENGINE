@@ -220,7 +220,6 @@ section div.videos{
   background: rgb(255, 199, 46);
   margin: 20px;
   margin-top:0%;
-  padding: 5px 20px 20px 20px;
 
   display: flex;
   flex-direction: row;
@@ -231,7 +230,7 @@ section div.videos{
 section div.videos figure {
   margin: auto;
   padding: 5px;
-  width: 200px;
+  width: -200px;
 }
 
 section div.videos figure iframe {
