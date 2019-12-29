@@ -20,14 +20,12 @@ class ComponentUIObjectBase : public Component
 {
 public:
 	ComponentUIObjectBase(float2 pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent);
-	virtual void PreUpdate();
-	virtual void Update();
-	virtual void CleanUp();
-	void SetAllPos(float2 &mouse_move);
-	virtual void SetPos(float2 & mouse_move);
-	virtual void PostUpdate();
+	virtual void PreUpdate() override;
+	virtual void Update() override;
+	virtual void CleanUp() override;
+	virtual void PostUpdate() override;
 
-	const bool MouseInRect() const;
+	const bool MouseInRect();
 
 	const bool GetVisible() const;
 	void SetAllVisible(const bool visible);

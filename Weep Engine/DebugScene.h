@@ -29,7 +29,8 @@ public:
 	void init2d();
 	bool PreUpdate(float dt);
 	bool Update(float dt);
-	void Rect2D();
+	bool ButtonEvent(const UIButtonType type) override;
+
 	bool PostUpdate(float dt);
 
 	void Tools();

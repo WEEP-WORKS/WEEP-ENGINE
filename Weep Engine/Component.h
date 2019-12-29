@@ -24,6 +24,7 @@ public:
 	GameObject*		object = nullptr;
 
 public:
+	virtual void PreUpdate() {};
 	virtual void Update() {};
 	virtual void PostUpdate() {};
 

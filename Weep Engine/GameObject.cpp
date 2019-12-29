@@ -12,11 +12,14 @@
 #include "ModuleInput.h"
 #include "ModuleWindow.h"
 #include "ModuleQuadtree.h"
+#include "ModuleTexture.h"
 #include <list>
 
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
 #include "ComponentRender2D.h".
 #include "ComponentUIImage.h"
+#include "ComponentUIButton.h"
 
 GameObject::GameObject(std::string name, GameObject* parent, bool is_static) : name(name), parent(parent), is_static(is_static)
 {
@@ -43,6 +46,14 @@ void GameObject::PreUpdate()
 	if (IsActive())
 	{
 		isInsideFrustum = false;
+
+		for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
+		{
+			if ((*iter)->IsActive())
+			{
+				(*iter)->PreUpdate();
+			}
+		}
 	}
 }
 
@@ -148,19 +159,13 @@ ComponentUIObjectBase* GameObject::AddComponentUI(const UIType& type, float2 loc
 {
 	ComponentUIObjectBase* ret = nullptr;
 
-	/*for (std::vector<Component*>::iterator iter = components.begin(); iter != components.end(); ++iter)
-	{
-		if ((*iter)->type == type && type != ComponentType::TEXTURE)
-		{
-			LOG("This game object already has a component of this type. Create another game object and add this component!");
-			return ret;
-		}
-	}*/
-
 	switch (type)
 	{
 	case UIType::IMAGE:
 		ret = new ComponentUIImage(type, local_pos, rect_spritesheet_original, draggable, parent);
+		break;
+	case UIType::BUTTON:
+		ret = new ComponentUIButton(type, local_pos, rect_spritesheet_original, draggable, parent);
 		break;
 	default:
 		break;
@@ -175,7 +180,30 @@ ComponentUIObjectBase* GameObject::AddComponentUI(const UIType& type, float2 loc
 ComponentUIImage* GameObject::AddComponentUIImage(float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent)
 {
 	ComponentUIImage* ret = (ComponentUIImage*)AddComponentUI(UIType::IMAGE, local_pos, rect_spritesheet_original, draggable, parent);
-	ComponentTexture* texture = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	//ComponentTexture* texture = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+
+	return ret;
+}
+
+ComponentUIButton* GameObject::AddComponentUIButton(float2 local_pos, Rect rect_spritesheet_original, UIButtonType type, Module* listener, bool draggable, ComponentUIObjectBase* parent)
+{
+	ComponentUIButton* ret = (ComponentUIButton*)AddComponentUI(UIType::BUTTON, local_pos, rect_spritesheet_original, draggable, parent);
+	
+	ComponentTexture* texture_background = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Lenna.png", texture_background);
+	ret->texture_id_background = texture_background->GetResource(texture_background->GetResourceID())->id_texture;
+
+	ComponentTexture* texture_hover = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Baker_house.png", texture_hover);
+	ret->texture_id_hover = texture_hover->GetResource(texture_hover->GetResourceID())->id_texture;
+
+	ComponentTexture* texture_clicked = (ComponentTexture*)AddComponent(ComponentType::TEXTURE);
+	App->texture->LoadTexture("Assets/Textures/Building_V01_C.png", texture_clicked);
+	ret->texture_id_clicked = texture_clicked->GetResource(texture_clicked->GetResourceID())->id_texture;
+
+	ret->current_texture_id = ret->texture_id_background;
+	ret->listener = listener;
+	ret->button_type = type;
 
 	return ret;
 }

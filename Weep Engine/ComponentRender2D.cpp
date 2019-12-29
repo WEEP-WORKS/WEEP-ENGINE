@@ -29,7 +29,7 @@ void ComponentRender2D::CleanUp()
 
 
 
-void ComponentRender2D::Render(BuffersData<float>& vertexs, BuffersData<float>& uvs)
+void ComponentRender2D::Render(BuffersData<float>& vertexs, BuffersData<float>& uvs, uint texture_id)
 {
 	Rect rect = App->window->GetWindowRect();
 
@@ -61,7 +61,7 @@ void ComponentRender2D::Render(BuffersData<float>& vertexs, BuffersData<float>& 
 
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	//bind texture
-	glBindTexture(GL_TEXTURE_2D, object->GetTextureActivated()->GetResource(object->GetTextureActivated()->GetResourceID())->id_texture);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 
 	glDrawArrays(GL_QUADS, 0, 4);

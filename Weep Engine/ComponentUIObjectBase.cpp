@@ -4,6 +4,8 @@
 #include "ComponentUIObjectBase.h"
 #include "GameObject.h"
 #include "ComponentRender2D.h"
+#include "ComponentTexture.h"
+#include"ResourceTexture.h"
 
 
 ComponentUIObjectBase::ComponentUIObjectBase(float2 local_pos, Rect rect_spritesheet_original, bool draggable, ComponentUIObjectBase* parent) : local_pos(local_pos), rect_spritesheet_original(rect_spritesheet_original), rect_spritesheet_final(rect_spritesheet_original), draggable(draggable), parent(parent)
@@ -78,7 +80,7 @@ void ComponentUIObjectBase::PreUpdate()
 void ComponentUIObjectBase::PostUpdate()
 {
 	//App->render->DrawQuad(rect_world, 255, 0, 0, 200, true, false);
-	object->GetRender2D()->Render(vertexs_quad, uv_quad);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
+	object->GetRender2D()->Render(vertexs_quad, uv_quad, object->GetTextureActivated()->GetResource(object->GetTextureActivated()->GetResourceID())->id_texture);// App->render->Blit(atlas, world_pos_final.x, world_pos_final.y, &rect_spritesheet_final, 1.0f, SDL_FLIP_NONE, false);
 
 	return;
 }
@@ -91,109 +93,17 @@ void ComponentUIObjectBase::CleanUp()
 
 void ComponentUIObjectBase::Update()
 {
-	//if (draggable)
-	//{
-	//	if (!dragging && MouseInRect() && App->input->GetMouseButton(0) == KEY_DOWN)
-	//	{
-	//		App->gui->SetDragging(this);
-	//	}
-
-	//	if (dragging)
-	//	{
-	//		float2 mouse_move;
-	//		mouse_move.x = App->input->GetMouseXMotion();
-	//		mouse_move.y = App->input->GetMouseYMotion();
-
-	//		SetAllPos(mouse_move);
-
-
-
-	//		if (App->input->GetMouseButton(0) == KEY_UP)
-	//		{
-	//			dragging = false;
-	//		}
-	//	}
-
-	//	if (parent)
-	//	{
-	//		/*if (world_pos_original.x < parent->world_pos_original.x)
-	//		{
-	//			rect_spritesheet_final.left = rect_spritesheet_original.left + (parent->world_pos_original.x - world_pos_original.x);
-	//			rect_spritesheet_final.Width() = rect_spritesheet_original.w - (parent->world_pos_original.x - world_pos_original.x);
-	//			world_pos_final.x = world_pos_original.x + (parent->world_pos_original.x - world_pos_original.x);
-	//		}
-	//		else if (world_pos_original.x + rect_spritesheet_original.w > parent->world_pos_original.x + parent->rect_spritesheet_final.w)
-	//		{
-	//			rect_spritesheet_final.w = rect_spritesheet_original.w - (world_pos_original.x + rect_spritesheet_original.w - (parent->world_pos_original.x + parent->rect_spritesheet_final.w));
-	//		}
-	//		else
-	//		{
-	//			world_pos_final.x = world_pos_original.x;
-	//			rect_spritesheet_final.left = rect_spritesheet_original.left;
-	//			rect_spritesheet_final.w = rect_spritesheet_original.w;
-	//		}
-
-	//		if (world_pos_original.y < parent->world_pos_original.y)
-	//		{
-	//			rect_spritesheet_final.y = rect_spritesheet_original.y + (parent->world_pos_original.y - world_pos_original.y);
-	//			rect_spritesheet_final.h = rect_spritesheet_original.h - (parent->world_pos_original.y - world_pos_original.y);
-	//			world_pos_final.y = world_pos_original.y + (parent->world_pos_original.y - world_pos_original.y);
-	//		}
-	//		else if (world_pos_original.y + rect_spritesheet_original.h > parent->world_pos_original.y + parent->rect_spritesheet_final.h)
-	//		{
-	//			rect_spritesheet_final.h = rect_spritesheet_original.h - (world_pos_original.y + rect_spritesheet_original.h - (parent->world_pos_original.y + parent->rect_spritesheet_final.h));
-	//		}
-	//		else
-	//		{
-	//			world_pos_final.y = world_pos_original.y;
-	//			rect_spritesheet_final.y = rect_spritesheet_original.y;
-	//			rect_spritesheet_final.h = rect_spritesheet_original.h;
-	//		}*/
-	//	}
-	//}
+	
 	return;
 }
 
-void ComponentUIObjectBase::SetAllPos(float2 &mouse_move)
-{
-	if (childrens.empty())
-	{
-		list<ComponentUIObjectBase*> all_childrens;
-		all_childrens.push_back(this);
 
-		while (all_childrens.empty())
-		{
-			list<ComponentUIObjectBase*>::iterator current_ui_object = all_childrens.begin();
-
-			for (list<ComponentUIObjectBase*>::iterator item = (*current_ui_object)->childrens.begin(); item != (*current_ui_object)->childrens.end(); ++item)
-			{
-				all_childrens.push_back(*item);
-			}
-
-			(*current_ui_object)->SetPos(mouse_move);
-			all_childrens.remove(*current_ui_object);
-		}
-	}
-	else
-		SetPos(mouse_move);
-
-}
-
-void ComponentUIObjectBase::SetPos(float2 & mouse_move)
-{
-	local_pos += mouse_move;
-	world_pos_original += mouse_move;
-	rect_world.left += mouse_move.x;
-	rect_world.top += mouse_move.y;
-	world_pos_final += mouse_move;
-}
-
-const bool ComponentUIObjectBase::MouseInRect() const
+const bool ComponentUIObjectBase::MouseInRect() 
 {
 	float2 mouse_pos = App->input->GetMouse();
 	
 
-	return false;//!(mouse_pos.x >= (rect_world.left + rect_world.Width() || mouse_pos.x <= rect_world.x || mouse_pos.y >= (rect_world.y + rect_world.h) || mouse_pos.y <= rect_world.y);
+	return !(mouse_pos.x >= (rect_world.left + rect_world.Width()) || mouse_pos.x <= rect_world.left || mouse_pos.y >= (rect_world.top + rect_world.Height()) || mouse_pos.y <= rect_world.top);
 }
 
 const bool ComponentUIObjectBase::GetVisible() const

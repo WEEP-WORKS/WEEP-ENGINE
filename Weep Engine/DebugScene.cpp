@@ -32,6 +32,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleQuadtree.h"
 #include "SceneManager.h"
+#include "ComponentUIButton.h"
 
 DebugScene::DebugScene(bool start_enabled) : Module( start_enabled)
 {
@@ -112,6 +113,12 @@ bool DebugScene::Start()
 	quad->AddComponentUIImage(float2{ 100, 100 }, Rect{ 0, 0, 500, 200 });
 	ComponentTexture* text = (ComponentTexture*)quad->AddComponent(ComponentType::TEXTURE);
 	App->texture->LoadTexture("Assets/Textures/Lenna.png", text);
+
+
+	GameObject* button = new GameObject("UIQuad", App->game_object_manager->root);
+	button->AddComponent(ComponentType::RENDER2D);
+	button->AddComponentUIButton(float2{ 650,400 }, Rect{ 0, 0, 300, 200 }, UIButtonType::TEST,  this);
+
 	App->profiler->SetGameTimeScale(1.0f);
 
 
@@ -1274,4 +1281,19 @@ void DebugScene::LoadStyle(const char * name)
 	style->Colors[ImGuiCol_TextSelectedBg] = green;
 	style->Colors[ImGuiCol_ModalWindowDarkening] = green;
 	}
+}
+
+
+bool DebugScene::ButtonEvent(const UIButtonType type)
+{
+	switch (type)
+	{
+	case UIButtonType::TEST:
+		LOG("button clicked!! Do Something");
+		break;
+	default:
+		break;
+	}
+
+	return true;
 }

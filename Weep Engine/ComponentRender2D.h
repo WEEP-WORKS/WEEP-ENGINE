@@ -21,7 +21,7 @@ public:
 
 	void SetTexture(ComponentTexture* texture);
 	ComponentTexture* GetTexture() const;
-	void Render(BuffersData<float>& vertexs, BuffersData<float>& uvs);
+	void Render(BuffersData<float>& vertexs, BuffersData<float>& uvs, uint texture_id);
 
 private:
 

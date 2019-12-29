@@ -1,6 +1,7 @@
 #pragma once
 
 class Application;
+enum class UIButtonType;
 
 using namespace std;
 
@@ -63,6 +64,10 @@ public:
 
 	}
 
+	virtual bool ButtonEvent(const UIButtonType type)
+	{
+		return true;
+	}
 
 	void SetName(const char* set_name) { name = set_name; }
 	const string GetName() const { return name; }
