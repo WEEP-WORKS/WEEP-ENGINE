@@ -7,7 +7,9 @@ WeepEngine v.0.4
 
 ## Description
 
-This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa
+This Engine made for educational porpouses on the Game Engines' subject during the 3rd year of Video Game Design and Development degree at CITM, Terrassa. 
+
+It also has a UI subsystem, due to the 3rd delivery.
 
 ## Links
 
